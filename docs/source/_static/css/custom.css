@@ -1,0 +1,35 @@
+/* Table styles with only outer border and rounded corners */
+table {
+    border-spacing: 0;
+    border: 1px solid var(--pst-color-border) !important;
+    border-radius: 3px;
+    border-collapse: separate;
+    overflow: hidden;
+    /* Ensures the border-radius is respected */
+}
+
+/* Table header and body styles without individual borders */
+table th,
+table td {
+    border-right: 1px solid var(--pst-color-border);
+    ;
+    border-bottom: 1px solid var(--pst-color-border);
+    ;
+    padding: 0.5em;
+    /* Optional: for padding within cells */
+}
+
+/* Remove right border from the last cell in the header and body */
+table th:last-child,
+table td:last-child {
+    border-right: none;
+}
+
+/* Remove bottom border from the last row in the table body */
+table tr:last-child td {
+    border-bottom: none;
+}
+
+table thead th {
+    background-color: var(--pst-color-surface) !important;
+}
