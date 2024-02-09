@@ -16,7 +16,7 @@ http://<server>:<port>/<contextPath>/shells/aasx
 ```
 An .aasx-file has to be included as an entry in the multipart form data upload. The entry **must** have a non-empty name like e.g. "aasx", "file" or "path". The following Screenshot shows an example in Postman:
 
-Aasx-upload-postman.PNG
+![Aasx-upload-postman.PNG](./images/Aasx-upload-postman.png)
 
 Here, we gave the entry the name "aasx". Make sure that "form-data" is selected!
 

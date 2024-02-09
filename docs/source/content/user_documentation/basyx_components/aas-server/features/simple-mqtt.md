@@ -7,13 +7,13 @@
 *so that I can receive MQTT events without having to worry about subscribing to detailed topics*
 
 
-If the hierarchical topics presented in Hierarchical MQTT Eventing are too complicated, this feature will support event-driven use cases.
+If the hierarchical topics presented in [Hierarchical MQTT Eventing](./hierarchical-mqtt.md) are too complicated, this feature will support event-driven use cases.
 
 
 Please note, that this feature can not be combined with lambda properties due to them being only updated on query.
 
 ## Feature Overview
-Information about what events will be published can be found in the eventing extension.
+Information about what events will be published can be found in the [eventing extension](../../../../developer/extensions/eventing.md).
 
 
 ## Feature Configuration
@@ -21,4 +21,4 @@ Eventing via MQTT is disabled by default. It can be enabled in the aas.propertie
 ```
 aas.events=MQTT
 ```
-The MQTT broker endpoint can be configured via mqtt.properties file
+The MQTT broker endpoint can be configured via [**mqtt.properties** file](../../mqtt.md)

@@ -1,6 +1,6 @@
 The component's MQTT configuration can be used to specify the MQTT Client data in order to connect to the right MQTT broker. It allows you to add credentials and a Quality of Service level (default: 1) besides the mandatory server address.
 
-Information about what events will be published can be found in the eventing extension.
+Information about what events will be published can be found in the [eventing extension](../../developer/extensions/eventing.md).
 
 ## Default Configuration
 By default, a MQTT Client only needs a server address. If not specified in the configuration the Quality of Service level will be 1.

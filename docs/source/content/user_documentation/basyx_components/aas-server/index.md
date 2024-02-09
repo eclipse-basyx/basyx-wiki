@@ -8,9 +8,9 @@
 
 <a id="aas-server-component"></a>
 # AAS Server Component
-The AAS server component provides an empty AAS server that can be used to host several AAS and Submodels. For its API usage see [Aggregator API](https://wiki.eclipse.org/BaSyx_/_Documentation_/_API_/_AssetAdministrationShell). Additionally, there's a video illustrating the configuration and usage in 5 minutes: [youtube](https://www.youtube.com/watch?v=nGRNg0sj1oY)
+The AAS server component provides an empty AAS server that can be used to host several AAS and Submodels. For its API usage see [Aggregator API](../../API/aas.md). Additionally, there's a video illustrating the configuration and usage in 5 minutes: [youtube](https://www.youtube.com/watch?v=nGRNg0sj1oY)
 
-For a complete deployment of the AAS infrastructure, additionally to this server a registry is needed. For this registry, the [Registry Component](https://wiki.eclipse.org/BaSyx_/_Documentation_/_Components_/_Registry) can be used.
+For a complete deployment of the AAS infrastructure, additionally to this server a registry is needed. For this registry, the [Registry Component](../registry/index.md) can be used.
 
 For illustration on how to create an AAS on the server provided by the component and how to retrieve it see the [snippet](https://git.eclipse.org/r/plugins/gitiles/basyx/basyx/+/master/examples/basys.examples/src/test/java/org/eclipse/basyx/examples/snippets/aas/registry/ConnectToAASEndpoints.java) in the repository.
 
@@ -46,7 +46,7 @@ docker rm aas
 ```
 <a id="context-configuation"></a>
 ## Context Configuration
-As with the other components, the server's context can be customized using the context configuration.
+As with the other components, the server's context can be customized using the [context configuration](../context-config.md).
 
 <a id="aas-server-configuration"></a>
 ## AAS Server Configuration
@@ -59,7 +59,7 @@ docker run --name=aas -p 8081:4001 -v C:/tmp:/usr/share/config eclipsebasyx/aas-
 ```
 In this example, the **aas.properties** file is located in C:/tmp/. Similarly, the AAS source file also needs to be mounted into the docker container.
 
-The features of the AAS Server component are documented on their own page: [Features](https://wiki.eclipse.org/BaSyx_/_Documentation_/_Components_/_AAS_Server_/_Features)
+The features of the AAS Server component are documented on their own page: [Features](./features/index.md)
 
 <a id="java-implementation"></a>
 ## Java Implementation

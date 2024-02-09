@@ -15,7 +15,7 @@ http://<server>:<port>/<contextPath>/shells/<aas-id>/.../<file-idShort>/upload
 ```
 A file has to be included as an entry in the multipart form data upload. The entry **must** have a non-empty name like e.g. "file". The following screenshot shows an example in Postman:
 
-Sme-file-upload-postman.PNG
+![Sme-file-upload-postman.PNG](./images/Sme-file-upload-postman.png)
 
 Here, we gave the entry the name "file". Make sure that "form-data" is selected!
 

@@ -33,8 +33,8 @@ Alternatively to the full request body above, the raw data can simply be passed 
     2. To achieve the Delegation functionality, a Qualifier of type "invocationDelegation" is added to the operation.
        - As value, the url to the desired operation must be given.
        - The url follows the pattern
-      http://{server}:{port}/{contextPath}/{idShortPathToOperation}/invoke
-      resp. it is the url for direct operation invocation.
+          [http://{server}:{port}/{contextPath}/{idShortPathToOperation}/invoke](http://{server}:{port}/{contextPath}/{idShortPathToOperation}/invoke)
+          resp. it is the url for direct operation invocation.
        - Knowledge about the operation to be delegated to, with regard to the number and type of input and output parameters is assumed.
 
 
