@@ -3,6 +3,8 @@
 This section describes how to use the BaSyx Docker-Components.
 
 ```{toctree}
+:maxdepth: 1
+
 aas_environment
 aas_repository
 aas-server/index
