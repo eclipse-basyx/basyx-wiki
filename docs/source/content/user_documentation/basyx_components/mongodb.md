@@ -1,3 +1,4 @@
+# MongoDB Configuration
 The component's MongoDB configuration can be used to specify the MongoDB database and its used collection names for the containers.
 
 ## Default Configuration

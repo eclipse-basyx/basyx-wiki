@@ -1,12 +1,4 @@
-### Contents
-1 [AAS Server Component](#aas-server-component)
-   - 1.1 [Download](#download)
-   - 1.2 [Startup](#startup)
-   - 1.3 [Context Configuration](#context-configuration)
-   - 1.4 [AAS Server Configuration](#aas-server-configuration)
-   - 1.5 [Java Implementation](#java-implementation)
 
-<a id="aas-server-component"></a>
 # AAS Server Component
 The AAS server component provides an empty AAS server that can be used to host several AAS and Submodels. For its API usage see [Aggregator API](../../API/aas.md). Additionally, there's a video illustrating the configuration and usage in 5 minutes: [youtube](https://www.youtube.com/watch?v=nGRNg0sj1oY)
 
@@ -14,7 +6,6 @@ For a complete deployment of the AAS infrastructure, additionally to this server
 
 For illustration on how to create an AAS on the server provided by the component and how to retrieve it see the [snippet](https://git.eclipse.org/r/plugins/gitiles/basyx/basyx/+/master/examples/basys.examples/src/test/java/org/eclipse/basyx/examples/snippets/aas/registry/ConnectToAASEndpoints.java) in the repository.
 
-<a id="download"></a>
 ## Download
 The AAS Server image is made available via [Docker Hub](https://hub.docker.com/r/eclipsebasyx/aas-server) and can be pulled by:
 
@@ -23,7 +14,6 @@ docker pull eclipsebasyx/aas-server:1.5.0
 ```
 Alternatively, the command described in Startup section will download the image.
 
-<a id="startup"></a>
 ## Startup
 To easily start the AAS server component, you can use the following command:
 
@@ -44,11 +34,10 @@ docker stop aas
 docker start aas
 docker rm aas
 ```
-<a id="context-configuation"></a>
+
 ## Context Configuration
 As with the other components, the server's context can be customized using the [context configuration](../context-config.md).
 
-<a id="aas-server-configuration"></a>
 ## AAS Server Configuration
 For the AAS server component, a multitude of features can be configured via the aas.properties file. By default, this configuration file is assumed to be located at _"/usr/share/config/aas.properties"_ within the container.
 
@@ -61,7 +50,6 @@ In this example, the **aas.properties** file is located in C:/tmp/. Similarly, t
 
 The features of the AAS Server component are documented on their own page: [Features](./features/index.md)
 
-<a id="java-implementation"></a>
 ## Java Implementation
 Within the project, the component can be found in the Java repository at [Java](https://git.eclipse.org/r/plugins/gitiles/basyx/basyx/+/master/components/basys.components/basyx.components.docker/basyx.components.AASServer/src/main/java/org/eclipse/basyx/components/aas/executable/). In this project, the executable can take the parameter **BASYX_AAS** to configure the path of the aas configuration file. For example, you can specify the path of the aas configuration file via
 
