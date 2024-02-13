@@ -38,10 +38,12 @@ docker run --name=registry -p 8082:4000 -v C:/tmp:/usr/share/config eclipsebasyx
 ```
 In this example, the **registry.properties** file is located in C:/tmp/
 
-The features of the AAS Registry component are documented on their own page: Features
+The features of the AAS Registry component are documented on their own page: [Features](./features/index.md)
 
 ## Java Implementation
 Within the project, the component can be found in the Java repository at [Java](https://git.eclipse.org/r/plugins/gitiles/basyx/basyx/+/master/components/basys.components/basyx.components.docker/basyx.components.registry/src/main/java/org/eclipse/basyx/components/registry/executable/). In this project, the executable can take the parameter **BASYX_REGISTRY** to configure the path of the registry configuration file. For example, you can specify the path of the registry configuration file via
 ```
 java -jar -DBASYX_REGISTRY="C:/tmp/registry.properties" registry.jar
 ```
+
+## [Features](./features/index.md)

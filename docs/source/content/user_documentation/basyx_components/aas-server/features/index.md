@@ -1,7 +1,7 @@
 # AAS Server Features
 The AAS Server Components supports a multitude of  with a great range of configuration options.
 
-Additionally, it is easy to implement new feature and integrate them into the AAS Server as shown in [this example](.simple-feature-decoration.md).
+Additionally, it is easy to implement new feature and integrate them into the AAS Server as shown in [this example](./simple-feature-decoration.md).
 
 ```{toctree}
 :maxdepth: 1

@@ -1,12 +1,9 @@
 # Storage Backend
 
 ## User Story & Use Case
-*As AAS Components user*
-
-*I want to configure the persistency backend*
-
-*so that I can easily change where AAS/Submodels Descriptors are stored and, depending on the backend, no data gets lost*
-
+>As AAS Components user*
+>I want to configure the persistency backend*
+>so that I can easily change where AAS/Submodels Descriptors are stored and, depending on the backend, no data gets lost*
 
 By using different kind of backends, the persistency layer of the AAS Registry component can be tailored to specific use cases' needs.
 
@@ -23,4 +20,4 @@ registry.backend=InMemory
 ```
 Currently, the other valid option for the backend is **MongoDB** and **SQL**.
 
-If MongoDB or SQL is chosen as backend, the MongoDB connection has to be configured via mongodb.properties file for MongoDB or sql.properties file for SQL.
+If MongoDB or SQL is chosen as backend, the MongoDB connection has to be configured via [mongodb.properties file](../../mongodb.md) for MongoDB or [sql.properties file](../../sql.md)for SQL.
