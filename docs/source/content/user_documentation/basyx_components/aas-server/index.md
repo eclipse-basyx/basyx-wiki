@@ -68,3 +68,6 @@ Within the project, the component can be found in the Java repository at [Java](
 ```
 java -jar -DBASYX_AAS="C:/tmp/aas.properties" aas.jar
 ```
+
+## [Features](./features/index.md)
+

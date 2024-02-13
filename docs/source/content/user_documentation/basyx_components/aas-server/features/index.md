@@ -1,18 +1,21 @@
 # AAS Server Features
-The AAS Server Components supports a multitude of features with a great range of configuration options.
+The AAS Server Components supports a multitude of  with a great range of configuration options.
 
-Additionally, it is easy to implement new feature and integrate them into the AAS Server as shown in [this example](./simple-feature-decoration.md).
+Additionally, it is easy to implement new feature and integrate them into the AAS Server as shown in [this example](.simple-feature-decoration.md).
 
-* Storage Backend
-* Preconfigured AAS & Submodels
-* Registry Integration
-* MQTT:
-    * Hierarchical MQTT Eventing
-    * Simple MQTT Eventing
-* Authorization
-* AASX Upload Endpoint
-* File Upload
-* Operation Delegation
-* Property Delegation
-* Value-only serialization
-* Health Endpoint
+```{toctree}
+:maxdepth: 1
+
+storage-backend
+preconfigured-aas-and-submodels.md
+registry-integration
+hierarchical-mqtt
+simple-mqtt
+authorization
+aasx-upload
+file-upload
+operation-delegation
+property-delegation
+value-only-serialization
+health-endpoint
+```
