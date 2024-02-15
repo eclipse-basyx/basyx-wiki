@@ -19,7 +19,7 @@ The datasource, transformers, and datasinks should be defined in their respectiv
 
 Similary, you can configure multiple routes.
 
-## ample Multiple Routes Configuration
+## Sample Multiple Routes Configuration
 ```yaml
 [
 	{
