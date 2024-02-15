@@ -18,5 +18,5 @@ cd_repository
 aas_registry
 submodel_registry
 web_ui/index
-databridge
+databridge/index
 ```
