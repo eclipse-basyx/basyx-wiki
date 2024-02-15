@@ -20,16 +20,16 @@ Routes Configuration
     ```
 * Protocol Integration
 ```{toctree}
-    ActiveMQ
-    Hono
-    HTTP
-    Kafka
-    OPCUA
-    MQTT
-    PLC4X
+    protocol-integration/ActiveMQ
+    protocol-integration/Hono
+    protocol-integration/HTTP
+    protocol-integration/Kafka
+    protocol-integration/OPCUA
+    protocol-integration/MQTT
+    protocol-integration/PLC4X
 ```
 * Data Transformation
     ```{toctree}
-    JSONata
-    Json Jackson
+    data-transformation/JSONata
+    protocol-integration/Json Jackson
     ```

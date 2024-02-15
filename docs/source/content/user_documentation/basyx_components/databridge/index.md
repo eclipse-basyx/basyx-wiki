@@ -23,3 +23,5 @@ The DataBridge expects the environment variables to follow the same naming schem
 * Either volume mapping or environment variable configuration is mandatory because if there are no configuration files defined/mapped, then running the image would throw an exception.
 * Make sure that other components such as Data Source, Transformer, and Data Sink components defined in the configuration are up and running before starting the DataBridge component.
 * Please use the latest version of the DataBridge image.
+
+# [Features](./features/index.md)
