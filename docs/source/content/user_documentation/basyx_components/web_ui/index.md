@@ -213,8 +213,16 @@ PDF Preview in the Visualization Panel
 ```{toctree}
 :maxdepth: 1
 
+features/data_sync
 features/docker_config
 features/statuscheck
+features/corporate_design
+features/mobile_support
+features/plugin_mechanism
+features/registry_integration
+features/routing
+features/statuscheck
+features/theme
 ```
 
 ## Compatibility to BaSyx V1

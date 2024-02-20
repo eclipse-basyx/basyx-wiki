@@ -6,30 +6,18 @@ The DataBridge Component supports a multitude of features with a great range of 
 
 Health Endpoint
 Routes Configuration
+AAS Polling Consumer
+AAS Data Sink
+Timer
+Event
+Request
+protocol-integration/ActiveMQ
+protocol-integration/Hono
+protocol-integration/HTTP
+protocol-integration/Kafka
+protocol-integration/OPCUA
+protocol-integration/MQTT
+protocol-integration/PLC4X
+data-transformation/JSONata
+protocol-integration/Json Jackson
 ```
-* AAS Configuration
-    ```{toctree}
-    AAS Polling Consumer
-    AAS Data Sink
-    ```
-* Route Types
-    ```{toctree}
-    Timer
-    Event
-    Request
-    ```
-* Protocol Integration
-```{toctree}
-    protocol-integration/ActiveMQ
-    protocol-integration/Hono
-    protocol-integration/HTTP
-    protocol-integration/Kafka
-    protocol-integration/OPCUA
-    protocol-integration/MQTT
-    protocol-integration/PLC4X
-```
-* Data Transformation
-    ```{toctree}
-    data-transformation/JSONata
-    protocol-integration/Json Jackson
-    ```
