@@ -8,12 +8,12 @@ BaSyx provides several easy to use off-the-shelf components. They can be used pr
 * [DataBridge Component](./databridge/index.md)
 * [AAS Web UI](./web_ui/index.md)
 
-You can either pull them from Docker Hub or [follow the instructions](Docker.md) to build them yourself.
+You can either pull them from Docker Hub or [follow the instructions](docker.md) to build them yourself.
 
 ## Configuring components with environment variables
 Please see the following page for configuring BaSyx components using environment variables.
 
-* Configuration with [environment variables](Environment_variables.md)
+* Configuration with [environment variables](environment_variables.md)
 
 ## Security Component
 Please see [Security Configuration](./security/https.md) for an overview over different security relevant options with the BaSyx Java SDK.
@@ -37,7 +37,9 @@ If the interfaces provided by BaSyx can't be used (e.g. because the component is
 For this, BaSyx provides a Technology Compatibility Kit (TCK). The TCKs for the components can be found in the repository in components/tck. For each component, there exists a TCK. Each TCK allows to generate a jar file that tests component functionality of arbitrary http endpoints. Each jar can be called in the following way:
 
 `java -jar $JAR $HTTP_ENDPOINT`
+
 where *$JAR* is the name of the component's TCK jar and *$HTTP_ENDPOINT* is the endpoint on which the component's REST API is available
+
 This section describes how to use the BaSyx Docker-Components.
 
 ```{toctree}

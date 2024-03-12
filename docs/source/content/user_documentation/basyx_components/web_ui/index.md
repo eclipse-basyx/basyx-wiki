@@ -219,10 +219,11 @@ features/statuscheck
 features/corporate_design
 features/mobile_support
 features/plugin_mechanism
-features/registry_integration
+features/aas_server_integration
 features/routing
 features/statuscheck
 features/theme
+features/register_new_shells
 ```
 
 ## Compatibility to BaSyx V1

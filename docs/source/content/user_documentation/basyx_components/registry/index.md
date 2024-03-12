@@ -27,7 +27,7 @@ docker start registry
 docker rm registry
 ```
 ## Context Configuration
-As with the other components, the registry's context can be customized using the context configuration.
+As with the other components, the registry's context can be customized using the [context configuration](../context-config.md ).
 
 ## AAS Registry Configuration
 For the AAS Registry component, a multitude of features can be configured via the registry.properties file. By default, this configuration file is assumed to be located at *"/usr/share/config/registry.properties"* within the container.

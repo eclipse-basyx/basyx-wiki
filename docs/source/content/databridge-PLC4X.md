@@ -36,7 +36,7 @@ This section will demonstrate the configuration of the Modbus PLC virtual simula
 ```
 3. When it is launched, the UI would look like this:
 
-MainScreen.png
+![MainScreen.png](./images/MainScreen.png)
 
 Here the port is set to default i.e. **502** (default Modbus port), you can change it as per your need.
 
@@ -44,35 +44,35 @@ Here the port is set to default i.e. **502** (default Modbus port), you can chan
 
 5. A new window would appear like below, input the **Slave name** and **IP address** of the slave (For Modbus TCP), for Modbus RTU please refer to the links as specified to the right of the window:
 
-AddingNewSlave.png
+![AddingNewSlave.png](./images/AddingNewSlave.png)
 
 6. Now click on the **eye icon** marked in below image to add new registers:
 
-AddRegisters.png
+![AddRegisters.png](./images/AddRegisters.png)
 
 7. Click on **Add** to add the holding registers, here put the number of registers you want to create (10 registers are created in below image):
 
-AddRegistersDetails.png
+![AddRegistersDetails.png](./images/AddRegistersDetails.png)
 
 8. Once it is added you can add **value** to it like:
 
-AddValue.png
+![AddValue.png](./images/AddValue.png)
 
 9. Similarly switch the tab to **Coils** and follow the same procedure to add coils:
 
-AddCoils.png
+![AddCoils.png](./images/AddCoils.png)
 
 10. Now click on **Run** to make your slave communicate:
 
-ClickRun.png
+![ClickRun.png](./images/ClickRun.png)
 
 11. As a last step, it is advisable to check the console by clicking on the **Console**:
 
-HighlightConsole.png
+![HighlightConsole.png](./images/HighlightConsole.png)
 
 This console shows you the log for every important event, for e.g. getting new connections from **PLC4X**:
 
-Console Modbus.png
+![Console Modbus.png](./images/Console_Modbus.png)
 
 
 For more information on these steps, please refer to [Apache PLC4X with a virtual Modbus PLC](https://plc4x.apache.org/users/getting-started/virtual-modbus.html)
@@ -80,11 +80,11 @@ For more information on these steps, please refer to [Apache PLC4X with a virtua
 ## Integration with AAS using DataBridge
 As you have configured the virtual Modbus, you can easily integrate this with the **AAS** using the **DataBridge**.
 
-IntegrationScenario.png
+![IntegrationScenario.png](./images/IntegrationScenario.png)
 
 In PLC4X the notation for addresses is as follows [Source](https://plc4x.apache.org/users/getting-started/virtual-modbus.html#some_modbus_basics):
 
-AddressSyntax.png
+![AddressSyntax.png](./images/AddressSyntax.png)
 
 For e.g. as in the above configuration, we have added 10 Holding registers from 1 to 10. So, the notation for this would be:
 ```
