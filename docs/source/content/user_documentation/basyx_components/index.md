@@ -3,23 +3,23 @@
 ## Off-the-Shelf-Components
 BaSyx provides several easy to use off-the-shelf components. They can be used programmatically, as an executable jar or as a docker container.
 
-* [AAS Server Component](./aas-server/index.md)
-* [Registry Component](./registry/index.md)
+* [AAS Server Component](./v1/aas-server/index.md)
+* [Registry Component](./v1/registry/index.md)
 * [DataBridge Component](./databridge/index.md)
 * [AAS Web UI](./web_ui/index.md)
 
-You can either pull them from Docker Hub or [follow the instructions](docker.md) to build them yourself.
+You can either pull them from Docker Hub or [follow the instructions](./v1/general_configuration/docker.md) to build them yourself.
 
 ## Configuring components with environment variables
 Please see the following page for configuring BaSyx components using environment variables.
 
-* Configuration with [environment variables](environment_variables.md)
+* Configuration with [environment variables](./v1/general_configuration/environment_variables.md)
 
 ## Security Component
-Please see [Security Configuration](./security/https.md) for an overview over different security relevant options with the BaSyx Java SDK.
+Please see [Security Configuration](./v1/general_configuration/security/https.md) for an overview over different security relevant options with the BaSyx Java SDK.
 
 ## CORS Configuration
-Cross-Origin Resource Sharing (CORS) can be configured to the BaSyx off-the-shelf components. Please see [CORS Configuration](context-config.md) for the steps to configure the CORS to the components.
+Cross-Origin Resource Sharing (CORS) can be configured to the BaSyx off-the-shelf components. Please see [CORS Configuration](./v1/general_configuration/context-config.md) for the steps to configure the CORS to the components.
 
 To get to know more about CORS please visit [Wikipedia Page about CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 
@@ -43,20 +43,10 @@ where *$JAR* is the name of the component's TCK jar and *$HTTP_ENDPOINT* is the 
 This section describes how to use the BaSyx Docker-Components.
 
 ```{toctree}
-:maxdepth: 1
+:maxdepth: 2
 
-aas_environment
-aas_repository
-aas-server/index
-registry/index
-security/index
-context-config
-mongodb
-mqtt
-submodel_repository
-cd_repository
-aas_registry
-submodel_registry
+v1/index
+v2/index
 web_ui/index
 databridge/index
 ```

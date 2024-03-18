@@ -16,3 +16,11 @@ In principle, a client authenticates at the authentication server and gets a JWT
 In order to run your own setup, you need to configure a KeyCloak server instance, the used OTS components and then use authenticated clients that access the OTS component with a valid token. A full example with introductions on how to run it can be found in the [example repository](https://github.com/eclipse-basyx/basyx-java-examples/tree/main/basyx.examples/src/main/java/org/eclipse/basyx/examples/scenarios/authorization/combined).
 
 For the authentication server, KeyCloak needs to be configured and started. General instructions on how to do this can be found [here](../../../scenarios/authorization.md) and in its extensive [documentation](https://www.keycloak.org/docs/latest/server_admin/#configuring-authentication_server_administration_guide). Depending on the component and the strategy, there is a different configuration at the BaSyx component for the [AASServer](../aas-server/features/authorization.md) or the [Registry](../registry/features/authorization.md). In addition, there is a detailed overview over the two main [authorization strategies](../security/authorization.md).
+
+
+```{toctree}
+:maxdepth: 1
+
+authorization
+https
+```

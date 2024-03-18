@@ -59,7 +59,7 @@ content/introduction/basyx_explained
 content/introduction/quickstart
 ```
 
-### User Documentaion
+### User Documentation
 
 This section contains the user documentation of the Eclipse BaSyx middleware.
 
@@ -67,13 +67,23 @@ This section contains the user documentation of the Eclipse BaSyx middleware.
 :maxdepth: 2
 :caption: User Documentation
 
+content/user_documentation/user_tutorials/index
 content/user_documentation/basyx_components/index
+content/user_documentation/integrated end-user applications/index
+content/user_documentation/releases/index
+content/user_documentation/3rdparty_apps_and_frameworks
 content/user_documentation/concepts/index
 content/user_documentation/architecture/index
 ```
 
 ### Developer Documentation
+```{toctree}
+:maxdepth: 2
+:caption: Developer Documentation
 
+content/user_documentation/developer/index
+
+```
 ### Research and Resources
 
 ### Community and Support

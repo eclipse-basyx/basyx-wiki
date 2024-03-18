@@ -117,3 +117,10 @@ The deployment of the different SDKs and components with docker is explained in 
 # Monitoring Applications (AAS Dashboards)
 
 The integration with third-party applications & tools enable the possibility to monitor Asset Administration Shell and visualize its data through Dashboards. The integration and its use is explained in here [[page](monitoring.md)].
+
+```{toctree}
+:maxdepth: 1
+
+monitoring
+
+```

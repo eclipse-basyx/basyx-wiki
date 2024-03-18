@@ -2,6 +2,21 @@
 
 The Registry is a central component to the Asset Administration Shell (AAS) infrastructure for looking up available AAS and their contained submodels. Hence, it is realized as a separate component that can also be containerized. Currently, there exists a single Registry component that can be configured to utilize different types of backends.
 
+## Features
+The AAS Registry Components supports a multitude of features with a great range of configuration options:
+
+```{toctree}
+:maxdepth: 2
+
+features/storage-backend
+features/tagged-directory
+features/hierarchical-mqtt
+features/simple-mqtt
+features/authorization
+features/health-endpoint
+
+```
+
 ## Download
 The registry image is made available via [Docker Hub](https://login.docker.com/u/login/identifier?state=hKFo2SBScEFyNlVtcEc5T3RaWlZPbUpmMG9CRWlaWEtpbHduRqFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIF9pNFppTVFMbTVSYUYwMk9jWmhUVXY0Z3JiSHFUTVRMo2NpZNkgbHZlOUdHbDhKdFNVcm5lUTFFVnVDMGxiakhkaTluYjk) and can be pulled by:
 ```
@@ -26,10 +41,9 @@ docker stop registry
 docker start registry
 docker rm registry
 ```
-## Context Configuration
+## Configuration
 As with the other components, the registry's context can be customized using the [context configuration](../context-config.md ).
 
-## AAS Registry Configuration
 For the AAS Registry component, a multitude of features can be configured via the registry.properties file. By default, this configuration file is assumed to be located at *"/usr/share/config/registry.properties"* within the container.
 
 Thus, another configuration file can be set by mounting a local configuration file into the container during startup. As an example, a local folder containing the configuration files can be mounted using:
@@ -40,10 +54,8 @@ In this example, the **registry.properties** file is located in C:/tmp/
 
 The features of the AAS Registry component are documented on their own page: [Features](./features/index.md)
 
-## Java Implementation
+## Implementation
 Within the project, the component can be found in the Java repository at [Java](https://git.eclipse.org/r/plugins/gitiles/basyx/basyx/+/master/components/basys.components/basyx.components.docker/basyx.components.registry/src/main/java/org/eclipse/basyx/components/registry/executable/). In this project, the executable can take the parameter **BASYX_REGISTRY** to configure the path of the registry configuration file. For example, you can specify the path of the registry configuration file via
 ```
 java -jar -DBASYX_REGISTRY="C:/tmp/registry.properties" registry.jar
 ```
-
-## [Features](./features/index.md)
