@@ -1,3 +1,5 @@
+# General Configuration
+
 ```{toctree}
 :maxdepth: 2
 

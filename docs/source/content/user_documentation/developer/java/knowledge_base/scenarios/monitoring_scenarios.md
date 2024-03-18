@@ -1,4 +1,5 @@
-# Architecture Overview
+# Monitoring Scenarios{Architecture Overview}
+
 Figure 1 illustrates the interface between ASS, Registry, Proxy and Grafana/Streamsheets/NodeRed-applications.
 
 * Registry is responsible to locate and identify available AAS(s) in the network.

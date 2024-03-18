@@ -1,4 +1,4 @@
-# How to build the BaSyx .NET Core SDK
+# .NET Setup{How to build the BaSyx .NET Core SDK}
 
 The BaSyx .NET Core SDK can be build via dotnet CLI as wells as Microsoft Visual Studio. It uses NuGet for dependency management. This article will detail on how to build the .NET Core SDK from a fresh checkout.
 

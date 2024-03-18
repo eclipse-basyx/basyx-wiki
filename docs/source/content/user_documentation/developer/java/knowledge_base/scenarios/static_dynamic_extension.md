@@ -1,3 +1,5 @@
+# Static Dynamic Extension
+
 This example shows the enrichment of AAS data loaded from an aasx file with a dynamically created Submodel. Its code is available on [GitHub](https://github.com/eclipse-basyx/basyx-java-examples/tree/main/basyx.examples/src/main/java/org/eclipse/basyx/examples/scenarios/staticdynamic)
 
 

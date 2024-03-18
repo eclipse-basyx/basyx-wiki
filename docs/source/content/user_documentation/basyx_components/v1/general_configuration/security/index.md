@@ -1,4 +1,12 @@
 # Security(HTTPS)
+
+```{toctree}
+:maxdepth: 1
+
+authorization
+https
+``` 
+
 By default, the AAS server component uses plain *Hypertext Transfer Protocol* (HTTP) to communicate with clients. HTTP is unprotected against network attacks, which allows an adversary to read and manipulate any communication to and from the AAS server. However, the AAS server also supports the secure variant of HTTP named [HTTPS](./https.md). In the linked subpage, you can find more information about HTTPS, and how to set it up and configure it with V1 Java BaSyx OTS components and the Java SDK.
 
 ## Access Control
@@ -17,10 +25,3 @@ In order to run your own setup, you need to configure a KeyCloak server instance
 
 For the authentication server, KeyCloak needs to be configured and started. General instructions on how to do this can be found [here](../../../scenarios/authorization.md) and in its extensive [documentation](https://www.keycloak.org/docs/latest/server_admin/#configuring-authentication_server_administration_guide). Depending on the component and the strategy, there is a different configuration at the BaSyx component for the [AASServer](../aas-server/features/authorization.md) or the [Registry](../registry/features/authorization.md). In addition, there is a detailed overview over the two main [authorization strategies](../security/authorization.md).
 
-
-```{toctree}
-:maxdepth: 1
-
-authorization
-https
-```

@@ -1,4 +1,5 @@
-# Application Examples
+# Documented Application Scenarios
+
 In the following, multiple example application scenarios are presented that illustrate basic concepts on how to use the Eclipse BaSyx middleware. Each scenario is implemented in the *basyx.example* project.
 
 This list will be continuously extended.
@@ -15,3 +16,16 @@ Moreover, there are three predefined scenarios that showcase examples about how 
 In the following, further examples are described. These examples showcase the extension possibilities of BaSyx.
 
 * [ADS Connector](ADS_connector.md): Showcases how the VAB can be extended to support the ADS protocol.
+
+
+```{toctree}
+:maxdepth: 1
+
+ADS_connector
+authorization
+cloud-edge-deployment
+device-integration
+monitoring-scenarios
+static_dynamic_extension
+
+```

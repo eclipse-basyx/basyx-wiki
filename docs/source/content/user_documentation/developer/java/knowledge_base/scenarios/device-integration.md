@@ -1,4 +1,5 @@
 # Device Integration
+
 In the following, device integration with BaSyx as implemented in the [Device Integration Example](https://github.com/eclipse-basyx/basyx-java-examples/tree/main/basyx.examples.deviceintegration/src/main/resources) is considered using a heating element. The heating element has a simple interface:
 
 * A heating setpoint can be configured in degrees Fahrenheit via http/REST.

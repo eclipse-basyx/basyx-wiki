@@ -1,4 +1,5 @@
-# How to install BaSyx Components
+# Components Setup {How to install BaSyx Components}
+
 <span style="color:red" >!! Building BaSyx Java is only necessary if you would like to access the currently being developed features. All releases are available on [Maven Central](https://central.sonatype.com/search?q=org.eclipse.basyx&smo=true) or [DockerHub](https://hub.docker.com/search?q=eclipsebasyx) and thus don't need to be build locally !!</span>
 
 

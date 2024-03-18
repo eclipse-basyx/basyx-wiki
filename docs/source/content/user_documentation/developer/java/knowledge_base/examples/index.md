@@ -1,4 +1,4 @@
-# Examples
+# Extended Examples
 
 ## Code snippets
 

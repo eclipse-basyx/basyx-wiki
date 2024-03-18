@@ -1,4 +1,4 @@
-# How to build the BaSyx C++ SDK
+# C++ Setup {How to build the BaSyx C++ SDK}
 
 The BaSyx C++ SDK is now using CMake to generate and control its building process. This article will detail on how to build the C++ SDK from a fresh checkout.
 

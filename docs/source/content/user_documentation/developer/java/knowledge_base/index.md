@@ -1,3 +1,5 @@
+# Knowledge base
+
 ```{toctree}
 :maxdepth: 2
 

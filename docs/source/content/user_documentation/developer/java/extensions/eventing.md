@@ -1,3 +1,5 @@
+# Java SDK Eventing for AAS
+
 MqttAASAggregator (Implements IAASAggregator)
 Package: org.eclipse.basyx.extensions.aas.aggregator.mqtt
 

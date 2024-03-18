@@ -1,4 +1,4 @@
-# Setting up Keycloak
+# Authorization{Setting up Keycloak}
 
 Keycloak is an open source software product to allow single sign-on with Identity and Access Management aimed at modern applications and services. As of March 2018 this WildFly community project is under the stewardship of Red Hat who use it as the upstream project for their RH-SSO product.
 

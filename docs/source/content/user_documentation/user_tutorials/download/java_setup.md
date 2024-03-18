@@ -1,4 +1,5 @@
-# How to build the BaSyx Java SDK
+# Java Setup {How to build the BaSyx Java SDK}
+
 <span style="color:red">!! Building BaSyx Java is only necessary if you would like to access the currently being developed features. All releases are available on [Maven Central](https://central.sonatype.com/search?q=org.eclipse.basyx&smo=true) and thus don't need to be build locally !!</span>
 The complete installation process of the SDK and components is documented in a 15 minutes video: [YouTube](https://www.youtube.com/results?search_query=basyx)
 

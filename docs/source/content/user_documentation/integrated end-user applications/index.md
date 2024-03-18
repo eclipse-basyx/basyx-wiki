@@ -1,3 +1,5 @@
+# Integrated End-User Applications
+
 ```{toctree}
 maxdepth 2
 
