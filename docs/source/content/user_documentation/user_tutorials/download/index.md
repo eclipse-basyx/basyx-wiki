@@ -1,4 +1,4 @@
-# Downloading and Setup up BaSyx
+# Downloading and Setting up BaSyx
 The code of BaSyx is available via GitHub. The various repositories can be found [here](https://github.com/eclipse-basyx).
 
 Additionally, the release artifacts of BaSyx Java can be found on [Maven Central](https://central.sonatype.com/search?q=org.eclipse.basyx&smo=true) as well as on [DockerHub](https://hub.docker.com/search?q=eclipsebasyx).

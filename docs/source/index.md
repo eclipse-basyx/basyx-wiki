@@ -69,7 +69,7 @@ This section contains the user documentation of the Eclipse BaSyx middleware.
 
 content/user_documentation/user_tutorials/index
 content/user_documentation/basyx_components/index
-content/user_documentation/integrated end-user applications/index
+content/user_documentation/integrated end-user applications/monitoring_scenarios
 content/user_documentation/releases/index
 content/user_documentation/3rdparty_apps_and_frameworks
 content/user_documentation/concepts/index

@@ -1,4 +1,4 @@
-# Java version 2
+# Java Version 2
 
 ```{toctree}
 :maxdepth: 1

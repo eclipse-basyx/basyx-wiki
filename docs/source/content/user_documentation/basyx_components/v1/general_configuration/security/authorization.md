@@ -1,4 +1,5 @@
 # Authorization
+
 ## <span style="color:red">The whole document targets the Java-version of the SDK and components only.</span>
 
 You can add authorization requirements to the actions of BaSyx components that would be subject to the AssetAdministrationShell, Registry and Submodel APIs.

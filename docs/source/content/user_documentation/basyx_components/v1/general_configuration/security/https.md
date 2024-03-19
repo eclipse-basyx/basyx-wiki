@@ -1,3 +1,5 @@
+# HTTPS
+
 ## Introduction
 By default, the [AAS server component](../aas-server/index.md) uses plain *Hypertext Transfer Protocol* (HTTP) to communicate with clients. HTTP is unprotected against network attacks, which allows an adversary to read and manipulate any communication to and from the AAS server. However, the AAS server also supports a secure variant of HTTP named HTTPS. To secure exchanged data, HTTPS makes use of the *Transport Layer Security* protocol (TLS), which provides three protection layers: (1) Encryption: exchanged data cannot be read by others; (2) Integrity: exchanged data cannot be modified by others; (3) Authenticity: exchanged data indeed comes from the claimed source, the server. Today, most Websites on the Internet support HTTPS and browsers recently use HTTPS as their default mode [[1]](https://blog.chromium.org/2021/03/a-safer-default-for-navigation-https.html).
 

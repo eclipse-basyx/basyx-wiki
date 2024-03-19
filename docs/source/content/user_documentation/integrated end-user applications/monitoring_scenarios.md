@@ -1,3 +1,5 @@
+# Integrated End-User Applications
+
 # Overview
 BaSyx enables integration with third-party tools to support real-time data visualization, real-time data monitoring, and data processing. The following examples provide different use cases according each application.
 
