@@ -79,13 +79,13 @@ Final result:
 ![BaSyxEclipseIDE.jpg](./images/BaSyxEclipseIDE.jpg)
 
 ### Further steps
-The **[introductory examples](../introductory_examples/index.md)** are a good starting point to see how the SDK itself can be utilized.
+The **[introductory examples](../../developer/java/knowledge_base/introductory_examples/index.md)** are a good starting point to see how the SDK itself can be utilized.
 
-Furthermore, the **basyx.components** project is built on top of the **basyx.sdk** and provides additional components. Among others you will also find components with [predefined docker images](../user_documentation/offtehshelf/index.md) inside.
+Furthermore, the **basyx.components** project is built on top of the **basyx.sdk** and provides additional components. Among others you will also find components with [predefined docker images](../../basyx_components/v1/index.md) inside.
 
-There are extended [basyx.examples](../examples/index.md) that demonstrate various examples and use cases for both projects.
+There are extended [basyx.examples](../../developer/java/knowledge_base/examples/index.md) that demonstrate various examples and use cases for both projects.
 
-Also read the article about [how to contribute](../developer/contributing.md) to the open source code.
+Also read the article about [how to contribute](../../developer/contributing.md) to the open source code.
 
 ## Troubleshooting
 
@@ -160,4 +160,4 @@ For new projects, the project's pom.xml has to be modified to support building e
 
 
 # How to set up HTTPS communication
-Please see [Security](../user_documentation/basyx_components/security/index.md) page for details.
+Please see [Security](../../basyx_components/v1/general_configuration/security/index.md) page for details.

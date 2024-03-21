@@ -1,7 +1,7 @@
 # Knowledge base
 
 ```{toctree}
-:maxdepth: 2
+:maxdepth: 1
 
 examples/index
 introductory_examples/index

@@ -10,7 +10,7 @@ The components package depends on [basyx.sdk](java_setup.md) and is a hierarchic
 
 In order to install all components to the local maven repository, **mvn install** can be used like with installing the [basyx.sdk](java_setup.md). As maven executes all tests before installing the build artifacts into the local repository, you need to make sure all the component's requirements are met beforehand. See the next subsections for the SQL and MongoDB backends. Alternatively, it is possible to directly build the artifacts without these requirements by skipping the maven test phase with **mvn install -DskipTests**.
 
-Additionally, all of the off-the-shelf components can be used in a Docker environment. All maven projects can also build their correspondent [docker images](../user_documentation/basyx_components/docker.md#how-to-build-docker-images).
+Additionally, all of the off-the-shelf components can be used in a Docker environment. All maven projects can also build their correspondent [docker images](../../basyx_components/v1/general_configuration/docker.md#how-to-build-docker-images).
 
 ## SQL components
 All SQL components additionally require an SQL backend. This backend can for example be provided by [postgreSQL](https://www.postgresql.org).

@@ -1,13 +1,15 @@
-# Existing Releases
+# Existing and Upcoming Releases 
 
-## Java Release 1.5.1
+## Existing Releases
+
+### Java Release 1.5.1
 
 Bugfixes:
 
 * Fixes Submodel creation event being sent at incorrect times when using MongoDB
 * Fixes FileSubmodelElement‘s value being wrong with MongoDB & preconfigured AASX
 
-## Java Release 1.5.0
+### Java Release 1.5.0
 
 Features:
 
@@ -30,7 +32,7 @@ Miscellaneous:
 
 * Renames "registry.host" entry of AAS Server configuration to "aas.externalurl" to highlight its intention and avoid confusion. "registry.host" still works to ensure backward compatibility.
 
-## Java Release 1.4.0
+### Java Release 1.4.0
 
 Features:
 
@@ -49,7 +51,7 @@ Bugfixes:
 * Fixes signals like SIGTERM not being correctly propagated to the Docker components
     * Shutting down an AAS Server gracefully now unregisters every contained AAS/Submodel, if a registry is configured
 
-## Java Release 1.3.1
+### Java Release 1.3.1
 
 * Fixes OperationVariable's internal representation of SMC & Entity
 * Adds missing date valuetype
@@ -61,7 +63,7 @@ Bugfixes:
 * Fixes missing mapping of mqtt client environment variable
 * Adds missing default config for mqtt to docker images
 
-## Java Release 1.3
+### Java Release 1.3
 * Hierarchical MQTT Topics for [AASServer](./user_documentation/basyx_components/aas-server/features/hierarchical-mqtt.md) and [AASRegistry](./user_documentation/basyx_components/registry/features/hierarchical-mqtt.md) with flexible Identifier encoding
     * Base64URL encoding
     * URL encoding
@@ -71,7 +73,7 @@ Bugfixes:
 * [Integrates secured AAS Registry with AAS Server](./user_documentation/basyx_components/aas-server/features/registry-integration.md)
 * Rule-based Authorization (see example project)
 
-## Java Release 1.2
+### Java Release 1.2
 
 Features:
 
@@ -83,7 +85,7 @@ Features:
 * Updates Tomcat to Version 9.0.64
 * Graceful shutdown of AAS Server unregisters contained AAS/Submodels if a registry is configured
 
-## Java Release 1.1
+### Java Release 1.1
 
 * MQTT eventing for all APIs
 * Authorization support for all APIs
@@ -91,7 +93,7 @@ Features:
 * Operation Delegation Mechanism enabling delegating operation calls made on the AAS OTS Server to outside HTTP/REST APIs
 * Integration of TaggedDirectory with off-the-shelf Registry component
 
-## Java Release 1.0
+### Java Release 1.0
 
 * Support of [DotAAS (Part 1) v2.0.1](https://www.plattform-i40.de/IP/Redaktion/EN/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part1_V2.html)
     * Implementation of the meta model
@@ -113,11 +115,11 @@ Features:
 * [VAB](./user_documentation/vab/index.md)
 * [Control Components](./user_documentation/controlcomponent.md)
 
-# Upcoming Releases
+## Upcoming Releases
 
 Upcoming releases are prepared in their respective branches
 
-## C# Release 1.0
+### C# Release 1.0
 
 The current status can be found in the big-interface-changes branch. It will be merged to the master branch after official release. The following elements are part of the release:
 
@@ -139,7 +141,7 @@ The current status can be found in the big-interface-changes branch. It will be 
     * AASX Package Server
 * Examples
 
-## C++ Release 1.0
+### C++ Release 1.0
 
 * Implementation of the AAS meta model as specified in [DotAAS (Part 1) v2.0.1](https://www.plattform-i40.de/IP/Redaktion/EN/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part1_V2.html)
 * [VAB](./user_documentation/vab/index.md)
@@ -148,6 +150,6 @@ The current status can be found in the big-interface-changes branch. It will be 
 * OPC UA AAS API support
 * OPC UA Gateway
 
-## Java Release 2.0
+### Java Release 2.0
 
 See [GitHub](https://github.com/eclipse-basyx/basyx-java-server-sdk) for details

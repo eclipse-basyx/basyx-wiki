@@ -149,7 +149,7 @@ private ClientRepresentation createClientRepresentationFromJson() {
 }
 ```
 
-# Setting up Authorized AAS Registry
+## Setting up Authorized AAS Registry
 The [Cloud & Edge Deployment](./cloud-edge-deployment.md) scenario can be implemented using Authorized AAS Registry.
 
 After setting up Keycloak, follow below steps to access the secured endpoints of AAS Registry:
