@@ -1,7 +1,7 @@
 # Java
 
 ```{toctree}
-:maxdepth: 2
+:maxdepth: 0
 
 
 sdk/java/index
