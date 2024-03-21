@@ -20,7 +20,7 @@ In the following, further examples are described. These examples showcase the ex
 
 
 ```{toctree}
-:maxdepth: 1
+:maxdepth: 0
 
 ADS_connector
 authorization

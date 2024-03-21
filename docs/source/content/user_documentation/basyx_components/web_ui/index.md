@@ -16,6 +16,25 @@ name: web_ui
 ---
 ```
 
+## Features
+
+```{toctree}
+:maxdepth: 0
+
+features/data_sync
+features/docker_config
+features/statuscheck
+features/corporate_design
+features/mobile_support
+features/plugin_mechanism
+features/aas_server_integration
+features/routing
+features/statuscheck
+features/theme
+features/register_new_shells
+```
+
+
 ## Download
 
 ```{note}
@@ -206,24 +225,6 @@ alt: PDF Preview
 name: pdf_preview
 ---
 PDF Preview in the Visualization Panel
-```
-
-## Features
-
-```{toctree}
-:maxdepth: 1
-
-features/data_sync
-features/docker_config
-features/statuscheck
-features/corporate_design
-features/mobile_support
-features/plugin_mechanism
-features/aas_server_integration
-features/routing
-features/statuscheck
-features/theme
-features/register_new_shells
 ```
 
 ## Compatibility to BaSyx V1

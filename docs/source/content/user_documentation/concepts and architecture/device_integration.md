@@ -1,4 +1,4 @@
-# BaSyx Device integration
+# BaSyx Device Integration
 
 We support three strategies for integrating devices with a BaSys 4.0 production architecture:
 

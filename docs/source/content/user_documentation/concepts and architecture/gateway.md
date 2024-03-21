@@ -1,3 +1,5 @@
+# Basyx VAB Gateway
+
 Gateways realize the translation part of the end-to-end communication of the Virtual Automation Bus. By transparently translating the five semantic primitives from a native communication technology to another native technology, they are completely invisible to sender and receiver of messages.
 
 For example, a *GET* primitive send over the BaSyx-TCP implementation can seamlessly be translated to HTTP-REST. The response to the *GET* primitive is handled in the same way. 

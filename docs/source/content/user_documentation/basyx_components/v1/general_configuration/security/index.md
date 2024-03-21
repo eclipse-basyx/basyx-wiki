@@ -19,7 +19,7 @@ In order to run your own setup, you need to configure a KeyCloak server instance
 For the authentication server, KeyCloak needs to be configured and started. General instructions on how to do this can be found [here](../../../scenarios/authorization.md) and in its extensive [documentation](https://www.keycloak.org/docs/latest/server_admin/#configuring-authentication_server_administration_guide). Depending on the component and the strategy, there is a different configuration at the BaSyx component for the [AASServer](../aas-server/features/authorization.md) or the [Registry](../registry/features/authorization.md). In addition, there is a detailed overview over the two main [authorization strategies](../security/authorization.md).
 
 ```{toctree}
-:maxdepth: 1
+:maxdepth: 0
 
 authorization
 https

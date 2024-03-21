@@ -1,3 +1,5 @@
+# Basyx Control Component
+
 # BaSys 4.0 control and group components
 The Device Layer of a Basys4.0 compliant production systems contains Control Components and Group Components, which reflect the new skill-based and hierarchical programming approach of such a system. A Control Component represents the lowest layer of the plant and directly connects to the controlled process via an Input/Output (IO) interface and a network interface to the Group Components on the next hierarchical layer. Group Components are typically not directly wired to the physical process under control. Instead, they serve as orchestrators for the Control Components and provide a network interface to the underlying Control Components and another network interface for the connection to other Group Components and the Basys4.0 compliant Middleware.
 

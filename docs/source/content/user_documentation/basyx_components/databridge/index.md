@@ -5,7 +5,7 @@ The DataBridge supports integrating various protocols with Asset Administration 
 The DataBridge Component supports a multitude of features with a great range of configuration options, please take a look at the overall [device integration](https://github.com/eclipse-basyx/basyx-java-examples/tree/main/basyx.examples.deviceintegration/src/main/resources) scenarios:
 
 ```{toctree}
-:maxdepth: 2
+:maxdepth: 0
 
 features/health-endpoint
 features/routes-configuration

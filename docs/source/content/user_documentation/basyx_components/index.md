@@ -43,7 +43,7 @@ where *$JAR* is the name of the component's TCK jar and *$HTTP_ENDPOINT* is the 
 This section describes how to use the BaSyx Docker-Components.
 
 ```{toctree}
-:maxdepth: 2
+:maxdepth: 0
 
 v1/index
 v2/index

@@ -6,7 +6,7 @@ The Registry is a central component to the Asset Administration Shell (AAS) infr
 The AAS Registry Components supports a multitude of features with a great range of configuration options:
 
 ```{toctree}
-:maxdepth: 2
+:maxdepth: 0
 
 features/storage-backend
 features/tagged-directory

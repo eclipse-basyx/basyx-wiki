@@ -1,7 +1,7 @@
-# Java Version 2
+# Basyx Java Version 2
 
 ```{toctree}
-:maxdepth: 1
+:maxdepth: 0
 
 aas_environment
 aas_registry

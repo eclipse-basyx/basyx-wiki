@@ -1,7 +1,7 @@
 # Concepts and Architecture
 
 ```{toctree}
-:maxdepth: 1
+:maxdepth: 0
 
 concepts
 aas_overview
