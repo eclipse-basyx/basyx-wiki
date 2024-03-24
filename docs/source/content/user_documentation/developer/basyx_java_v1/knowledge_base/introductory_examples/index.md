@@ -1,6 +1,6 @@
 # Introductory Examples
 
-# Setting up a digital production with Eclipse BaSyx
+## Setting up a digital production with Eclipse BaSyx
 The introductory examples provide a starting point for getting started with the Eclipse BaSyx Java SDK. The overall rationale of Eclipse BaSyx is to enable digital manufacturing processes. Digital manufacturing processes are fully digitized, i.e. they have digital representatives for assets, for the process itself, and for the products. Digital representatives cover all relevant aspects of their real-world counterpart. Eclipse BaSyx realizes these digital representatives with the Asset Administration Shell (AAS). The AAS is therefore a digital substitute for an entity that is relevant for a production process. The following examples introduce Eclipse BaSyx and illustrate the use of our middleware to create a digital representative of a manufacturing process.
 
 In the following, for each SDK there are introductory examples provided, showcasing the different concepts in the respective SDK.

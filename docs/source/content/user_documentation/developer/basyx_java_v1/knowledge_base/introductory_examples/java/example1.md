@@ -187,7 +187,7 @@ Heater: deactivated
 ...
 ```
 
-# Oven Stub
+## Oven Stub
 Any implementation supporting the used interfaces of the oven can be used. In the following, an example implementation is given:
 
 ## Oven Code

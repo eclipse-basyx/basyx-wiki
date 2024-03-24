@@ -1,6 +1,6 @@
 # Extended Examples
 
-## Code snippets
+### Code snippets
 
 Code snippets are simple, isolated use-cases that illustrate the use of Eclipse BaSyx. They provide focused recipes that document the intended use of the BaSyx SDK and our reference implementations of Industrie 4.0 middleware components. To keep functional examples simple, code snippets only address selected aspects of Industrie 4.0 implementations. Selected snippets provide a page with documentation. For all snippets, links to executable source code files in the git repository are provided. The snippets itself only contain the code necessary to fulfil their function. Examples on how to use the snippets can be found in the [tests](https://git.eclipse.org/r/plugins/gitiles/basyx/basyx/+/master/examples/basys.examples/src/test/java/org/eclipse/basyx/examples/snippets) for the snippets.
 
@@ -10,7 +10,7 @@ The code for the snippets is available via the Eclipse BaSyx GIT repository:
 
 * For Java, the code is located in the basyx.example project in package org.eclipse.basyx.examples.snippets
 
-## Asset Administration Shell (AAS)
+### Asset Administration Shell (AAS)
 
 The Asset Administration Shell snippets illustrate different aspects of the usage of the Asset Administration Shell.
 
@@ -25,7 +25,7 @@ The Asset Administration Shell snippets illustrate different aspects of the usag
 |                            |                                                                                                                                                                                                                                                                                                                                                                                                                                                     |                                                                                                                                                                                   |
 | Delete Submodel from AAS   | Illustrates how to delete a Submodel from an AAS object. If the AAS the Submodel should be deleted from is a ConnectedAAS (the actual AAS data is held on a server) this will delete the Submodel from the server, but not deregister it. You have to deregister it manually (see Deregister Submodel Snippet). Alternatively you can use the use the AASManager to delete it (see Manager Snippets below), which will automatically deregister it. | [Java](https://git.eclipse.org/r/plugins/gitiles/basyx/basyx/+/master/examples/basys.examples/src/main/java/org/eclipse/basyx/examples/snippets/aas/DeleteSubmodelFromAAS.java)   |
 
-## AAS Manager
+### AAS Manager
 
 These code snippets illustrate how to use the ConnectedAssetAdministrationShellManager for interacting with BaSyx elements hosted on a server.
 
@@ -44,7 +44,7 @@ These code snippets illustrate how to use the ConnectedAssetAdministrationShellM
 |                            |                                                                                                                                                                                                                                                                            |                                                                                                                                                                                       |
 | Delete Submodel from AAS   | Illustrates how to delete a Submodel from an AAS on a server. This will delete the Submodel with the given ID from the AAS with the given ID. It will also automatically deregister the Submodel.                                                                          | [Java](https://git.eclipse.org/r/plugins/gitiles/basyx/basyx/+/master/examples/basys.examples/src/main/java/org/eclipse/basyx/examples/snippets/manager/DeleteSubmodelFromAAS.java)   |
 
-## AAS Submodels
+### AAS Submodels
 
 Asset Administration Shell Submodels may be distributed through the network. While an AAS resides on the IT and remains accessible in case of device failures, Submodels may be distributed. Submodels containing static data or information about devices that needs to remain available in case of device failure may be hosted on the IT as well; Submodels containing live data may be hosted on devices, and possibly on products. The following code snippets illustrate the creation, transfer, hosting, and use of AAS Submodels.
 
@@ -63,7 +63,7 @@ Asset Administration Shell Submodels may be distributed through the network. Whi
 | Host preconfigured Submodel | Illustrates how a preconfigured submodel can be hosted on its own server     | [Java](https://git.eclipse.org/r/plugins/gitiles/basyx/basyx/+/master/examples/basys.examples/src/main/java/org/eclipse/basyx/examples/snippets/submodel/HostPreconfiguredSubmodel.java) |
 
 
-## Registry
+### Registry
 
 The Asset Administration Shell registry enables registration of AAS and Submodels, as well as retrieving previously registered AAS and Submodels by their IDs.
 
@@ -77,7 +77,7 @@ The Asset Administration Shell registry enables registration of AAS and Submodel
 | Deregister Submodel | Removes a Submodel from a registry                | [Java](https://git.eclipse.org/r/plugins/gitiles/basyx/basyx/+/master/examples/basys.examples/src/main/java/org/eclipse/basyx/examples/snippets/registry/DeregisterSubmodel.java) |
 
 
-## Virtual Automation Bus (VAB)
+### Virtual Automation Bus (VAB)
 
 The Virtual Automation Bus provides end-to-end connection capabilities. The VAB uses gateways to connect network technologies into one virtual, and fully connected network. The network consists of objects, e.g. Asset Administration Shells and Submodels that are accessible through unqiue IDs. The following code snippets illustrate VAB operations and the use of the Virtual Automation Bus.
 
@@ -89,12 +89,12 @@ The Virtual Automation Bus provides end-to-end connection capabilities. The VAB 
 | Dynamic property (Class)  | Illustrate the dynamic properties (Class) in VAB objects.                                               | [Java](https://git.eclipse.org/r/plugins/gitiles/basyx/basyx/+/master/examples/basys.examples/src/test/java/org/eclipse/basyx/examples/snippets/vab/DynamicPropertyClass.java)  |
 
 
-## AAS Submodel providers
+### AAS Submodel providers
 
 Eclipse BaSyx provides pre-created AAS Submodel providers. These servlets connect existing data sources, such as textual configuration files and SQL data bases into Industrie 4.0 environments as AAS Submodels. BaSyx Submodel providers are configured with a configuration API and do not require programming knowledge to integrate data sources into Industrie 4.0 environments as AAS Submodels.
 
 
-## AAS Submodels (Dynamic)
+### AAS Submodels (Dynamic)
 Asset Administration Shell Submodels may contain dynamic properties and operations. Dynamic properties are properties whose values are generated dynamically at runtime. This may happen for example periodically, or whenever a specific information is requested. Dynamic operations are operations that may be updated at runtime. The following code snippets illustrate dynamic Submodel properties and operations.
 
 | Snippet                   | Description                                                                                                              | Source                                                                                                                                                                              |
@@ -102,7 +102,7 @@ Asset Administration Shell Submodels may contain dynamic properties and operatio
 | Dynamic property (Lambda) | Illustrates the creation and usage of a lambda property (i.e. a property retrieving its value from a backend at runtime) | [Java](https://git.eclipse.org/r/plugins/gitiles/basyx/basyx/+/master/examples/basys.examples/src/main/java/org/eclipse/basyx/examples/snippets/property/CreateLambdaProperty.java) |
 
 
-## URN
+### URN
 
 Eclipse BaSyx advocates the use of URNs as unique identifiers for AAS. Code snippets illustrate the creation and use of URNs.
 
@@ -111,15 +111,15 @@ Eclipse BaSyx advocates the use of URNs as unique identifiers for AAS. Code snip
 | Construct URNs | Create URNs for AAS and globally idenfied Submodels | [Java](https://git.eclipse.org/r/plugins/gitiles/basyx/basyx/+/master/examples/basys.examples/src/test/java/org/eclipse/basyx/examples/snippets/urn/ConstructURNs.java) |
 
 
-# Deployment with Docker
+## Deployment with Docker
 The deployment of the different SDKs and components with docker is explained in its own [page](../user_documentation/basyx_components/docker.md).
 
-# Monitoring Applications (AAS Dashboards)
+## Monitoring Applications (AAS Dashboards)
 
 The integration with third-party applications & tools enable the possibility to monitor Asset Administration Shell and visualize its data through Dashboards. The integration and its use is explained in here [[page](monitoring.md)].
 
 ```{toctree}
-:maxdepth: 0
+:maxdepth: 1
 
 monitoring
 

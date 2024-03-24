@@ -1,7 +1,7 @@
 # Basyx Java Version 1
 
 ```{toctree}
-:titleonly:
+:maxdepth: 1
 
 
 sdk/java/index

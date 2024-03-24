@@ -1,5 +1,5 @@
 ```{toctree}
-:titleonly:
+:maxdepth: 1
 
 
 contributing

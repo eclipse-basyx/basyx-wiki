@@ -10,7 +10,7 @@ For such scenario, we assume that the AAS sub-models provide the access of multi
 
 ![ArchitectureView BasysMonitoringApplications.png](./images/ArchitectureView_BasysMonitoringApplications.png)
 
-# How to Build
+## How to Build
 In addition to directly using the already provided docker images, it is also possible to build them by yourself using the BaSyx SDK and the supplementary projects in the GIT repository. For building the Java projects you will also need the Java Development Kit.
 
 **Requirements**:
@@ -51,19 +51,19 @@ Automatically all docker containers will start, for this example in the followin
 1. Run stop.bat
 ```
 
-# Applications Examples
-## Streamsheets
+## Applications Examples
+### Streamsheets
 [Streamsheets](https://cedalo.com) is an Eclipse project providing an application for monitoring and visualizing streams of data from various sources.
 
 * With Streamsheets it is possible to process, aggregate, visualize and transform data streams in real-time as a server app.
 * Streamsheets exchange data over REST-based protocols (request/response), and ts also designed for publish/subscribe streaming protocols like MQTT, Apache Kafka or AMQP.
 * Streamsheets can also be customized its visual interface, buy adding images, colors, buttons.
 
-### Stream Machine Example
+#### Stream Machine Example
 
 ![StreamsheetsDashboard.png](./images/StreamsheetsDashboard.png)
 
-### Setting Up a New Streamsheet
+#### Setting Up a New Streamsheet
 The configuration of the HTTP-connector and the producer follows the following steps:
 
 ```
@@ -76,25 +76,25 @@ The configuration of the HTTP-connector and the producer follows the following s
 
 At run time, the data-points of the Streamsheets-application create HTTP-Requests with the producer periodically. The HTTP-connector communicates with the AAS based on these HTTP-requests. The responses are transmitted back to the Streamsheets-application. For the real time display, HTTP-GET requests are generated cyclically and the responses are updated to the data points in the Streamsheets-application. The configuration of the data points in the Streamsheets-application follow the following steps:
 
-## Grafana
+### Grafana
 [Grafana](https://grafana.com) is an Open-Source application available on GitHub. It's a browser-based tool for creating dashboards of different types of data sources.
 
 * Grafana has plenty of different panels and data sources available in the official repository.
 * Grafana allows its users to query, visualize, and alert on metrics and logs independent of where data is stored.
 * Grafana reads data of multiple sources and the user can visualize it in a single dashboard.
 
-### Grafana Dashboard Example
+#### Grafana Dashboard Example
 
 ![GrafanaDashboard.png](./images/GrafanaDashboard.png)
 
-### Setting up a new panel
+#### Setting up a new panel
 
 There are two possibilities for panels that can make use of the proxy:
 
 * Use datasource plugin that comes with the example
 * Use Ajax plugin => can already query any kind of JSON datasource
 
-## Node Red
+### Node Red
 
 [Node-RED](https://nodered.org) is under OpenJS Foundation. It is a browser-based tool for flow editing.
 
@@ -103,11 +103,11 @@ There are two possibilities for panels that can make use of the proxy:
 * Flows can be deployed to run locally; in a device (e.g. a Raspberry Pi); or in the cloud.
 * Nodes can be customized via scripting according to needs. They may send and receive messages whilst the flow is running.
 
-### Node-RED Dashboard Example
+#### Node-RED Dashboard Example
 
 ![NodeRedDashboard.png](./images/NodeRedDashboard.png)
 
-### Setting up a new panel
+#### Setting up a new panel
 * To create a new node, see detailed documentation [here](https://nodered.org/docs/creating-nodes/). Basically 3 files have to be created.
 ```
  1. package.json: which is used to pack it all together and compile it using npm.
