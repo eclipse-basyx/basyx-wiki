@@ -2,8 +2,20 @@
 
 In the following, multiple example application scenarios are presented that illustrate basic concepts on how to use the Eclipse BaSyx middleware. Each scenario is implemented in the *basyx.example* project.
 
-This list will be continuously extended.
+```{toctree}
+:maxdepth: 1
 
+* ADS_connector
+* authorization
+* cloud-edge-deployment
+* device-integration
+* monitoring_scenarios
+* static_dynamic_extension
+
+```
+
+
+This list will be continuously extended.
 
 * [Device Integration](device-integration.md): Showcases how to utilize the various features of the BaSyx OTS components to bidirectionally integrate a device with its Asset Administration Shell
 * [Cloud & Edge Deployment](cloud-edge-deployment.md): Showcases how to set up a distributed deployment of an AAS with several Submodels.
@@ -17,16 +29,3 @@ In the following, further examples are described. These examples showcase the ex
 
 * [ADS Connector](ADS_connector.md): Showcases how the VAB can be extended to support the ADS protocol.
 
-
-
-```{toctree}
-:maxdepth: 1
-
-ADS_connector
-authorization
-cloud-edge-deployment
-device-integration
-monitoring_scenarios
-static_dynamic_extension
-
-```
