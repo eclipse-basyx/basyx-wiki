@@ -1,7 +1,10 @@
 ```{toctree}
-:maxdepth: 0
+:titleonly:
+
 
 contributing
-java/index
+basyx_java_v1/index
+basyx_java_v2/index
+
 
 ```
