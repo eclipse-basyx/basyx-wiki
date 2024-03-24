@@ -6,7 +6,7 @@ The low-level providers implements the five [Virtual Automation Bus primitives](
 
 
 ```{toctree}
-:maxdepth: 1
+:titleonly:
 
 fileSystem_provider
 hashmap_provider
