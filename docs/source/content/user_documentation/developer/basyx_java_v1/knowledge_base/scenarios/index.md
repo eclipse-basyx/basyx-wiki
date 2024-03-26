@@ -5,12 +5,12 @@ In the following, multiple example application scenarios are presented that illu
 ```{toctree}
 :maxdepth: 1
 
-* ADS_connector
-* authorization
-* cloud-edge-deployment
-* device-integration
-* monitoring_scenarios
-* static_dynamic_extension
+ ADS_connector
+ authorization
+ cloud-edge-deployment
+ device-integration
+ monitoring_scenarios
+ static_dynamic_extension
 
 ```
 

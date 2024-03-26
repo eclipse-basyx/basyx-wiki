@@ -1,7 +1,14 @@
 # User Tutorials
 
+
+* [Downloading and setting up Basyx](./download/index.md)
+* [Related downloads](./relatedDownload/index.md)
+* [Databridge automation protocol integration](databridge-PLC4X.md)
+
+
 ```{toctree}
-:maxdepth: 2
+:hidden:
+:maxdepth: 1
 
 
 download/index

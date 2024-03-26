@@ -1,7 +1,7 @@
 # Basyx Java Version 1
 
 ```{toctree}
-:maxdepth: 0
+:maxdepth: 1
 
 
 aas-server/index

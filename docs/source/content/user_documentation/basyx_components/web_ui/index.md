@@ -19,7 +19,7 @@ name: web_ui
 ## Features
 
 ```{toctree}
-:maxdepth: 0
+:maxdepth: 1
 
 features/data_sync
 features/docker_config

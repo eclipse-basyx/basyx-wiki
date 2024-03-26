@@ -27,7 +27,7 @@ BaSyx provides multiple ready-to-use off-the-shelf components as Docker Images t
 
 
 ```{toctree}
-:maxdepth: 2
+:maxdepth: 1
 
 components_setup
 cpp_setup
