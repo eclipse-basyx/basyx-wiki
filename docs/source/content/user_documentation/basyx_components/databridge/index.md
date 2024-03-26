@@ -4,7 +4,20 @@ The DataBridge supports integrating various protocols with Asset Administration 
 ## Features
 The DataBridge Component supports a multitude of features with a great range of configuration options, please take a look at the overall [device integration](https://github.com/eclipse-basyx/basyx-java-examples/tree/main/basyx.examples.deviceintegration/src/main/resources) scenarios:
 
+* [Health Endpoint](./features/health-endpoint.md)
+* [Routes Configuration](./features/routes-configuration.md)
+* [AAS POlling Consumer](./features/aas-polling-consumer.md)
+* [AAS Data Sink](./features/aas-data-sink.md)
+* [Timer](./features/timer.md)
+* [Event](./features/event.md)
+* [Request](./features/request.md)
+* [Protocol Integration](./features/protocol-integration/index.md)
+* Data Transformation : 
+    * [JSONATA](./features/data-transformation/jsonata.md)
+    
+
 ```{toctree}
+:hidden:
 :maxdepth: 1
 
 features/health-endpoint
@@ -14,8 +27,8 @@ features/aas-data-sink
 features/timer
 features/event
 features/request
-protocol-integration/index
-data-transformation/jsonata
+features/protocol-integration/index
+features/data-transformation/jsonata
 
 ```
 

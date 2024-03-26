@@ -18,7 +18,27 @@ name: web_ui
 
 ## Features
 
+* [Data Synchronization](./features/data_sync.md)
+* [Docker Configuration](./features/docker_config.md)
+*  Dedicated components for different SubmodelElements:
+      * SubmodelElementCollection
+      * Property
+      * MultiLanguageProperty
+      * File
+      * Operation
+      * ReferenceElement
+* [Status Check and Error Notifications](./features/statuscheck.md)
+* [Corporate Design](./features/corporate_design.md)
+* [Mobile Support](./features/mobile_support.md)
+* [Plugin Mechanism](./features/plugin_mechanism.md)
+* [AAS Routing](./features/routing.md)
+* [AAS Server integration](./features/aas_server_integration.md)
+* [Application Theme](./features/theme.md)
+* [Register New Shells](./features/register_new_shells.md)
+
+
 ```{toctree}
+:hidden:
 :maxdepth: 1
 
 features/data_sync
@@ -29,11 +49,9 @@ features/mobile_support
 features/plugin_mechanism
 features/aas_server_integration
 features/routing
-features/statuscheck
 features/theme
 features/register_new_shells
 ```
-
 
 ## Download
 

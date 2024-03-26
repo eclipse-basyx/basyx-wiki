@@ -5,8 +5,17 @@ The Registry is a central component to the Asset Administration Shell (AAS) infr
 ## Features
 The AAS Registry Components supports a multitude of features with a great range of configuration options:
 
+* [Storage Backend](./features/storage-backend.md)
+* [Tagged Directory](./features/tagged-directory.md)
+* [Hierarchical MQTT Eventing](./features/hierarchical-mqtt.md)
+* [Simple MQTT Eventing](./features/simple-mqtt.md)
+* [Authorization](./features/authorization.md)
+* [Health Endpoint](./features/health-endpoint.md)
+
+
 ```{toctree}
-:maxdepth: 0
+:hidden:
+:maxdepth: 1
 
 features/storage-backend
 features/tagged-directory

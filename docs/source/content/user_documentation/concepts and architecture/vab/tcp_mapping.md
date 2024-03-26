@@ -1,4 +1,6 @@
-# General Frame Format
+# TCP Mapping
+
+## General Frame Format
 Each *BaSyx* Native frame is divided into two fields. These fields define message size and message payload. Due to this, the receiver can create a appropriate sized buffer.
 
 If a message is received with *size > Message Length*, an error is assumed and the message it is discarded.
@@ -8,7 +10,7 @@ If a message is received with *size > Message Length*, an error is assumed and t
 | 4 Byte, LSB first                      | Payload Length  |
 | Variable, as defined in Payload Length | Message payload |
 
-# String Encoding
+## String Encoding
 Strings are encoded in the following scheme:
 
 |                 Length                |                   Field                  |
@@ -16,22 +18,22 @@ Strings are encoded in the following scheme:
 | 4 Byte, LSB first                     | String Length                            |
 | Variable, as defined in String Length | String content, without null termination |
 
-# Object Encoding
+## Object Encoding
 Collections/Maps are serialized to a string as defined in the JSON serialization and send as a string as defined above.
 
-# Primitive Mapping
+## Primitive Mapping
 For a detailed description of the primitives, see the VAB [documentation](index.md).
 
-# RETRIEVE
+## RETRIEVE
 
-## Request
+### Request
 
 |   Length   |           Field           | Value |
 |:----------:|:-------------------------:|:-----:|
 | 1 Byte     | Command                   | 0x01  |
 | <variable> | Path to element as string |       |
 
-## Response
+### Response
 
 |   Length   |           Field          |
 |:----------:|:------------------------:|
@@ -40,14 +42,14 @@ For a detailed description of the primitives, see the VAB [documentation](index.
 
 Currently, the result will always be *0x00* with exceptions encoded in the returned string.
 
-## Exceptions
+### Exceptions
 If the property specified in the path or one of its parent elements does not exist, a ResourceNotFound Exception will be returned.
 
 If the parent element of the specified property is a list, a ResourceNotFound Exception will be returned.
 
 If another error occurs and the property can't be retrieved, a MalformedRequest Exception will be returned.
 
-# UPDATE
+## UPDATE
 
 ### Request
 
@@ -70,7 +72,7 @@ If the parent element of the property specified in the path is a list, a Resourc
 
 If another error occurs while trying to set the property, a MalformedRequest Exception is returned.
 
-# CREATE
+## CREATE
 
 ### Request
 
@@ -96,7 +98,7 @@ If the property already exists, a ResourceAlreadyExists exception will be return
 
 If the new property could not be created, a MalformedRequest exception will be returned.
 
-# DELETE
+## DELETE
 There are two variants of delete: Deleting a value from a path and deleting a value from a Collection in a given path. In the latter case, the object to be deleted will be passed as JSON string.
 
 ### Request
@@ -120,7 +122,7 @@ If the property specified in the path or one of its parent elements does not exi
 
 If the property could not be deleted, a MalformedRequest exception is returned.
 
-# INVOKE
+## INVOKE
 
 ### Request
 

@@ -1,7 +1,7 @@
 # Releases
 
 ```{toctree}
-maxdepth 2
+:maxdepth: 1
 
 releases_and_features
 

@@ -1,4 +1,6 @@
-# User Story & Use Case
+# Tagged Directory
+
+## User Story & Use Case
 >As AAS Components user>
 >I want to tag AAS & Submodel descriptors>
 >so that I can search for combinations of tags without the need of exploring the complete AAS & Submodel structure>

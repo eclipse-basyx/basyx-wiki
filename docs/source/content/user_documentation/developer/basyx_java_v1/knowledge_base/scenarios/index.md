@@ -3,14 +3,15 @@
 In the following, multiple example application scenarios are presented that illustrate basic concepts on how to use the Eclipse BaSyx middleware. Each scenario is implemented in the *basyx.example* project.
 
 ```{toctree}
+:hidden:
 :maxdepth: 1
 
- ADS_connector
- authorization
- cloud-edge-deployment
- device-integration
- monitoring_scenarios
- static_dynamic_extension
+ADS_connector
+authorization
+cloud-edge-deployment
+device-integration
+monitoring_scenarios
+static_dynamic_extension
 
 ```
 

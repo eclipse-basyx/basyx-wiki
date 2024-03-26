@@ -11,11 +11,28 @@ The AAS Server Components supports a multitude of  with a great range of configu
 
 Additionally, it is easy to implement new feature and integrate them into the AAS Server as shown in [this example](./simple-feature-decoration.md).
 
+
+* [Storage Backend](./features/storage-backend.md)
+* [Preconfigured AAS & Submodels](./features/preconfigured-aas-and-submodels.md)
+* [Registry Integration](./features/registry-integration.md)
+* [Hierarchical MQTT Eventing](./features/hierarchical-mqtt.md)
+* [Simple MQTT Eventing](./features/simple-mqtt.md)
+* [Authorization](./features/authorization.md)
+* [AASX Upload Endpoint](./features/aasx-upload.md)
+* [File Upload Endpoint](./features/file-upload.md)
+* [Operation Delegation](./features/operation-delegation.md)
+* [Property Delegation](./features/property-delegation.md)
+* [Value-only Serialization](./features/value-only-serialization.md)
+* [Health Endpoint](./features/health-endpoint.md)
+* [Feature Decoration Example](./features/simple-feature-decoration.md)
+
+
 ```{toctree}
-:maxdepth: 0
+:hidden:
+:maxdepth: 1
 
 features/storage-backend
-features/preconfigured-aas-and-submodels.md
+features/preconfigured-aas-and-submodels
 features/registry-integration
 features/hierarchical-mqtt
 features/simple-mqtt

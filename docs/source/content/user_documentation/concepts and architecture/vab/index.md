@@ -5,6 +5,18 @@ Each protocol may be mapped to the VAB by creating a mapping of this five primit
 
 The benefit of this approach is a reduced implementation effort to bridge different communication technologies. Instead of having to translate from every protocol to every protocol (NxM) it is possible to use the VAB primitives as intermediate and reduce the complexity (N+M).
 
+
+```{toctree}
+:hidden:
+:maxdepth: 1
+
+http_rest_mapping
+tcp_mapping
+json_serialization
+exceptions
+```
+
+
 ## Virtual Automation Bus concept
 The figure below illustrates an example virtual automation bus with connected entities.
 
@@ -107,11 +119,3 @@ The sequence diagram below illustrates the resulting call sequence. The Topology
 ![Basyx.VABMultiNetworkExampleSequence.png](./images/Basyx.VABMultiNetworkExampleSequence.png)
 
 
-```{toctree}
-:maxdepth: 0
-
-http_rest_mapping
-json_serialization
-tcp_mapping
-
-```

@@ -38,11 +38,11 @@ For this, BaSyx provides a Technology Compatibility Kit (TCK). The TCKs for the 
 
 `java -jar $JAR $HTTP_ENDPOINT`
 
-where *$JAR* is the name of the component's TCK jar and *$HTTP_ENDPOINT* is the endpoint on which the component's REST API is available
+where *$JAR* is the name of the component's TCK jar and *$HTTP_ENDPOINT* is the endpoint on which the component's REST API is available.
 
-This section describes how to use the BaSyx Docker-Components.
 
 ```{toctree}
+:hidden:
 :maxdepth: 1
 
 v1/index

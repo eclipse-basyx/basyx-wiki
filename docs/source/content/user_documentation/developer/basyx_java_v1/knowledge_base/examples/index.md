@@ -119,6 +119,7 @@ The deployment of the different SDKs and components with docker is explained in 
 The integration with third-party applications & tools enable the possibility to monitor Asset Administration Shell and visualize its data through Dashboards. The integration and its use is explained in here [[page](monitoring.md)].
 
 ```{toctree}
+:hidden:
 :maxdepth: 1
 
 monitoring

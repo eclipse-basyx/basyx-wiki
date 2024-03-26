@@ -159,5 +159,5 @@ The .jar can be found in the /target directory with its dependencies located at 
 For new projects, the project's pom.xml has to be modified to support building executable jars. The pom.xml in the Off-the-shelf components can help with finding a correct configuration (see <pluginManagement> in basyx.components/basyx.components.docker/pom.xml).
 
 
-# How to set up HTTPS communication
+## How to set up HTTPS communication
 Please see [Security](../../basyx_components/v1/general_configuration/security/index.md) page for details.
