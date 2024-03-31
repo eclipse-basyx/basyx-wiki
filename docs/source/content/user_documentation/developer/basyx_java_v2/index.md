@@ -1,3 +1,3 @@
-# Basyx Java Version 2
+# BaSyx Java Version 2
 
 Placeholder

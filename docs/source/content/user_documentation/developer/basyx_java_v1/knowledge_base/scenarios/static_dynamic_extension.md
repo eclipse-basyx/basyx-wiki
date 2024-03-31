@@ -5,8 +5,8 @@ This example shows the enrichment of AAS data loaded from an aasx file with a dy
 
 The following components are used:
 
-* [Registry Component](../user_documentation/basyx_components/registry/index.md)
-* [AAS Server Component](../user_documentation/basyx_components/aas-server/index.md)
+* [Registry Component](../../../../basyx_components/v1/registry/index.md)
+* [AAS Server Component](../../../../basyx_components/v1/aas-server/index.md)
 
 
 

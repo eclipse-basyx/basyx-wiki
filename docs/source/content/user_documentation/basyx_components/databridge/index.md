@@ -1,5 +1,5 @@
 # DataBridge Component
-The DataBridge supports integrating various protocols with Asset Administration Shells. Data can be acquired from various endpoints, be transformed and pushed into SubmodelElements. By being provided as easy-to-use off-the-shelf component on [DockerHub](https://hub.docker.com/r/eclipsebasyx/databridge), it can easily be integrated in own use cases. For a comprehensive example, see the[ Asset Integration Scenario](../../../scenarios/device-integration.md).
+The DataBridge supports integrating various protocols with Asset Administration Shells. Data can be acquired from various endpoints, be transformed and pushed into SubmodelElements. By being provided as easy-to-use off-the-shelf component on [DockerHub](https://hub.docker.com/r/eclipsebasyx/databridge), it can easily be integrated in own use cases. For a comprehensive example, see the[ Asset Integration Scenario](../../developer/basyx_java_v1/knowledge_base/scenarios/device-integration.md).
 
 ## Features
 The DataBridge Component supports a multitude of features with a great range of configuration options, please take a look at the overall [device integration](https://github.com/eclipse-basyx/basyx-java-examples/tree/main/basyx.examples.deviceintegration/src/main/resources) scenarios:

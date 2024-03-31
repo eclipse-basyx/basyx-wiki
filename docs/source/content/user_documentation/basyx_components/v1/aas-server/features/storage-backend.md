@@ -21,4 +21,4 @@ By default, an empty InMemory server is started. The backend can be changed with
 ```
 aas.backend=InMemory
 ```
-Currently, the other valid option for the backend is **MongoDB** that persists the whole AAS together with its submodels in a MongoDB. If MongoDB is chosen as backend, the MongoDB backend connection has to be configured via [mongodb.properties file](../../mongodb.md).
+Currently, the other valid option for the backend is **MongoDB** that persists the whole AAS together with its submodels in a MongoDB. If MongoDB is chosen as backend, the MongoDB backend connection has to be configured via [mongodb.properties file](../../general_configuration/mongodb.md).

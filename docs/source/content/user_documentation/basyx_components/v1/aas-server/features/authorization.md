@@ -1,10 +1,10 @@
 # Authorization
-This feature enables AAS components user to secure the AAS & Submodels stored on the AAS Server component. This is one of the [security options](../../security/index.md) available in the Java SDK V1 of BaSyx.
+This feature enables AAS components user to secure the AAS & Submodels stored on the AAS Server component. This is one of the [security options](../../general_configuration/security/index.md) available in the Java SDK V1 of BaSyx.
 
 ## Feature Overview
 The authorization is a basic implementation to enable only authorized requests for <span style="color:red"> WHITE </span> and <span style="color:red"> READ </span>operations for both the AAS and the submodels. This implementation uses OAuth2 tokens and scopes, with the scopes being defined [[for submodels](https://github.com/eclipse-basyx/basyx-java-sdk/blob/development/src/main/java/org/eclipse/basyx/extensions/submodel/aggregator/authorization/SubmodelAggregatorScopes.java#L10-L11)] and [[for the AAS](https://github.com/eclipse-basyx/basyx-java-sdk/blob/development/src/main/java/org/eclipse/basyx/extensions/aas/aggregator/authorization/AASAggregatorScopes.java#L20-L21)]. As long as the token includes the respective scopes, an operation can be performed if the authorization is enabled.
 
-An example for the authorization can be found in the [scenario with Keycloak](../../../../scenarios/authorization.md).
+An example for the authorization can be found in the [scenario with Keycloak](../../../../developer/basyx_java_v1/knowledge_base/scenarios/authorization.md).
 
 ## Feature Configuration
 Authorization is disabled by default. Basic authorization can be configured in the aas.properties:
@@ -12,7 +12,8 @@ Authorization is disabled by default. Basic authorization can be configured in t
 aas.authorization=Enabled
 aas.authorization=Disabled
 ```
-<span style="color:red;font-size:larger"> [deprecated] </span> The JWT connectivity can be configured in the [context.properties](../../context-config.md), e.g. by
+<span style="color:red;font-size:larger"> [deprecated] </span> The JWT connectivity can be configured in the [context.properties](../../general_configuration/context-config.md), e.g. by
+
 ```
 jwtBearerTokenAuthenticationIssuerUri=http://127.0.0.1:9006/auth/realms/basyx-demo
 jwtBearerTokenAuthenticationJwkSetUri=http://127.0.0.1:9006/auth/realms/basyx-demo/protocol/openid-connect/certs
@@ -38,4 +39,4 @@ Further configurations for the authorization are done in the [[security.properti
 | aas.authorization.strategy.custom.authorizersProvider                                           | \<class>                        | class that provides the authorizers for AAS-Server/Registry respectively for custom strategy, must implement IAuthorizersProvider, thus 3rd party authorization logic can be dynamically loaded |                                                                                                          |
 | aas.authorization.strategy.custom.subjectInformationProvider                                    | \<class>                        | class that provides the subject information retrieval logic to go with the custom authorizers, must implement ISubjectInformationProvider                                                       |                                                                                                  |	
 
-Also see [BaSyx_/_Documentation_/_Components_/_Security_/_Authorization](../../security/authorization.md).
+Also see [Authorization](../../general_configuration/security/authorization.md).

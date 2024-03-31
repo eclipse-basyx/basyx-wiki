@@ -154,5 +154,5 @@ services:
 ```
 
 ```{hint}
-You can find a complete example on how to setup BaSyx with Docker in the [Quick Start](../../../../introduction/quickstart) section.
+You can find a complete example on how to setup BaSyx with Docker in the [Quick Start](../../../../introduction/quickstart.md) section.
 ```

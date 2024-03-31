@@ -60,7 +60,7 @@ With the new project in place, we can add Eclipse BaSyx to our dependencies and 
 As listed in the AASServer and Registry methods, we load the configurations from their default sources. For this, we will need to add the following files to our resources folder in the project. The different config elements can also be changed to your liking, we simply stick to the default values for this example.
 
 #### aas.properties
-```yaml
+```bash
    # #############################
    # AAS Server configuration file
    # #############################
@@ -165,7 +165,7 @@ As listed in the AASServer and Registry methods, we load the configurations from
 ```
 
 #### registry.properties
-```yaml
+```bash
    # ###########################
    # Registry configuration file
    # ###########################
@@ -214,7 +214,7 @@ As listed in the AASServer and Registry methods, we load the configurations from
    registry.taggedDirectory=Disabled
 ```
 #### serverContext.properties
-```yaml
+```bash
    # ###############################
    # HTTP Context configuration file
    # ###############################
@@ -259,7 +259,7 @@ As listed in the AASServer and Registry methods, we load the configurations from
    # accessControlAllowOrigin=http://www.example.com
 ```
 #### registryContext.properties
-```yaml
+```bash
    # ###############################
    # HTTP Context configuration file
    # ###############################

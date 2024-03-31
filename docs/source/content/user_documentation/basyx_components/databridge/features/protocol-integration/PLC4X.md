@@ -67,4 +67,4 @@ Similarly, you can configure multiple PLC4X inside the configuration file.
 The name of the PLC4X configuration file should be **plc4xconsumer.json**.
 
 ## Working Example
-The integration example with PLC4X as a data source, Json Jackson and JSONata as a transformer, and AAS as a data sink is on [GitHub DataBridge Example](https://github.com/eclipse-basyx/basyx-databridge/tree/main/databridge.examples/databridge.examples.plc4x-jsonata-aas). and [in this article](../../../../../databridge-PLC4X.md)
+The integration example with PLC4X as a data source, Json Jackson and JSONata as a transformer, and AAS as a data sink is on [GitHub DataBridge Example](https://github.com/eclipse-basyx/basyx-databridge/tree/main/databridge.examples/databridge.examples.plc4x-jsonata-aas). and [in this article](../../../../user_tutorials/databridge-PLC4X.md)

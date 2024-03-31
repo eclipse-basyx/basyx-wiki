@@ -20,4 +20,4 @@ registry.backend=InMemory
 ```
 Currently, the other valid option for the backend is **MongoDB** and **SQL**.
 
-If MongoDB or SQL is chosen as backend, the MongoDB connection has to be configured via [mongodb.properties file](../../mongodb.md) for MongoDB or [sql.properties file](../../sql.md)for SQL.
+If MongoDB or SQL is chosen as backend, the MongoDB connection has to be configured via [mongodb.properties file](../../general_configuration/mongodb.md) for MongoDB or [sql.properties file](../../general_configuration/sql.md)for SQL.

@@ -40,4 +40,4 @@ An example configuration for this feature could be:
 registry.events = MQTTV2
 registry.id = product-aas-registry
 ```
-The MQTT broker connectivity is configured via [mqtt.properties](../../mqtt.md)
+The MQTT broker connectivity is configured via [mqtt.properties](../../general_configuration/mqtt.md)

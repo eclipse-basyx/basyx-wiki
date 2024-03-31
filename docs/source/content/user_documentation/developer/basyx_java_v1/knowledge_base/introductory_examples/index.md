@@ -30,13 +30,13 @@ More details can be found at Introductory Examples/Java/Step 5
 ## Java
 The goal of the following examples is to introduce core concepts and the respective infrastructure components of the Eclipse BaSyx Java SDK in 8 steps. In these steps we will illustrate:
 
-* [Virtual Automation Bus](../user_documentation/vab/index.md)
-* [Asset Administration Shell](../user_documentation/aas.md)
-* [Control Components](../user_documentation/controlcomponent.md)
+* [Virtual Automation Bus](../../../../concepts%20and%20architecture/vab/index.md)
+* [Asset Administration Shell](../../../../concepts%20and%20architecture/aas_overview.md)
+* [Control Components](../../../../concepts%20and%20architecture/controlcomponent.md)
 
 The Virtual Automation Bus enables end-to-end connectivity. The Asset Administration Shell is the digital representative of a device. If the AAS only provides access to sensor data then it will be a digital shadow. If it also enables controlling of the real device, it is a digital twin. The control component can be implemented in a PLC controller, and provides a unified device interface.
 
-**Precondition**: The example requires a successful installation of the [SDK](../download/java_setup.md) and the [components](../download/components_setup.md).
+**Precondition**: The example requires a successful installation of the [SDK](../../../../user_tutorials/download/java_setup.md) and the [components](../../../../user_tutorials/download/components_setup.md).
 
 The following example illustrates Eclipse BaSyx by creating a digital twin for one device. The device is an oven that consists of a temperature sensor and of a heater. An application will display the current state of the oven and control its operation. The following links lead to a set of classes that we will be using for simulating the behavior of the oven and its devices to enable the self-contained execution of this example:
 
@@ -59,8 +59,8 @@ The following example illustrates Eclipse BaSyx by creating a digital twin for o
 
 * [Step 1](./java/example1.md) - Creating and accessing an oven model with local VAB access
 * [Step 2](./java/example2.md) - Providing the model via HTTP/REST and accessing the model remotely
-    * [Step 2a](./java/example2a.md) - Providing the model via [BaSyxTCP](../user_documentation/vab/tcp_mapping.md)
-    * [Step 2b](./java/example2b.md) - Providing the model via [BaSyxTCP](../user_documentation/vab/tcp_mapping.md) and connecting via a [gateway](../user_documentation/gateway.md)
+    * [Step 2a](./java/example2a.md) - Providing the model via [BaSyxTCP](../../../../concepts%20and%20architecture/vab/tcp_mapping.md)
+    * [Step 2b](./java/example2b.md) - Providing the model via [BaSyxTCP](../../../../concepts%20and%20architecture/vab/tcp_mapping.md) and connecting via a [gateway](../../../../concepts%20and%20architecture/gateway.md)
 * [Step 3](./java/example3.md) - Using a Control Component for unified service interfacing
 * [Step 4](./java/example4.md) - Creating the AAS, registering it and exploring the HTTP-REST interface
 * [Step 5](./java/example5.md) - Accessing the remote AAS through the SDK

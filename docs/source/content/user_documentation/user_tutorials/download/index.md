@@ -23,7 +23,7 @@ Additionally, the release artifacts of BaSyx Java can be found on [Maven Central
 ## Off-the-Shelf Components
 BaSyx provides multiple ready-to-use off-the-shelf components as Docker Images that can be used without any programming knowledge.
 
-* [Off-the-Shelf Components Download and Setup](../../basyx_components/index.md)
+* [Off-the-Shelf Components Download and Setup](../../basyx_components/index.md#off-the-shelf-components)
 
 
 ```{toctree}

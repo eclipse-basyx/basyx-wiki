@@ -22,7 +22,7 @@ Strings are encoded in the following scheme:
 Collections/Maps are serialized to a string as defined in the JSON serialization and send as a string as defined above.
 
 ## Primitive Mapping
-For a detailed description of the primitives, see the VAB [documentation](index.md).
+For a detailed description of the primitives, see the VAB [documentation](index.md#technology-independent-vab-element-interface).
 
 ## RETRIEVE
 

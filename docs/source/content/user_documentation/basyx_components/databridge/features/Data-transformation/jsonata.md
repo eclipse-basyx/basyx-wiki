@@ -1,4 +1,5 @@
 # JSONata
+
 The JSONata transformer can be integrated with DataBridge. The Jsonata component allows you to process JSON messages using the [JSONata](https://jsonata.org) specification. This can be ideal when doing JSON to JSON transformation and other transformations from JSON.
 
 ## Configuration

@@ -1,6 +1,6 @@
 # Security(HTTPS)
 
-By default, the AAS server component uses plain *Hypertext Transfer Protocol* (HTTP) to communicate with clients. HTTP is unprotected against network attacks, which allows an adversary to read and manipulate any communication to and from the AAS server. However, the AAS server also supports the secure variant of HTTP named [HTTPS](./https.md). In the linked subpage, you can find more information about HTTPS, and how to set it up and configure it with V1 Java BaSyx OTS components and the Java SDK.
+By default, the AAS server component uses plain *Hypertext Transfer Protocol* (HTTP) to communicate with clients. HTTP is unprotected against network attacks, which allows an adversary to read and manipulate any communication to and from the AAS server. However, the AAS server also supports the secure variant of HTTP named [HTTPS](https.md). In the linked subpage, you can find more information about HTTPS, and how to set it up and configure it with V1 Java BaSyx OTS components and the Java SDK.
 
 ## Features 
 
@@ -11,13 +11,12 @@ By default, the AAS server component uses plain *Hypertext Transfer Protocol* (H
 :hidden:
 :maxdepth: 1
 
-authorization
 https
-
+authorization
 ``` 
 
 ## Access Control
-Overview By default, all clients can access all data within the main [BaSyx OTS components](../index.md). In the Java SDK of BaSyx V1, there exist multiple options for defining access restrictions on specific clients. There are mainly two strategies. Additionally, it is possible to implement, configure and load a custom implementation for access control. See also more [details](../security/authorization.md) about these strategies.
+Overview By default, all clients can access all data within the main [BaSyx OTS components](../../index.md#off-the-shelf-components). In the Java SDK of BaSyx V1, there exist multiple options for defining access restrictions on specific clients. There are mainly two strategies. Additionally, it is possible to implement, configure and load a custom implementation for access control. See also more [details](authorization.md) about these strategies.
 
 * GrantedAuthoriy: Configure read/write access for clients
 * SimpleRbac: Configure individual roles and detailed rules for accessing e.g. individual submodel elements
@@ -30,6 +29,6 @@ In principle, a client authenticates at the authentication server and gets a JWT
 ## Setup
 In order to run your own setup, you need to configure a KeyCloak server instance, the used OTS components and then use authenticated clients that access the OTS component with a valid token. A full example with introductions on how to run it can be found in the [example repository](https://github.com/eclipse-basyx/basyx-java-examples/tree/main/basyx.examples/src/main/java/org/eclipse/basyx/examples/scenarios/authorization/combined).
 
-For the authentication server, KeyCloak needs to be configured and started. General instructions on how to do this can be found [here](../../../scenarios/authorization.md) and in its extensive [documentation](https://www.keycloak.org/docs/latest/server_admin/#configuring-authentication_server_administration_guide). Depending on the component and the strategy, there is a different configuration at the BaSyx component for the [AASServer](../aas-server/features/authorization.md) or the [Registry](../registry/features/authorization.md). In addition, there is a detailed overview over the two main [authorization strategies](../security/authorization.md).
+For the authentication server, KeyCloak needs to be configured and started. General instructions on how to do this can be found [here](../../../../developer/basyx_java_v1/knowledge_base/scenarios/authorization.md) and in its extensive [documentation](https://www.keycloak.org/docs/latest/server_admin/#configuring-authentication_server_administration_guide). Depending on the component and the strategy, there is a different configuration at the BaSyx component for the [AASServer](../../aas-server/features/authorization.md) or the [Registry](../../registry/features/authorization.md). In addition, there is a detailed overview over the two main [authorization strategies](authorization.md).
 
 

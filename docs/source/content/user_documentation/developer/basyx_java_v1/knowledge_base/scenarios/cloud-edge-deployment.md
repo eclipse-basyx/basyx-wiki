@@ -4,8 +4,8 @@ This example shows the setup and usage of a distributed deployment. It contains 
 
 The following components are used:
 
-* [Registry Component](../user_documentation/basyx_components/registry/index.md)
-* [AAS Server Component](../user_documentation/basyx_components/aas-server/index.md)
+* [Registry Component](../../../../basyx_components/v1/registry/index.md)
+* [AAS Server Component](../../../../basyx_components/v1/aas-server/index.md)
 
 
 ![CloudEdgeDeploymentScenario.png](./images/706px-CloudEdgeDeploymentScenario.png)

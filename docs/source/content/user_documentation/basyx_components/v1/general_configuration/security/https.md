@@ -1,7 +1,7 @@
 # HTTPS
 
 ## Introduction
-By default, the [AAS server component](../aas-server/index.md) uses plain *Hypertext Transfer Protocol* (HTTP) to communicate with clients. HTTP is unprotected against network attacks, which allows an adversary to read and manipulate any communication to and from the AAS server. However, the AAS server also supports a secure variant of HTTP named HTTPS. To secure exchanged data, HTTPS makes use of the *Transport Layer Security* protocol (TLS), which provides three protection layers: (1) Encryption: exchanged data cannot be read by others; (2) Integrity: exchanged data cannot be modified by others; (3) Authenticity: exchanged data indeed comes from the claimed source, the server. Today, most Websites on the Internet support HTTPS and browsers recently use HTTPS as their default mode [[1]](https://blog.chromium.org/2021/03/a-safer-default-for-navigation-https.html).
+By default, the [AAS server component](../../aas-server/index.md) uses plain *Hypertext Transfer Protocol* (HTTP) to communicate with clients. HTTP is unprotected against network attacks, which allows an adversary to read and manipulate any communication to and from the AAS server. However, the AAS server also supports a secure variant of HTTP named HTTPS. To secure exchanged data, HTTPS makes use of the *Transport Layer Security* protocol (TLS), which provides three protection layers: (1) Encryption: exchanged data cannot be read by others; (2) Integrity: exchanged data cannot be modified by others; (3) Authenticity: exchanged data indeed comes from the claimed source, the server. Today, most Websites on the Internet support HTTPS and browsers recently use HTTPS as their default mode [[1]](https://blog.chromium.org/2021/03/a-safer-default-for-navigation-https.html).
 
 Due to the insecure nature of HTTP, it is *highly recommended to use the AAS server in HTTPS mode*. This article describes how to configure the BaSyx AAS server component to use HTTPS, thereby, effectively protecting the AAS server against network attacks.
 
@@ -82,8 +82,11 @@ Finally, clients need to made aware of the self-signed certificate. Command line
 keytool.exe -export -alias tomcat -storepass secretpassword -keystore credentials.jks -rfc -file server.pem
 ```
 In addition, some clients make use of a certificate store to keep track of trusted certificates. Such certificate stores are provided either by the client itself or by the Operating System (OS). For instance, browsers typically use the certificate store provided by the OS. On Windows, certificates can be imported into the Windows certificate store by double-clicking on the certificate and following these steps: Install Certificate... -> Store Location: Current User -> Certificate Store: Trusted Root Certification Authorities -> Finish. Afterwards, Windows, including browsers such as Firefox, Edge, or Chrome, recognizes the certificate as trustworthy. On Linux-based OSs, the implementation of the certificate store depend on the particular Linux distribution. Here is a link that describes the process for Ubuntu: [Adding the Root Certificate to Linux](https://deliciousbrains.com/ssl-certificate-authority-for-local-https-development/#adding-root-cert-linux-keychain).
+
 ## Option 2: CA-signed AAS Server Certificate
+
 ### Step 1: Key and CSR Generation
+
 To generate a CA-signed certificate for the AAS server, the AAS server first needs an asymmetric (private/public) key pair. In addition, the subject field of the future certificate need to be set. This is done with keytool using the following command:
 ```
 keytool.exe -genkey -alias tomcat -keyalg RSA -keysize 2048 -dname "CN=example-hostname, O=Example Company, C=DE" -validity 365 -storepass secretpassword -keystore credentials.jks
@@ -142,4 +145,4 @@ However, if the server is running in HTTPS using a self-signed certificate, Java
 An example on how to run the server in HTTPS and test connection, REST API can be found in *basyx.testsuite.regression.vab.protocol.https.TestVABHTTPS*
 
 ## Application-Level Authentication and Authorization of Resources in the BaSyx Server
-See [BaSyx_/_Documentation_/_Components_/_Security_/_Authorization](./authorization.md).
+See [Authorization](authorization.md).

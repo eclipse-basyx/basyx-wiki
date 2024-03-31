@@ -1,6 +1,6 @@
 # Lambda Provider
 
-The Lambda provider is one of the basic providers in the BaSyx SDK for generic models. It is based on the [HashMap provider](./hashmap_provider.md) and therefore also uses HashMaps for the internal representation of data. In addition to the functionalities of this provider, the Lambda provider also enables dynamic property resolution. Both implement the same interface, so depending on the required functionalities they can be used interchangeably.
+The Lambda provider is one of the basic providers in the BaSyx SDK for generic models. It is based on the [HashMap provider](hashmap_provider.md) and therefore also uses HashMaps for the internal representation of data. In addition to the functionalities of this provider, the Lambda provider also enables dynamic property resolution. Both implement the same interface, so depending on the required functionalities they can be used interchangeably.
 
 ### Dynamic Property Resolution
 

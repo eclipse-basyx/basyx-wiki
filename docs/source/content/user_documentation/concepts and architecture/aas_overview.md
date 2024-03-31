@@ -150,7 +150,7 @@ The Identifier class is used to uniquely identify an entity. The IdentifierType 
 * IRDI: IRDI according to ISO29002-5 as an Identifier scheme for properties and classifications.
 * URI: Identifier of type URI
 * Custom: Custom identifiers like GUIDs (globally unique Identifiers)
-With respect to the global kind of an AAS, we propose a [URI based format for the AAS identifier](../../../../user_documentation/identification.md).
+With respect to the global kind of an AAS, we propose a [URI based format for the AAS identifier](identification.md).
 
 
 | Attribute | Type           | Kind | Cardinality | Description                                                                                                               |

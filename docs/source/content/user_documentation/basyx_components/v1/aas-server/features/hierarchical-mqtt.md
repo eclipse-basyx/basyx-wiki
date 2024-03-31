@@ -51,6 +51,6 @@ An example configuration for this feature could be:
 aas.events = MQTTV2
 aas.id = product-aas-repo
 ```
-The MQTT broker connectivity is configured via [mqtt.properties](../../mqtt.md)
+The MQTT broker connectivity is configured via [mqtt.properties](../../general_configuration/mqtt.md)
 
 Additional to the overall event configuration, the payload send on the *../value* topic for updating a SubmodelElement's value can be tailored. For SubmodelElements containing huge values like Blobs, it may be sensible to disable sending their value's content. If this is the case, a qualifier with type *emptyValueUpdateEvent* and value set to *true* will configure empty value updates for the specific SubmodelElement (cf. [ObservableSubmodelAPIV2Helper](https://github.com/eclipse-basyx/basyx-java-sdk/blob/development/src/main/java/org/eclipse/basyx/submodel/restapi/observing/ObserableSubmodelAPIV2Helper.java#L62)).

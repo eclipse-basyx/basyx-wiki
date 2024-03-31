@@ -122,6 +122,6 @@ So, based on the above configurations we did we can identify the above attribute
 * **Options** -> None
 * **Tags -> name** = value_1 (Arbitrary Name), **value** = holding-register:1
 
-Now the last step is to specify these attributes in a configuration file **plc4xconsumer.json** as defined in the [PLC4X Protocol](./user_documentation/basyx_components/databridge/features/protocol-integration/PLC4X.md), along with other [protocols](./user_documentation/basyx_components/databridge/features/index.md) supported by the DataBridge.
+Now the last step is to specify these attributes in a configuration file **plc4xconsumer.json** as defined in the [PLC4X Protocol](../basyx_components/databridge/features/protocol-integration/PLC4X.md), along with other [protocols](../basyx_components/databridge/index.md#features) supported by the DataBridge.
 
 An **example scenario** demonstrating this is also available on [GitHub](https://github.com/eclipse-basyx/basyx-databridge/tree/main/databridge.examples/databridge.examples.plc4x-jsonata-aas).

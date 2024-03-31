@@ -7,7 +7,7 @@
 * [OPC UA](opcua.md)
 * [MQTT](mqtt.md)
 * [PLC4X](PLC4X.md)
-* [JSON JACKSON](json-jackson.md)
+* [JSON Jackson](json-jackson.md)
 
 
 ```{toctree}

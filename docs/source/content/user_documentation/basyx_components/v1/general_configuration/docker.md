@@ -1,10 +1,10 @@
 # Docker 
-The docker images for the components from the Java SDK are provided on [DockerHub](https://hub.docker.com/search?q=eclipsebasyx). For their documentation, see [here](./index.md). Thus, there is no need for building them before usage.
+The docker images for the components from the Java SDK are provided on [DockerHub](https://hub.docker.com/search?q=eclipsebasyx). For their documentation, see [here](../../v1/index.md). Thus, there is no need for building them before usage.
 
 The following sections for deployment with docker assume an already installed docker environment.
 
 # Java SDK
-Additionally, you can either build the available docker images that are contained in the open source repository or create custom docker images by yourself. For both, you will need to [setup the Java SDK](../../download/java_setup.md) beforehand.
+Additionally, you can either build the available docker images that are contained in the open source repository or create custom docker images by yourself. For both, you will need to [setup the Java SDK](../../../user_tutorials/download/java_setup.md) beforehand.
 
 ## Predefined Docker Images
 All components with predefined docker images are contained in the basyx.components project. It is a hierarchical Maven project and consists of two sub-projects itself:
@@ -13,10 +13,10 @@ All components with predefined docker images are contained in the basyx.componen
 
 **basyx.components.lib** contains all other components and functions as a shared library - individual components are going to be organized into sub-projects over time.
 
-See the [list of docker components](../basyx_components/index.md) in its own page.
+See the [list of docker components](../../v1/index.md) in its own page.
 
 ### How to Create Predefined Docker Images?
-Each Maven sub-project in **basyx.components.docker** can build a docker image when installing the project. By default, this step is skipped when [installing the Maven artifacts](../../download/components_setup.md) for each sub-project to the local repository. For including the docker image in the build process use the **Maven profile "docker"**:
+Each Maven sub-project in **basyx.components.docker** can build a docker image when installing the project. By default, this step is skipped when [installing the Maven artifacts](../../../user_tutorials/download/components_setup.md) for each sub-project to the local repository. For including the docker image in the build process use the **Maven profile "docker"**:
 
 * Right Click on the respective project (e.g. basyx.components.sqlregistry) -> Run As -> Maven build...
 * Goals: *install*
@@ -26,7 +26,7 @@ As with all Maven commands, you can also execute this outside of the Eclipse IDE
 ```
 mvn install -Pdocker
 ```
-Maven then runs unit tests, build the binaries and the docker image, runs the container and integration tests and then installs the project on success. Similar to the [default](../../download/components_setup.md) project installation without the docker images, it is also possible to skip all the tests and thereby the backend requirements listed in that page.
+Maven then runs unit tests, build the binaries and the docker image, runs the container and integration tests and then installs the project on success. Similar to the [default](../../../user_tutorials/download/components_setup.md) project installation without the docker images, it is also possible to skip all the tests and thereby the backend requirements listed in that page.
 
 ### How to create Images for ARM?
 If you want to build the Image directly on an ARM device, you can just follow the instructions above. The following description shows how to crossbuild an ARM image on an x86 CPU.
@@ -43,7 +43,7 @@ docker buildx build --load --platform linux/arm/v7 --build-arg JAR_FILE=basyx.co
 ```
 
 ### How to start docker containers using the predefined docker images?
-This depends on the container. Different containers can be configured in different ways and possibly depend on another piece of infrastructure. See the description of the docker component you are interested in for instructions on how to configure and start it. See the [list of docker components](../basyx_components/index.md) to find more information on that.
+This depends on the container. Different containers can be configured in different ways and possibly depend on another piece of infrastructure. See the description of the docker component you are interested in for instructions on how to configure and start it. See the [list of docker components](../../v1/index.md) to find more information on that.
 
 ### How to Build Docker Images
 As you already know, all projects inside of basyx.components.docker are Maven projects and therefore follow an automated build process. This process is the same for each individual docker component project and works as follows:
@@ -80,7 +80,7 @@ In the following, it is assumed that the resource is already packaged in a jar f
 
 The following Dockerfile can be used to package arbitrary jars and expose their port(s). ${jar-name} is here the name of the jar file.
 
-```yaml
+```bash
 # Add java runtime environment for execution
 FROM java:8-jdk-alpine 
  

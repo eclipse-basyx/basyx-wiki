@@ -16,6 +16,7 @@ You can add authorization requirements to the actions of BaSyx components that w
 
 As BaSyx is meant to support various architectures as a foundational technology, the authorization capabilities are designed accordingly in a somewhat generic way to make it adaptable. At the same time, to reduce the effort, there are implemented standard strategies shipped with BaSyx.
 
+
 # Provided Authorization Strategies
 ## GrantedAuthority
 The name comes from the GrantedAuthority interface of Spring Security.
@@ -98,7 +99,7 @@ The authorization key-value pairs inside the files look like this:
 For AAS-Server:
 
 aas.properties:
-```yaml
+```bash
 aas.authorization=Enabled
 The security.properties looks like this for both components:
 
@@ -359,6 +360,7 @@ context.setJwtBearerTokenAuthenticationConfiguration(
 The required JwtBearerTokenAuthenticationConfiguration object can also be created directly via its own factory method:
 
 ``JwtBearerTokenAuthenticationConfiguration.of(issuerUri, jwkSetUri, optionalRequiredAudience)``
+
 ## Customziation
 By implementing ISubmodelAPIAuthorizer or similar plus ISubjectInformationProvider, you can add own authorization logic. The ISubmodelAPIAuthorizer interface for example declares methods which mirror the operations of the ISubmodelAPI interface to deliver an authorization decision for each of those operations.
 
@@ -382,6 +384,7 @@ The ISubjectInformationProvider supplies the subject information considered by t
 Further utility and facilities for authorization can be found at [https://github.com/eclipse-basyx/basyx-java-sdk/tree/main/src/main/java/org/eclipse/basyx/extensions/shared/internal/authorization].
 
 Among that is the KeycloakService class, which has some methods to interact with a Keycloak server. The BaSyx SDK also has the [[Keycloak Admin REST Client Java library]](https://mvnrepository.com/artifact/org.keycloak/keycloak-admin-client) as a dependency.
+y
 
 # Scope tables for GrantedAuthority and SimpleRbac
 Below are reference tables that show which action scopes are used in what endpoints of the Off-the-Shelf components and analogously for the component servlets that you would add with the SDK. The permissions and authorization decisions are not directly matching the endpoints but rather target the individual service operations backing them. For example, in order to write to an AAS-API on an AASServer, it would first ask the AAS-Aggregator to provide the AAS-API, which requires reading permission for the AAS-Aggregator, before trying to write to the AAS-API, which would additionally need writing permissions for the AAS-API.

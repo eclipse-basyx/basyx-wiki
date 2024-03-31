@@ -12,7 +12,7 @@ dbcollectionRegistry	= registry
 dbcollectionAAS		    = assetadministrationshells
 dbcollectionSubmodels	= submodels
 ```
-The collection names are used by the [AAS Server Component](./aas-server/index.md)and the [Registry Component](./registry/index.md) to specifiy the collection within the MongoDB to store the AAS, submodels and registry entries.
+The collection names are used by the [AAS Server Component](../../../basyx_components/v1/aas-server/index.md)and the [Registry Component](../../../basyx_components/v1/registry/index.md) to specifiy the collection within the MongoDB to store the AAS, submodels and registry entries.
 
 ## Custom Configuration
 For docker components, the mongodb.properties file can be mounted inside of the container using a volume during container startup. E.g., to run the registry component with custom configuration, use

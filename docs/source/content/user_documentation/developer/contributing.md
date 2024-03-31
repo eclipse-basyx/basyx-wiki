@@ -30,4 +30,4 @@ java -jar $JAR $HTTP_ENDPOINT
 where *$JAR* is the name of the component's TCK jar and *$HTTP_ENDPOINT* is the endpoint on which the component's REST API is available.
 
 ## Code Formatting
-For the Java parts of Eclipse BaSyx, an Eclipse IDE Code Formatter profile is available: [File:BaSyx Formatting.zip](../developer/files/BaSyx_Formatting%20.zip).
+For the Java parts of Eclipse BaSyx, an Eclipse IDE Code Formatter profile is available: [File:BaSyx Formatting.zip](../developer/files/BaSyx_Formatting20.zip).

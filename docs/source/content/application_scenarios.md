@@ -2,7 +2,7 @@ The following BaSys 4.0 scenarios document application scenarios and functional 
 
 
 ## BaSyx HowTo
-[Howto: Asset Administration Shells]()
+[Howto: Asset Administration Shells](../content/user_documentation/concepts%20and%20architecture/aas_overview.md)
 
 
 ## Application scenarios

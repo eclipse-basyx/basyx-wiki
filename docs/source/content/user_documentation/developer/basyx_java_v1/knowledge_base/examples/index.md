@@ -1,5 +1,13 @@
 # Extended Examples
 
+```{toctree}
+:hidden:
+:maxdepth: 1
+
+monitoring
+
+```
+
 ### Code snippets
 
 Code snippets are simple, isolated use-cases that illustrate the use of Eclipse BaSyx. They provide focused recipes that document the intended use of the BaSyx SDK and our reference implementations of Industrie 4.0 middleware components. To keep functional examples simple, code snippets only address selected aspects of Industrie 4.0 implementations. Selected snippets provide a page with documentation. For all snippets, links to executable source code files in the git repository are provided. The snippets itself only contain the code necessary to fulfil their function. Examples on how to use the snippets can be found in the [tests](https://git.eclipse.org/r/plugins/gitiles/basyx/basyx/+/master/examples/basys.examples/src/test/java/org/eclipse/basyx/examples/snippets) for the snippets.
@@ -112,16 +120,8 @@ Eclipse BaSyx advocates the use of URNs as unique identifiers for AAS. Code snip
 
 
 ## Deployment with Docker
-The deployment of the different SDKs and components with docker is explained in its own [page](../user_documentation/basyx_components/docker.md).
+The deployment of the different SDKs and components with docker is explained in its own [page](../../../../basyx_components/v1/general_configuration/docker.md).
 
 ## Monitoring Applications (AAS Dashboards)
 
 The integration with third-party applications & tools enable the possibility to monitor Asset Administration Shell and visualize its data through Dashboards. The integration and its use is explained in here [[page](monitoring.md)].
-
-```{toctree}
-:hidden:
-:maxdepth: 1
-
-monitoring
-
-```

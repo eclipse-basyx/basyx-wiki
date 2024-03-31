@@ -15,4 +15,4 @@ The following example describes a valid ID for an asset administration shell: ``
 | ElementID:        | x-509           | An additional Element ID                                                                                                                 |
 | Element instance: | 001             | The instance of the element that is described by this ID                                                                                 |
 
-[This](./developer/java/knowledge_base/examples/index.md#urn) BaSyx SDK example illustrates the creation of an URN identifier
+[This](../developer/basyx_java_v1/knowledge_base/examples/index.md#urn) BaSyx SDK example illustrates the creation of an URN identifier

@@ -1,4 +1,4 @@
-# 3rd Party applications and Frameworks
+# 3rd Party Applications and Frameworks
 
 BaSyx is also integrated in various third-party applications and frameworks. Please note that this list is currently work-in-progress and will be extended in future
 

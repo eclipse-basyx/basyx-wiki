@@ -51,7 +51,7 @@ docker start registry
 docker rm registry
 ```
 ## Configuration
-As with the other components, the registry's context can be customized using the [context configuration](../context-config.md ).
+As with the other components, the registry's context can be customized using the [context configuration](../general_configuration/context-config.md ).
 
 For the AAS Registry component, a multitude of features can be configured via the registry.properties file. By default, this configuration file is assumed to be located at *"/usr/share/config/registry.properties"* within the container.
 
@@ -61,7 +61,7 @@ docker run --name=registry -p 8082:4000 -v C:/tmp:/usr/share/config eclipsebasyx
 ```
 In this example, the **registry.properties** file is located in C:/tmp/
 
-The features of the AAS Registry component are documented on their own page: [Features](./features/index.md)
+The features of the AAS Registry component are documented on their own page: [Features](#features)
 
 ## Implementation
 Within the project, the component can be found in the Java repository at [Java](https://git.eclipse.org/r/plugins/gitiles/basyx/basyx/+/master/components/basys.components/basyx.components.docker/basyx.components.registry/src/main/java/org/eclipse/basyx/components/registry/executable/). In this project, the executable can take the parameter **BASYX_REGISTRY** to configure the path of the registry configuration file. For example, you can specify the path of the registry configuration file via

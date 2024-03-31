@@ -79,11 +79,11 @@ Final result:
 ![BaSyxEclipseIDE.jpg](./images/BaSyxEclipseIDE.jpg)
 
 ### Further steps
-The **[introductory examples](../../developer/java/knowledge_base/introductory_examples/index.md)** are a good starting point to see how the SDK itself can be utilized.
+The **[introductory examples](../../developer/basyx_java_v1/knowledge_base/introductory_examples/index.md)** are a good starting point to see how the SDK itself can be utilized.
 
-Furthermore, the **basyx.components** project is built on top of the **basyx.sdk** and provides additional components. Among others you will also find components with [predefined docker images](../../basyx_components/v1/index.md) inside.
+Furthermore, the **basyx.components** project is built on top of the **basyx.sdk** and provides additional components. Among others you will also find [components with predefined docker images](../../basyx_components/v1/index.md) inside.
 
-There are extended [basyx.examples](../../developer/java/knowledge_base/examples/index.md) that demonstrate various examples and use cases for both projects.
+There are extended [basyx.examples](../../developer/basyx_java_v1/knowledge_base/examples/index.md) that demonstrate various examples and use cases for both projects.
 
 Also read the article about [how to contribute](../../developer/contributing.md) to the open source code.
 
