@@ -1,11 +1,11 @@
 # Integrated End-User Applications
 
-# Overview
+## Overview
 BaSyx enables integration with third-party tools to support real-time data visualization, real-time data monitoring, and data processing. The following examples provide different use cases according each application.
 
-# Use Cases
+## Use Cases
 
-## Data Analytics
+### Data Analytics
 
 Data analysis play a key role in making decisions in a many diverse businesses and domains. In the context of Industry 4.0, data analysis will support to operate more effectively and efficiently, and will also be crucial for predictive maintenance. In the context of Basyx project, a tool named **Streamsheets** is integrated to support Basyx users in the task of monitoring and visualizing streams of data.
 
@@ -23,7 +23,7 @@ The following example describes a scenario where temperature values are collecte
 
 ![Basyx.monitoring-streamsheets-thumb.png](./images/800px-Basyx.monitoring-streamsheets-thumb.png)
 
-## Dashboard
+### Dashboard
 
 Data visualization through user-friendly Dashboards which displays real-time data complements the use case Data Analytics. To support Basyx users the tool names **Grafana** was selected as a flexible and customizable application. Grafana is an open-source tool for creating dashboards of different types of data sources.
 
@@ -41,7 +41,7 @@ The following example describes a scenario where temperature values can be visua
 
 ![GrafanaDashboard.png](./images/800px-GrafanaDashboard.png)
 
-## Dataflow Controlling
+### Dataflow Controlling
 
 Dataflow controlling is also a need in the context of Industry 4.0. In near future, most of all operations in a shop floor might be based on data. From basic operations, decision making processes, predictive maintenance, to processes optimization all will be realized by interoperability of data. Many sources and targets will be in communication exchanging information. To support such scenarios, Basyx users shall use tools that allows data processing and transformation. For the moment, **Node-RED** is the selected tool to support in these tasks.
 
@@ -66,7 +66,7 @@ In the following example:
 
 ![NodeRedDashboard.png](./images/800px-NodeRedDashboard.png)
 
-## How to Use
+### How to Use
 All necessary images that are necessary to run the examples are available in DockerHub. So, in order to run them, you do not need to build them by yourself, but only have to run them in a configured Docker environment. A full example for all monitoring scenarios with a simple AAS is given in the BaSyx Git repository. To run the examples, you therefore need a Docker environment. The necessary files can be checked found on GitHub:
 
 https://github.com/eclipse-basyx/basyx-java-examples

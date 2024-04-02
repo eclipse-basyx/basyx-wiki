@@ -1,14 +1,14 @@
 # Concepts and Architecture
 
-* [Basyx Concepts](concepts.md)
+* [BaSyx Concepts](concepts.md)
 * [About AAS](aas_overview.md)
-* [Basyx AAS Submodel](submodel.md)
-* [Basyx AAS Registry](registry_overview.md)
-* [Basyx URI ID Schema](identification.md)
-* [Basyx Control Component](controlcomponent.md)
-* [Basyx VAB Gateway](gateway.md)
+* [BaSyx AAS Submodel](submodel.md)
+* [BaSyx AAS Registry](registry_overview.md)
+* [BaSyx URI ID Schema](identification.md)
+* [BaSyx Control Component](controlcomponent.md)
+* [BaSyx VAB Gateway](gateway.md)
 * [Virtual Automation Bus](./vab/index.md)
-* [Basyx Device Integration](device_integration.md)
+* [BaSyx Device Integration](device_integration.md)
 
 ```{toctree}
 :hidden:

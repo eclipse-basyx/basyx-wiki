@@ -1,4 +1,4 @@
-# Basyx VAB Gateway
+# BaSyx VAB Gateway
 
 Gateways realize the translation part of the end-to-end communication of the Virtual Automation Bus. By transparently translating the five semantic primitives from a native communication technology to another native technology, they are completely invisible to sender and receiver of messages.
 

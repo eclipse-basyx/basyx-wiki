@@ -1,4 +1,4 @@
-# Basyx URI ID Schema
+# BaSyx URI ID Schema
 
 Eclipse BaSyx uses unique IDs (URIs) to identify elements that are connected to the virtual automation bus. Therefore, Asset Administration Shells and sub models are identified by a specific and technology independent ID. The following illustrates the ID format that is proposed by Eclipse BaSyx. It resembles the ID format described by the Platform Industrie 4.0 initiative “Asset Administrative Shell in Detail”. In addition, other, internal ID formats may be used at any time, as long as no duplicate identifiers are used.
 

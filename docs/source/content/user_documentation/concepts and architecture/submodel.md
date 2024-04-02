@@ -1,4 +1,4 @@
-# Basyx AAS Submodel
+# BaSyx AAS Submodel
 
 "A Submodel defines a specific aspect of the asset represented by the Asset Administration Shell. A Submodel is used to structure the virtual representation and technical functionality of an Administration Shell into distinguishable parts. Each Submodel refers to a well-defined domain or subject matter. Submodels can become standardized and thus become submodels types. Submodels can have different life-cycles." (Details of the Asset Administration Shell, 2018, p. 46, [[1](https://www.plattform-i40.de/IP/Redaktion/DE/Downloads/Publikation/2018-verwaltungsschale-im-detail.pdf)])
 
