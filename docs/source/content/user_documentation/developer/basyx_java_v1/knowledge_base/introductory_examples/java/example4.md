@@ -2,7 +2,7 @@
 
 After the last example, we can control the oven through a unified service interface. However, the provided descriptions, data and semantics are still custom made. Thus, an application working with the oven, retrieving temperature and controlling it is not necessary interoperable with another oven, using the same abstract data but not the same model.
 
-To fill this gap, the [Asset Administration Shell](../../../../../concepts%20and%20architecture/aas_overview.md) will be used in this example. Additionally, we will explore the AAS meta model through its [HTTP-REST]((../../../../../API/aas.md)) interface by using any browser.
+To fill this gap, the [Asset Administration Shell](../../../../../concepts%20and%20architecture/aas_overview.md) will be used in this example. Additionally, we will explore the AAS meta model through its [HTTP-REST](../../../../../API/aas.md) interface by using any browser.
 
 ## Example Code
 First, two submodels are created with properties and operations. These properties/operations hold meta data giving a description of their semantics. The defined submodels are:
