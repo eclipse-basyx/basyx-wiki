@@ -1,6 +1,6 @@
 # Example 6 - Hello World
 
-The "Hello World" example is a very basic client/server demonstration of BaSyx that utilizes the [Off-the-shelf components](../../user_documentation/basyx_components/index.md). It can be found in the BaSyx repository in *examples/basyx.hello_world*. The "Hello World" project consists of two parts: Client and Server.
+The "Hello World" example is a very basic client/server demonstration of BaSyx that utilizes the [Off-the-shelf components](../../../../../basyx_components/v1/index.md). It can be found in the BaSyx repository in *examples/basyx.hello_world*. The "Hello World" project consists of two parts: Client and Server.
 
 ## Server Class
 

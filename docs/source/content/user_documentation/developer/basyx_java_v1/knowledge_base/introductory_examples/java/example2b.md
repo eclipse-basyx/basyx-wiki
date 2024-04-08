@@ -1,5 +1,5 @@
 # Example 2b - Remote VAB Access with Gateway
-This is a variant of [Example 2a](example2a.md). Instead of directly connecting to the the model via TCP, a HTTP/REST to TCP [Gateway](../../user_documentation/gateway.md) is used. Thus, access to models only available via TCP are made possible for web based apps, e.g. a browser.
+This is a variant of [Example 2a](example2a.md). Instead of directly connecting to the the model via TCP, a HTTP/REST to TCP [Gateway](../../../../../concepts%20and%20architecture/gateway.md) is used. Thus, access to models only available via TCP are made possible for web based apps, e.g. a browser.
 
 ## Example Code
 There's little change necessary to the already existing code. The local code can be reused from [Example 2](example2.md). Only the local side has to change to start the Gateway.

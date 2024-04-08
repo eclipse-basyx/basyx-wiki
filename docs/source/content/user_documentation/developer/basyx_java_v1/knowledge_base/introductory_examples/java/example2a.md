@@ -1,13 +1,13 @@
 # Example 2a - Remote VAB Access via BaSyxTCP
 This is a variant of the scenario showcased in [Example 2](example2.md).
 
-Instead of accessing the oven model through HTTP/REST, [BaSyxTCP](../../user_documentation/vab/tcp_mapping.md) is used. The registry is still accessed through HTTP/REST.
+Instead of accessing the oven model through HTTP/REST, [BaSyxTCP](../../../../../concepts%20and%20architecture/vab/tcp_mapping.md) is used. The registry is still accessed through HTTP/REST.
 
 ## Example Code
 Only small code changes are necessary to support this scenario. First, the local variant needs to be changed to provide the oven model via TCP. Then, the remote side needs to be extended to support both HTTP/REST and TCP.
 
 ### Local
-Instead of providing the oven through HTTP/REST, it is now provided via TCP. Thus, the oven servlet is replaced with a [BaSyxTCP](../../user_documentation/vab/tcp_mapping.md) server. Additionally, the registry entry is updated to point to the TCP server.
+Instead of providing the oven through HTTP/REST, it is now provided via TCP. Thus, the oven servlet is replaced with a [BaSyxTCP](../../../../../concepts%20and%20architecture/vab/tcp_mapping.md) server. Additionally, the registry entry is updated to point to the TCP server.
 ```java
 import java.util.Map;
  

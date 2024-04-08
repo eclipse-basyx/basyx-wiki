@@ -1,5 +1,5 @@
 # Example 2 - Remote VAB Access
-In this example, the code of the previous example will be extended. The model will locally be deployed on a server and registered at the [VABRegistry](../../user_documentation/vab/index.md). Next, on the remote side, the model path is retrieved from the registry and the connection to the model is established. Finally, the same control loop as in Example 1 is implemented. As supporting component, the VABDirectoryServlet is used.
+In this example, the code of the previous example will be extended. The model will locally be deployed on a server and registered at the [VABRegistry](../../../../../concepts%20and%20architecture/vab/index.md). Next, on the remote side, the model path is retrieved from the registry and the connection to the model is established. Finally, the same control loop as in Example 1 is implemented. As supporting component, the VABDirectoryServlet is used.
 
 ## Example Code
 Since the model is now potentially deployed on a separate compute node, in the following it is distinguished between the local and the remote side.

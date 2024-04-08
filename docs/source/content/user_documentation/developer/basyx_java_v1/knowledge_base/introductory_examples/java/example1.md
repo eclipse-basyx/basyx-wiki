@@ -4,7 +4,7 @@ In this first example, an oven will be connected to the VAB. Next, the VAB will 
 ![BaSyx Introductory Examples Java 1.png](./images/BaSyx_Introductory_Examples_Java_1.png)
 
 ## Example Code
-To do this, we first need to describe the oven in a model and provide this model to the VAB. As [described](../../user_documentation/vab_providers.md), maps can be used for easy definition of models. Thus, an initial model of the oven using Maps is defined. Additionally, the already existing interface to the oven has to be integrated into the map model. To do this, the [Lambda Provider](../../user_documentation/lambda_provider.md) is used.
+To do this, we first need to describe the oven in a model and provide this model to the VAB. As [described](../../../vab_providers/index.md), maps can be used for easy definition of models. Thus, an initial model of the oven using Maps is defined. Additionally, the already existing interface to the oven has to be integrated into the map model. To do this, the [Lambda Provider](../../../vab_providers/lambda_provider.md) is used.
 
 ```java
 import java.util.HashMap;

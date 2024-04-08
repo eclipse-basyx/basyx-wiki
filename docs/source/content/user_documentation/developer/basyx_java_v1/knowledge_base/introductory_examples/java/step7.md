@@ -48,6 +48,6 @@ docker run -v C:\tmp\registry:/usr/share/config --name=registry -p 8082:4000 ecl
 ```
 
 ## Available Topics for subscribing
-A list of available Topics can be found [here](../../developer/extensions/eventing.md)
+A list of available Topics can be found [here](../../../extensions/eventing.md)
 
 Now you have the AAS Server and Registry connected to your MQTT Broker.

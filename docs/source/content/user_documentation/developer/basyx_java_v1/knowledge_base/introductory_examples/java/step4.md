@@ -1,5 +1,5 @@
 # Step 4: Providing the Submodel in the network via HTTP
-In this step, the code of the previous example will be extended to provide the created Submodel through its [HTTP/REST interface](../../user_documentation/API/submodel.md). Submodels for the same AAS can be created and hosted on different locations in the network. For example, the AAS may be hosted in the central IT infrastructure to ensure its availability. Submodels may be hosted in the infrastructure as well, or on the device. Static information, e.g. a digital nameplate is often hosted in the IT infrastructure as well. Submodels with dynamic data may be hosted closer to the process to prevent a high network load.
+In this step, the code of the previous example will be extended to provide the created Submodel through its [HTTP/REST interface](../../../../../concepts%20and%20architecture/submodel.md). Submodels for the same AAS can be created and hosted on different locations in the network. For example, the AAS may be hosted in the central IT infrastructure to ensure its availability. Submodels may be hosted in the infrastructure as well, or on the device. Static information, e.g. a digital nameplate is often hosted in the IT infrastructure as well. Submodels with dynamic data may be hosted closer to the process to prevent a high network load.
 
 
 ## Example Code

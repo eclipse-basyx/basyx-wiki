@@ -8,4 +8,4 @@ For example, a *GET* primitive send over the BaSyx-TCP implementation can seamle
 
 It is possible to cascade an arbitrary number of gateways. Since the gateways utilize the same access functionalities of the VAB as a client, it is also for gateways transparent if they directly address the data provider or another gateway.
 
-In the current implementation, gateways do not contain any further access logic since the path used for gateway access contains all necessary information for further processing, e.g. http://gw1//basyx://10.0.0.1:2332.
+In the current [implementation](../implementation/gateway.md), gateways do not contain any further access logic since the path used for gateway access contains all necessary information for further processing, e.g. http://gw1//basyx://10.0.0.1:2332.

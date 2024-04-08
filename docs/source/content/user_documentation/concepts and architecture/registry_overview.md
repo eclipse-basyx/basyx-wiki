@@ -12,7 +12,7 @@ The AAS registry registers all Asset Administration Shells. It enables looking u
 Registry component in a Eclipse BaSyx system - Icons by Icons8.com
 
 ## Using the Registry
-Asset Administration Shells must be registered in the registry to ensure that they can be found by their ID. Therefore, the software component that brings a new Asset Administration Shell into the system is in charge for its registration. For example, an engineering tool that enables an engineer to project a new manufacturing line will register the AAS for the planned devices. The storage system will register AAS for work-pieces, as soon as they are e.g. scanned and added into the system. The IT system will create an AAS for a new product, as soon as a new order has been received. The AAS registry component therefore provides a http/REST API that enables to access it at runtime.
+Asset Administration Shells must be registered in the registry to ensure that they can be found by their ID. Therefore, the software component that brings a new Asset Administration Shell into the system is in charge for its registration. For example, an engineering tool that enables an engineer to project a new manufacturing line will register the AAS for the planned devices. The storage system will register AAS for work-pieces, as soon as they are e.g. scanned and added into the system. The IT system will create an AAS for a new product, as soon as a new order has been received. The AAS registry component therefore provides a [HTTP/REST API](../API/registry.md) that enables to access it at runtime.
 
 
 ## AAS Identifiers

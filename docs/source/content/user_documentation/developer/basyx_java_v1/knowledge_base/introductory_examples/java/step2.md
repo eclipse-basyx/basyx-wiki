@@ -1,5 +1,5 @@
 # Step 2: Setting up the Eclipse BaSyx infrastructure
-This step consists of the setting up of the initial Eclipse BaSyx infrastructure, which is illustrated below. It consists of two mandatory containers – an AAS server and an AAS registry component. Both containers will be deployed on a server. This example will use the pre-configured components from dockerhub, which keep all data in memory. Therefore, all changes will be lost when the servers are stopped. To prevent this a different backend must be configured that stores data for example in a database. The necessary steps for this are documented here ([BaSyx AAS Server Component](../../user_documentation/basyx_components/aas-server/index.md)) and here ([BaSyx Registry Component](../../user_documentation/basyx_components/registry/index.md)).
+This step consists of the setting up of the initial Eclipse BaSyx infrastructure, which is illustrated below. It consists of two mandatory containers – an AAS server and an AAS registry component. Both containers will be deployed on a server. This example will use the pre-configured components from dockerhub, which keep all data in memory. Therefore, all changes will be lost when the servers are stopped. To prevent this a different backend must be configured that stores data for example in a database. The necessary steps for this are documented here ([BaSyx AAS Server Component](../../../../../basyx_components/v1/aas-server/index.md)) and here ([BaSyx Registry Component](../../../../../basyx_components/v1/registry/index.md)).
 
 
 ![BaSyx.Example.Java.Step1.NucleusArch.png](./images/800px-BaSyx.Example.Java.Step1.NucleusArch.png)
@@ -19,7 +19,7 @@ In order to access our server from different sources ( Origins ) e.g. via the aa
 ```
 basyxcontext_accesscontrolalloworigin="*"
 ```
-For a more detailed explanation see [here](../../user_documentation/basyx_components/index.md)
+For a more detailed explanation see [here](../../../../../basyx_components/index.md)
 
 Now the endpoint for registering and looking up AAS will be:
 ```
@@ -32,7 +32,7 @@ docker start registry
 docker rm registry
 ```
 ## Setting up of the AAS server component
-The AAS server component provides an empty AAS server that can be used to host several AAS and Submodels. For its API see [Aggregator API](../../user_documentation/API/aas.md). Additionally, there's a video illustrating the configuration and usage in 5 minutes: [YouTube](https://www.youtube.com/watch?v=nGRNg0sj1oY). The AAS Server image is made available via [Docker Hub](https://hub.docker.com/r/eclipsebasyx/aas-server) and can be pulled by:
+The AAS server component provides an empty AAS server that can be used to host several AAS and Submodels. For its API see [Aggregator API](../../../../../API/aas.md). Additionally, there's a video illustrating the configuration and usage in 5 minutes: [YouTube](https://www.youtube.com/watch?v=nGRNg0sj1oY). The AAS Server image is made available via [Docker Hub](https://hub.docker.com/r/eclipsebasyx/aas-server) and can be pulled by:
 ```
 docker pull eclipsebasyx/aas-server:1.2.0
 ```

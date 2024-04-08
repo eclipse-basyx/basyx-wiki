@@ -1,14 +1,14 @@
 # Example 3
 Previously, Example 1 and 2 had set up the connection of the oven to the VAB. Through this connection, the oven is controllable regardless of location and protocol.
 
-However, the service invocation is still custom made and may differ from oven to oven. Thus, an abstraction of service interface is needed. This is done by the [Control Component](../../user_documentation/controlcomponent.md).
+However, the service invocation is still custom made and may differ from oven to oven. Thus, an abstraction of service interface is needed. This is done by the [Control Component](../../../../../concepts%20and%20architecture/controlcomponent.md)
 
 In this example, a control component for the oven is created by extending the *SimpleControlComponent* class of the Components project.
 
 ## Example Code
 Again, the code is separated between local and remote code. First, the Control Component is set up. Please note, that in this tutorial it is not registered at the Registry. This is done to showcase how to connect to known entities on the VAB that for one reason or another are not registered.
 
-First, in *startMyControlComponent()* the control component is created and hosted on a TCP server. Next, the code connects to the Control Component via direct address input and controls it via the [Control Component VAB API mapping](../../user_documentation/API/control-components.md).
+First, in *startMyControlComponent()* the control component is created and hosted on a TCP server. Next, the code connects to the Control Component via direct address input and controls it via the [Control Component VAB API mapping](../../../../../API/control-components.md).
 
 ```java
 import org.eclipse.basyx.models.controlcomponent.ControlComponent;

@@ -1,14 +1,14 @@
 ### Setting up your Keycloak instance
 A detailed description on how-to set up the Keycloak Docker Container can be found [here](../../scenarios/authorization.md)
 
-A list containing all the Scopes needed to configure your Realm, can be found [here](../../user_documentation/basyx_components/security/authorization.md#scope-tables-for-grantedauthority-and-simplerbac)
+A list containing all the Scopes needed to configure your Realm, can be found [here](../../../../../basyx_components/v1/general_configuration/security/authorization.md#scope-tables-for-grantedauthority-and-simplerbac)
 
 **Note**: `When trying to access your Server, with authorization enabled, from an external source, you have to set up HTTPS. You can find a description [here](../../user_documentation/basyx_components/security/index.md)`
 
 ### Restricting access via Authorization
 To prevent access from unauthorized requests, you can enable authorization via OAuth2.
 
-In order to activate you have to set aas.authorization to Enabled in your aas.properties. There are several other optional Options to set, a complete list can be found [here](../../user_documentation/basyx_components/security/authorization.md#using-authorization)
+In order to activate you have to set aas.authorization to Enabled in your aas.properties. There are several other optional Options to set, a complete list can be found [here](../../../../../basyx_components/v1/general_configuration/security/authorization.md#using-authorization)
 ```yaml
 # ###########################
 # Authorization

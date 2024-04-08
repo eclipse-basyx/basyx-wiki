@@ -2,7 +2,7 @@
 
 After the last example, we can control the oven through a unified service interface. However, the provided descriptions, data and semantics are still custom made. Thus, an application working with the oven, retrieving temperature and controlling it is not necessary interoperable with another oven, using the same abstract data but not the same model.
 
-To fill this gap, the [Asset Administration Shell](../../user_documentation/aas.md) will be used in this example. Additionally, we will explore the AAS meta model through its [HTTP-Rest](../../user_documentation/API/aas.md) interface by using any browser.
+To fill this gap, the [Asset Administration Shell](../../../../../concepts%20and%20architecture/aas_overview.md) will be used in this example. Additionally, we will explore the AAS meta model through its [HTTP-REST]((../../../../../API/aas.md)) interface by using any browser.
 
 ## Example Code
 First, two submodels are created with properties and operations. These properties/operations hold meta data giving a description of their semantics. The defined submodels are:
@@ -12,7 +12,7 @@ First, two submodels are created with properties and operations. These propertie
 
 Please note that the Control Component is a concept not within the standard of the AAS. Thus, the Control Component has to be either referenced like in this example or expose itself through the submodel interface. Additionally, the standard referenced by the temperature property already defines the unit. For the sake of this tutorial, it is assumed that the oven is not 100% conforming to this standard and can switch between Fahrenheit and Celsius.
 
-Next, these submodels are added to an AAS and hosted via HTTP. Additionally, the AAS and its submodel are registered with the [AAS Registry](../../user_documentation/API/registry.md). After starting the HTTP server and registering, the Registry, AAS and its submodel can be explored via the HTTP-REST interface as described in the example or above.
+Next, these submodels are added to an AAS and hosted via HTTP. Additionally, the AAS and its submodel are registered with the [AAS Registry](../../../../../API/registry.md). After starting the HTTP server and registering, the Registry, AAS and its submodel can be explored via the HTTP-REST interface as described in the example or above.
 
 ```java
 import java.util.function.Function;
@@ -216,4 +216,4 @@ public class Scenario4 {
 ```
 
 ## Expected Output
-The output will consist of the info (maybe in a red text color) about the BaSyx Context and HTTP server (a Tomcat server) which has been started. No other output will be generated in the console. You have to visit [ http://localhost:4000/handson/oven/aas ] to check if everything works as expected and explore the AAS meta model through its [HTTP-Rest](../../user_documentation/API/aas.md) interface.
+The output will consist of the info (maybe in a red text color) about the BaSyx Context and HTTP server (a Tomcat server) which has been started. No other output will be generated in the console. You have to visit [ http://localhost:4000/handson/oven/aas ] to check if everything works as expected and explore the AAS meta model through its [HTTP-REST]((../../../../../API/aas.md)) interface.
