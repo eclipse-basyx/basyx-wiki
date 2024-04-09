@@ -16,6 +16,43 @@ name: web_ui
 ---
 ```
 
+## Features
+
+* [Data Synchronization](./features/data_sync.md)
+* [Docker Configuration](./features/docker_config.md)
+*  Dedicated components for different SubmodelElements:
+      * SubmodelElementCollection
+      * Property
+      * MultiLanguageProperty
+      * File
+      * Operation
+      * ReferenceElement
+* [Status Check and Error Notifications](./features/statuscheck.md)
+* [Corporate Design](./features/corporate_design.md)
+* [Mobile Support](./features/mobile_support.md)
+* [Plugin Mechanism](./features/plugin_mechanism.md)
+* [AAS Routing](./features/routing.md)
+* [AAS Server integration](./features/aas_server_integration.md)
+* [Application Theme](./features/theme.md)
+* [Register New Shells](./features/register_new_shells.md)
+
+
+```{toctree}
+:hidden:
+:maxdepth: 1
+
+features/data_sync
+features/docker_config
+features/statuscheck
+features/corporate_design
+features/mobile_support
+features/plugin_mechanism
+features/aas_server_integration
+features/routing
+features/theme
+features/register_new_shells
+```
+
 ## Download
 
 ```{note}
@@ -206,15 +243,6 @@ alt: PDF Preview
 name: pdf_preview
 ---
 PDF Preview in the Visualization Panel
-```
-
-## Features
-
-```{toctree}
-:maxdepth: 1
-
-features/docker_config
-features/statuscheck
 ```
 
 ## Compatibility to BaSyx V1

@@ -1,14 +1,16 @@
 # BaSyx Components
 
-This section describes how to use the BaSyx Docker-Components.
+* [BaSyx Java Version 1](./v1/index.md)
+* [BaSyx Java Version 2](./v2/index.md)
+* [AAS Web UI](./web_ui/index.md)
+* [Databridge Component](./databridge/index.md)
 
 ```{toctree}
-aas_environment
-aas_repository
-submodel_repository
-cd_repository
-aas_registry
-submodel_registry
+:hidden:
+:maxdepth: 1
+
+v1/index
+v2/index
 web_ui/index
-databridge
+databridge/index
 ```

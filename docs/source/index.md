@@ -49,7 +49,13 @@ The documentation of the Eclipse BaSyx middleware is split into the following su
 This section will give you a brief overview of Industrie 4.0 and the Eclipse BaSyx middleware.
 It also contains a quick start guide that will help you to get started with Eclipse BaSyx.
 
+* [Industrie 4.0](./content/introduction/industrie4.0_intro.md)
+* [Why use BaSyx?](./content/introduction/why_basyx.md)
+* [BaSyx explained](./content/introduction/basyx_explained.md)
+* [Quick Start Guide](./content/introduction/quickstart.md)
+
 ```{toctree}
+:hidden:
 :maxdepth: 1
 :caption: Introduction
 
@@ -59,21 +65,44 @@ content/introduction/basyx_explained
 content/introduction/quickstart
 ```
 
-### User Documentaion
+### User Documentation
 
 This section contains the user documentation of the Eclipse BaSyx middleware.
 
+* [User Tutorials](./content/user_documentation/user_tutorials/index.md)
+* [BaSyx Components](./content/user_documentation/basyx_components/index.md)
+* [Integrated End-User Applications](./content/user_documentation/integrated%20end-user%20applications/monitoring_scenarios.md)
+* [Releases](./content/user_documentation/releases/releases_and_features.md)
+* [3rd Party Applications and Frameworks](./content/user_documentation/3rdparty_apps_and_frameworks.md)
+* [Concepts and Architecture](./content/user_documentation/concepts%20and%20architecture/index.md)
+
 ```{toctree}
-:maxdepth: 2
+:hidden:
+:maxdepth: 1
 :caption: User Documentation
 
+content/user_documentation/user_tutorials/index
 content/user_documentation/basyx_components/index
-content/user_documentation/concepts/index
-content/user_documentation/architecture/index
+content/user_documentation/integrated end-user applications/monitoring_scenarios
+content/user_documentation/releases/releases_and_features
+content/user_documentation/3rdparty_apps_and_frameworks
+content/user_documentation/concepts and architecture/index
 ```
 
 ### Developer Documentation
 
+* [Contributing](./content/user_documentation/developer/contributing.md)
+* [BaSyx Java Version 1](./content/user_documentation/developer/basyx_java_v1/index.md)
+* [BaSyx Java Version 2](./content/user_documentation/developer/basyx_java_v2/index.md)
+
+```{toctree}
+:hidden:
+:maxdepth: 1
+:caption: Developer Documentation
+
+content/user_documentation/developer/index
+
+```
 ### Research and Resources
 
 ### Community and Support
