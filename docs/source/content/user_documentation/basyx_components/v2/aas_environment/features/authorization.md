@@ -5,9 +5,9 @@ This feature enables authorized access to the Aas Environment.
 Only Role Based Access Control (RBAC) in combination with Keycloak as a JWT token provider is supported as authorization type as of now.
 ```
 
-> To know more about the RBAC, please refer [Authorization Services Guide](https://www.keycloak.org/docs/latest/authorization_services/index.html)
+To know more about the RBAC, please refer [Authorization Services Guide](https://www.keycloak.org/docs/latest/authorization_services/index.html)
 
-> To know more about the Keycloak server administration, please refer [Server Administration Guide](https://www.keycloak.org/docs/latest/server_admin/#keycloak-features-and-concepts)
+To know more about the Keycloak server administration, please refer [Server Administration Guide](https://www.keycloak.org/docs/latest/server_admin/#keycloak-features-and-concepts)
 
 An example valid configuration:
 

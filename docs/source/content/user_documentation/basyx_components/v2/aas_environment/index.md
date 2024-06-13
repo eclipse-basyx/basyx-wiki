@@ -85,6 +85,11 @@ spring.security.oauth2.resourceserver.jwt.issuer-uri= http://localhost:9096/real
 ```
 ---
 
+### Registry Integration ![Default](https://img.shields.io/badge/default-false-blue) ![Default](https://img.shields.io/badge/required-false-red)
+For configration, see and utilize the [Submodel Repository Configuration](../submodel_repository/index.md) and the [AAS Repository Configuration](../aas_repository/index.md)
+
+---
+
 ### Operation Delegation ![Default](https://img.shields.io/badge/default-true-blue) ![Default](https://img.shields.io/badge/required-false-red)
 For configration, see and utilize the [Submodel Repository Configuration](../submodel_repository/index.md) and the [AAS Repository Configuration](../aas_repository/index.md).
 
@@ -103,12 +108,30 @@ spring.servlet.multipart.max-request-size=128KB
 ```
 ---
 
+### Configure Favicon
+To configure the favicon, mount your favicon to the `static` directory of the component using Docker:
+```
+docker run --name=aas-env -p:8081:8081 -v C:/path/to/favicon.ico:/application/static/favicon.ico eclipsebasyx/aas-environment:2.0.0-SNAPSHOT
+```
+or
+```yaml
+aas-env:
+    image: eclipsebasyx/aas-environment:2.0.0-SNAPSHOT
+    container_name: aas-env
+    volumes:
+      - ./aas:/application/aas
+      - ./basyx/aas-env.properties:/application/application.properties
+	  - ./basyx/static/favicon.ico:/application/static/favicon.ico
+    ports:
+      - '8081:8081'
+```
+
 ## Docker
 
 Eclipse BaSyx provides the AAS Environment as off-the-shelf component via DockerHub. The following command pulls the image and creates a container for the AAS Environment:
 
 ```bash
-docker run --name=aas-env -p:8081:8081 -v C:/tmp/application.properties:/application/application.properties eclipsebasyx/aas-environment:2.0.0-SNAPSHOT
+docker run --name=aas-env -p:8081:8081 -v C:/path/to/application.properties:/application/application.properties eclipsebasyx/aas-environment:2.0.0-SNAPSHOT
 ```
 
 ## Swagger UI

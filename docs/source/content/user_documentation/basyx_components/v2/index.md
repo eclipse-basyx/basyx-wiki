@@ -2,7 +2,7 @@
 
 * [AAS Environment](aas_environment/index)
 * [AAS Registry](aas_registry)
-* [AAS Repository](aas_repository)
+* [AAS Repository](aas_repository/index)
 * [Concept Description Repository](cd_repository)
 * [Submodel Registry](submodel_registry)
 * [Submodel Repository](submodel_repository)
@@ -13,7 +13,7 @@
 
 aas_environment/index
 aas_registry
-aas_repository
+aas_repository/index
 cd_repository
 submodel_registry
 submodel_repository
