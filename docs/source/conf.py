@@ -3,11 +3,11 @@
 # -- Project information
 
 project = 'BaSyx Wiki'
-copyright = '2023, Eclipse BaSyx™'
+copyright = '2024, Eclipse BaSyx™'
 author = 'Eclipse BaSyx™'
 
-release = '0.1'
-version = '0.1.0'
+release = '2.0'
+version = '2.0.0'
 
 # -- General configuration
 

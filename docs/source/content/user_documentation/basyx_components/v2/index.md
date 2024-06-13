@@ -1,6 +1,6 @@
 # BaSyx Java Version 2
 
-* [AAS Environment](aas_environment)
+* [AAS Environment](aas_environment/index)
 * [AAS Registry](aas_registry)
 * [AAS Repository](aas_repository)
 * [Concept Description Repository](cd_repository)
@@ -11,7 +11,7 @@
 :hidden:
 :maxdepth: 1
 
-aas_environment
+aas_environment/index
 aas_registry
 aas_repository
 cd_repository

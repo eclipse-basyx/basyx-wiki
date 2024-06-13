@@ -123,3 +123,12 @@ The Aggregated API endpoint documentation is available at:
 The Aggregated Swagger UI for the endpoint is available at:
 
 	http://{host}:{port}/swagger-ui/index.html
+
+```{toctree}
+:hidden:
+:maxdepth: 1
+
+feature/authorization
+feature/preconfiguration
+feature/upload
+```
