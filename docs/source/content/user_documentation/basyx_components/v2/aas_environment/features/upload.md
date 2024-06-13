@@ -1,4 +1,4 @@
-# AAS Environment Upload Endpoint
+# Upload Endpoint
 
 AAS packages (XML, JSON, AASX) can be uploaded as multipart/form-data via POST request using the `/upload` endpoint. Please note that the following MIME types are expected for the respective file uploads:
 * AASX: application/asset-administration-shell-package

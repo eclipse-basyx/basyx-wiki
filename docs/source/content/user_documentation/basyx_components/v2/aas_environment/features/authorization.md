@@ -1,4 +1,4 @@
-# Aas Environment - Authorization
+# Authorization
 This feature enables authorized access to the Aas Environment.
 
 ```{note}
