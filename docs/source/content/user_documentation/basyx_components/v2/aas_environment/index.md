@@ -74,7 +74,7 @@ basyx.cors.allowed-methods=GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
 ---
 
 ### Authorization Configuration ![Default](https://img.shields.io/badge/default-false-blue) ![Default](https://img.shields.io/badge/required-false-red)
-> Enable and configure authorization features, such as Role-Based Access Control (RBAC) and JWT Bearer Token Provider.
+Enable and configure authorization features, such as Role-Based Access Control (RBAC) and JWT Bearer Token Provider.
 ```properties
 basyx.feature.authorization.enabled = true
 basyx.feature.authorization.type = rbac
@@ -86,17 +86,17 @@ spring.security.oauth2.resourceserver.jwt.issuer-uri= http://localhost:9096/real
 ---
 
 ### Operation Delegation ![Default](https://img.shields.io/badge/default-true-blue) ![Default](https://img.shields.io/badge/required-false-red)
-> For configration, see and utilize the [Submodel Repository Configuration](../submodel_repository/index.md) and the [AAS Repository Configuration](../aas_repository/index.md).
+For configration, see and utilize the [Submodel Repository Configuration](../submodel_repository/index.md) and the [AAS Repository Configuration](../aas_repository/index.md).
 
 ---
 
 ### MQTT Configuration ![Default](https://img.shields.io/badge/default-false-blue) ![Default](https://img.shields.io/badge/required-false-red)
-> For configration, see and utilize the [Submodel Repository Configuration](../submodel_repository/index.md) and the [AAS Repository Configuration](../aas_repository/index.md)
+For configration, see and utilize the [Submodel Repository Configuration](../submodel_repository/index.md) and the [AAS Repository Configuration](../aas_repository/index.md)
 
 ---
 
 ### File Upload Configuration ![Default](https://img.shields.io/badge/default-true-blue) ![Default](https://img.shields.io/badge/required-false-red)
-> Set the maximum file size and request size for file uploads. The default values are 1 MB for file size and 10 MB for request size.
+Set the maximum file size and request size for file uploads. The default values are 1 MB for file size and 10 MB for request size.
 ```properties
 spring.servlet.multipart.max-file-size=128KB
 spring.servlet.multipart.max-request-size=128KB
@@ -128,7 +128,7 @@ The Aggregated Swagger UI for the endpoint is available at:
 :hidden:
 :maxdepth: 1
 
-feature/authorization
-feature/preconfiguration
-feature/upload
+features/authorization
+features/preconfiguration
+features/upload
 ```
