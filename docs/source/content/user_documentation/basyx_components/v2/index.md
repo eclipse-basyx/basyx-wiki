@@ -12,9 +12,9 @@
 :maxdepth: 1
 
 aas_environment/index
-aas_registry
+aas_registry/index
 aas_repository/index
-cd_repository
-submodel_registry
-submodel_repository
+cd_repository/index
+submodel_registry/index
+submodel_repository/index
 ```
