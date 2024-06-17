@@ -6,18 +6,19 @@
 ![API](https://img.shields.io/badge/API-v3.0-yellow)
 
 ## Features
+- [Authorization](./features/authorization.md)
+- [Registry Integration](./features/registry-integration.md)
+- [MQTT](./features/mqtt.md)
 
-
-
-## Configration
+## Configuration
 
 ### Server Configuration
 This section configures the server port, application name, error path and AAS Repo Name for the AAS Repository.
 ```properties
-server.port=8081
-server.error.path=/error
-spring.application.name=AAS Repository
-basyx.aasrepo.name=aas-repo
+server.port = 8081
+server.error.path = /error
+spring.application.name = AAS Repository
+basyx.aasrepo.name = aas-repo
 ```
 
 ### Backend Configuration ![Default](https://img.shields.io/badge/required-true-red)
@@ -53,7 +54,7 @@ This section provides the configuration for enabling MQTT.
 
 ```properties
 basyx.aasrepository.feature.mqtt.enabled = true
-mqtt.clientId=TestClient
+mqtt.clientId = TestClient
 mqtt.hostname = localhost
 mqtt.port = 1883
 ```
@@ -68,8 +69,8 @@ To do this, you need to add the URL of the Web GUI to the allowed origins.
 ```
 
 ```properties
-basyx.cors.allowed-origins=http://localhost:3000, http://localhost:4000
-basyx.cors.allowed-methods=GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
+basyx.cors.allowed-origins = http://localhost:3000, http://localhost:4000
+basyx.cors.allowed-methods = GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
 ```
 ---
 
