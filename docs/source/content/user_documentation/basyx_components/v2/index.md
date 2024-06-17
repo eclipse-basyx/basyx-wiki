@@ -1,11 +1,11 @@
 # BaSyx Java Version 2
 
 * [AAS Environment](aas_environment/index)
-* [AAS Registry](aas_registry)
+* [AAS Registry](aas_registry/index)
 * [AAS Repository](aas_repository/index)
-* [Concept Description Repository](cd_repository)
-* [Submodel Registry](submodel_registry)
-* [Submodel Repository](submodel_repository)
+* [Concept Description Repository](cd_repository/index)
+* [Submodel Registry](submodel_registry/index)
+* [Submodel Repository](submodel_repository/index)
 
 ```{toctree}
 :hidden:
