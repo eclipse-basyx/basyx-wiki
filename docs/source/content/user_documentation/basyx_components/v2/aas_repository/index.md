@@ -23,6 +23,7 @@ basyx.aasrepo.name = aas-repo
 
 ### Backend Configuration ![Default](https://img.shields.io/badge/required-true-red)
 Configure the backend storage. By default, it uses InMemory. Optionally, you can configure MongoDB.
+
 #### InMemory ![Default](https://img.shields.io/badge/default-true-blue)
 ```properties
 basyx.backend = InMemory
@@ -112,7 +113,7 @@ docker run --name=aas-repo -p:8081:8081 -v C:/path/to/application.properties:/ap
 ```
 
 ## Swagger UI
-In the Swagger UI, you can find the API documentation for the AAS Environment.
+In the Swagger UI, you can find the API documentation for the AAS Repository.
 
 You can also execute all the API calls directly from the Swagger UI.
 

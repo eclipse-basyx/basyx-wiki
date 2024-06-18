@@ -91,6 +91,26 @@ This feature is enabled by default and to disable this the following property sh
 basyx.submodelrepository.feature.operation.delegation.enabled = false
 ```
 
+## Docker
+
+Eclipse BaSyx provides the Submodel Repository as off-the-shelf component via DockerHub. The following command pulls the image and creates a container for the Submodel Repository:
+
+```bash
+docker run --name=sm-repo -p:8081:8081 -v C:/path/to/application.properties:/application/application.properties eclipsebasyx/submodel-repository:2.0.0-SNAPSHOT
+```
+
+## Swagger UI
+In the Swagger UI, you can find the API documentation for the Submodel Repository.
+
+You can also execute all the API calls directly from the Swagger UI.
+
+The Aggregated API endpoint documentation is available at:
+
+	http://{host}:{port}/v3/api-docs
+	
+The Aggregated Swagger UI for the endpoint is available at:
+
+	http://{host}:{port}/swagger-ui/index.html
 
 ```{toctree}
 :hidden:
