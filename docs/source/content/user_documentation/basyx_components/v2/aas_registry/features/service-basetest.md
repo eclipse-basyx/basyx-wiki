@@ -1,4 +1,4 @@
-# Basyx Asset Administration Registry Service Base Tests
+# Service Base Tests
 
 This project offers test utility classes that you can use in your storage or integration tests.
 

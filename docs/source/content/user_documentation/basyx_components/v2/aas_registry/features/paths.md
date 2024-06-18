@@ -1,4 +1,4 @@
-# Basyx AAS Registry Paths
+# Paths
 
 This project uses the [simple-path-generator plugin](../basyx.aasregistry-plugins/README.md) to create a builder java class that can be used in conjunction with the AAS registry client to reference a field of an *AssetAdministrationShellDescriptor* document.
 

@@ -94,7 +94,7 @@ docker run --name=aas-repo -p:8081:8081 -v C:/path/to/favicon.ico:/application/s
 ```
 or
 ```yaml
-aas-env:
+aas-repo:
     image: eclipsebasyx/aas-repository:2.0.0-SNAPSHOT
     container_name: aas-repo
     volumes:

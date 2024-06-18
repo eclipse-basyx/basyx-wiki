@@ -7,6 +7,9 @@
 
 ## Features
 - [Authorization](./features/authorization.md)
+- [MQTT](./features/mqtt.md)
+- [Operation Delegation](./features/operation-delegation.md)
+- [Registry Integration](./features/registry-integration.md)
 
 ## Configuration
 ### Server Configuration ![Required](https://img.shields.io/badge/required-true-red)

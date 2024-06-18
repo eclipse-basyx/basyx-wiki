@@ -15,7 +15,7 @@ are highly configurable by leveraging the Spring framework. Thus, they utilize e
 The health endpoint to check whether the server is up and running is available at:
 
 	http://{host}:{port}/actuator/health
-For a detailed documentation on its configuration possibilities, see [Spring Management Endpoint](management_Endpoint.md) documentation.
+For a detailed documentation on its configuration possibilities, see [Spring Management Endpoint](management_endpoint.md) documentation.
 
 ## CORS configuration
 Cross-Site Resource Sharing options can be configured under [application.properties](https://github.com/eclipse-basyx/basyx-java-server-sdk/blob/main/basyx.aasrepository/basyx.aasrepository.component/src/main/resources/application.properties#L26) with the following attribute:

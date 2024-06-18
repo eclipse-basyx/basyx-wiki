@@ -1,4 +1,4 @@
-# Asset Administration Registry Server Kafka Events
+# Kafka Events
 
 This registry storage implementation uses [Apache Kafka](https://kafka.apache.org/) as event sink. Include this dependency if you want to use this storage implementation:
 

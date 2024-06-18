@@ -59,7 +59,21 @@ basyx:
 ```
 
 ### Configure Favicon
-To configure the favicon, add the favicon.ico to [basyx-java-server-sdk\basyx.common\basyx.http\src\main\resources\static](../basyx.common/basyx.http/src/main/resources/static/).
+To configure the favicon, mount your favicon to the `static` directory of the component using Docker:
+```
+docker run --name=submodel-registry -p:8081:8081 -v C:/path/to/favicon.ico:/application/static/favicon.ico eclipsebasyx/submodel-registry-log-mem:2.0.0-SNAPSHOT
+```
+or
+```yaml
+submodel-registry:
+    image: eclipsebasyx/submodel-registry-log-mem:2.0.0-SNAPSHOT
+    container_name: submodel-registry
+    volumes:
+      - ./basyx/submodel-registry.properties:/application/application.properties
+	  - ./basyx/static/favicon.ico:/application/static/favicon.ico
+    ports:
+      - '8080:8080'
+```
 
 ## Docker
 The following example demonstrate how to use the Submodel Registry with Docker Compose:
@@ -112,14 +126,6 @@ In addition, maven deploy will also deploy your maven artifacts, so you can do e
 Have a look at the *docker-compose* sub-folder to see how the created images could be referenced in docker-compose files.
 
 Consider updating the [image name pattern](pom.xml#L16) if you want a different image name.
-
-## Docker
-
-Eclipse BaSyx provides the Submodel Registry as off-the-shelf component via DockerHub. The following command pulls the image and creates a container for the Submodel Registry:
-
-```bash
-docker run --name=sm-registry -p:8080:8080 -v C:/path/to/application.properties:/application/application.properties eclipsebasyx/submodel-registry-log-mem:2.0.0-SNAPSHOT
-```
 
 ## Swagger UI
 In the Swagger UI, you can find the API documentation for the Submodel Registry.

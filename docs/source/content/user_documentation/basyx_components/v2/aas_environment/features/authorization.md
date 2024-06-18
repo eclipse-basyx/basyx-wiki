@@ -1,5 +1,5 @@
 # Authorization
-This feature enables authorized access to the Aas Environment.
+This feature enables authorized access to the AAS Environment.
 
 ```{note}
 Only Role Based Access Control (RBAC) in combination with Keycloak as a JWT token provider is supported as authorization type as of now.
@@ -68,7 +68,7 @@ The targetInformation defines coarse-grained control over the resource, you may 
 
 ## Action table for RBAC
 
-Below is a reference table that shows which actions are used in what endpoints of the AasEnvironment:
+Below is a reference table that shows which actions are used in what endpoints of the AAS Environment:
 
 | Action  | Endpoint           |
 |---------|--------------------|

@@ -1,4 +1,4 @@
-# Basyx AAS Registry Plugins
+# Plugins
 
 This project provides a maven plugin that can be used to generate builder classes that create search paths for the registry-service-based POJO classes. The plugin traverses the referenced class and its fields and generates a class that can be used to set up these search paths.
 

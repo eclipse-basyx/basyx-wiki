@@ -1,4 +1,4 @@
-# Basyx Asset Administration Registry InMemory Storage
+# InMemory Storage
 
 This registry storage implementation uses in-memory hash maps as document-store and uses the [base java pojos](../basyx.aasregistry-service-basemodel) as data model. Include this dependency if you want to use this storage implementation:
 

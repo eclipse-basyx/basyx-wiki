@@ -1,6 +1,6 @@
-# MongoDb Storage
+# MongoDB Storage
 
-This registry storage implementation uses [MongoDb](https://www.mongodb.com/) as document-store and generates a specific data model with MongoDb annotations. Include this dependency if you want to use this storage implementation:
+This registry storage implementation uses [MongoDB](https://www.mongodb.com/) as document-store and generates a specific data model with MongoDB annotations. Include this dependency if you want to use this storage implementation:
 
 ```xml
 	<dependency>

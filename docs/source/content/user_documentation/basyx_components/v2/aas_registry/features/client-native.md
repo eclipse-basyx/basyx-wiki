@@ -1,4 +1,4 @@
-# Basyx AAS Registry Client Native
+# Client Native
 
 This is the generated java openAPI client (based on native java with jackson parsing) that can be used to communicate with the AAS registry server.
 
