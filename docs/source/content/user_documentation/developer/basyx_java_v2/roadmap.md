@@ -1,8 +1,8 @@
 # BaSyx Roadmap
-Here, a list of features, components and general updates that are planned in the future is described. Please note that this list is not exhaustive and repriorization might happen.
+Here, a list of features, components and upcoming updates that are planned in the future is described. Please note that this list is not exhaustive and may be reprioritized.
 
 ## BaSyx AAS Core
-- Implementation of AAS API Spec as well as upcoming features (continous)
+- Implementation of [AAS API](https://app.swaggerhub.com/apis/Plattform_i40/Entire-API-Collection/V3.0.1) Spec as well as upcoming features (continous)
 - AAS Client SDK (continuous)
 - AASX File Server with MongoDB and InMemory Persistency (Q2/2024)
 - Dynamic integration of features/backends in AAS Infrastructure OTS components (Q2/2024)

@@ -1,5 +1,6 @@
 # BaSyx Java Version 2
 
+* [AAS Discovery](aas_discovery/index)
 * [AAS Environment](aas_environment/index)
 * [AAS Registry](aas_registry/index)
 * [AAS Repository](aas_repository/index)
@@ -11,6 +12,7 @@
 :hidden:
 :maxdepth: 1
 
+aas_discovery/index
 aas_environment/index
 aas_registry/index
 aas_repository/index

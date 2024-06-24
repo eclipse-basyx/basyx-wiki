@@ -15,13 +15,13 @@ spring.security.oauth2.resourceserver.jwt.issuer-uri= <URI of the resource serve
 Only Role Based Access Control (RBAC) is supported as authorization type as of now, also Keycloak is the only Jwt token provider supported now and it is also a default provider. 
 ```
 
-To know more about the RBAC, please refer [Authorization Services Guide](https://www.keycloak.org/docs/latest/authorization_services/index.html)
+To learn more about RBAC, please refer to the [Authorization Services Guide](https://www.keycloak.org/docs/latest/authorization_services/index.html)
 
-To know more about the Keycloak server administration, please refer [Server Administration Guide](https://www.keycloak.org/docs/latest/server_admin/#keycloak-features-and-concepts)
+To learn more about the Keycloak server administration, please refer [Server Administration Guide](https://www.keycloak.org/docs/latest/server_admin/#keycloak-features-and-concepts)
 
 ## RBAC rule configuration
 
-For configuring RBAC rules, all the rbac rules should be configured inside a json file, the rules are defined as below:
+To configure the RBAC rules, you need to create a JSON file for them. Rules could like shown below:
 
 ```
 [
@@ -64,7 +64,7 @@ For configuring RBAC rules, all the rbac rules should be configured inside a jso
  ]
 ```
 
-The role defines which role is allowed to perform the defined actions. The role is as per the configuration of identity providers or based on the organization. Action could be CREATE, READ, UPDATE, DELETE, and EXECUTE, there could be a single action or multiple actions as a list (cf. admin configuration above).
+A `role` specifies which actions are permitted to be performed by said users of that role. The role is as per the configuration of identity providers or based on the organization. Action could be CREATE, READ, UPDATE, DELETE, and EXECUTE, there could be a single action or multiple actions as a list (cf. admin configuration above).
 
 The targetInformation defines coarse-grained control over the resource, you may define the submodelIds and submodelElementIdShortPaths with a wildcard (\*), it means the defined role x with action y can access any Submodel and any SubmodelElement on the repository.
 

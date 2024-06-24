@@ -5,6 +5,8 @@
 ![Metamodel](https://img.shields.io/badge/Metamodel-v3.0-yellow)
 ![API](https://img.shields.io/badge/API-v3.0-yellow)
 
+The AAS Repository is a component that provides a REST API to interact with Asset Administration Shells. It allows the creation, retrieval, update, and deletion of AAS instances.
+
 ## Features
 - [Authorization](./features/authorization.md)
 - [Registry Integration](./features/registry-integration.md)
@@ -13,16 +15,16 @@
 ## Configuration
 
 ### Server Configuration
-This section configures the server port, application name, error path and AAS Repo Name for the AAS Repository.
+The following shows how to configure the server port, application name and AAS Repository Name.
+
 ```properties
 server.port = 8081
-server.error.path = /error
 spring.application.name = AAS Repository
 basyx.aasrepo.name = aas-repo
 ```
 
 ### Backend Configuration ![Default](https://img.shields.io/badge/required-true-red)
-Configure the backend storage. By default, it uses InMemory. Optionally, you can configure MongoDB.
+By default, it uses InMemory. Optionally, you can configure MongoDB.
 
 #### InMemory ![Default](https://img.shields.io/badge/default-true-blue)
 ```properties
@@ -69,8 +71,10 @@ To use the component with the [BaSyx Web GUI](../../web_ui/index.md) this config
 To do this, you need to add the URL of the Web GUI to the allowed origins.
 ```
 
+This is what an example configuration looks like:
+
 ```properties
-basyx.cors.allowed-origins = http://localhost:3000, http://localhost:4000
+basyx.cors.allowed-origins = http://localhost:3000, https://my-url/*
 basyx.cors.allowed-methods = GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
 ```
 ---
@@ -87,7 +91,10 @@ spring.security.oauth2.resourceserver.jwt.issuer-uri= http://localhost:9096/real
 ```
 ---
 
-### Configure Favicon
+### Favicon Configuration ![Default](https://img.shields.io/badge/default-false-blue) ![Default](https://img.shields.io/badge/required-false-red)
+```{note}
+A favicon is a small 16×16 or 32×32 pixel icon, symbol or logo used by web browsers to identify a website in a recognizable way
+```
 To configure the favicon, mount your favicon to the `static` directory of the component using Docker:
 ```
 docker run --name=aas-repo -p:8081:8081 -v C:/path/to/favicon.ico:/application/static/favicon.ico eclipsebasyx/aas-repository:2.0.0-SNAPSHOT
@@ -106,7 +113,7 @@ aas-repo:
 
 ## Docker
 
-Eclipse BaSyx provides the AAS Repository as off-the-shelf component via DockerHub. The following command pulls the image and creates a container for the AAS Repository:
+Eclipse BaSyx provides the AAS Repository as off-the-shelf component via DockerHub. The following command pulls the image and starts a container for the AAS Repository:
 
 ```bash
 docker run --name=aas-repo -p:8081:8081 -v C:/path/to/application.properties:/application/application.properties eclipsebasyx/aas-repository:2.0.0-SNAPSHOT
@@ -121,7 +128,7 @@ The Aggregated API endpoint documentation is available at:
 
 	http://{host}:{port}/v3/api-docs
 	
-The Aggregated Swagger UI for the endpoint is available at:
+The Aggregated Swagger UI for the endpoints is available at:
 
 	http://{host}:{port}/swagger-ui/index.html
 

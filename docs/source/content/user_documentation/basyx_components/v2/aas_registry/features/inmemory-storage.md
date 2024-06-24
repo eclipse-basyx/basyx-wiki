@@ -10,7 +10,7 @@ This registry storage implementation uses in-memory hash maps as document-store 
 	</dependency>
 ```
 
-Then included, you can active it by either setting the active profile or the *registry.type* attribute:
+Then included, you can activate it by setting the active profile:
 
 ```
  -Dspring.profiles.active=logEvents,inMemoryStorage

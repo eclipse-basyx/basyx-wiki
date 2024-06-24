@@ -5,7 +5,7 @@
 ![Metamodel](https://img.shields.io/badge/Metamodel-v3.0-yellow)
 ![API](https://img.shields.io/badge/API-v3.0-yellow)
 
-The AAS Environment aggregates the AAS Repository, Submodel Repository and ConceptDescription Repository into a single component.
+The AAS Environment aggregates the [AAS Repository](../aas_repository/index.md), [Submodel Repository](../submodel_repository/index.md) and [ConceptDescription Repository](../cd_repository/index.md) into a single component.
 
 ```{note}
 Additionally, the AAS Environment supports the following endpoint defined in DotAAS Part 2 V3 - Serialization Interface:
@@ -109,7 +109,12 @@ spring.servlet.multipart.max-request-size=128KB
 ---
 
 ### Configure Favicon
+```{note}
+A favicon is a small 16×16 or 32×32 pixel icon, symbol or logo used by web browsers to identify a website in a recognizable way
+```
+
 To configure the favicon, mount your favicon to the `static` directory of the component using Docker:
+
 ```
 docker run --name=aas-env -p:8081:8081 -v C:/path/to/favicon.ico:/application/static/favicon.ico eclipsebasyx/aas-environment:2.0.0-SNAPSHOT
 ```
@@ -143,7 +148,7 @@ The Aggregated API endpoint documentation is available at:
 
 	http://{host}:{port}/v3/api-docs
 	
-The Aggregated Swagger UI for the endpoint is available at:
+The Aggregated Swagger UI for the endpoints is available at:
 
 	http://{host}:{port}/swagger-ui/index.html
 

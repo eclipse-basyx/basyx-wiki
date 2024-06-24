@@ -24,7 +24,7 @@ The search API does not only provide concrete filtering but also similarity matc
 new ShellDescriptorQuery().queryType(QueryTypeEnum.MATCH).path(AasRegistryPaths.submodelDescriptors().description().text()).value("robot");
 ```
 
-We also support these regular expressions. A query can be created like this:
+We also support regular expressions. A query can be created like this:
 
 ```java
 new ShellDescriptorQuery().queryType(QueryTypeEnum.REGEX).path(AasRegistryPaths.submodelDescriptors().description().text()).value("r[ob]{3}t");
@@ -49,4 +49,4 @@ queryA.combinedWith(queryB);
 queryB.combinedWith(queryC);
 ```
 
-The query matches, if all shell-related queries match and ,if there are also queries to submodel content (path starts with *"submodelDescriptors."*), there is at least one submodel that matches all submodel queries.
+The query is successful if all shell-related queries match and, for queries targeting submodel content, at least one submodel satisfies all submodel queries. Queries targeting submodel content are indicated by paths starting with `submodelDescriptors`.

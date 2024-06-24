@@ -8,7 +8,9 @@
 ![Metamodel](https://img.shields.io/badge/Metamodel-v3.0-yellow)
 ![API](https://img.shields.io/badge/API-v3.0-yellow)
 
-This is a Java-based implementation of the Asset Administration Shell Registry server and client based on the corresponding [Open-API specification](https://app.swaggerhub.com/apis/Plattform_i40/AssetAdministrationShellRegistryServiceSpecification/V3.0_SSP-001) of the German Plattform Industrie 4.0 and its specification document [Details of the Asset Administration Shell, Part 2](https://industrialdigitaltwin.org/wp-content/uploads/2023/04/IDTA-01002-3-0_SpecificationAssetAdministrationShell_Part2_API.pdf)
+The AAS Registry is a server that provides a REST API to register and search for Asset Administration Shells based on their shell descriptors.
+
+The server is based on the [Open-API specification](https://app.swaggerhub.com/apis/Plattform_i40/AssetAdministrationShellRegistryServiceSpecification/V3.0_SSP-001) of the [German Plattform Industrie 4.0](https://www.plattform-i40.de/) and the [IDTA](https://industrialdigitaltwin.org/) in the specification document [Details of the Asset Administration Shell, Part 2](https://industrialdigitaltwin.org/wp-content/uploads/2023/04/IDTA-01002-3-0_SpecificationAssetAdministrationShell_Part2_API.pdf).
 
 ## Features
 
@@ -64,7 +66,10 @@ basyx:
     allowed-methods: GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
 ```
 
-### Configure Favicon
+### 
+```{note}
+A favicon is a small 16×16 or 32×32 pixel icon, symbol or logo used by web browsers to identify a website in a recognizable way
+```
 To configure the favicon, mount your favicon to the `static` directory of the component using Docker:
 ```
 docker run --name=aas-registry -p:8081:8081 -v C:/path/to/favicon.ico:/application/static/favicon.ico eclipsebasyx/aas-registry-log-mem:2.0.0-SNAPSHOT
@@ -82,7 +87,7 @@ aas-registry:
 ```
 
 ## Docker
-The following example demonstrate how to use the AAS Registry with Docker Compose:
+The following example demonstrates how to use the AAS Registry with Docker Compose:
 
 ```yml
 aas-registry:
@@ -95,10 +100,6 @@ aas-registry:
     volumes:
       - ./basyx/aas-registry.yml:/workspace/config/application.yml
     restart: always
-```
-
-```{important}
-The REST API and the client implementation will not be modified - if not a SNAPSHOT version - until a new major version is released or an update of the openAPI definition. All server-side classes and the plugins are not intended to be used as programming library. They could be updated or removed then a new minor version is released.
 ```
 
 
@@ -142,7 +143,7 @@ The Aggregated API endpoint documentation is available at:
 
 	http://{host}:{port}/v3/api-docs
 	
-The Aggregated Swagger UI for the endpoint is available at:
+The Aggregated Swagger UI for the endpoints is available at:
 
 	http://{host}:{port}/swagger-ui/index.html
 

@@ -5,6 +5,8 @@
 ![Metamodel](https://img.shields.io/badge/Metamodel-v3.0-yellow)
 ![API](https://img.shields.io/badge/API-v3.0-yellow)
 
+The Submodel Repository is a component that provides a REST API to interact with Submodels. It allows the creation, retrieval, update, and deletion of Submodels.
+
 ## Features
 - [Authorization](./features/authorization.md)
 - [MQTT](./features/mqtt.md)
@@ -51,8 +53,10 @@ To use the component with the [BaSyx Web GUI](../../web_ui/index.md) this config
 To do this, you need to add the URL of the Web GUI to the allowed origins.
 ```
 
+This is what an example configuration looks like:
+
 ```properties
-basyx.cors.allowed-origins=http://localhost:3000, http://localhost:4000
+basyx.cors.allowed-origins=http://localhost:3000, https://my-url/*
 basyx.cors.allowed-methods=GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
 ```
 ---
@@ -111,7 +115,7 @@ The Aggregated API endpoint documentation is available at:
 
 	http://{host}:{port}/v3/api-docs
 	
-The Aggregated Swagger UI for the endpoint is available at:
+The Aggregated Swagger UI for the endpoints is available at:
 
 	http://{host}:{port}/swagger-ui/index.html
 

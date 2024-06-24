@@ -5,9 +5,9 @@ This feature enables authorized access to the AssetAdministrationShell Repositor
 Only Role Based Access Control (RBAC) is supported as authorization type as of now, also Keycloak is the only Jwt token provider supported now and it is also a default provider. 
 ```
 
-To know more about the RBAC, please refer [Authorization Services Guide](https://www.keycloak.org/docs/latest/authorization_services/index.html)
+To learn more about RBAC, please refer to the [Authorization Services Guide](https://www.keycloak.org/docs/latest/authorization_services/index.html).
 
-To know more about the Keycloak server administration, please refer [Server Administration Guide](https://www.keycloak.org/docs/latest/server_admin/#keycloak-features-and-concepts)
+To learn more about the Keycloak server administration, please refer [Server Administration Guide](https://www.keycloak.org/docs/latest/server_admin/#keycloak-features-and-concepts)
 
 An example valid configuration:
 
@@ -21,7 +21,7 @@ spring.security.oauth2.resourceserver.jwt.issuer-uri= http://localhost:9096/real
 
 ## RBAC rule configuration
 
-For configuring RBAC rules, all the rbac rules should be configured inside a json file, the rules are defined as below:
+To configure the RBAC rules, you need to create a JSON file for them. Rules could like shown below:
 
 ```
 [
@@ -52,15 +52,15 @@ For configuring RBAC rules, all the rbac rules should be configured inside a jso
  ]
 ```
 
-The role defines which role is allowed to perform the defined actions. The role is as per the configuration of identity providers or based on the organization. Action could be CREATE, READ, UPDATE, DELETE, and EXECUTE, there could be a single action or multiple actions as a list (cf. admin configuration above).
+A `role` specifies which actions are permitted to be performed by said users of that role. Roles are determined according to the configuration of identity providers or organizational settings. Possible actions include `CREATE`, `READ`, `UPDATE`, `DELETE`, and `EXECUTE`. These actions may be configured as either a single action or a list of multiple actions (see admin configuration above).
 
 The targetInformation defines coarse-grained control over the resource, you may define the aasIds with a wildcard (\*), it means the defined role x with action y can access any Asset Administration Shell on the repository.
 
 You can also define a specific AAS Identifier in place of the wildcard (\*), then the role x with action y could be performed only on that particular AAS. There could be a single aasId or multiple aasIds as a list (cf. basyx-deleter above). 
 
 ```{note}
-- The Action are fixed as of now and limited to (CREATE, READ, UPDATE, DELETE, and EXECUTE)
-    - `Later, a user-configurable mapping of these actions would be provided.`
+- The Actions are static as of now and limited to `CREATE`, `READ`, `UPDATE`, `DELETE`, and `EXECUTE`
+    - (Later, a user-configurable mapping of these actions will be provided)
 ```
 
 ## Action table for RBAC

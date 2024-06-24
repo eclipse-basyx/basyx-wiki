@@ -60,14 +60,14 @@ For configuring RBAC rules, all the rbac rules should be configured inside a jso
 ]
 ```
 
-The role defines which role is allowed to perform the defined actions. The role is as per the configuration of identity providers or based on the organization. Action could be CREATE, READ, UPDATE, DELETE, and EXECUTE, there could be a single action or multiple actions as a list (cf. admin configuration above).
+A `role` specifies which actions are permitted to be performed by said users of that role. The role is as per the configuration of identity providers or based on the organization. Action could be CREATE, READ, UPDATE, DELETE, and EXECUTE, there could be a single action or multiple actions as a list (cf. admin configuration above).
 
 The targetInformation defines coarse-grained control over the resource, you may define the conceptDescriptionIds with a wildcard (\*), it means the defined role x with action y can access any Concept Description on the repository. You can also define a specific Concept Description Identifier in place of the wildcard (\*), then the role x with action y could be performed only on that particular Concept Description.
 There could be a single conceptDescriptionId or multiple conceptDescriptionIds as a list (cf. basyx-reader-two above).
 
 ```{note}
-- The Action are fixed as of now and limited to (CREATE, READ, UPDATE, DELETE, and EXECUTE)
-    - `Later, a user-configurable mapping of these actions would be provided.`
+- The actions are static as of now and limited to `CREATE`, `READ`, `UPDATE`, `DELETE`, and `EXECUTE`
+    - (Later, a user-configurable mapping of these actions will be provided)
 ```
 
 ## Action table for RBAC

@@ -10,17 +10,19 @@ This registry storage implementation uses [Apache Kafka](https://kafka.apache.or
 	</dependency>
 ```
 
-Then included, you can activate it by either setting the active profile or the "events.sink" property:
+Once included, you can activate it by setting the active profile:
 ```
  -Dspring.profiles.active=kafkaEvents,inMemory
-``
+```
 
-Dont't forget to also set the kafka bootstrap servers as property:
+You also have to set the kafka bootstrap servers.
 
+You can set the bootstrap property either like this:
 ```
 -Dspring.kafka.bootstrap-servers=PLAINTEXT://kafka:29092
 ```
-Or set the environment variable:
+
+Or by using the Docker environment variable:
 ```
 KAFKA_BOOTSTRAP_SERVERS=PLAINTEXT://kafka:29092
 ```

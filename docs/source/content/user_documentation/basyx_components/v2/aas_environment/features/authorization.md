@@ -5,9 +5,9 @@ This feature enables authorized access to the AAS Environment.
 Only Role Based Access Control (RBAC) in combination with Keycloak as a JWT token provider is supported as authorization type as of now.
 ```
 
-To know more about the RBAC, please refer [Authorization Services Guide](https://www.keycloak.org/docs/latest/authorization_services/index.html)
+To learn more about the RBAC, please refer [Authorization Services Guide](https://www.keycloak.org/docs/latest/authorization_services/index.html)
 
-To know more about the Keycloak server administration, please refer [Server Administration Guide](https://www.keycloak.org/docs/latest/server_admin/#keycloak-features-and-concepts)
+To learn more about the Keycloak server administration, please refer [Server Administration Guide](https://www.keycloak.org/docs/latest/server_admin/#keycloak-features-and-concepts)
 
 An example valid configuration:
 
@@ -21,7 +21,7 @@ spring.security.oauth2.resourceserver.jwt.issuer-uri= http://localhost:9096/real
 
 ## RBAC rule configuration
 
-For configuring RBAC rules, all the rbac rules should be configured inside a json file, the rules are defined as below: 
+The rbac rules should be configured inside a json file, the rules are defined as below:
 
 ```
 [
@@ -55,15 +55,15 @@ For configuring RBAC rules, all the rbac rules should be configured inside a jso
  ]
 ```
 
-The role defines which role is allowed to perform the defined actions. The role is as per the configuration of identity providers or based on the organization. Action could be CREATE, READ, UPDATE, DELETE, and EXECUTE, there could be a single action or multiple actions as a list (cf. admin configuration above).
+A `role` specifies which actions are permitted to be performed by said users of that role. The role is as per the configuration of identity providers or based on the organization. Action could be CREATE, READ, UPDATE, DELETE, and EXECUTE, there could be a single action or multiple actions as a list (cf. admin configuration above).
 
-The targetInformation defines coarse-grained control over the resource, you may define the aasIds and submodelIds with a wildcard (\*), it means the defined role x with action y can perform operations on all the AASs and Submodels. You can also define a specific aasIds and submodelIds in place of the wildcard (\*), then the role x with action y could be performed only on that particular AASs and Submodels. Please note that filtering option is currently not supported so, for serialization requests, if you specify some particular aasIds or submodelIds then serialization request will be denied if there are other AASs or Submodels exists in the environment apart from what configured in the rules, and similarly for upload requests.
+The targetInformation defines coarse-grained control over the resource, you may define the aasIds and submodelIds with a wildcard (\*), it means the defined role x with action y can perform operations on all the AASs and Submodels. You can also define specific aasIds and submodelIds in place of the wildcard (\*), then the role x with action y could be performed only on that particular AASs and Submodels. Please note that filtering options are not currently supported. Therefore, for serialization requests, specifying certain aasIds or submodelIds will result in the request being rejected. This happens if there are other AAS or submodels in the environment that are not configured in the rules. A similar rule applies to upload requests.
 
 ```{note}
-- The Action are fixed as of now and limited to (CREATE, READ, UPDATE, DELETE, and EXECUTE)
-    - `Later, a user-configurable mapping of these actions would be provided.`
-- For serialization related requests there should be defined rules for accessing the AASs/Submodels/Concept Descriptions, as the serialization requires access to all of these elements. If a role with serialization is configured for the AAS Environment target information, but if there is no role for reading the AAS/Submodel/Concept Description, then the request will be denied.
-- For upload related requests there should be defined rules for reading, creating, and updating the AASs/Submodels/Concept Descriptions, as the upload requests perform creation, update, and request operations on the AASs/Submodels/Concept Descriptions contained in the uploaded file, hence appropriate rules should be configured for the subject in consideration.
+- The actions are static as of now and limited to `CREATE`, `READ`, `UPDATE`, `DELETE`, and `EXECUTE`
+    - (Later, a user-configurable mapping of these actions will be provided)
+- For serialization-related requests, it's essential to have defined rules for accessing AAS, Submodels, and Concept Descriptions, since serialization requires access to all these elements. If a role configured for serialization targets the AAS Environment but lacks the corresponding read permissions for AAS, Submodels, or Concept Descriptions, the request will be denied.
+- For upload-related requests, defined rules for reading, creating, and updating AASs, Submodels, and Concept Descriptions are necessary. This is because upload requests involve creation, update, and retrieval operations on the AASs, Submodels, and Concept Descriptions contained in the uploaded files. Therefore, appropriate rules should be configured for the subjects under consideration.
 ```
 
 ## Action table for RBAC
@@ -73,7 +73,7 @@ Below is a reference table that shows which actions are used in what endpoints o
 | Action  | Endpoint           |
 |---------|--------------------|
 | READ    | GET /serialization |
-| CREATE  | POST /update       |
+| CREATE  | POST /upload       |
 | UPDATE  | -                  |
 | DELETE  | -                  |
 | EXECUTE | -                  |

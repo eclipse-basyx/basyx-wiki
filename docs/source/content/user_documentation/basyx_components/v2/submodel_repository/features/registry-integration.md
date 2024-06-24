@@ -9,4 +9,4 @@ basyx.submodelrepository.feature.registryintegration = {Submodel-Registry-Base-U
 basyx.externalurl = {Submodel-Repo-Base-Url}
 ```
 
-This feature gets enable automatically when both of the above defined properties are configured, i.e., no external enabled/disabled property is required.
+This feature is enabled when both of the above defined properties are configured, i.e., no additional enabled/disabled property is required.

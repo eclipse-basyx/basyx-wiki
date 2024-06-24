@@ -9,19 +9,21 @@ This registry storage implementation uses [MongoDB](https://www.mongodb.com/) as
 	</dependency>
 ```
 
-Then included, you can activate it by either setting the active profile or the *registry.type* attribute:
+Once included, you can activate it by setting the active profile:
 
 ```
  -Dspring.profiles.active=logEvents,mongoDbStorage
 ```
 
-Dont't forget to also set the mongodb url as property
+You also have to set the mongodb URL.
+
+You can set it as a property like this:
 
 ```
 -Dspring.data.mongodb.uri=mongodb://admin:admin@localhost:27017/
 ```
 
-or use the environment variable
+Or by using the Docker environment variable:
 
 ```
 SPRING_DATA_MONGODB_URI=mongodb://admin:admin@localhost:27017/
