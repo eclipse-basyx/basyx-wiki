@@ -56,7 +56,16 @@ spring.data.mongodb.authentication-database=admin
 spring.data.mongodb.username=mongoAdmin
 spring.data.mongodb.password=mongoPassword
 ```
----
+
+The collections where AASs, Submodels, and Concept Descriptions are saved can be individually configured using the following parameters:
+
+```properties
+basyx.aasrepository.mongodb.collectionName=aas-repo
+basyx.submodelrepository.mongodb.collectionName=submodel-repo
+basyx.cdrepository.mongodb.collectionName=cd-repo
+```
+
+The above values are also the default values.
 
 ### CORS Configuration ![Default](https://img.shields.io/badge/default-false-blue) ![Default](https://img.shields.io/badge/required-false-red)
 Configure CORS settings to specify allowed origins and methods.
