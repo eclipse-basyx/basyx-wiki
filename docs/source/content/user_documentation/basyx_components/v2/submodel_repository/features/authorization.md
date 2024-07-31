@@ -12,7 +12,7 @@ spring.security.oauth2.resourceserver.jwt.issuer-uri= <URI of the resource serve
 ```
 
 ```{note}
-Only Role Based Access Control (RBAC) is supported as authorization type as of now, also Keycloak is the only Jwt token provider supported now and it is also a default provider. 
+- Only Role Based Access Control (RBAC) is supported as authorization type as of now, also Keycloak is the only Jwt token provider supported now and it is also a default provider. 
 ```
 
 To learn more about RBAC, please refer to the [Authorization Services Guide](https://www.keycloak.org/docs/latest/authorization_services/index.html)
@@ -75,7 +75,9 @@ It means that the whole Submodel GET request would not be possible if the IdShor
 There could be a single submodelId/submodelElementIdShortPath or multiple submodelIds/submodelElementIdShortPaths as a list (cf. basyx-sme-reader).
 
 ```{note}
-The Action are fixed as of now and limited to (CREATE, READ, UPDATE, DELETE and EXECUTE) but later user configurable mapping of these actions would be provided.
+- The Actions are static as of now and limited to `CREATE`, `READ`, `UPDATE`, `DELETE`, and `EXECUTE`
+    - (Later, a user-configurable mapping of these actions will be provided)
+- Each rule should be unique in combination of role + action + target information
 ```
 
 ## Action table for RBAC

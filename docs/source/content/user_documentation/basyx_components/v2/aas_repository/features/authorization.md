@@ -61,6 +61,7 @@ You can also define a specific AAS Identifier in place of the wildcard (\*), the
 ```{note}
 - The Actions are static as of now and limited to `CREATE`, `READ`, `UPDATE`, `DELETE`, and `EXECUTE`
     - (Later, a user-configurable mapping of these actions will be provided)
+- Each rule should be unique in combination of role + action + target information
 ```
 
 ## Action table for RBAC

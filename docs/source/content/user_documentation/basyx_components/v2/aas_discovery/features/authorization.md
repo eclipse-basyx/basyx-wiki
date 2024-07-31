@@ -94,6 +94,12 @@ RBAC rules should be configured in a JSON file as follows:
 
 A `role` specifies which actions are permitted to be performed by said users of that role. The `action` can be CREATE, READ, DELETE, and the `targetInformation` provides coarse-grained control over the resource. You may define the `aasIds` and `assetIds` with a wildcard (*), which means the defined role with action can perform operations on all AASs and Assets. You can also define specific `aasIds` and `assetIds`.
 
+```{note}
+- The Actions are static as of now and limited to `CREATE`, `READ`, `UPDATE`, `DELETE`, and `EXECUTE`
+    - (Later, a user-configurable mapping of these actions will be provided)
+- Each rule should be unique in combination of role + action + target information
+```
+
 ### Special Configuration Notes
 
 - The wildcard `*` for `assetIds` must be inserted in both the `name` and `value` to indicate non-specific filtering for the `READ` endpoint on `/lookup/shells`.
