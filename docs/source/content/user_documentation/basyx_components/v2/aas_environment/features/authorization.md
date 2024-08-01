@@ -64,6 +64,7 @@ The targetInformation defines coarse-grained control over the resource, you may 
     - (Later, a user-configurable mapping of these actions will be provided)
 - For serialization-related requests, it's essential to have defined rules for accessing AAS, Submodels, and Concept Descriptions, since serialization requires access to all these elements. If a role configured for serialization targets the AAS Environment but lacks the corresponding read permissions for AAS, Submodels, or Concept Descriptions, the request will be denied.
 - For upload-related requests, defined rules for reading, creating, and updating AASs, Submodels, and Concept Descriptions are necessary. This is because upload requests involve creation, update, and retrieval operations on the AASs, Submodels, and Concept Descriptions contained in the uploaded files. Therefore, appropriate rules should be configured for the subjects under consideration.
+- Each rule should be unique in combination of role + action + target information
 ```
 
 ## Action table for RBAC
