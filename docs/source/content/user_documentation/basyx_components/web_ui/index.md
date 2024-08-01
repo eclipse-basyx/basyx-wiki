@@ -32,15 +32,14 @@ name: web_ui
   * ReferenceElement
   * RelationshipElement
   * AnnotatedRelationshipElement
+* [Role Based Access Control](./features/rbac.md)
 * [Status Check and Error Notifications](./features/statuscheck.md)
 * [Corporate Design](./features/corporate_design.md)
 * [Mobile Support](./features/mobile_support.md)
 * [Plugin Mechanism](./features/plugin_mechanism.md)
 * [AAS Routing](./features/routing.md)
-* [AAS Server integration](./features/aas_server_integration.md)
+* [AAS Environment Integration](./features/aas_environment_integration.md)
 * [Application Theme](./features/theme.md)
-* [Register New Shells](./features/register_new_shells.md)
-
 
 ```{toctree}
 :hidden:
@@ -48,14 +47,14 @@ name: web_ui
 
 features/data_sync
 features/docker_config
+features/rbac
 features/statuscheck
 features/corporate_design
 features/mobile_support
 features/plugin_mechanism
-features/aas_server_integration
+features/aas_environment_integration
 features/routing
 features/theme
-features/register_new_shells
 ```
 
 ## Download
@@ -146,7 +145,7 @@ The AAS Web UI will be available at [http://localhost:3000](http://localhost:300
 
 ```{seealso}
 The [Docker Configuration](./features/docker_config.md) page provides a detailed description of the configuration options for the AAS Web UI regarding the environment variables and the volumes.
-``` 
+```
 
 ## Interacting with AAS
 
@@ -262,6 +261,26 @@ alt: CAD Preview
 name: cad_preview
 ---
 CAD Preview in the Visualization Panel
+```
+
+## AAS Viewer
+
+The AAS Viewer is a separate window that can be used to visualize the content of an Asset Administration Shell in a user friendly manner. It can be accessed via the main menu by clicking on the **AAS Viewer** button.
+Like in the normal view, the AAS Viewer requires the selection of an AAS from the AAS List Sidebar.
+After selecting an AAS, the user can navigate through a list of Submodels for the selected AAS.
+In contrast to the normal view, the AAS Viewer does not show the SubmodelElements in a tree structure but only visualizes the top level Submodels.
+
+The AAS Viewer shows the visualization of Submodels using the same criteria as the **Visualization Panel** in the normal view.
+This means that primarily the SemanticId of the Submodel is used to find a suitable visualization using dedicated Submodel Plugins.
+If no fitting Plugin is found, the AAS Viewer will try to display the Submodel in a generic way.
+
+```{figure} ./images/aas_viewer.png
+---
+width: 100%
+alt: AAS Viewer
+name: aas_viewer
+---
+AAS Viewer Window
 ```
 
 ## Compatibility to BaSyx V1
