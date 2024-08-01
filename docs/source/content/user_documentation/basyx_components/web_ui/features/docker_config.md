@@ -61,20 +61,20 @@ services:
         ports:
             - "3000:3000"
         environment:
-            AAS_DISCOVERY_PATH: "<discovery_path>"
+            AAS_DISCOVERY_PATH: "<discovery_path>" (optional)
             AAS_REGISTRY_PATH: "<aas_registry_path>"
             SUBMODEL_REGISTRY_PATH: "<submodel_registry_path>"
             AAS_REPO_PATH: "<aas_repo_path>"
             SUBMODEL_REPO_PATH: "<submodel_repo_path>"
             CD_REPO_PATH: "<concept_description_repo_path>"
-            DASHBOARD_SERVICE_PATH: "<dashboard_service_path>"
-            PRIMARY_COLOR: "<primary_color>"
-            LOGO_PATH: "<logo_path_in_container>"
-            BASE_PATH: "<base_path>"
-            INFLUXDB_TOKEN: "<influxdb_token>"
-            KEYCLOAK_URL: "<keycloak_url>"
-            KEYCLOAK_REALM: "<keycloak_realm>"
-            KEYCLOAK_CLIENT_ID: "<keycloak_client_id>"
+            DASHBOARD_SERVICE_PATH: "<dashboard_service_path>" (optional; Time Series Data)
+            PRIMARY_COLOR: "<primary_color>" (optional; Corporate Design)
+            LOGO_PATH: "<logo_path_in_container>" (optional; Corporate Design)
+            BASE_PATH: "<base_path>" (optional)
+            INFLUXDB_TOKEN: "<influxdb_token>" (optional; Time Series Data)
+            KEYCLOAK_URL: "<keycloak_url>" (optional; RBAC feature)
+            KEYCLOAK_REALM: "<keycloak_realm>" (optional; RBAC feature)
+            KEYCLOAK_CLIENT_ID: "<keycloak_client_id>" (optional; RBAC feature)
 ```
 
 2. Start the AAS Web UI with the following command:
@@ -118,6 +118,10 @@ services:
             - "3000:3000"
         volumes:
             - <local_path_to_logo>:/usr/src/app/dist/Logo
+```
+
+```{hint}
+Specify the path to the logo in the `LOGO_PATH` environment variable.
 ```
 
 2. Start the AAS Web UI with docker-compose like described above.

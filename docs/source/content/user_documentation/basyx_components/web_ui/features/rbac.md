@@ -16,7 +16,7 @@ The user is also able to log out and see the status of their session in the app 
 
 ## Feature Configuration
 
-The feature can be configured by using Docker environment variables.
+The feature can be configured by using Docker environment variables. The RBAC feature is only enabled in the AAS Web UI when the environment variables `KEYCLOAK_URL`, `KEYCLOAK_REALM`, and `KEYCLOAK_CLIENT_ID` are set.
 
 When using **Docker Run** you can set the environment variables like this:
 
