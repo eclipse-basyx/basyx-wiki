@@ -4,7 +4,7 @@
 
 >As AAS Web UI user
 >I want to preconfigure the AAS Web UI through Docker environment variables.
->I also want to be able to mount my own folders containing UI plugins and my company logo.
+>I also want to be able to mount my own logo folder to display my companies logo in the AAS Web UI.
 
 The Docker Image of the AAS Web UI can be configured through environment variables and volumes. This allows the user to preconfigure the AAS Web UI when starting the Docker container.
 

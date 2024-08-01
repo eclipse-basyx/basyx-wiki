@@ -1,12 +1,11 @@
 # AAS Web UI
 
 ![Docker Pulls](https://img.shields.io/docker/pulls/eclipsebasyx/aas-gui)
-![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/eclipsebasyx/aas-gui)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/eclipse-basyx/basyx-applications)
-![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/eclipse-basyx/basyx-applications)
 ![GitHub](https://img.shields.io/github/license/eclipse-basyx/basyx-applications)
+![Metamodel](https://img.shields.io/badge/Metamodel-v3.0-yellow)
+![API](https://img.shields.io/badge/API-v3.0-yellow)
 
-The AAS Web UI is a vue.js 3 based web application and can be used to visualize and interact with Asset Administration Shells. It is intended to work in conjunction with the BaSyx Registry and the BaSyx AAS Environment.
+The AAS Web UI is a vue.js 3 based web application that can be used to visualize and interact with Asset Administration Shells and their contents. It is designed to work with AAS V3 compliant registries and repositories as well as the AAS Discovery Service.
 
 ```{figure} ./images/aas_web_ui.png
 ---
@@ -20,13 +19,19 @@ name: web_ui
 
 * [Data Synchronization](./features/data_sync.md)
 * [Docker Configuration](./features/docker_config.md)
-*  Dedicated components for different SubmodelElements:
-      * SubmodelElementCollection
-      * Property
-      * MultiLanguageProperty
-      * File
-      * Operation
-      * ReferenceElement
+* Dedicated components for different SubmodelElements:
+  * SubmodelElementCollection
+  * SubmodelElementList
+  * Property
+  * MultiLanguageProperty
+  * Range
+  * File
+  * Blob
+  * Operation
+  * Entity
+  * ReferenceElement
+  * RelationshipElement
+  * AnnotatedRelationshipElement
 * [Status Check and Error Notifications](./features/statuscheck.md)
 * [Corporate Design](./features/corporate_design.md)
 * [Mobile Support](./features/mobile_support.md)
@@ -84,7 +89,7 @@ docker run -p 3000:3000 --name=aas-web-ui eclipsebasyx/aas-gui
 
 When the container is running, you can access the AAS Web UI by navigating to [http://localhost:3000](http://localhost:3000) in your browser.
 
-There you will be able to connect to the BaSyx Registry and the AAS Environment (AAS Repository, Submodel Repository, Concept Description Repository) from the main menu.
+There you will be able to connect to the Registries, Repositories and Discovery from the main menu.
 
 ```{figure} ./images/connect_to_basyx.png
 ---
@@ -101,29 +106,34 @@ name: connect_basyx
 You can find a complete example on how to setup BaSyx in the [Quick Start](../../../introduction/quickstart) section.
 ```
 
-You cant create a complete BaSyx example environment with Docker Compose. This includes the AAS Web UI, the BaSyx Registry and the AAS Environment (AAS Repository, Submodel Repository, Concept Description Repository).
+You cant create a complete BaSyx example environment with Docker Compose. This includes the AAS Web UI, the BaSyx AAS and Submodel Registry, the AAS Environment (AAS Repository, Submodel Repository, Concept Description Repository) and the AAS Discovery Service.
 
 This is a simple example of how to setup the AAS Web UI with Docker Compose in a `docker-compose.yml` file:
 
 ```yaml
-version: "3.8"
 services:
-    aas-web-gui:
+    aas-web-ui:
         image: eclipsebasyx/aas-gui
-        container_name: aas-web-gui
+        container_name: aas-web-ui
         ports:
             - "3000:3000"
         environment:
-            CHOKIDAR_USEPOLLING: "true"
-            VITE_REGISTRY_PATH: "<registry_path>"
-            VITE_AAS_REPO_PATH: "<aas_repo_path>"
-            VITE_SUBMODEL_REPO_PATH: "<submodel_repo_path>"
-            VITE_CD_REPO_PATH: "<concept_description_repo_path>"
-            VITE_PRIMARY_COLOR: "<primary_color>"
-            VITE_BASE_PATH: "<base_path>"
+            AAS_DISCOVERY_PATH: "<discovery_path>"
+            AAS_REGISTRY_PATH: "<aas_registry_path>"
+            SUBMODEL_REGISTRY_PATH: "<submodel_registry_path>"
+            AAS_REPO_PATH: "<aas_repo_path>"
+            SUBMODEL_REPO_PATH: "<submodel_repo_path>"
+            CD_REPO_PATH: "<concept_description_repo_path>"
+            DASHBOARD_SERVICE_PATH: "<dashboard_service_path>"
+            PRIMARY_COLOR: "<primary_color>"
+            LOGO_PATH: "<logo_path_in_container>"
+            BASE_PATH: "<base_path>"
+            INFLUXDB_TOKEN: "<influxdb_token>"
+            KEYCLOAK_URL: "<keycloak_url>"
+            KEYCLOAK_REALM: "<keycloak_realm>"
+            KEYCLOAK_CLIENT_ID: "<keycloak_client_id>"
         volumes:
-            - <local_path_to_logo>:/app/src/assets/Logo
-            - <local_path_to_plugins>:/app/src/UserPlugins
+            - <local_path_to_logo>:/usr/src/app/dist/Logo
 ```
 
 you can start the AAS Web UI with the following command:
@@ -151,11 +161,11 @@ AAS List Sidebar
 
 ### AAS List Sidebar
 
-The AAS List shows all Asset Administration Shells that are registered. The list can be filtered by entering a search term in the search bar.
+The AAS List shows all Asset Administration Shells that are registered in the AAS Registry. The list can be filtered by entering a search term in the search bar.
 
 There is also an option to show an information window for each Asset Administration Shell by clicking on the info icon. The information window shows the AAS ID, the AAS Name, the AAS Description and information regarding the asset like the global asset ID and a thumbnail.
 
-In addition, the AAS can be removed from the registry by clicking on the **delete/close** icon. Clicking the **download** icon will download the AAS as an AASX file.
+In addition, the AAS can be removed by clicking on the **delete/close** icon. Clicking the **download** icon will download the AAS as an AASX file.
 
 ### AAS Treeview
 
@@ -185,27 +195,27 @@ Element Details
 
 The Element Details Page shows the content of the selected SubmodelElement. This includes the following information:
 
-- idShort
-- modelType
-- semanticId
-- description
-- value
-- dataSpecificationContent (fetched from the Concept Description Repository)
+* idShort
+* modelType
+* semanticId
+* description
+* value
+* dataSpecificationContent (fetched from the Concept Description Repository)
 
 The implemented SubmodelElements follow the specification for the AAS in Metamodel Version 3. Currently, the following SubmodelElements have their own visualization:
 
-- SubmodelElementCollection
-- SubmodelElementList
-- Property
-- MultiLanguageProperty
-- File
-- Blob
-- Operation
-- ReferenceElement
-- Range
-- Entity
-- RelationshipElement
-- AnnotatedRelationshipElement
+* SubmodelElementCollection
+* SubmodelElementList
+* Property
+* MultiLanguageProperty
+* File
+* Blob
+* Operation
+* ReferenceElement
+* Range
+* Entity
+* RelationshipElement
+* AnnotatedRelationshipElement
 
 ```{note}
 The Capability and Event SubmodelElements are not yet implemented in the AAS Web UI.
@@ -225,7 +235,7 @@ name: ui_visualization
 ---
 ```
 
-2. The File and Blob SubmodelElements have a special visualization. If the SubmodelElement contains an image or a PDF, the AAS Web UI displays the image/PDF in the visualization page.
+1. The File and Blob SubmodelElements have a special visualization. If the SubmodelElement contains an image, a PDF or a CAD file (.stl/.glTF/.obj), the AAS Web UI displays the file contents in the visualization page.
 
 ```{figure} ./images/image_preview.png
 ---
@@ -243,6 +253,15 @@ alt: PDF Preview
 name: pdf_preview
 ---
 PDF Preview in the Visualization Panel
+```
+
+```{figure} ./images/cad_preview.png
+---
+width: 80%
+alt: CAD Preview
+name: cad_preview
+---
+CAD Preview in the Visualization Panel
 ```
 
 ## Compatibility to BaSyx V1

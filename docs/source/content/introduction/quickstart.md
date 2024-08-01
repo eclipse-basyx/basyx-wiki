@@ -16,61 +16,34 @@ Dockers official documentation provides a [detailed installation guide](https://
 
 ## Setup
 
-To setup the introductory example, you need to clone the BaSyx Java Server SDK Repository:
+We provide a Starter Kit for setting up BaSyx on our Website [BaSyx.org](https://basyx.org/#/).
+By clicking on **Get Started** you will be guided through an interactive setup process including all necessary components and configurations.
 
-```bash
-git clone https://github.com/eclipse-basyx/basyx-java-server-sdk.git
+```{figure} ./images/starterkit.png
+---
+width: 80%
+alt: BaSyx Starter Kit
+name: starterkit
+---
 ```
 
-Afterwards, you need to navigate to the `examples` directory inside the cloned `basyx-java-server-sdk` directory and run the following command:
+After you have completed the setup process, you can download the generated configuration files.
+
+Afterwards, you need to unzip the donwloaded file and run the following command inside the folder:
 
 ```bash
 docker-compose up -d
 ```
 
-This starts the following components:
+You can acces the BaSyx AAS Web UI by navigating to [http://localhost:3000](http://localhost:3000) in your browser.
+From there you are able to interact with the BaSyx components.
 
-- AAS Repository (http://localhost:8081/shells)
-- Submodel Repository (http://localhost:8081/submodels)
-- ConceptDescription Repository (http://localhost:8081/concept-descriptions)
-- AAS Registry (http://localhost:8082/api/v3.0/shell-descriptors)
-- AAS Web UI (http://localhost:3000)
+One of the first actions could be the upload of a Shell using the upload feature of the AAS Environment.
 
-```{note}
-As of right now you have to register all Asset Administration Shells manually (possible through the UI).
-```
-
-You can use the following endpoints to register Asset Administration Shells which are included in the introductory example:
-
-```bash
-http://localhost:8081/shells/aHR0cHM6Ly9odHctYmVybGluLmRlL2lkcy9hYXMvZGVtb2Fhc3Yz
-```
-
-```bash
-http://localhost:8081/shells/aHR0cHM6Ly9leGFtcGxlLmNvbS9pZHMvc20vMjQxMV83MTYwXzAxMzJfNDUyMw==
-```
-
-```bash
-http://localhost:8081/shells/aHR0cHM6Ly9hY3BsdC5vcmcvVGVzdF9Bc3NldEFkbWluaXN0cmF0aW9uU2hlbGw=
-```
-
-```bash
-http://localhost:8081/shells/aHR0cHM6Ly9hY3BsdC5vcmcvVGVzdF9Bc3NldEFkbWluaXN0cmF0aW9uU2hlbGxfTWFuZGF0b3J5
-```
-
-```bash
-http://localhost:8081/shells/aHR0cHM6Ly9hY3BsdC5vcmcvVGVzdF9Bc3NldEFkbWluaXN0cmF0aW9uU2hlbGwyX01hbmRhdG9yeQ==
-```
-
-```bash
-http://localhost:8081/shells/aHR0cHM6Ly9hY3BsdC5vcmcvVGVzdF9Bc3NldEFkbWluaXN0cmF0aW9uU2hlbGxfTWlzc2luZw==
-```
-
-```{figure} ./images/register_aas.png
+```{figure} ./images/upload_aas.png
 ---
-width: 100%
-alt: Register AAS
-name: register_aas
+width: 80%
+alt: BaSyx Starter Kit
+name: starterkit
 ---
-Register Asset Administrations Shells via the Basyx AAS Web UI.
 ```
