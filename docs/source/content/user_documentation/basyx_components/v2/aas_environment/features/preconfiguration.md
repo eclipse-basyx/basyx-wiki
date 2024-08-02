@@ -15,3 +15,24 @@ For ConceptDescriptions ID collisions will be ignored since they are assumed to 
 
 Further ConceptDescriptions with the same Id will only lead to a warning in the log. 
 ```
+
+## Preconfiguration of AAS Packages With Authorization Enabled
+If you want to use a preconfigured environment with authorization, you need to set the following options as well:
+
+```
+basyx.aasenvironment.authorization.preconfiguration.token-endpoint = <Endpoint to the KeyCloak Server>
+basyx.aasenvironment.authorization.preconfiguration.grant-type = <Grant Type>
+basyx.aasenvironment.authorization.preconfiguration.client-id = <ClientID>
+basyx.aasenvironment.authorization.preconfiguration.client-secret= <Client Secret>
+basyx.aasenvironment.authorization.preconfiguration.username = <Username>
+basyx.aasenvironment.authorization.preconfiguration.password = <Password>
+basyx.aasenvironment.authorization.preconfiguration.scopes = <Scopes>
+```
+
+An example authorized preconfiguration would be:
+```
+basyx.aasenvironment.authorization.preconfiguration.token-endpoint = http://localhost:9096/realms/BaSyx/protocol/openid-connect/token
+basyx.aasenvironment.authorization.preconfiguration.grant-type = CLIENT_CREDENTIALS
+basyx.aasenvironment.authorization.preconfiguration.client-id = workstation-1
+basyx.aasenvironment.authorization.preconfiguration.client-secret = nY0mjyECF60DGzNmQUjL81XurSl8etom
+```
