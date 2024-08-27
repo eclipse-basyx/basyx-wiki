@@ -1,0 +1,1011 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "BaSyx Asset Administration Shell Repository HTTP REST-API",
+    "description" : "The full description of the generic BaSyx Asset Administration Shell Repository HTTP REST-API",
+    "contact" : {
+      "name" : "Constantin Ziesche",
+      "url" : "https://www.bosch.com/de/",
+      "email" : "constantin.ziesche@bosch.com"
+    },
+    "license" : {
+      "name" : "EPL-2.0",
+      "url" : "https://www.eclipse.org/legal/epl-2.0/"
+    },
+    "version" : "v1"
+  },
+  "paths" : {
+    "/shells" : {
+      "get" : {
+        "tags" : [ "AssetAdministrationShellRepository" ],
+        "summary" : "Retrieves all Asset Administration Shells from the Asset Administration Shell repository",
+        "operationId" : "GetAllAssetAdministrationShells",
+        "responses" : {
+          "200" : {
+            "description" : "Returns a list of found Asset Administration Shells",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/AssetAdministrationShell"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shells/{aasId}" : {
+      "get" : {
+        "tags" : [ "AssetAdministrationShellRepository" ],
+        "summary" : "Retrieves a specific Asset Administration Shell from the Asset Administration Shell repository",
+        "parameters" : [ {
+          "name" : "aasId",
+          "in" : "path",
+          "description" : "The Asset Administration Shell's unique id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Asset Administration Shell's unique id",
+            "nullable" : true
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns the requested Asset Administration Shell",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/AssetAdministrationShell"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "No Asset Administration Shell found"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "AssetAdministrationShellRepository" ],
+        "summary" : "Creates or updates a Asset Administration Shell at the Asset Administration Shell repository",
+        "operationId" : "PutAssetAdministrationShell",
+        "parameters" : [ {
+          "name" : "aasId",
+          "in" : "path",
+          "description" : "The Asset Administration Shell's unique id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Asset Administration Shell's unique id",
+            "nullable" : true
+          }
+        } ],
+        "requestBody" : {
+          "description" : "The Asset Administration Shell",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/AssetAdministrationShell"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Asset Administration Shell created successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/AssetAdministrationShell"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "AssetAdministrationShellRepository" ],
+        "summary" : "Deletes a specific Asset Administration Shell at the Asset Administration Shell repository",
+        "operationId" : "DeleteAssetAdministrationShellById",
+        "parameters" : [ {
+          "name" : "aasId",
+          "in" : "path",
+          "description" : "The Asset Administration Shell's unique id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Asset Administration Shell's unique id",
+            "nullable" : true
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Asset Administration Shell deleted successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shells/{aasId}/aas" : {
+      "get" : {
+        "tags" : [ "AssetAdministrationShellRepository" ],
+        "summary" : "Retrieves a specific Asset Administration Shell from the Asset Administration Shell repository",
+        "operationId" : "GetAssetAdministrationShellById",
+        "parameters" : [ {
+          "name" : "aasId",
+          "in" : "path",
+          "description" : "The Asset Administration Shell's unique id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Asset Administration Shell's unique id",
+            "nullable" : true
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns the requested Asset Administration Shell",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/AssetAdministrationShell"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "No Asset Administration Shell found"
+          }
+        }
+      }
+    },
+    "/shells/{aasId}/aas/submodels" : {
+      "get" : {
+        "tags" : [ "AssetAdministrationShellRepository" ],
+        "summary" : "Retrieves all Submodels from the  Asset Administration Shell",
+        "operationId" : "ShellRepo_GetSubmodelsFromShell",
+        "parameters" : [ {
+          "name" : "aasId",
+          "in" : "path",
+          "description" : "The Asset Administration Shell's unique id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Asset Administration Shell's unique id",
+            "nullable" : true
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns a list of found Submodels",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "No Submodel Service Providers found"
+          }
+        }
+      }
+    },
+    "/shells/{aasId}/aas/submodels/{submodelIdShort}" : {
+      "put" : {
+        "tags" : [ "AssetAdministrationShellRepository" ],
+        "summary" : "Creates or updates a Submodel to an existing Asset Administration Shell",
+        "operationId" : "ShellRepo_PutSubmodelToShell",
+        "parameters" : [ {
+          "name" : "aasId",
+          "in" : "path",
+          "description" : "The Asset Administration Shell's unique id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Asset Administration Shell's unique id",
+            "nullable" : true
+          }
+        }, {
+          "name" : "submodelIdShort",
+          "in" : "path",
+          "description" : "The Submodel's short id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Submodel's short id",
+            "nullable" : true
+          }
+        } ],
+        "requestBody" : {
+          "description" : "The serialized Submodel object",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Submodel"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Submodel created successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Submodel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get" : {
+        "tags" : [ "AssetAdministrationShellRepository" ],
+        "summary" : "Retrieves the Submodel from the Asset Administration Shell",
+        "parameters" : [ {
+          "name" : "aasId",
+          "in" : "path",
+          "description" : "The Asset Administration Shell's unique id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Asset Administration Shell's unique id",
+            "nullable" : true
+          }
+        }, {
+          "name" : "submodelIdShort",
+          "in" : "path",
+          "description" : "The Submodel's short id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Submodel's short id",
+            "nullable" : true
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Submodel retrieved successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Submodel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "No Submodel Service Provider found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "AssetAdministrationShellRepository" ],
+        "summary" : "Deletes a specific Submodel from the Asset Administration Shell",
+        "operationId" : "ShellRepo_DeleteSubmodelFromShellByIdShort",
+        "parameters" : [ {
+          "name" : "aasId",
+          "in" : "path",
+          "description" : "The Asset Administration Shell's unique id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Asset Administration Shell's unique id",
+            "nullable" : true
+          }
+        }, {
+          "name" : "submodelIdShort",
+          "in" : "path",
+          "description" : "The Submodel's short id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Submodel's short id",
+            "nullable" : true
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Submodel deleted successfully"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shells/{aasId}/aas/submodels/{submodelIdShort}/submodel" : {
+      "get" : {
+        "tags" : [ "AssetAdministrationShellRepository" ],
+        "summary" : "Retrieves the Submodel from the Asset Administration Shell",
+        "operationId" : "ShellRepo_GetSubmodelFromShellByIdShort",
+        "parameters" : [ {
+          "name" : "aasId",
+          "in" : "path",
+          "description" : "The Asset Administration Shell's unique id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Asset Administration Shell's unique id",
+            "nullable" : true
+          }
+        }, {
+          "name" : "submodelIdShort",
+          "in" : "path",
+          "description" : "The Submodel's short id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Submodel's short id",
+            "nullable" : true
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Submodel retrieved successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Submodel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "No Submodel Service Provider found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shells/{aasId}/aas/submodels/{submodelIdShort}/submodel/values" : {
+      "get" : {
+        "tags" : [ "AssetAdministrationShellRepository" ],
+        "summary" : "Retrieves the minimized version of a Submodel, i.e. only the values of SubmodelElements are serialized and returned",
+        "operationId" : "ShellRepo_GetSubmodelValues",
+        "parameters" : [ {
+          "name" : "aasId",
+          "in" : "path",
+          "description" : "The Asset Administration Shell's unique id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Asset Administration Shell's unique id",
+            "nullable" : true
+          }
+        }, {
+          "name" : "submodelIdShort",
+          "in" : "path",
+          "description" : "The Submodel's short id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Submodel's short id",
+            "nullable" : true
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "404" : {
+            "description" : "Submodel not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shells/{aasId}/aas/submodels/{submodelIdShort}/submodel/submodelElements" : {
+      "get" : {
+        "tags" : [ "AssetAdministrationShellRepository" ],
+        "summary" : "Retrieves all Submodel-Elements from the Submodel",
+        "operationId" : "ShellRepo_GetSubmodelElements",
+        "parameters" : [ {
+          "name" : "aasId",
+          "in" : "path",
+          "description" : "The Asset Administration Shell's unique id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Asset Administration Shell's unique id",
+            "nullable" : true
+          }
+        }, {
+          "name" : "submodelIdShort",
+          "in" : "path",
+          "description" : "The Submodel's short id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Submodel's short id",
+            "nullable" : true
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns a list of found Submodel-Elements",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/SubmodelElement"
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Submodel not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shells/{aasId}/aas/submodels/{submodelIdShort}/submodel/submodelElements/{seIdShortPath}" : {
+      "put" : {
+        "tags" : [ "AssetAdministrationShellRepository" ],
+        "summary" : "Creates or updates a Submodel-Element at the Submodel",
+        "operationId" : "ShellRepo_PutSubmodelElement",
+        "parameters" : [ {
+          "name" : "aasId",
+          "in" : "path",
+          "description" : "The Asset Administration Shell's unique id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Asset Administration Shell's unique id",
+            "nullable" : true
+          }
+        }, {
+          "name" : "submodelIdShort",
+          "in" : "path",
+          "description" : "The Submodel's short id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Submodel's short id",
+            "nullable" : true
+          }
+        }, {
+          "name" : "seIdShortPath",
+          "in" : "path",
+          "description" : "The Submodel-Element's IdShort-Path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Submodel-Element's IdShort-Path",
+            "nullable" : true
+          }
+        } ],
+        "requestBody" : {
+          "description" : "The Submodel-Element object",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/SubmodelElement"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Submodel-Element created successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/SubmodelElement"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Submodel not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get" : {
+        "tags" : [ "AssetAdministrationShellRepository" ],
+        "summary" : "Retrieves a specific Submodel-Element from the Submodel",
+        "operationId" : "ShellRepo_GetSubmodelElementByIdShort",
+        "parameters" : [ {
+          "name" : "aasId",
+          "in" : "path",
+          "description" : "The Asset Administration Shell's unique id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Asset Administration Shell's unique id",
+            "nullable" : true
+          }
+        }, {
+          "name" : "submodelIdShort",
+          "in" : "path",
+          "description" : "The Submodel's short id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Submodel's short id",
+            "nullable" : true
+          }
+        }, {
+          "name" : "seIdShortPath",
+          "in" : "path",
+          "description" : "The Submodel-Element's IdShort-Path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Submodel-Element's IdShort-Path",
+            "nullable" : true
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns the requested Submodel-Element",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/SubmodelElement"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Submodel / Submodel-Element not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "AssetAdministrationShellRepository" ],
+        "summary" : "Deletes a specific Submodel-Element from the Submodel",
+        "operationId" : "ShellRepo_DeleteSubmodelElementByIdShort",
+        "parameters" : [ {
+          "name" : "aasId",
+          "in" : "path",
+          "description" : "The Asset Administration Shell's unique id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Asset Administration Shell's unique id",
+            "nullable" : true
+          }
+        }, {
+          "name" : "submodelIdShort",
+          "in" : "path",
+          "description" : "The Submodel's short id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Submodel's short id",
+            "nullable" : true
+          }
+        }, {
+          "name" : "seIdShortPath",
+          "in" : "path",
+          "description" : "The Submodel-Element's IdShort-Path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Submodel-Element's IdShort-Path",
+            "nullable" : true
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "Submodel-Element deleted successfully"
+          },
+          "404" : {
+            "description" : "Submodel / Submodel-Element not found"
+          }
+        }
+      }
+    },
+    "/shells/{aasId}/aas/submodels/{submodelIdShort}/submodel/submodelElements/{seIdShortPath}/value" : {
+      "get" : {
+        "tags" : [ "AssetAdministrationShellRepository" ],
+        "summary" : "Retrieves the value of a specific Submodel-Element from the Submodel",
+        "operationId" : "ShellRepo_GetSubmodelElementValueByIdShort",
+        "parameters" : [ {
+          "name" : "aasId",
+          "in" : "path",
+          "description" : "The Asset Administration Shell's unique id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Asset Administration Shell's unique id",
+            "nullable" : true
+          }
+        }, {
+          "name" : "submodelIdShort",
+          "in" : "path",
+          "description" : "The Submodel's short id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Submodel's short id",
+            "nullable" : true
+          }
+        }, {
+          "name" : "seIdShortPath",
+          "in" : "path",
+          "description" : "The Submodel-Element's IdShort-Path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Submodel-Element's IdShort-Path",
+            "nullable" : true
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns the value of a specific Submodel-Element",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Submodel / Submodel-Element not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "AssetAdministrationShellRepository" ],
+        "summary" : "Updates the Submodel-Element's value",
+        "operationId" : "ShellRepo_PutSubmodelElementValueByIdShort",
+        "parameters" : [ {
+          "name" : "aasId",
+          "in" : "path",
+          "description" : "The Asset Administration Shell's unique id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Asset Administration Shell's unique id",
+            "nullable" : true
+          }
+        }, {
+          "name" : "submodelIdShort",
+          "in" : "path",
+          "description" : "The Submodel's short id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Submodel's short id",
+            "nullable" : true
+          }
+        }, {
+          "name" : "seIdShortPath",
+          "in" : "path",
+          "description" : "The Submodel-Element's IdShort-Path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Submodel-Element's IdShort-Path",
+            "nullable" : true
+          }
+        } ],
+        "requestBody" : {
+          "description" : "The new value",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "description" : "The new value",
+                "nullable" : true
+              }
+            }
+          }
+        },
+        "responses" : {
+          "204" : {
+            "description" : "Submodel-Element's value changed successfully"
+          },
+          "404" : {
+            "description" : "Submodel / Submodel-Element not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method not allowed"
+          }
+        }
+      }
+    },
+    "/shells/{aasId}/aas/submodels/{submodelIdShort}/submodel/submodelElements/{idShortPathToOperation}/invoke" : {
+      "post" : {
+        "tags" : [ "AssetAdministrationShellRepository" ],
+        "summary" : "Invokes a specific operation from the Submodel synchronously or asynchronously",
+        "operationId" : "ShellRepo_InvokeOperationByIdShort",
+        "parameters" : [ {
+          "name" : "aasId",
+          "in" : "path",
+          "description" : "The Asset Administration Shell's unique id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Asset Administration Shell's unique id",
+            "nullable" : true
+          }
+        }, {
+          "name" : "submodelIdShort",
+          "in" : "path",
+          "description" : "Submodel's short id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "Submodel's short id",
+            "nullable" : true
+          }
+        }, {
+          "name" : "idShortPathToOperation",
+          "in" : "path",
+          "description" : "The IdShort path to the Operation",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The IdShort path to the Operation",
+            "nullable" : true
+          }
+        }, {
+          "name" : "async",
+          "in" : "query",
+          "description" : "Determines whether the execution of the operation is asynchronous (true) or not (false)",
+          "schema" : {
+            "type" : "boolean",
+            "description" : "Determines whether the execution of the operation is asynchronous (true) or not (false)"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "The parameterized request object for the invocation",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/InvocationRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Operation invoked successfully"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Submodel / Method handler not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shells/{aasId}/aas/submodels/{submodelIdShort}/submodel/submodelElements/{idShortPathToOperation}/invocationList/{requestId}" : {
+      "get" : {
+        "tags" : [ "AssetAdministrationShellRepository" ],
+        "summary" : "Retrieves the result of an asynchronously started operation",
+        "operationId" : "ShellRepo_GetInvocationResultByIdShort",
+        "parameters" : [ {
+          "name" : "aasId",
+          "in" : "path",
+          "description" : "The Asset Administration Shell's unique id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Asset Administration Shell's unique id",
+            "nullable" : true
+          }
+        }, {
+          "name" : "submodelIdShort",
+          "in" : "path",
+          "description" : "Submodel's short id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "Submodel's short id",
+            "nullable" : true
+          }
+        }, {
+          "name" : "idShortPathToOperation",
+          "in" : "path",
+          "description" : "The IdShort path to the Operation",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The IdShort path to the Operation",
+            "nullable" : true
+          }
+        }, {
+          "name" : "requestId",
+          "in" : "path",
+          "description" : "The request id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The request id",
+            "nullable" : true
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Result found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/InvocationResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Submodel / Operation / Request not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
