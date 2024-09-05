@@ -47,3 +47,7 @@ alt: BaSyx Starter Kit
 name: starterkit
 ---
 ```
+
+```{seealso}
+You can find some [example shells](https://github.com/eclipse-basyx/basyx-java-server-sdk/tree/main/examples/BaSyxMinimal/aas) in our [minimal example](https://github.com/eclipse-basyx/basyx-java-server-sdk/tree/main/examples/BaSyxMinimal).
+```

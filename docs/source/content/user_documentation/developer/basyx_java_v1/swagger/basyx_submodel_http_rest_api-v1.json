@@ -1,0 +1,458 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "BaSyx Submodel HTTP REST-API",
+    "description" : "The full description of the generic BaSyx Submodel HTTP REST-API",
+    "contact" : {
+      "name" : "Constantin Ziesche",
+      "url" : "https://www.bosch.com/de/",
+      "email" : "constantin.ziesche@bosch.com"
+    },
+    "license" : {
+      "name" : "EPL-2.0",
+      "url" : "https://www.eclipse.org/legal/epl-2.0/"
+    },
+    "version" : "v1"
+  },
+  "paths" : {
+    "/submodel" : {
+      "get" : {
+        "tags" : [ "Submodel" ],
+        "summary" : "Retrieves the entire Submodel",
+        "operationId" : "GetSubmodel",
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Submodel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Submodel not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/submodel/values" : {
+      "get" : {
+        "tags" : [ "Submodel" ],
+        "summary" : "Retrieves the minimized version of a Submodel, i.e. only the values of SubmodelElements are serialized and returned",
+        "operationId" : "GetSubmodelValues",
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "404" : {
+            "description" : "Submodel not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/submodel/submodelElements" : {
+      "get" : {
+        "tags" : [ "Submodel" ],
+        "summary" : "Retrieves all Submodel-Elements from the Submodel",
+        "operationId" : "GetSubmodelElements",
+        "responses" : {
+          "200" : {
+            "description" : "Returns a list of found Submodel-Elements",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/SubmodelElement"
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Submodel not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/submodel/submodelElements/{seIdShortPath}" : {
+      "put" : {
+        "tags" : [ "Submodel" ],
+        "summary" : "Creates or updates a Submodel-Element at the Submodel",
+        "operationId" : "PutSubmodelElement",
+        "parameters" : [ {
+          "name" : "seIdShortPath",
+          "in" : "path",
+          "description" : "The Submodel-Element's IdShort-Path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Submodel-Element's IdShort-Path",
+            "nullable" : true
+          }
+        } ],
+        "requestBody" : {
+          "description" : "The Submodel-Element object",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/SubmodelElement"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Submodel-Element created successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/SubmodelElement"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get" : {
+        "tags" : [ "Submodel" ],
+        "summary" : "Retrieves a specific Submodel-Element from the Submodel",
+        "operationId" : "GetSubmodelElementByIdShort",
+        "parameters" : [ {
+          "name" : "seIdShortPath",
+          "in" : "path",
+          "description" : "The Submodel-Element's IdShort-Path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Submodel-Element's IdShort-Path",
+            "nullable" : true
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns the requested Submodel-Element",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/SubmodelElement"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Submodel Element not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Submodel" ],
+        "summary" : "Deletes a specific Submodel-Element from the Submodel",
+        "operationId" : "DeleteSubmodelElementByIdShort",
+        "parameters" : [ {
+          "name" : "seIdShortPath",
+          "in" : "path",
+          "description" : "The Submodel-Element's IdShort-Path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Submodel-Element's IdShort-Path",
+            "nullable" : true
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "Submodel-Element deleted successfully"
+          },
+          "404" : {
+            "description" : "Submodel-Element not found"
+          }
+        }
+      }
+    },
+    "/submodel/submodelElements/{seIdShortPath}/value" : {
+      "get" : {
+        "tags" : [ "Submodel" ],
+        "summary" : "Retrieves the value of a specific Submodel-Element from the Submodel",
+        "operationId" : "GetSubmodelElementValueByIdShort",
+        "parameters" : [ {
+          "name" : "seIdShortPath",
+          "in" : "path",
+          "description" : "The Submodel-Element's IdShort-Path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Submodel-Element's IdShort-Path",
+            "nullable" : true
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns the value of a specific Submodel-Element",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Submodel / Submodel-Element not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Submodel" ],
+        "summary" : "Updates the Submodel-Element's value",
+        "operationId" : "PutSubmodelElementValueByIdShort",
+        "parameters" : [ {
+          "name" : "seIdShortPath",
+          "in" : "path",
+          "description" : "The Submodel-Element's IdShort-Path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The Submodel-Element's IdShort-Path",
+            "nullable" : true
+          }
+        } ],
+        "requestBody" : {
+          "description" : "The new value",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "description" : "The new value",
+                "nullable" : true
+              }
+            }
+          }
+        },
+        "responses" : {
+          "204" : {
+            "description" : "Submodel-Element's value changed successfully"
+          },
+          "404" : {
+            "description" : "Submodel-Element not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method not allowed"
+          }
+        }
+      }
+    },
+    "/submodel/submodelElements/{idShortPathToOperation}/invoke" : {
+      "post" : {
+        "tags" : [ "Submodel" ],
+        "summary" : "Invokes a specific operation from the Submodel synchronously or asynchronously",
+        "operationId" : "InvokeOperationByIdShort",
+        "parameters" : [ {
+          "name" : "idShortPathToOperation",
+          "in" : "path",
+          "description" : "The IdShort path to the Operation",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The IdShort path to the Operation",
+            "nullable" : true
+          }
+        }, {
+          "name" : "async",
+          "in" : "query",
+          "description" : "Determines whether the execution of the operation is asynchronous (true) or not (false)",
+          "schema" : {
+            "type" : "boolean",
+            "description" : "Determines whether the execution of the operation is asynchronous (true) or not (false)"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "The parameterized request object for the invocation",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/InvocationRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Operation invoked successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/InvocationResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Method handler not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/submodel/submodelElements/{idShortPathToOperation}/invocationList/{requestId}" : {
+      "get" : {
+        "tags" : [ "Submodel" ],
+        "summary" : "Retrieves the result of an asynchronously started operation",
+        "operationId" : "GetInvocationResultByIdShort",
+        "parameters" : [ {
+          "name" : "idShortPathToOperation",
+          "in" : "path",
+          "description" : "The IdShort path to the Operation",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The IdShort path to the Operation",
+            "nullable" : true
+          }
+        }, {
+          "name" : "requestId",
+          "in" : "path",
+          "description" : "The request id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "The request id",
+            "nullable" : true
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Result found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/InvocationResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Operation / Request not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://api.swaggerhub.com/domains/BaSyx/SharedModels/v1#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
