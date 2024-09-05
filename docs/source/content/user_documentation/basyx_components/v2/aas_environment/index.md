@@ -9,7 +9,7 @@ The AAS Environment aggregates the [AAS Repository](../aas_repository/index.md),
 
 ```{note}
 Additionally, the AAS Environment supports the following endpoint defined in DotAAS Part 2 V3 - Serialization Interface:
-- GenerateSerializationByIds
+- GenerateSerializationByIds - For more information about this endpoint please refer to [Swagger API](https://app.swaggerhub.com/apis/Plattform_i40/Entire-API-Collection/V3.0.1#/Serialization%20API/GenerateSerializationByIds)
 ```
 
 ## Features
