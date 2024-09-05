@@ -1,9 +1,17 @@
 # Upload Endpoint
 
-AAS packages (XML, JSON, AASX) can be uploaded as multipart/form-data via POST request using the `/upload` endpoint. Please note that the following MIME types are expected for the respective file uploads:
+AAS packages (XML, JSON, AASX) can be uploaded by a multipart/form-data POST on the `/upload` endpoint. Please note that the following MIME types as **Accept Header** are expected for the respective file uploads:
 * AASX: application/asset-administration-shell-package
 * JSON: application/json
 * XML: application/xml
+
+Below is an example curl request:
+
+```bash
+curl --location 'http://localhost:8081/upload' \
+--header 'Accept: application/asset-administration-shell-package' \
+--form 'file=@"Sample.aasx"'
+```
     
 The upload follows the same rules as the preconfiguration in terms of handling existing AAS, submodels and concept descriptions. In order for the file to be recognized correctly, please make sure that its MIME type is properly configured.
 
