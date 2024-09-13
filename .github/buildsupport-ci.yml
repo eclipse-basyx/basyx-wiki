@@ -1,0 +1,62 @@
+name: AAS Service SDK CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+  issues: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          registry: objectivepartner.azurecr.io/basyx-enterprise
+          username: ${{ vars.AZURE_CR_BASYX_ENTERPRISE_TOKEN_USER }}
+          password: ${{ secrets.AZURE_CR_BASYX_ENTERPRISE_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.11
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: eu-central-1
+          role-to-assume: arn:aws:iam::339713129959:role/github-actions
+
+      - name: Fetch AWS CodeArtifact temporary authorization token
+        run: |
+          aws codeartifact login --tool pip --repository pypi-store --domain objectivepartner --domain-owner 339713129959 --region eu-central-1
+          aws codeartifact login --tool twine --repository pypi-store --domain objectivepartner --domain-owner 339713129959 --region eu-central-1
+
+          cat ~/.pypirc
+
+      - name: Build and deploy
+        run: |
+          pip install -r docs/requirements.txt
+          
+          sphinx-build -b html source/ build/
+          
+          docker buildx build --platform linux/amd64,linux/arm64 -t objectivepartner.azurecr.io/basyx-enterprise/wiki:latest .
