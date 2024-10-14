@@ -1,4 +1,4 @@
-# AAS Dataspace for Everybody in Action
+# AAS Dataspace for Everybody Tutorial
 
 ## Table of Contents
 * [Overview](#Overview)
@@ -10,7 +10,7 @@
 ## Overview
 This tutorial focuses on below points:
 
-* What is the �ǣAAS Dataspace for Everybody?
+* What is the AAS Dataspace for Everybody?
 * Live Demonstration of the AAS Dataspace for Everybody
 * Try out the AAS Dataspace yourself and share Digital Twins with multiple Partners.
 
@@ -154,7 +154,13 @@ More details on Security can be found [here](https://github.com/eclipse-basyx/ba
 * The administrator of the system controls the Policy inside the Submodel.
 * Rules can be added or deleted while the system is running.
 
-<img width="80%" alt="image" src="images/DynamicRBACMgmt.png" style="display: block; margin-left: auto; margin-right: auto;">
+```{figure} ./images/DynamicRBACMgmt.png
+---
+width: 80%
+alt: AAS Dataspace
+name: AAS_Dataspace
+---
+```
 
 ### Interaction With AAS DS4E with Postman
 
@@ -191,7 +197,13 @@ More details on Security can be found [here](https://github.com/eclipse-basyx/ba
 | ManufacturerGear  | dave  | dave     |
 | ManufacturerTyre  | dave  | dave     |
 
-<img width="80%" alt="image" src="images/AASDS2.png" style="display: block; margin-left: auto; margin-right: auto;">
+```{figure} ./images/AASDS2.png
+---
+width: 80%
+alt: AAS Dataspace
+name: AAS_Dataspace
+---
+```
 
 * When Frame Supplier delivers the product they also add a policy/rule (using Dynamic RBAC) so that the manufacturer can see the Digital Twin of the supplied product.
   - Postman -> AASDataspace -> Rules -> Frame (In Postman collection)
@@ -206,7 +218,13 @@ More details on Security can be found [here](https://github.com/eclipse-basyx/ba
 	- Postman -> AASDataspace -> Rules -> Tyre
 	- Login to the UI using manufacturer account (same credentials as above) to see if the Tyre AAS exists
 
-  <img width="80%" alt="image" src="images/BicycleExampleDataspaceFlow.png" style="display: block; margin-left: auto; margin-right: auto;">
+```{figure} ./images/BicycleExampleDataspaceFlow.png
+---
+width: 80%
+alt: AAS Dataspace
+name: AAS_Dataspace
+---
+```
 
 * When manufacturer opens the AAS GUI, and login through its own credentials, they can see the digital twins of the products provided by the suppliers.
 * If Manufacturer tries to update some property value such as MaxLoadCapacity then they cannot do it because they have no rights for that.
