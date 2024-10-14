@@ -10,7 +10,7 @@ The **AAS Dataspace** enables the **exchange of information** seamlessly across 
 
 This exchange occurs **between partners within the value chain**, allowing manufacturers, suppliers, service providers, and other stakeholders to collaborate efficiently. By enabling data sharing among trusted partners, the AAS Dataspace strengthens collaboration, reduces information silos, and accelerates decision-making processes. This transparency enhances supply chain efficiency, product quality, and responsiveness to market demands.
 
-<img src="../images/AASDS2.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
+<img src="images/AASDS2.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
 
 Moreover, the AAS Dataspace **supports cross-company information sharing**, breaking down traditional barriers between organizations. Companies can exchange crucial data across organizational boundaries while retaining control over their proprietary information. This fosters innovation, opens up new business opportunities, and enables a more agile response to challenges in an increasingly interconnected industrial landscape.
 
@@ -22,7 +22,7 @@ What we are **not talking about** in the context of the AAS Dataspace is **uncon
 
 We are talking about **intentional and agreed data exchange**. In the AAS Dataspace, data is shared deliberately, based on clearly defined agreements between parties. This means that data owners always retain control over who accesses their data, for what purpose, and under what conditions. This structured approach ensures that data flows are governed by mutual consent and trust.
 
-<img src="../images/AASDS3.png" alt="AAS Dataspace" width="50%" style="display: block; margin-left: auto; margin-right: auto;">
+<img src="images/AASDS3.png" alt="AAS Dataspace" width="50%" style="display: block; margin-left: auto; margin-right: auto;">
 
 Furthermore, the data exchange occurs **between one or more authorized partners**. Only those who have been explicitly given permission and meet the necessary criteria for accessing specific data are allowed to participate in the exchange. This ensures that all participants in the data space are trusted entities, and no unauthorized third parties can disrupt the data-sharing process.
 
@@ -41,7 +41,7 @@ These actions reflect how the AAS Dataspace enables controlled and purpose-drive
 
 ## The AAS Dataspace in details
 
-<img src="../images/AASDS1.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
+<img src="images/AASDS1.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
 
 
 * Lots of Participants: The AAS Dataspace involves a wide variety of participants who play different roles in the value chain, such as:
@@ -58,7 +58,7 @@ Complex Questions Arise: While the setup may seem straightforward, several criti
 
 ### How do we setup our AAS Infrastructure?
 
-<img src="../images/AASDS4.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
+<img src="images/AASDS4.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
 
 This question explores the possibility of setting up the AAS infrastructure within the organization's own data centers. It raises the need to consider factors such as internal control over data, security management, and the capabilities required to maintain the infrastructure internally. The organization would be responsible for managing hardware, software, and network resources.
 
@@ -76,7 +76,7 @@ Regardless of how you answer these questions a new question pops-up:
 
 The question, "How do you find your AAS?", is crucial for ensuring that an AAS is not only implemented but also discoverable and usable by the intended participants. This question seeks to explore the mechanisms through which stakeholders can locate and access an AAS once it has been deployed.
 
-<img src="../images/AASDS5.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
+<img src="images/AASDS5.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
 
 * Having an AAS Infrastructure is only a starting point:
 
@@ -110,7 +110,7 @@ The question, "How do you find your AAS?", is crucial for ensuring that an AAS i
 
 The question "How to Get Access to Your AAS?" addresses the technical and procedural steps required to ensure that the right users or systems can securely access and interact with your AAS. Here's an elaboration based on the provided points:
 
-<img src="../images/AASDS6.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
+<img src="images/AASDS6.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
 
 * What does it mean to get access to your system?:
 
@@ -152,13 +152,13 @@ The question "How to Get Access to Your AAS?" addresses the technical and proced
         - Setting up tools for monitoring and logging access activities to ensure compliance, detect anomalies, and maintain security audits.
         - Ensuring that all access is governed by strict security protocols, including encryption, multi-factor authentication (MFA), and role-based access control (RBAC).
 
-<img src="../images/AASDS7.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
+<img src="images/AASDS7.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
 
 When setting up access to your AAS, it's important to recognize that not all users or systems will have the same access rights. Permissions may be differentiated at multiple levels, such as the AAS level, Submodel level, and even at the SubmodelElement level, ensuring that each participant only accesses the data or services they are authorized to. Proper authentication mechanisms must be in place to verify the identity of users.
 
 ## How to scale?
 
-<img src="../images/AASDS8.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
+<img src="images/AASDS8.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
 
 The question "How to Scale?" addresses the challenge of ensuring that your AAS infrastructure can handle a potentially massive number of AAS and the numerous entities that will be interacting with them. Here's an elaboration based on the provided points:
 
@@ -187,7 +187,7 @@ However, we did not look at one last but very important question
 
 ### How to Connect your own Systems?
 
-<img src="../images/AASDS9.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
+<img src="images/AASDS9.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
 
 The question "How to Connect Your Own Systems?" explores how to integrate your existing infrastructure and assets with the AAS framework to create a seamless, automated environment. This process ensures that your systems, devices, and products are represented in the AAS infrastructure efficiently and accurately.
 
@@ -211,7 +211,7 @@ Now, after having addressed all the key questions, such as how to set up, scale,
 
 ## AAS Dataspace for Everybody
 
-<img src="../images/AASDS10.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
+<img src="images/AASDS10.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
 
 This is exactly what the AAS Dataspace for Everybody is aiming to achieve! It is a collaborative initiative designed to simplify the process of setting up and integrating with the AAS dataspace, helping organizations avoid the time and costs associated with building their own infrastructure from scratch. It's a project led by IDTA, Fraunhofer IESE, and NetApp, aimed at providing a testbed for getting started with AAS Dataspaces. Here's what the project focuses on:
 
@@ -220,19 +220,19 @@ This is exactly what the AAS Dataspace for Everybody is aiming to achieve! It is
 * Prototyping cross-company digital twins: The initiative supports the development and testing of cross-company digital twins, enabling seamless data exchange and collaboration between different organizations.
 * Integrating dataspace technologies into products, processes, and devices: The project works to integrate AAS and dataspace technologies into real-world products, manufacturing processes, and devices, making digital twins a core part of daily operations.
 
-<img src="../images/AASDS11.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
+<img src="images/AASDS11.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
 
 One key point is that the AAS Dataspace for Everybody serves as a testbed for precompetitive use cases. It's a space for experimentation, not for commercial use, where organizations can explore and refine their digital twin strategies without the pressure of market competition.
 
-<img src="../images/AASDS12.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
+<img src="images/AASDS12.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
 
 The infrastructure will be operated 24/7 at IESE in Kaiserslautern, using Eclipse BaSyx as the core platform. For scalability, the project leverages NetApp hardware and technology, ensuring that the infrastructure can handle a growing number of AAS and the demands of cross-company collaboration.
 
-<img src="../images/AASDS13.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
+<img src="images/AASDS13.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
 
 This project aims to provide an accessible, scalable, and collaborative environment to help organizations quickly start working with AAS dataspace technologies, offering a practical alternative to building everything from scratch.
 
-<img src="../images/AASDS14.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
+<img src="images/AASDS14.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
 
 Let's now answer the questions step by step based on the AAS Dataspace for Everybody project:
 
@@ -252,7 +252,7 @@ Let's now answer the questions step by step based on the AAS Dataspace for Every
 
     * You guessed it, we provide the Submodel Templates too! The project includes ready-to-use Submodel templates that conform to industry standards, simplifying the creation and deployment of AAS. You don't need to develop these from scratch, as we offer a library of templates to get you started quickly and efficiently.
 
-<img src="../images/AASDS15.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
+<img src="images/AASDS15.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
 
 By offering these key components' Discovery, Registry, Access Control, Scalability, and Submodel Templates, the AAS Dataspace for Everybody project removes the complexities of setting up and managing your own AAS infrastructure. Everything you need is hosted and provided within the framework, allowing you to focus on utilizing the AAS for innovation and collaboration.
 
@@ -271,7 +271,7 @@ Now, you may be wondering, what is the software backbone that powers this AAS Da
 
 The software backbone for the AAS Dataspace for Everybody is called **Eclipse BaSyx**. Naturally, this raises the next important question, what is Eclipse BaSyx?
 
-<img src="../images/AASDS16.png" alt="Eclipse BaSyx" width="60%" style="display: block; margin-left: auto; margin-right: auto;">
+<img src="images/AASDS16.png" alt="Eclipse BaSyx" width="60%" style="display: block; margin-left: auto; margin-right: auto;">
 
 Eclipse BaSyx is an open-source platform that provides a complete AAS infrastructure, offering all the tools and components necessary for the creation, management, and interaction of Asset Administration Shells. It is highly regarded for its Technology Readiness Level (TRL), making it a trusted choice for industrial and commercial applications.
 
@@ -279,13 +279,13 @@ With over 320,000+ downloads, Eclipse BaSyx has proven its reliability and wides
 
 Eclipse BaSyx is also applied in mission-critical environments, where uptime, reliability, and security are paramount, further demonstrating its robustness and capability. Beyond the technical aspects, BaSyx benefits from a strong ecosystem of contributors and users, ensuring continued development, support, and innovation, making it the ideal backbone for the AAS Dataspace for Everybody.
 
-<img src="../images/AASDS17.png" alt="AAS Dataspace" width="100%" style="display: block; margin-left: auto; margin-right: auto;">
+<img src="images/AASDS17.png" alt="AAS Dataspace" width="100%" style="display: block; margin-left: auto; margin-right: auto;">
 
 To know more about Eclipse BaSyx, please check the [documentation](https://wiki.basyx.org/en/latest/).
 
 ## How to Get Access to the AAS Dataspace for Everybody?
 
-<img src="../images/AASDS18.png" alt="AAS Dataspace" width="100%">
+<img src="images/AASDS18.png" alt="AAS Dataspace" width="100%">
 
 Now, the interesting question is "How can I access the AAS Dataspace for Everybody?". Access to the AAS Dataspace for Everybody is free for IDTA members, and getting started is straightforward. Just follow these three easy steps to gain access:
 
