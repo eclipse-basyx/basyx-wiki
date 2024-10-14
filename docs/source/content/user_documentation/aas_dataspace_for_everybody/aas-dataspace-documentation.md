@@ -12,6 +12,14 @@ This exchange occurs **between partners within the value chain**, allowing manuf
 
 <img src="images/AASDS2.png" alt="AAS Dataspace" width="80%" style="display: block; margin-left: auto; margin-right: auto;">
 
+```{figure} ./images/AASDS2.png
+---
+width: 80%
+alt: AAS Dataspace
+name: AAS_Dataspace
+---
+```
+
 Moreover, the AAS Dataspace **supports cross-company information sharing**, breaking down traditional barriers between organizations. Companies can exchange crucial data across organizational boundaries while retaining control over their proprietary information. This fosters innovation, opens up new business opportunities, and enables a more agile response to challenges in an increasingly interconnected industrial landscape.
 
 Importantly, when discussing the AAS Dataspace, we are **not referring to shopfloor automation**.
