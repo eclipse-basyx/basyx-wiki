@@ -71,6 +71,7 @@ This section contains the user documentation of the Eclipse BaSyx middleware.
 
 * [User Tutorials](./content/user_documentation/user_tutorials/index.md)
 * [BaSyx Components](./content/user_documentation/basyx_components/index.md)
+* [AAS Dataspace for Everybody](./content/user_documentation/aas_dataspace_for_everybody/index.md)
 * [Integrated End-User Applications](./content/user_documentation/integrated%20end-user%20applications/monitoring_scenarios.md)
 * [Releases](./content/user_documentation/releases/releases_and_features.md)
 * [3rd Party Applications and Frameworks](./content/user_documentation/3rdparty_apps_and_frameworks.md)
