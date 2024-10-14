@@ -54,7 +54,7 @@ In this example, the rule grants the admin role permission to perform the READ a
 
 ## Persistency Support for RBAC Rules
 
-The AAS Repository supports two backend persistency mechanisms for storing RBAC rules:
+The AAS Registry supports two backend persistency mechanisms for storing RBAC rules:
 
 ### InMemory RBAC Storage
 
