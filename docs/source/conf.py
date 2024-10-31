@@ -53,8 +53,7 @@ html_theme_options = {
         {
             "name": "Eclipse BaSyx Open Hour",
             "url": "https://www.iese.fraunhofer.de/en/customers_industries/digitalisierung-produktion/industrie40/basyx_open_hour.html",
-            "icon": "./_static/logo/favicon-32x32.png",
-            "type": "local",
+            "icon": "_static/logo/favicon-32x32.png",
         },
         {
             "name": "GitHub",
