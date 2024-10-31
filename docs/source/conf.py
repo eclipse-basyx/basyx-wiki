@@ -54,6 +54,7 @@ html_theme_options = {
             "name": "Eclipse BaSyx Open Hour",
             "url": "https://www.iese.fraunhofer.de/en/customers_industries/digitalisierung-produktion/industrie40/basyx_open_hour.html",
             "icon": "_static/logo/favicon-32x32.png",
+            "type": "local",
         },
         {
             "name": "GitHub",
@@ -89,6 +90,8 @@ html_favicon = "_static/logo/favicon-32x32.ico"
 html_css_files = [
     'css/custom.css',
 ]
+
+html_static_path = ['_static']
 
 # -- Options for EPUB output
 epub_show_urls = 'footnote'
