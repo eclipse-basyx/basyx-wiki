@@ -91,5 +91,7 @@ html_css_files = [
     'css/custom.css',
 ]
 
+html_static_path = ['_static']
+
 # -- Options for EPUB output
 epub_show_urls = 'footnote'
