@@ -1,5 +1,5 @@
-# Alpine Linux Virtual Machine Setup - All Components in One Virtual Machine
-This section explains how the virtual machine images for [these](/docs/source/content/user_documentation/basyx_components/v2/index.md) components can be created. Based on a [base image](./alpine_virtualmachine_setup_dev_base_image.md), the [component specific images](./alpine_virtualmachine_setup_dev_component_specific.md) and the [image containing all components](./alpine_virtualmachine_setup_dev_all_in_one.md) are created.
+# Alpine Linux Virtual Machine Creation
+This section explains how the virtual machine images for [these](../../../basyx_components/v2/index.md) components can be created. Based on a [base image](./alpine_virtualmachine_setup_dev_base_image.md), the [component specific images](./alpine_virtualmachine_setup_dev_component_specific.md) and the [image containing all components](./alpine_virtualmachine_setup_dev_all_in_one.md) are created.
 
 ```{toctree}
 :hidden:
