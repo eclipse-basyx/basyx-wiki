@@ -119,6 +119,11 @@ Eclipse BaSyx provides the AAS Repository as off-the-shelf component via DockerH
 docker run --name=aas-repo -p:8081:8081 -v C:/path/to/application.properties:/application/application.properties eclipsebasyx/aas-repository:2.0.0-SNAPSHOT
 ```
 
+## Virtual Machine
+Eclipse BaSyx provides the AAS Repository as a virtual machine image for Oracle VirtualBox and VMware Workstation Player. 
+
+The image can be found [here](https://oc.iese.de/index.php/s/9JyJAuOlhh9vMUu). How to use it is described [here](/docs/source/content/user_documentation/user_tutorials/virtualmachines/alpine_virtualmachine_setup_use.md).
+
 ## Swagger UI
 In the Swagger UI, you can find the API documentation for the AAS Repository.
 

@@ -6,6 +6,9 @@ The following documentation is available:
 * [Component Documentation](./components.md)
 * [Roadmap](./roadmap.md)
 * [Building Docker Images](./docker.md)
+* [Creating Virtual Machine Images](./alpine_virtualmachine_setup_dev_tutorials/index.md)
+
+
 ```{toctree}
 :hidden:
 :maxdepth: 1
