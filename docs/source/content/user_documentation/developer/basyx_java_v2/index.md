@@ -11,12 +11,12 @@ The following documentation is available:
 
 ```{toctree}
 :hidden:
-:maxdepth: 1
+:maxdepth: 2
 
 
 components
 roadmap
 docker
 management_endpoint
-/alpine_virtualmachine_setup_dev_tutorials/index
+alpine_virtualmachine_setup_dev_tutorials/index
 ```
