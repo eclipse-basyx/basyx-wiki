@@ -18,5 +18,5 @@ components
 roadmap
 docker
 management_endpoint
-alpine_virtualmachine_setup_dev_tutorials
+alpine_virtualmachine_setup_dev_tutorials/index
 ```
