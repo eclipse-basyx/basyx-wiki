@@ -1,4 +1,4 @@
-# Alpine Linux Virtual Machine Creation -  Component Specific
+# Single Component
 This tutorial explains how a virtual machine for one of [these](../../../basyx_components/v2/index.md) components is created based on the base image described [here](./alpine_virtualmachine_setup_dev_base_image.md).
 
 
