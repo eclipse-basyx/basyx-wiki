@@ -4,8 +4,8 @@ The virtual machine images for [these](../../basyx_components/v2/index.md) compo
 ## Oracle VirtualBox
 ### Import the Virtual Machine
 Import the machine (*File -> Import Appliance*) with the following settings: 
-- Tick only the network adapter checkbox
-- MAC Address Policy: Include only NAT network adapter MAC addresses
+- Tick only the network adapter checkbox.
+- MAC Address Policy: Include only NAT network adapter MAC addresses.
 
 ### Change the Shared Folder Location
 Create a folder called *SharedFolder* on the host system and change the shared folder path under *Settings -> Shared Folders* to the new folder. Depending on the BaSyx component, create one of the following folders in *SharedFolder*:

@@ -5,8 +5,8 @@ This tutorial explains how a virtual machine for one of [these](../../../basyx_c
 ## VirtualBox
 ### Import the base image
 Import the machine (*File -> Import Appliance*) with the following settings: 
-- Tick only the network adapter checkbox
-- MAC Address Policy: Include only NAT network adapter MAC addresses
+- Tick only the network adapter checkbox.
+- MAC Address Policy: Include only NAT network adapter MAC addresses.
 
 
 ### Create a Component Specific Folder in the Shared Folder
@@ -39,7 +39,7 @@ Execute:
 
 
 ### Place the Setup and Startup Scripts on the Virtual Machine
-Place basyx_\<component>\_setup.sh and basyx_\<component>_startup.sh in the shared folder on the host system and execute:
+Place *basyx_\<component>\_setup.sh* and *basyx_\<component>_startup.sh* in the shared folder on the host system and execute:
 
     mv /mnt/shared/basyx_<component>_setup.sh /home/basyx_<component>
     mv /mnt/shared/basyx_<component>_startup.sh /home/basyx_<component>
@@ -62,7 +62,7 @@ Place the *.jar* file of the respective component in the shared folder on the ho
 
 
 ### Export the Virtual Machine
-Export the machine as an ova file (*File -> Export Appliance*) with the following properties:
+Export the machine as an *ova* file (*File -> Export Appliance*) with the following properties:
 - Format: Open Virtualization Format 1.0
 - MAC Address Policy: Include only NAT network adapter MAC addresses
 - Appliance Settings: Tick only the network adapter checkbox

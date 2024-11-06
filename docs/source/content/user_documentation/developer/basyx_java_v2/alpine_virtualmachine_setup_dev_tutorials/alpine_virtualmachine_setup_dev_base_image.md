@@ -3,7 +3,7 @@ Based on this base image, the virtual machine images for [these](../../../basyx_
 
 ## VirtualBox
 ### Creation of the VM in VirtualBox
-Download the .iso file from https://alpinelinux.org/downloads/. Choose *x86_64* as architecture and *virtual* as image type.
+Download the .iso file from <https://alpinelinux.org/downloads/>. Choose *x86_64* as architecture and *virtual* as image type.
 Configuration steps in VirtualBox:
 1. Create a new machine.
 2. Choose the downloaded .iso file.
@@ -47,7 +47,7 @@ To be able to install the VirtualBox Guest Additions and Eclipse Temurin, the co
 
 
 ### Install Eclipse Temurin
-Execute
+Execute:
 
     wget -O /etc/apk/keys/adoptium.rsa.pub https://packages.adoptium.net/artifactory/api/security/keypair/public/repositories/apk
 
@@ -56,7 +56,7 @@ Execute
     apk update && apk upgrade
     apk add temurin-17-jdk
 
-Source: https://adoptium.net/installation/linux/
+Source: <https://adoptium.net/installation/linux/>
 
 
 ### Add a Shared Folder (VirtualBox)
@@ -87,17 +87,17 @@ Add to *crontab -e*:
 
 ### Deactivate Login Request After Booting
 Make the following changes to */etc/inittab*:
-- Comment out 
+- Comment out: 
     
         tty1::respawn:/sbin/getty 38400 tty1
 
-- Add
+- Add:
 
         tty1::respawn:/bin/sh
 
 
 ### Export the Virtual Machine
-Export the machine as an ova file (*File -> Export Appliance*) with the following properties:
+Export the machine as an *ova* file (*File -> Export Appliance*) with the following properties:
 - Format: Open Virtualization Format 1.0
-- MAC Address Policy: Include only NAT network adapter MAC addresses
-- Appliance Settings: Tick only the network adapter checkbox
+- MAC Address Policy: Include only NAT network adapter MAC addresses.
+- Appliance Settings: Tick only the network adapter checkbox.

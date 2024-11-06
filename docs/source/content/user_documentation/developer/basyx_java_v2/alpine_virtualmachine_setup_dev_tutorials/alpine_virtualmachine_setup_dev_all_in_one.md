@@ -4,8 +4,8 @@ This tutorial explains how the virtual machine containing all of [these](../../.
 ## Virtual Box
 ### Import the Base Image
 Import the machine (*File -> Import Appliance*) with the following settings: 
-- Tick only the network adapter checkbox
-- MAC Address Policy: Include only NAT network adapter MAC addresses
+- Tick only the network adapter checkbox.
+- MAC Address Policy: Include only NAT network adapter MAC addresses.
 
 
 ### Create a Shared Folder
@@ -92,7 +92,7 @@ Place *show_errors.sh* and *show_logs.sh* in the shared folder on the host and e
 
 
 ### Export the Virtual Machine
-Export the machine as an ova file (*File -> Export Appliance*) with the following properties:
+Export the machine as an *ova* file (*File -> Export Appliance*) with the following properties:
 - Format: Open Virtualization Format 1.0
-- MAC Address Policy: Include only NAT network adapter MAC addresses
-- Appliance Settings: Tick only the network adapter checkbox
+- MAC Address Policy: Include only NAT network adapter MAC addresses.
+- Appliance Settings: Tick only the network adapter checkbox.
