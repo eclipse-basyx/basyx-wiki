@@ -99,7 +99,7 @@ sm-registry:
 ## Virtual Machine
 Eclipse BaSyx provides the Submodel Registry as a virtual machine image for Oracle VirtualBox and VMware Workstation Player. 
 
-The image can be found [here](https://oc.iese.de/index.php/s/9JyJAuOlhh9vMUu). How to use it is described [here](/docs/source/content/user_documentation/user_tutorials/virtualmachines/alpine_virtualmachine_setup_use.md).
+The image can be found [here](https://oc.iese.de/index.php/s/9JyJAuOlhh9vMUu). How to use it is described [here](../../../user_tutorials/virtualmachines/alpine_virtualmachine_setup_use.md).
 
 
 ## Build Resources
