@@ -64,5 +64,5 @@ Place the *.jar* file of the respective component in the shared folder on the ho
 ### Export the Virtual Machine
 Export the machine as an *ova* file (*File -> Export Appliance*) with the following properties:
 - Format: Open Virtualization Format 1.0
-- MAC Address Policy: Include only NAT network adapter MAC addresses
-- Appliance Settings: Tick only the network adapter checkbox
+- MAC Address Policy: Include only NAT network adapter MAC addresses.
+- Appliance Settings: Tick only the network adapter checkbox.
