@@ -91,6 +91,12 @@ In this example, configuration files are located in `C:/tmp`
 ```{warning}
 The binding of volume `C:/tmp/application.properties` to `/application/application.properties` is tested using Windows Powershell. Other terminals might run into an error.
 ```
+
+## Virtual Machine
+Eclipse BaSyx provides the AAS Discovery Service as a virtual machine image for Oracle VirtualBox and VMware Workstation Player. 
+
+The image can be found [here](https://oc.iese.de/index.php/s/9JyJAuOlhh9vMUu). How to use it is described [here](../../../user_tutorials/virtualmachines/alpine_virtualmachine_setup_use.md).
+
 ## Swagger UI
 In the Swagger UI, you can find the API documentation for the AAS Discovery Service.
 

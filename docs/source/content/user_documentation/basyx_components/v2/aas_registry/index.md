@@ -102,6 +102,11 @@ aas-registry:
     restart: always
 ```
 
+## Virtual Machine
+Eclipse BaSyx provides the AAS Registry as a virtual machine image for Oracle VirtualBox and VMware Workstation Player. At the moment, only the version that logs registry events and uses an in-memory storage is available as a virtual machine image. So, it is not possible to use Apache Kafka as event sink or MongoDB as storage.
+
+The image can be found [here](https://oc.iese.de/index.php/s/9JyJAuOlhh9vMUu). How to use it is described [here](../../../user_tutorials/virtualmachines/alpine_virtualmachine_setup_use.md).
+
 
 ## Build Resources
 
