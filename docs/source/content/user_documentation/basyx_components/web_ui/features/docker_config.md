@@ -30,7 +30,7 @@ The following environment variables can be used to configure the AAS Web UI:
 | KEYCLOAK_URL | The URL of the Keycloak server used as identity provider for RBAC |
 | KEYCLOAK_REALM | The realm of the Keycloak server |
 | KEYCLOAK_CLIENT_ID | The client ID of the Keycloak server |
-| ENDPOINT_CONFIG_AVAILABLE | Specifies whether the endpoint configuration should be available in the AAS Web UI |
+| ENDPOINT_CONFIG_AVAILABLE | Specifies whether the endpoint configuration should be available in the AAS Web UI (ENV variable available starting with eclipsebasyx/aas-gui:v2-241114)|
 
 ```{tip}
 Using environment variables works when building the Docker image yourself or when using the image from Docker Hub.
@@ -76,7 +76,7 @@ services:
             KEYCLOAK_URL: "<keycloak_url>" (optional; RBAC feature)
             KEYCLOAK_REALM: "<keycloak_realm>" (optional; RBAC feature)
             KEYCLOAK_CLIENT_ID: "<keycloak_client_id>" (optional; RBAC feature)
-            ENDPOINT_CONFIG_AVAILABLE: "<true/false>" (optional)
+            ENDPOINT_CONFIG_AVAILABLE: "<true/false>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-241114)
 ```
 
 2. Start the AAS Web UI with the following command:
