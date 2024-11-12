@@ -125,7 +125,11 @@ services:
             CD_REPO_PATH: "<concept_description_repo_path>"
             DASHBOARD_SERVICE_PATH: "<dashboard_service_path>" (optional; Time Series Data)
             PRIMARY_COLOR: "<primary_color>" (optional; Corporate Design)
+            PRIMARY_LIGHT_COLOR: "<primary_light_color>" (optional; Corporate Design light theme)
+            PRIMARY_DARK_COLOR: "<primary_dark_color>" (optional; Corporate Design dark theme)
             LOGO_PATH: "<logo_path_in_container>" (optional; Corporate Design)
+            LOGO_LIGHT_PATH: "<logo_light_path_in_container>" (optional; Corporate Design light theme)
+            LOGO_DARK_PATH: "<logo_dark_path_in_container>" (optional; Corporate Design dark theme)
             BASE_PATH: "<base_path>" (optional)
             INFLUXDB_TOKEN: "<influxdb_token>" (optional; Time Series Data)
             KEYCLOAK_URL: "<keycloak_url>" (optional; RBAC feature)
