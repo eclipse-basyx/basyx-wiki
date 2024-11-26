@@ -24,7 +24,11 @@ The following environment variables can be used to configure the AAS Web UI:
 | CD_REPO_PATH | The path to the Concept Description Repository |
 | DASHBOARD_SERVICE_PATH | The path to the Dashboard Service |
 | PRIMARY_COLOR | The primary color of the AAS Web UI |
+| PRIMARY_LIGHT_COLOR | The primary color of the AAS Web UI of the light theme (ENV variable available starting with eclipsebasyx/aas-gui:v2-241114) |
+| PRIMARY_DARK_COLOR | The primary color of the AAS Web UI of the dark theme (ENV variable available starting with eclipsebasyx/aas-gui:v2-241114) |
 | LOGO_PATH | The path to the application logo inside the container `Logo/<your-logo.png>` |
+| LOGO_LIGHT_PATH | The path to the application logo of the dark theme inside the container `Logo/<your-logo.png>` (ENV variable available starting with eclipsebasyx/aas-gui:v2-241114) |
+| LOGO_DARK_PATH | The path to the application logo of the dark theme inside the container `Logo/<your-logo.png>` (ENV variable available starting with eclipsebasyx/aas-gui:v2-241114) |
 | BASE_PATH | The base path of the AAS Web UI |
 | INFLUXDB_TOKEN | The token for accessing time series data from an InfluxDB |
 | KEYCLOAK_URL | The URL of the Keycloak server used as identity provider for RBAC |
@@ -70,7 +74,11 @@ services:
             CD_REPO_PATH: "<concept_description_repo_path>"
             DASHBOARD_SERVICE_PATH: "<dashboard_service_path>" (optional; Time Series Data)
             PRIMARY_COLOR: "<primary_color>" (optional; Corporate Design)
+            PRIMARY_LIGHT_COLOR: "<primary_light_color>" (optional; Corporate Design light theme; ENV variable available starting with eclipsebasyx/aas-gui:v2-241114)
+            PRIMARY_DARK_COLOR: "<primary_dark_color>" (optional; Corporate Design dark theme; ENV variable available starting with eclipsebasyx/aas-gui:v2-241114)
             LOGO_PATH: "<logo_path_in_container>" (optional; Corporate Design)
+            LOGO_LIGHT_PATH: "<logo_light_path_in_container>" (optional; Corporate Design light theme; ENV variable available starting with eclipsebasyx/aas-gui:v2-241114)
+            LOGO_DARK_PATH: "<logo_dark_path_in_container>" (optional; Corporate Design dark theme; ENV variable available starting with eclipsebasyx/aas-gui:v2-241114)
             BASE_PATH: "<base_path>" (optional)
             INFLUXDB_TOKEN: "<influxdb_token>" (optional; Time Series Data)
             KEYCLOAK_URL: "<keycloak_url>" (optional; RBAC feature)
