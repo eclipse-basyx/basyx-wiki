@@ -43,10 +43,12 @@ Using environment variables works when building the Docker image yourself or whe
 This is how you would use the environment variables when building the Docker image yourself:
 
 1. Build the Docker image from the Dockerfile in the [aas-web-gui](https://github.com/eclipse-basyx/basyx-applications/tree/main/aas-gui/Frontend/aas-web-gui) directory of the AAS Web UI repository:
+<br/><sup>Note: If you are behind a proxy, you have to set the shell ENV variable HTTP_PROXY respectively HTTPS_PROXY; see [bootstrap.sh](https://github.com/eclipse-basyx/basyx-aas-web-ui/blob/main/bootstrap.sh).</sup>
 
   ```bash
   docker build -t aas-web-ui .
   ```
+  
 
 2. Start the Docker container with the following command (replace the environment variables with your own values; only an excerpt of the variables are specified in the following example):
 
