@@ -1,5 +1,5 @@
 # BaSyx Virtual Machine Setup
-The virtual machine images for [these](../../basyx_components/v2/index.md) components and for the [databridge](../../../basyx_components/databridge/index.md) component can be found [here](https://oc.iese.de/index.php/s/9JyJAuOlhh9vMUu?path=%2F). In the following, it is explained how the images can be used with Oracle VirtualBox and VMware Workstation Player.
+The virtual machine images for [these](../../basyx_components/v2/index.md) components and for the [DataBridge](../../../basyx_components/databridge/index.md) component can be found [here](https://oc.iese.de/index.php/s/9JyJAuOlhh9vMUu?path=%2F). In the following, it is explained how the images can be used with Oracle VirtualBox and VMware Workstation Player.
 
 ## Oracle VirtualBox
 ### Import the Virtual Machine
@@ -17,8 +17,8 @@ Create a folder called *SharedFolder* on the host system and change the shared f
 - submodelrepository
 - databridge
 
-For the virtual machine containing all components except the databridge, create all of those. Place the *application.properties* files in the respective folders. <br>
-Place the databridge configuration files in the respective folder.
+For the virtual machine containing all components except the DataBridge, create all of those. Place the *application.properties* files in the respective folders. <br>
+Place the DataBridge configuration files in the respective folder.
 
 ### Enable Port Forwarding
 This step is only required when *NAT* or *NAT Network* is selected as networking mode under *Settings -> Network -> Attached to*. *NAT* does not facilitate inter-communication between virtual machines. If inter-communication is required, *Bridged Adapter* or *NAT Network* can be used instead. <br>
@@ -54,8 +54,8 @@ Create a folder called *SharedFolder* on the host system and add it under *Edit 
 - submodelrepository
 - databridge
 
-For the virtual machine containing all components except the databridge, create all of those. Place the *application.properties* files in the respective folders. <br>
-Place the databridge configuration files in the respective folder.
+For the virtual machine containing all components except the DataBridge, create all of those. Place the *application.properties* files in the respective folders. <br>
+Place the DataBridge configuration files in the respective folder.
 
 ### Make the Virtual Machine Load the Shared Folder
 This step is only necessary if changes have been made to this file before. <br>
