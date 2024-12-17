@@ -1,5 +1,5 @@
 # BaSyx Virtual Machine Setup
-The virtual machine images for [these](../../basyx_components/v2/index.md) components and for the [DataBridge](../../../basyx_components/databridge/index.md) component can be found [here](https://oc.iese.de/index.php/s/9JyJAuOlhh9vMUu?path=%2F). In the following, it is explained how the images can be used with Oracle VirtualBox and VMware Workstation Player.
+The virtual machine images for [these](../../basyx_components/v2/index.md) components and for the [DataBridge](../../basyx_components/databridge/index.md) component can be found [here](https://oc.iese.de/index.php/s/9JyJAuOlhh9vMUu?path=%2F). In the following, it is explained how the images can be used with Oracle VirtualBox and VMware Workstation Player.
 
 ## Oracle VirtualBox
 ### Import the Virtual Machine
