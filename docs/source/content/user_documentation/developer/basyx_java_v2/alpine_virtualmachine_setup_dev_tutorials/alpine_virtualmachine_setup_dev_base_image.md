@@ -1,5 +1,5 @@
 # Base Image
-Based on this base image, the virtual machine images for [these](../../../basyx_components/v2/index.md) components can be created as described [here](./alpine_virtualmachine_setup_dev_component_specific.md) for the component specific images and [here](./alpine_virtualmachine_setup_dev_all_in_one.md) for an image containing all components.
+Based on this base image, the virtual machine images for [these](../../../basyx_components/v2/index.md) components can be created as described [here](./alpine_virtualmachine_setup_dev_component_specific.md) for the component specific images and [here](./alpine_virtualmachine_setup_dev_all_in_one.md) for an image containing all components. Furthermore, the virtual machine image for the [DataBridge](../../../basyx_components/databridge/index.md) component can be created as described [here](./alpine_virtualmachine_setup_dev_databridge_component.md).
 
 ## VirtualBox
 ### Creation of the VM in VirtualBox
