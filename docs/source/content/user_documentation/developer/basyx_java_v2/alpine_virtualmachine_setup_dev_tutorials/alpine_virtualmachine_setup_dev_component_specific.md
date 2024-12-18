@@ -4,9 +4,7 @@ This tutorial explains how a virtual machine for one of [these](../../../basyx_c
 
 ## VirtualBox
 ### Import the base image
-Import the machine (*File -> Import Appliance*) with the following settings: 
-- Tick only the network adapter checkbox.
-- MAC Address Policy: Include only NAT network adapter MAC addresses.
+Import the virtual machine image under *File -> Import Appliance*. Do **not** tick *Import hard drives as VDI*.
 
 
 ### Create a Component Specific Folder in the Shared Folder
@@ -21,6 +19,7 @@ Create a folder called *SharedFolder* on the host system and change the shared f
 
 
 ### Enable Port Forwarding (for VirtualBox)
+This step is only required when *NAT* or *NAT Network* is selected as networking mode under *Settings -> Network -> Attached to*. *NAT* does not facilitate inter-communication between virtual machines. If inter-communication is required, *Bridged Adapter* or *NAT Network* can be used instead. <br>
 Create a new entry in the port forwarding list (*Settings -> Network -> Adapter 1 -> Advanced -> Port Forwarding*) with the following properties:
 - Host IP: 127.0.0.1
 - Host Port: \<port>
