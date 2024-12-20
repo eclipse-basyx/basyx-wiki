@@ -136,6 +136,9 @@ services:
             KEYCLOAK_REALM: "<keycloak_realm>" (optional; RBAC feature)
             KEYCLOAK_CLIENT_ID: "<keycloak_client_id>" (optional; RBAC feature)
             ENDPOINT_CONFIG_AVAILABLE: "<true/false>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-241114)
+            SINGLE_AAS: "<true/false>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-241220)
+
+            SINGLE_AAS_REDIRECT: "<URL>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-241220)
         volumes:
             - <local_path_to_logo>:/usr/src/app/dist/Logo (optional; Corporate Design)
 ```
