@@ -13,7 +13,7 @@ When using **Docker run**, you can add the logos by mounting a local folder cont
 
 Please note, that the logo and primary color for the light and dark theme can be configured separately (starting with eclipsebasyx/aas-gui:v2-241114) using *PRIMARY_LIGHT_COLOR*, *PRIMARY_DARK_COLOR* respectivly *LOGO_LIGHT_PATH* and *LOGO_DARK_PATH*.
 
-`docker run -p 3000:3000 -v <local_path_to_logo>:/usr/src/app/dist/Logo -e LOGO_PATH=Logo/<your-logo.png> -e VITE_PRIMARY_COLOR=<primary_color> eclipsebasyx/aas-gui`
+`docker run -p 3000:3000 -v <local_path_to_logo>:/usr/src/app/dist/Logo -e LOGO_PATH=<your-logo.png> -e VITE_PRIMARY_COLOR=<primary_color> eclipsebasyx/aas-gui`
 The same feature can also be adapted for **Docker compose**:
 
 ```yaml
@@ -23,7 +23,7 @@ aas-web-gui:
    ports:
        - "3000:3000"
    environment:
-       LOGO_PATH: "Logo/<your-logo.png>"
+       LOGO_PATH: "<your-logo.png>"
        PRIMARY_COLOR: "<primary_color>"
    volumes:
        - <local_path_to_logo>:/usr/src/app/dist/Logo
