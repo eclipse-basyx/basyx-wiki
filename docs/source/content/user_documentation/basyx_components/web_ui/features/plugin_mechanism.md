@@ -27,8 +27,9 @@ Currently, the following plugins are available:
 
 You can develop your own plugins for the AAS Web UI. For this you will be writing a Vue.js 3 component in TypeScript.
 
-> [!NOTE]
-> To get started with Vue.js 3, you can check out the [Vue.js 3 Documentation](https://vuejs.org/guide/introduction.html).
+```{seealso}
+To get started with Vue.js 3, you can check out the [Vue.js 3 Documentation](https://vuejs.org/guide/introduction.html).
+```
 
 ### Prerequisites
 
@@ -52,8 +53,9 @@ Before you start developing your own plugin, make sure you prepared the followin
 To create your first plugin, navigate to the `UserPLugins` directory in the `src` folder. Here you can create a new Vue component for your plugin.
 Vue component files should have the `.vue` extension.
 
-> [!TIP]
-> You can use the `HelloWorldPlugin` as a template for your own plugin.
+```{tip}
+You can use the [HelloWorldPlugin](https://github.com/eclipse-basyx/basyx-aas-web-ui/blob/main/aas-web-ui/src/UserPlugins/HelloWorldPlugin.vue) as a template for your own plugin.
+```
 
 Every vue component should have the following base structure:
 
@@ -217,7 +219,7 @@ From there you can start to implement you own logic:
     </script>
    ```
 
-4. **Visualize the Submodel data**: Now you can use the `mySubmodelData` variable in the `template` part of the component to visualize the Submodel data.
+5. **Visualize the Submodel data**: Now you can use the `mySubmodelData` variable in the `template` part of the component to visualize the Submodel data.
 
    ```html
     <template>
@@ -230,5 +232,6 @@ From there you can start to implement you own logic:
     </template>
    ```
 
-   > [!TIP]
-   > You can use [Vuetify Components](https://vuetifyjs.com/en/components/all/#containment) to create a user-friendly interface for your plugin.
+   ```{seealso}
+   You can use [Vuetify Components](https://vuetifyjs.com/en/components/all/#containment) to create a user-friendly interface for your plugin.
+   ```
