@@ -50,6 +50,10 @@ docker stop registry
 docker start registry
 docker rm registry
 ```
+
+**Warning:** When running this component inside Docker, **do not modify the port configuration** in the application properties file.  
+Changing the port setting may prevent the service from being accessible from outside the container.
+
 ## Configuration
 As with the other components, the registry's context can be customized using the [context configuration](../general_configuration/context-config.md ).
 

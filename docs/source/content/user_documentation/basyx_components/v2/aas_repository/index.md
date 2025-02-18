@@ -119,6 +119,9 @@ Eclipse BaSyx provides the AAS Repository as off-the-shelf component via DockerH
 docker run --name=aas-repo -p:8081:8081 -v C:/path/to/application.properties:/application/application.properties eclipsebasyx/aas-repository:2.0.0-SNAPSHOT
 ```
 
+**Warning:** When running this component inside Docker, **do not modify the port configuration**.  
+Changing the port setting may prevent the service from being accessible from outside the container.
+
 ## Virtual Machine
 Eclipse BaSyx provides the AAS Repository as a virtual machine image for Oracle VirtualBox and VMware Workstation Player. 
 
