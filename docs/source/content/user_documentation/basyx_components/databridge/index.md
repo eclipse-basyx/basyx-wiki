@@ -48,8 +48,10 @@ docker run --name=databridge -p 8085:8085 -v C:/tmp:/usr/share/config eclipsebas
 ```
 The host port 8085 is mapped to container port 8085. The configuration files are located in **C:/tmp** and are available to the docker container at **/usr/share/config** via volume mapping. Alternatively, the DataBridge can be configured by passing the configuration files via environment variables.
 
-**Warning:** When running this component inside Docker, **do not modify the port configuration**.  
+```{warning}
+ When running this component inside Docker, **do not modify the port configuration**.  
 Changing the port setting may prevent the service from being accessible from outside the container.
+```
 
 ## Configuration 
 The DataBridge expects the environment variables to follow the same naming scheme and content as the config files. For example, for routes configuration, "routes.json" environment variable needs to be defined with the content described in the [routes.json](./features/routes-configuration.md) documentation. Additionally, the name of the JSONata transformation files need to be explicitly configured as JSON array via *jsonatatransformers* variable, e.g., *jsonatatransformers = ["jsonataA.json", "jsonataB.json"]*.

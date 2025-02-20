@@ -148,9 +148,10 @@ Eclipse BaSyx provides the AAS Environment as off-the-shelf component via Docker
 docker run --name=aas-env -p:8081:8081 -v C:/path/to/application.properties:/application/application.properties eclipsebasyx/aas-environment:2.0.0-SNAPSHOT
 ```
 
-**Warning:** When running this component inside Docker, **do not modify the port configuration**.  
+```{warning}
+ When running this component inside Docker, **do not modify the port configuration**.  
 Changing the port setting may prevent the service from being accessible from outside the container.
-
+```
 ## Virtual Machine
 Eclipse BaSyx provides the AAS Environment as a virtual machine image for Oracle VirtualBox and VMware Workstation Player. 
 

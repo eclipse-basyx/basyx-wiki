@@ -102,9 +102,10 @@ aas-registry:
     restart: always
 ```
 
-**Warning:** When running this component inside Docker, **do not modify the port configuration**.  
+```{warning}
+ When running this component inside Docker, **do not modify the port configuration**.  
 Changing the port setting may prevent the service from being accessible from outside the container.
-
+```
 ## Virtual Machine
 Eclipse BaSyx provides the AAS Registry as a virtual machine image for Oracle VirtualBox and VMware Workstation Player. At the moment, only the version that logs registry events and uses an in-memory storage is available as a virtual machine image. So, it is not possible to use Apache Kafka as event sink or MongoDB as storage.
 

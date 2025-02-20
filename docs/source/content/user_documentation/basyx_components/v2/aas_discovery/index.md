@@ -91,9 +91,11 @@ In this example, configuration files are located in `C:/tmp`
 ```{warning}
 The binding of volume `C:/tmp/application.properties` to `/application/application.properties` is tested using Windows Powershell. Other terminals might run into an error.
 ```
-**Warning:** When running this component inside Docker, **do not modify the port configuration**.  
-Changing the port setting may prevent the service from being accessible from outside the container.
 
+```{warning}
+ When running this component inside Docker, **do not modify the port configuration**.  
+Changing the port setting may prevent the service from being accessible from outside the container.
+```
 
 ## Virtual Machine
 Eclipse BaSyx provides the AAS Discovery Service as a virtual machine image for Oracle VirtualBox and VMware Workstation Player. 
