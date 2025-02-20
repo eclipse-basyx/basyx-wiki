@@ -98,10 +98,6 @@ name: connect_basyx
 ---
 ```
 
-```{warning}
- When running this component inside Docker, **do not modify the port configuration**.  
-Changing the port setting may prevent the service from being accessible from outside the container.
-```
 ## Introductory Example
 
 ```{seealso}
