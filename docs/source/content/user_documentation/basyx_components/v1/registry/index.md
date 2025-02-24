@@ -50,7 +50,6 @@ docker stop registry
 docker start registry
 docker rm registry
 ```
-
 ## Configuration
 As with the other components, the registry's context can be customized using the [context configuration](../general_configuration/context-config.md ).
 

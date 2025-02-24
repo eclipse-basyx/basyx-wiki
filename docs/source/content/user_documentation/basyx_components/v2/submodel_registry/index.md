@@ -97,7 +97,7 @@ sm-registry:
 ```
 
 ```{warning}
- When running this component inside Docker, **do not modify the port configuration**.  
+ When running this component inside Docker, **do not modify the internal port configuration**.  
 Changing the port setting may prevent the service from being accessible from outside the container.
 ```
 ## Virtual Machine
