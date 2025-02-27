@@ -1,27 +1,26 @@
-# Getting Started with Python Basyx SDK:
+# Getting Started with Python Basyx SDK
 
 This documentation provides a step-by-step guide for setting up an AAS (Asset Administration Shell) & Submodel Creation System, running an API server using the BaSyx Python SDK, and visualizing the data using Dash (web-based visualization) and PyQt5 (GUI viewer).
 
 ## Overview
 The system consists of the following components:
 
-* AAS & Submodel Creation (visualize_aas.py):
+* **AAS & Submodel Creation (visualize_aas.py):**
 Creates an AAS with a submodel and its properties.
 Saves the generated AAS in aas_data.json (JSON format) in the designated folder (e.g. /storage).
 
-* Hosting AAS and Submodels via BaSyx AAS Repository and Submodel Repository (main.py):
+* **Hosting AAS and Submodels via BaSyx AAS Repository and Submodel Repository (main.py):**
 Reads aas_data.json from the designated folder (e.g. /storage) and serves it through the BaSyx AAS & Submodel Servers at:
-http://localhost:8080/api/v3.0/shells & http://localhost:8080/api/v3.0/submodels
+[http://localhost:8080/api/v3.0/shells](http://localhost:8080/api/v3.0/shells) & [http://localhost:8080/api/v3.0/submodels](http://localhost:8080/api/v3.0/submodels)
 
-* Visualization Dashboards for AAS and its submodels:
-Dash Web Application (dash_app.py)
-Provides an interactive web-based visualization of AAS & submodels.
-Runs on http://127.0.0.1:8050.
+* **Visualization Dashboards for AAS and its submodels:**
+- Dash Web Application (dash_app.py)
+Provides an interactive web-based visualization of AAS & submodels. It runs on [http://127.0.0.1:8050](http://127.0.0.1:8050).
 
-[Optional] for visualizing locally PyQt5 GUI Viewer (aas_gui.py) can be used to fetch AAS data from (http://localhost:8080/api/v3.0/shells) and display it in a GUI.
+- [Optional] for visualizing locally PyQt5 GUI Viewer (aas_gui.py) can be used to fetch AAS data from [http://localhost:8080/api/v3.0/shells](http://localhost:8080/api/v3.0/shells) and display it in a GUI.
 
 ## Prerequisites
-* Ensure you have the following installed on your system:
+ Ensure you have the following installed on your system:
 
 - Python 3.x (Recommended: 3.8 or higher)
 - Pip (Python Package Manager)
@@ -88,7 +87,7 @@ prop2 = model.Property(id_short="Pressure", value_type=model.datatypes.Integer, 
             ))
 ```            
 
-For more details you can refer to the whole script: [visualize_aas.py] (./scripts/visualize_aas.py)
+For more details you can refer to the whole script: [visualize_aas.py](./scripts/visualize_aas.py)
 
 **Step 2:** Start the BaSyx AAS & Submodel Server (main.py)
 Run the script to serve AAS & submodel data via BaSyx AAS Repository and Submodel Repository APIs:
@@ -117,7 +116,7 @@ with open("storage/aas_data.json") as f:
                     print(f"ERROR: Failed to load {file}. Reason: {e}") 
 ```                    
 
-Once started, visit http://localhost:8080/api/v3.0/shells to verify the AAS data .
+Once started, visit [http://localhost:8080/api/v3.0/shells](http://localhost:8080/api/v3.0/shells) to verify the AAS data .
 
 ```{figure} ./images/Basyx_AAS_server.png
 ---
@@ -127,7 +126,7 @@ name: Basyx_AAS_server
 ---
 ```
 
-Visit http://localhost:8080/api/v3.0/submodels to verify the submodel data.
+Visit [http://localhost:8080/api/v3.0/submodels](http://localhost:8080/api/v3.0/submodels) to verify the submodel data.
 
 ```{figure} ./images/Basyx_submodel_server.png
 ---
@@ -136,9 +135,11 @@ alt: About BaSyx Python SDK's Submodel Repository
 name: Basyx_Submodel_server
 ---
 ```
-For more reference here's the whole script: [main.py] (./scripts/main.py)
+
+For more reference here's the whole script: [main.py](./scripts/main.py)
 
 **Step 3:** Visualizing AAS Data
+
 A. Using Dash Web Application (dash_app.py)
 Run the Dash application:
 
@@ -146,7 +147,7 @@ Run the Dash application:
 python dash_app.py
 ```
 
-Open http://127.0.0.1:8050 in a web browser to visualize the AAS & submodels interactively.
+Open [http://127.0.0.1:8050](http://127.0.0.1:8050) in a web browser to visualize the AAS & submodels interactively.
 
 ```{figure} ./images/AAS_submodel_visualization_with_dash.png
 ---
@@ -155,7 +156,8 @@ alt: About visualizing the AAS and submodel data through Dash Web App
 name: AAS_&_Submodel_visualization_with_dash_web_app
 ---
 ```
-For more reference here's the whole script: [dash_app.py] (./scripts/dash_app.py)
+
+For more reference here's the whole script: [dash_app.py](./scripts/dash_app.py)
 
 B. Using PyQt5 GUI (aas_gui.py)
 Run the PyQt5 GUI Viewer:
@@ -164,7 +166,7 @@ Run the PyQt5 GUI Viewer:
 python aas_gui.py 
 ```
 
-This fetches AAS data from http://localhost:8080/api/v3.0/shells and displays it in a Graphical User Interface (GUI).
+This fetches AAS data from [http://localhost:8080/api/v3.0/shells](http://localhost:8080/api/v3.0/shells) and displays it in a Graphical User Interface (GUI).
 
 ```{figure} ./images/AAS_visualization_with_pyQt.png
 ---
@@ -173,12 +175,13 @@ alt: About visualizing the AAS data through PyQt
 name: AAS_visualization_with_pyQt
 ---
 ```
-For more reference here's the whole script: [aas_gui.py] (./scripts/aas_gui.py)
 
-Notes: visualize_aas.py ensures that any modifications to aas_data.json are reflected to BaSyx AAS & Submodel Server which get available via http://127.0.0.1:8050. The Dash and PyQt5 GUIs dynamically fetch and visualize AAS data.
+For more reference here's the whole script: [aas_gui.py](./scripts/aas_gui.py)
 
-4. References
+Notes: visualize_aas.py ensures that any modifications to aas_data.json are reflected to BaSyx AAS & Submodel Server which get available via [http://127.0.0.1:8050](http://127.0.0.1:8050). The Dash and PyQt5 GUIs dynamically fetch and visualize AAS data.
 
-https://github.com/eclipse-basyx/basyx-python-sdk/tree/main/server
+## References
 
-https://github.com/eclipse-basyx/basyx-python-sdk/tree/main/sdk/basyx/aas/examples
+[GitHub basyx server](https://github.com/eclipse-basyx/basyx-python-sdk/tree/main/server)
+
+[GitHub basyx aas](https://github.com/eclipse-basyx/basyx-python-sdk/tree/main/sdk/basyx/aas)
