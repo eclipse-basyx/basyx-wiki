@@ -1,4 +1,4 @@
-# Getting Started with Python Basyx SDK
+# BaSyx Python SDK
 
 This documentation provides a step-by-step guide for setting up an AAS (Asset Administration Shell) & Submodel Creation System, running an API server using the BaSyx Python SDK, and visualizing the data using Dash (web-based visualization) and PyQt5 (GUI viewer).
 
@@ -14,7 +14,7 @@ Reads aas_data.json from the designated folder (e.g. /storage) and serves it thr
 [http://localhost:8080/api/v3.0/shells](http://localhost:8080/api/v3.0/shells) & [http://localhost:8080/api/v3.0/submodels](http://localhost:8080/api/v3.0/submodels)
 
 * **Visualization Dashboards for AAS and its submodels:**
-- Dash Web Application (dash_app.py)
+- Dash Web Application (aas_dash.py)
 Provides an interactive web-based visualization of AAS & submodels. It runs on [http://127.0.0.1:8050](http://127.0.0.1:8050).
 
 - [Optional] for visualizing locally PyQt5 GUI Viewer (aas_gui.py) can be used to fetch AAS data from [http://localhost:8080/api/v3.0/shells](http://localhost:8080/api/v3.0/shells) and display it in a GUI.
@@ -54,7 +54,7 @@ python visualize_aas.py
 After execution of the script, an aas_data.json file will be created in the project directory containing AAS information. As you see in the below code snippet, you can define the path where you want the generated json file to be stored.
 
 ```python
-storage_path = r"C:\Users\chakrabo\Documents\Project_David\basyx-python-sdk\server\app\storage\aas_data.json"
+storage_path = r"<path-to-python-sdk>\basyx-python-sdk\server\app\storage\aas_data.json"
 ```
 
 As part of creating the sample AAS and its submodels you can define their identifier, repective fields and properties in the following format:
@@ -140,11 +140,11 @@ For more reference here's the whole script: [main.py](./scripts/main.py)
 
 **Step 3:** Visualizing AAS Data
 
-A. Using Dash Web Application (dash_app.py)
+A. Using Dash Web Application (aas_dash.py)
 Run the Dash application:
 
 ```bash
-python dash_app.py
+python aas_dash.py
 ```
 
 Open [http://127.0.0.1:8050](http://127.0.0.1:8050) in a web browser to visualize the AAS & submodels interactively.
@@ -157,7 +157,7 @@ name: AAS_&_Submodel_visualization_with_dash_web_app
 ---
 ```
 
-For more reference here's the whole script: [dash_app.py](./scripts/dash_app.py)
+For more reference here's the whole script: [aas_dash.py](./scripts/aas_dash.py)
 
 B. Using PyQt5 GUI (aas_gui.py)
 Run the PyQt5 GUI Viewer:
