@@ -5,11 +5,6 @@ from basyx.aas.adapter.json import write_aas_json_file
 import json, os
 
 storage_path = r"C:\Users\chakrabo\Documents\Project_David\basyx-python-sdk\server\app\storage\aas_data.json"
-# Get the absolute path of visualize_aas.py
-#current_dir = os.path.dirname(os.path.abspath(__file__))
-
-# Set storage directory relative to the server directory
-#storage_path = os.path.abspath(os.path.join(current_dir, "../../../server/app/storage/aas_data.json"))
 
 # Step 1: Create an AAS with a Submodel and Properties
 aas_identifier = "https://example.com/AAS"
@@ -51,5 +46,5 @@ data.add(submodel)
 write_aas_json_file(storage_path, data)
 print(f"AAS data has been successfully saved to {storage_path}")
 
-#print("AAS data has been successfully saved to aas_data.json")
+
 

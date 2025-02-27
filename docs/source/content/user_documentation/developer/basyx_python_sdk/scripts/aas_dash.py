@@ -4,7 +4,6 @@ from dash import dcc, html, Input, Output, dash_table
 import pandas as pd
 
 
-#API_URL1 = "http://127.0.0.1:5000/aas"  # Flask API URL
 API_URL = "http://localhost:8080/api/v3.0/shells"
 API_SUBMODEL_URL = "http://localhost:8080/api/v3.0/submodels"
 

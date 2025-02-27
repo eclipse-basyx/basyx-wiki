@@ -1,6 +1,5 @@
 import sys
 import requests
-#from PyQt5.QtWidgets import QApplication, QTreeWidget, QTreeWidgetItem, QMainWindow
 from PyQt5.QtWidgets import QApplication, QTreeWidget, QTreeWidgetItem, QMainWindow, QPushButton, QVBoxLayout, QWidget
 
 API_URL = "http://localhost:8080/api/v3.0/shells"  # Server URL
