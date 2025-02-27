@@ -49,7 +49,7 @@ docker run --name=databridge -p 8085:8085 -v C:/tmp:/usr/share/config eclipsebas
 The host port 8085 is mapped to container port 8085. The configuration files are located in **C:/tmp** and are available to the docker container at **/usr/share/config** via volume mapping. Alternatively, the DataBridge can be configured by passing the configuration files via environment variables.
 
 ```{warning}
- When running this component inside Docker, **do not modify the internal port configuration**.  
+When running this component inside Docker, **do not modify the internal port configuration**.  
 Changing the port setting may prevent the service from being accessible from outside the container.
 ```
 

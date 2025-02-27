@@ -120,7 +120,7 @@ docker run --name=aas-repo -p:8081:8081 -v C:/path/to/application.properties:/ap
 ```
 
 ```{warning}
- When running this component inside Docker, **do not modify the internal port configuration**.  
+When running this component inside Docker, **do not modify the internal port configuration**.  
 Changing the port setting may prevent the service from being accessible from outside the container.
 ```
 ## Virtual Machine
