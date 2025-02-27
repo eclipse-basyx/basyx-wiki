@@ -96,6 +96,10 @@ Eclipse BaSyx provides the Concept Description Repository as off-the-shelf compo
 docker run --name=cd-repo -p:8081:8081 -v C:/path/to/application.properties:/application/application.properties eclipsebasyx/conceptdescription-repository:2.0.0-SNAPSHOT
 ```
 
+```{warning}
+When running this component inside Docker, **do not modify the internal port configuration**.  
+Changing the port setting may prevent the service from being accessible from outside the container.
+```
 ## Virtual Machine
 Eclipse BaSyx provides the Concept Description Repository as a virtual machine image for Oracle VirtualBox and VMware Workstation Player. 
 
