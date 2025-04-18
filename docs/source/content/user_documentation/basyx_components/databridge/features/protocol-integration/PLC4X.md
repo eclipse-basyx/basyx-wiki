@@ -1,8 +1,8 @@
 # PLC4X
-The automation protocols such as Modbus, S7 leveraging **apache PLC4X** can be integrated with DataBridge. Apache PLC4X allows you to communicate directly with your industrial Hardware without retrofitting it [[1]](https://plc4x.apache.org/users/index.html). For more information please refer to [Apache PLC4X](https://plc4x.apache.org/users/getting-started/general-concepts.html)
+The automation protocols such as Modbus, S7 leveraging **apache PLC4X** can be integrated with DataBridge. Apache PLC4X allows you to communicate directly with your industrial Hardware without retrofitting it [[1]](https://plc4x.apache.org/plc4x/latest/users/index.html). For more information please refer to [Apache PLC4X](https://plc4x.apache.org/plc4x/latest/users/getting-started/general-concepts.html)
 
 ## Configuration
-To configure the PLC4X source in DataBridge you need to provide the **unique id**, the connection details like **host, port**, and the **service path** (*), **options** (*), the **driver** and the **tags**. The **driver** could be any of the drivers supported by the [PLC4X](https://plc4x.apache.org/users/protocols/index.html). For more information on the configuration please refer [Camel PLC4X](https://camel.apache.org/components/next/plc4x-component.html)
+To configure the PLC4X source in DataBridge you need to provide the **unique id**, the connection details like **host, port**, and the **service path** (*), **options** (*), the **driver** and the **tags**. The **driver** could be any of the drivers supported by the [PLC4X](https://plc4x.apache.org/plc4x/latest/users/protocols/index.html). For more information on the configuration please refer [Camel PLC4X](https://camel.apache.org/components/next/plc4x-component.html)
 
 * - Optional attributes
 
