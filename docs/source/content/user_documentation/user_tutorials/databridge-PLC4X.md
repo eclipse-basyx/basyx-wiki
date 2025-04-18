@@ -1,5 +1,5 @@
 # DataBridge Automation Protocol Integration
-The automation protocols such as Modbus, S7 leveraging **apache PLC4X** can be integrated with DataBridge. Apache PLC4X allows you to communicate directly with your industrial Hardware without retrofitting it [1](https://plc4x.apache.org/users/index.html). For more information please refer to [Apache PLC4X](https://plc4x.apache.org/users/getting-started/general-concepts.html)
+The automation protocols such as Modbus, S7 leveraging **apache PLC4X** can be integrated with DataBridge. Apache PLC4X allows you to communicate directly with your industrial Hardware without retrofitting it [1](https://plc4x.apache.org/plc4x/latest/users/index.html). For more information please refer to [Apache PLC4X](https://plc4x.apache.org/plc4x/latest/users/getting-started/index.html)
 
 ## Apache PLC4X
 PLC4X is a set of libraries for communicating with industrial programmable logic controllers (PLCs) using a variety of protocols but with a shared API [1](https://plc4x.apache.org).
@@ -10,7 +10,7 @@ PLC4X is a set of libraries for communicating with industrial programmable logic
 * ADS /AMS
 * BACnet/IP
 * CANopen
-* ÜDeltaV
+* DeltaV
 * DF1
 * EtherNet/IP
 * Firmata
@@ -21,8 +21,8 @@ PLC4X is a set of libraries for communicating with industrial programmable logic
 
 **Note**:
 
-* Few of the protocols are fully supported and few are supported by simulation. For more information on this, please refer to [Protocols](https://plc4x.apache.org/users/protocols/index.html).
-* Also, not all the features such as Read Single Address Value, Read Multiple Address Values, etc. are supported by every protocol mentioned above. For details about the features please check [Features](https://plc4x.apache.org/users/protocols/index.html#features)
+* Few of the protocols are fully supported and few are supported by simulation. For more information on this, please refer to [Protocols](https://plc4x.apache.org/plc4x/latest/users/protocols/index.html).
+* Also, not all the features such as Read Single Address Value, Read Multiple Address Values, etc. are supported by every protocol mentioned above. For details about the features please check [Features](https://plc4x.apache.org/plc4x/latest/users/protocols/index.html#_features)
 
 ## Virtual Modbus PLC
 This section will demonstrate the configuration of the Modbus PLC virtual simulator [ModbusPal](https://modbuspal.sourceforge.net). If you don’t have any PLC you can configure this virtual PLC and get started with integration of PLC with the Asset Administration Shell (AAS).
@@ -75,14 +75,14 @@ This console shows you the log for every important event, for e.g. getting new c
 ![Console Modbus.png](./images/Console_Modbus.png)
 
 
-For more information on these steps, please refer to [Apache PLC4X with a virtual Modbus PLC](https://plc4x.apache.org/users/getting-started/virtual-modbus.html)
+For more information on these steps, please refer to [Apache PLC4X with a virtual Modbus PLC](https://plc4x.apache.org/plc4x/latest/users/getting-started/virtual-modbus.html)
 
 ## Integration with AAS using DataBridge
 As you have configured the virtual Modbus, you can easily integrate this with the **AAS** using the **DataBridge**.
 
 ![IntegrationScenario.png](./images/IntegrationScenario.png)
 
-In PLC4X the notation for addresses is as follows [Source](https://plc4x.apache.org/users/getting-started/virtual-modbus.html#some_modbus_basics):
+In PLC4X the notation for addresses is as follows [Source](https://plc4x.apache.org/plc4x/latest/users/getting-started/virtual-modbus.html#_some_modbus_basics):
 
 ![AddressSyntax.png](./images/AddressSyntax.png)
 
