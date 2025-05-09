@@ -14,30 +14,36 @@ The Docker Image of the AAS Web UI can be configured through environment variabl
 
 The following environment variables can be used to configure the AAS Web UI:
 
-| Variable Name | Description |
-|---------------|-------------|
-| AAS_DISCOVERY_PATH | The path to the AAS Discovery Service |
-| AAS_REGISTRY_PATH | The path to the AAS Registry |
-| SUBMODEL_REGISTRY_PATH | The path to the Submodel Registry |
-| AAS_REPO_PATH | The path to the AAS Repository |
-| SUBMODEL_REPO_PATH | The path to the Submodel Repository |
-| CD_REPO_PATH | The path to the Concept Description Repository |
-| DASHBOARD_SERVICE_PATH | The path to the Dashboard Service |
-| PRIMARY_COLOR | The primary color of the AAS Web UI |
-| PRIMARY_LIGHT_COLOR | The primary color of the AAS Web UI of the light theme (ENV variable available starting with eclipsebasyx/aas-gui:v2-241114) |
-| PRIMARY_DARK_COLOR | The primary color of the AAS Web UI of the dark theme (ENV variable available starting with eclipsebasyx/aas-gui:v2-241114) |
-| LOGO_PATH | The path to the application logo inside the container `<your-logo.png>` (older versions used `Logo/<your-logo.png>`) |
-| LOGO_LIGHT_PATH | The path to the application logo of the dark theme inside the container `<your-logo.png>` (ENV variable available starting with eclipsebasyx/aas-gui:v2-241114) |
-| LOGO_DARK_PATH | The path to the application logo of the dark theme inside the container `<your-logo.png>` (ENV variable available starting with eclipsebasyx/aas-gui:v2-241114) |
-| BASE_PATH | The base path of the AAS Web UI |
-| INFLUXDB_TOKEN | The token for accessing time series data from an InfluxDB |
-| KEYCLOAK_URL | The URL of the Keycloak server used as identity provider for RBAC |
-| KEYCLOAK_REALM | The realm of the Keycloak server |
-| KEYCLOAK_CLIENT_ID | The client ID of the Keycloak server |
-| ENDPOINT_CONFIG_AVAILABLE | Specifies whether the endpoint configuration should be available in the AAS Web UI (ENV variable available starting with eclipsebasyx/aas-gui:v2-241114) |
-| SINGLE_AAS | Specifies whether the aas-gui should show only one specific AAS or an List of all AAS "<true/false>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-241220) |
-
-| SINGLE_AAS_REDIRECT | Specifies a URL to which redirection should occur in the case of SINGLE_AAS = true and missing `aas` URL query parameter (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-241220)
+| Variable Name | Description | Default |
+|---------------|-------------|---------|
+| AAS_DISCOVERY_PATH | The path to the AAS Discovery Service | - |
+| AAS_REGISTRY_PATH | The path to the AAS Registry | - |
+| SUBMODEL_REGISTRY_PATH | The path to the Submodel Registry | - |
+| AAS_REPO_PATH | The path to the AAS Repository | - |
+| SUBMODEL_REPO_PATH | The path to the Submodel Repository | - |
+| CD_REPO_PATH | The path to the Concept Description Repository | - |
+| DASHBOARD_SERVICE_PATH | The path to the Dashboard Service | - |
+| PRIMARY_COLOR | The primary color of the AAS Web UI | - |
+| PRIMARY_LIGHT_COLOR | The primary color of the AAS Web UI of the light theme (ENV variable available starting with eclipsebasyx/aas-gui:v2-241114) | "#0cb2f0" |
+| PRIMARY_DARK_COLOR | The primary color of the AAS Web UI of the dark theme (ENV variable available starting with eclipsebasyx/aas-gui:v2-241114) | "#f69222" |
+| LOGO_PATH | The path to the application logo inside the container `<your-logo.png>` (older versions used `Logo/<your-logo.png>`) | - |
+| LOGO_LIGHT_PATH | The path to the application logo of the dark theme inside the container `<your-logo.png>` (ENV variable available starting with eclipsebasyx/aas-gui:v2-241114) | "Logo_light.svg" |
+| LOGO_DARK_PATH | The path to the application logo of the dark theme inside the container `<your-logo.png>` (ENV variable available starting with eclipsebasyx/aas-gui:v2-241114) | "Logo_dark.svg" |
+| BASE_PATH | The base path of the AAS Web UI | "/" |
+| INFLUXDB_TOKEN | The token for accessing time series data from an InfluxDB | - |
+| KEYCLOAK_URL | The URL of the Keycloak server used as identity provider for RBAC | - |
+| KEYCLOAK_REALM | The realm of the Keycloak server | - |
+| KEYCLOAK_CLIENT_ID | The client ID of the Keycloak server | - |
+| PRECONFIGURED_AUTH_USERNAME | The preconfigured Keycloak username for the automatic sign in (ENV variable available starting with eclipsebasyx/aas-gui:v2-250417) | - |
+| PRECONFIGURED_AUTH_PASSWORD | The preconfigured Keycloak password for the automatic sign in (ENV variable available starting with eclipsebasyx/aas-gui:v2-250417) | - |
+| ENDPOINT_CONFIG_AVAILABLE | Specifies whether the endpoint configuration should be available in the AAS Web UI (ENV variable available starting with eclipsebasyx/aas-gui:v2-241114) | true |
+| SINGLE_AAS | Specifies whether the aas-gui should show only one specific AAS or an List of all AAS "<true/false>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-241220) | false |
+| SINGLE_AAS_REDIRECT | Specifies a URL to which redirection should occur in the case of SINGLE_AAS = true and missing `aas` URL query parameter (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-241220) | - |
+| ALLOW_EDITING | Flag to enable/disable the editor mode (ENV variable available starting with eclipsebasyx/aas-gui:v2-250417) | true |
+| ALLOW_UPLOADING | Flag to enable/disable uploading AAS (ENV variable available starting with eclipsebasyx/aas-gui:v2-250417) | true |
+| BASIC_AUTH_USERNAME | The username that will be used for basic auth in the authorization header of each request (ENV variable available starting with eclipsebasyx/aas-gui:v2-250417) | - |
+| BASIC_AUTH_PASSWORD | The password that will be used for basic auth in the authorization header of each request (ENV variable available starting with eclipsebasyx/aas-gui:v2-250417) | - |
+| EDITOR_ID_PREFIX | The default prefix for AAS IDs and GlobalAssetIDs in the editor mode (ENV variable available starting with eclipsebasyx/aas-gui:v2-250417) | "https://example.com/" |
 
 ```{tip}
 Using environment variables works when building the Docker image yourself or when using the image from Docker Hub.
@@ -89,10 +95,16 @@ services:
             KEYCLOAK_URL: "<keycloak_url>" (optional; RBAC feature)
             KEYCLOAK_REALM: "<keycloak_realm>" (optional; RBAC feature)
             KEYCLOAK_CLIENT_ID: "<keycloak_client_id>" (optional; RBAC feature)
+            PRECONFIGURED_AUTH_USERNAME: "<preconfigured_keycloak_username>" (optional; RBAC feature)
+            PRECONFIGURED_AUTH_PASSWORD: "<preconfigured_keycloak_password>" (optional; RBAC feature)
             ENDPOINT_CONFIG_AVAILABLE: "<true/false>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-241114)
             SINGLE_AAS: "<true/false>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-241220)
-
             SINGLE_AAS_REDIRECT: "<URL>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-241220)
+            ALLOW_EDITING: "<true/false>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-250417)
+            ALLOW_UPLOADING: "<true/false>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-250417)
+            BASIC_AUTH_USERNAME: "<basic_auth_username>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-250417)
+            BASIC_AUTH_PASSWORD: "<basic_auth_password>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-250417)
+            EDITOR_ID_PREFIX: "<id_prefix>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-250417)
 ```
 
 2. Start the AAS Web UI with the following command:
