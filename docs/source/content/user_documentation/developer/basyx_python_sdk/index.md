@@ -2,6 +2,10 @@
 
 This documentation provides a step-by-step guide for setting up an AAS (Asset Administration Shell) & Submodel Creation System, running an API server using the BaSyx Python SDK, and visualizing the data using Dash (web-based visualization). An **interactive Jupyter Notebook** is available, allowing users to execute and experiment with the setup step by step.
 
+For more examples and detailed explanations, see:
+- BaSyx Python SDK [Tutorials](https://github.com/eclipse-basyx/basyx-python-sdk/blob/main/sdk/README.md#examples-and-tutorials)
+- BaSyx Python SDK [Documentation](https://basyx-python-sdk.readthedocs.io/en/latest/)
+
 ## Overview
 
 ### **Jupyter Notebook for Interactive Execution**
