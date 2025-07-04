@@ -8,6 +8,7 @@ The DataBridge Component supports a multitude of features with a great range of 
 * [Routes Configuration](./features/routes-configuration.md)
 * [AAS POlling Consumer](./features/aas-polling-consumer.md)
 * [AAS Data Sink](./features/aas-data-sink.md)
+* [Multiple Datasinks](./features/multi-sink.md)
 * [Timer](./features/timer.md)
 * [Event](./features/event.md)
 * [Request](./features/request.md)
@@ -24,6 +25,7 @@ features/health-endpoint
 features/routes-configuration
 features/aas-polling-consumer
 features/aas-data-sink
+features/multi-sink
 features/timer
 features/event
 features/request
