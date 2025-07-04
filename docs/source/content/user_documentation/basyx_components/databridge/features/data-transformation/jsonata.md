@@ -28,6 +28,8 @@ To learn more about JSONata expressions please refer [JSONata Org](https://jsona
 
 Similarly, you can configure multiple JSONata transformers inside the configuration file.
 
+You can also use the JSONata Exerciser to test your JSONata expressions. The Exerciser is available at [JSONata Exerciser](https://try.jsonata.org/).
+
 ## Naming Convention
 The name of the JSONata configuration file should be **jsonatatransformer.json**.
 
