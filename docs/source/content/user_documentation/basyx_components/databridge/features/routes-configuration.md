@@ -1,7 +1,7 @@
 # Routes Configuration
 A route is a sequence of steps, executed in order by DataBridge, that consume and process a message. A route starts with a source and is followed by a chain of endpoints and processors such as transformers and sinks. The names utilized in the route configuration have to be equal to the *uniqueIds* defined in the respective jsons.
 
-A route in DataBridge can be configured using Json file. You can specify the Data Sources, Transformers, Data Sinks, and Route trigger. Specifying the trigger in the route instructs the DataBridge about when the route would be started. More information on different types of triggers can be found in [Features](../index.md#features) under **Route Types**.
+A route in DataBridge can be configured using Json file. You can specify the Data Sources, Transformers, Data Sinks, and Route trigger. Specifying the trigger in the route instructs the DataBridge about when the route would be started. More information on different types of triggers can be found in [Triggers](./triggers/index.md).
 
 ## Sample Single Route Configuration
 ```yaml
