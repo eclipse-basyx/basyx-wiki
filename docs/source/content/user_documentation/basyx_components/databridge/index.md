@@ -9,9 +9,7 @@ The DataBridge Component supports a multitude of features with a great range of 
 * [AAS POlling Consumer](./features/aas-polling-consumer.md)
 * [AAS Data Sink](./features/aas-data-sink.md)
 * [Multiple Datasinks](./features/multi-sink.md)
-* [Timer](./features/timer.md)
-* [Event](./features/event.md)
-* [Request](./features/request.md)
+* [Triggers](./features/triggers/index.md)
 * [Protocol Integration](./features/protocol-integration/index.md)
 * Data Transformation : 
     * [JSONATA](./features/data-transformation/jsonata.md)
@@ -26,9 +24,7 @@ features/routes-configuration
 features/aas-polling-consumer
 features/aas-data-sink
 features/multi-sink
-features/timer
-features/event
-features/request
+features/triggers/index
 features/protocol-integration/index
 features/data-transformation/jsonata
 
