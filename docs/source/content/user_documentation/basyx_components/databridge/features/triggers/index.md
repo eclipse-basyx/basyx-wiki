@@ -6,7 +6,7 @@ The Databridge supports various trigger types that can be used to initiate data 
 
 * [Event Trigger](./event.md)
 * [Timer](./timer.md)
-* [ARequest Trigger](./request.md)
+* [Request Trigger](./request.md)
 
 ```{toctree}
 :hidden:
