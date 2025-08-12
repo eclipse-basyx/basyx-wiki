@@ -16,30 +16,33 @@ The `MqttSubscriber` listens for submodel creation, update, and deletion events:
 client.subscribe(TOPIC_NEW);
 client.subscribe(TOPIC_UPDATE);
 client.subscribe(TOPIC_DELETE);
+```
 
+**On creation/update:**
+- Deserializes the submodel, checks the AASX version, and validates the presence of a SemanticId.
 
-On creation/update:
-Deserializes the submodel, checks the AASX version, and validates the presence of a SemanticId.
+**On deletion:**
+- Cleans up related test results in the repository.
 
- On deletion:
-Cleans up related test results in the repository.
+---
 
+## 2. Validation Logic
 
-2. Validation Logic
-Deserialization:
+**Deserialization:**  
 All submodels and schemas are parsed using the IDTA-compatible JSON format:
+
 ```java
 Environment inputEnv = Deserializer.deserializejsonFile(jsonString);
+```
 
-
-Comparison:
+**Comparison:**  
 Each input submodel is compared to all available schema submodels (from IDTA or custom sources) by matching their SemanticId:
 
 ```java
 ComparisonResult result = Comparator.compare(schemaSubmodel, inputSubmodel);
+```
 
-
-Recursive Validation:
+**Recursive Validation:**  
 The main routine for comparing submodel elements:
 
 ```java
@@ -48,35 +51,35 @@ RecursionFunc.compareSubmodelElements(
     inputSubmodel.getSubmodelElements(),
     result
 );
+```
 
+This function:
+- Validates multiplicity rules
+- Checks required/optional elements (using qualifiers)
+- Compares properties, types, values, and semantic IDs
+- Recurses into nested SubmodelElementCollections
 
-
-This function Validates multiplicity rules:
-
-Checks required/optional elements (using qualifiers)
-
-Compares properties, types, values, and semantic IDs
-
-Recurses into nested SubmodelElementCollections
-
-Multiplicity Checks Example:
+**Multiplicity Checks Example:**
 
 ```java
 if ("One".equals(multiplicity)) {
     SMEComparator.checkMultiplicityOne(schemaElement, inputElementMap, result);
 }
+```
 
-All multiplicity rules (One, ZeroToOne, OneToMany, ZeroToMany) are supported according to IDTA specifications.
+All multiplicity rules (`One`, `ZeroToOne`, `OneToMany`, `ZeroToMany`) are supported according to IDTA specifications.
 
+---
 
-3. Test Results & Reporting
-All validation outcomes are written as SubmodelElementCollections in a dedicated TestResults submodel in the repository.
+## 3. Test Results & Reporting
+
+All validation outcomes are written as `SubmodelElementCollections` in a dedicated `TestResults` submodel in the repository.
+
 ```java
 ResultSubmodelFactory.addResultToSubmodel(comparisonResult, inputSubmodel);
+```
 
-
-
-Example structure of a result:
+**Example structure of a result:**
 
 ```json
 {
@@ -87,29 +90,25 @@ Example structure of a result:
   "Differences": "...",
   "Infos": "..."
 }
+```
 
+---
 
+## Handling Unsupported Versions and Missing Semantic IDs
 
-
-
-
-
-
-Handling Unsupported Versions and Missing Semantic IDs : 
-
-
-Unsupported AASX version:
+**Unsupported AASX version:**  
 Detected early, and a result is recorded using:
 
 ```java
 ResultSubmodelFactory.addUnsupportedVersionResult(rawJson);
+```
 
-Missing SemanticId:
+**Missing SemanticId:**  
 Triggers a warning and skips validation.
 
+---
 
-
-Example: Submodel Comparison Core Logic:
+## Example: Submodel Comparison Core Logic
 
 ```java
 public static ComparisonResult compare(Submodel schemaSubmodel, Submodel inputSubmodel) {
@@ -121,11 +120,12 @@ public static ComparisonResult compare(Submodel schemaSubmodel, Submodel inputSu
     );
     return result;
 }
+```
 
+---
 
+## Example: Handling a New Submodel Event
 
- Example: Handling a New Submodel Event
- 
 ```java
 private void processSubmodel(String submodelJson) {
     if (!isAASXv3Format(submodelJson)) {
@@ -139,9 +139,6 @@ private void processSubmodel(String submodelJson) {
     }
     SubmodelFactory.processReceivedSubmodel(submodel);
 }
+```
 
-
-
-
-Next: Extending Validation
-
+[Next: Extending Validation](extending.md)
