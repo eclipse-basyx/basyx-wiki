@@ -2,9 +2,13 @@
 
 ---
 
-## How Validation Works
+# Validation Logic
 
-### 1. Event-driven Submodel Processing
+The Test Orchestrator validates submodels in three main steps:
+
+---
+
+## 1. Event-driven Submodel Processing
 
 The `MqttSubscriber` listens for submodel creation, update, and deletion events:
 
@@ -24,21 +28,27 @@ Cleans up related test results in the repository.
 2. Validation Logic
 Deserialization:
 All submodels and schemas are parsed using the IDTA-compatible JSON format:
-
-Code snippet:
+```java
 Environment inputEnv = Deserializer.deserializejsonFile(jsonString);
+
+
 Comparison:
 Each input submodel is compared to all available schema submodels (from IDTA or custom sources) by matching their SemanticId:
 
-Code snippet :
+```java
 ComparisonResult result = Comparator.compare(schemaSubmodel, inputSubmodel);
 
 
 Recursive Validation:
 The main routine for comparing submodel elements:
 
-Code snippet:
-RecursionFunc.compareSubmodelElements(schemaSubmodel.getSubmodelElements(), inputSubmodel.getSubmodelElements(), result);
+```java
+RecursionFunc.compareSubmodelElements(
+    schemaSubmodel.getSubmodelElements(),
+    inputSubmodel.getSubmodelElements(),
+    result
+);
+
 
 
 This function Validates multiplicity rules:
@@ -51,8 +61,7 @@ Recurses into nested SubmodelElementCollections
 
 Multiplicity Checks Example:
 
-Code snippet:
-
+```java
 if ("One".equals(multiplicity)) {
     SMEComparator.checkMultiplicityOne(schemaElement, inputElementMap, result);
 }
@@ -62,16 +71,14 @@ All multiplicity rules (One, ZeroToOne, OneToMany, ZeroToMany) are supported acc
 
 3. Test Results & Reporting
 All validation outcomes are written as SubmodelElementCollections in a dedicated TestResults submodel in the repository.
-
-Code snippet :
+```java
 ResultSubmodelFactory.addResultToSubmodel(comparisonResult, inputSubmodel);
-
 
 
 
 Example structure of a result:
 
-
+```json
 {
   "ComparedSubmodelId": "...",
   "SemanticId": "...",
@@ -94,27 +101,32 @@ Handling Unsupported Versions and Missing Semantic IDs :
 Unsupported AASX version:
 Detected early, and a result is recorded using:
 
-Code snippet :
+```java
 ResultSubmodelFactory.addUnsupportedVersionResult(rawJson);
+
 Missing SemanticId:
 Triggers a warning and skips validation.
 
 
 
-Code Snippets:
-
-
 Example: Submodel Comparison Core Logic:
 
+```java
 public static ComparisonResult compare(Submodel schemaSubmodel, Submodel inputSubmodel) {
     ComparisonResult result = new ComparisonResult();
-    RecursionFunc.compareSubmodelElements(schemaSubmodel.getSubmodelElements(), inputSubmodel.getSubmodelElements(), result);
+    RecursionFunc.compareSubmodelElements(
+        schemaSubmodel.getSubmodelElements(),
+        inputSubmodel.getSubmodelElements(),
+        result
+    );
     return result;
 }
 
 
 
  Example: Handling a New Submodel Event
+ 
+```java
 private void processSubmodel(String submodelJson) {
     if (!isAASXv3Format(submodelJson)) {
         ResultSubmodelFactory.addUnsupportedVersionResult(submodelJson);
