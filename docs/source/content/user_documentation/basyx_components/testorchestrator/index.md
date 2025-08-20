@@ -6,10 +6,29 @@ This module provides automated validation for Asset Administration Shell (AAS) s
 - [Getting Started](getting_started.md)
 - [Validation Logic](validation_logic.md)
 - [Extending Validation](extending.md)
+- [Example](./features/Example.md)
+- [MongoDB Integration](./features/mongodbintegration.md)
+- [Visualization](./features/Visualization.md)
+- Semantic Validation:
+    - [ECLASS](./features/SemanticValidation/ECLASS.md)
+    - [Generative AI](./features/SemanticValidation/GenerativeAI.md)
 - [References](#references)
 
 See also: [BaSyx Submodel Repository](../submodel_repository/index.md)
 
+```{toctree}
+:hidden:
+:maxdepth: 1
+
+features/Example
+features/mongodbintegration
+features/Visualization
+features/SemanticValidation/ECLASS
+features/SemanticValidation/GenerativeAI
+extending
+getting_started
+validation_logic
+```
 ## Overview
 
 The Test Orchestrator is a Spring Boot-based extension for validating Asset Administration Shell (AAS) submodels according to IDTA/Industry standards.
