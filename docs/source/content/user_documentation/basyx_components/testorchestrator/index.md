@@ -7,8 +7,8 @@ This module provides automated validation for Asset Administration Shell (AAS) s
 - [Validation Logic](validation_logic.md)
 - [Extending Validation](extending.md)
 - [Example](./features/Example.md)
-- [MongoDB Integration](./features/mongodbintegration.md)
 - [Visualization](./features/Visualization.md)
+- [MongoDB Integration](./features/mongodbintegration.md)
 - Semantic Validation:
     - [ECLASS](./features/SemanticValidation/ECLASS.md)
     - [Generative AI](./features/SemanticValidation/GenerativeAI.md)
@@ -20,14 +20,14 @@ See also: [BaSyx Submodel Repository](../submodel_repository/index.md)
 :hidden:
 :maxdepth: 1
 
-features/Example
-features/mongodbintegration
-features/Visualization
-features/SemanticValidation/ECLASS
-features/SemanticValidation/GenerativeAI
-extending
 getting_started
 validation_logic
+extending
+features/Example
+features/Visualization
+features/mongodbintegration
+features/SemanticValidation/ECLASS
+features/SemanticValidation/GenerativeAI
 ```
 ## Overview
 
