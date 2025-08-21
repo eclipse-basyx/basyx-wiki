@@ -21,7 +21,7 @@ Recursive validation ensures structural and semantic correctness of nested Submo
 4. Results are collected in `ComparisonResult`.
 
 ---
-```{figure} ./images/ValidationWorkflow.pdf
+```{figure} ./images/ValidationWorkflow.png
 ---
 width: 100%
 alt: ValidationWorkflow

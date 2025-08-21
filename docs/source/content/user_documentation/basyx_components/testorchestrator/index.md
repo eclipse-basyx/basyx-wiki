@@ -51,7 +51,7 @@ It provides:
 
 The Test Orchestrator integrates with the BaSyx Submodel Repository and listens for submodel creation, update, and deletion events via MQTT.
 
-```{figure} ./images/architecture.pdf
+```{figure} ./images/architecture.png
 ---
 width: 100%
 alt: architecture

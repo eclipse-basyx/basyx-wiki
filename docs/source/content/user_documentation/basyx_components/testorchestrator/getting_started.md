@@ -35,7 +35,7 @@ The orchestrator is designed for **production use**: it validates on every creat
 
 At a high level, the orchestrator integrates with the BaSyx Submodel Repository, listens to MQTT events, deserializes incoming Submodels, performs template matching and recursive comparison, and stores the outcome as result Submodels.
 
-```{figure} ./images/ValidationWorkflow.pdf
+```{figure} ./images/ValidationWorkflow.png
 ---
 width: 100%
 alt: ValidationWorkflow

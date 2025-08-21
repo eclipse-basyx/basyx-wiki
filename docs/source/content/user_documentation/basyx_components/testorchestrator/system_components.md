@@ -12,7 +12,7 @@ This section provides an overview of the main components involved in the Test Or
 
 The diagram below outlines the integration between the BaSyx Submodel Repository, AAS Web UI, MQTT Broker, and the Test Orchestrator components.
 
-```{figure} ./images/architecture.pdf
+```{figure} ./images/architecture.png
 ---
 width: 100%
 alt: architecture
