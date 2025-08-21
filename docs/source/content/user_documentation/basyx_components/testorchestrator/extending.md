@@ -1,6 +1,7 @@
-[Back to Validation Logic](validation_logic.md) | [Back to Overview](index.md)
+[Back: Results Visualization](../results_visualization.md) | [Back to Overview](../index.md)
 
----
+# ⚙️ Extending Validation
+
 
 ## Adding New Schemas
 
@@ -34,5 +35,4 @@ Add your MQTT topics there to enable automated validation for your specific work
 
 ---
 
-[Back to Overview](index.md)
-
+[Back: Results Visualization](../results_visualization.md) | [Next: MongoDB Integration](mongodbintegration.md)

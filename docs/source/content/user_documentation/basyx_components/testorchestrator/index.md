@@ -4,8 +4,11 @@ Welcome to the documentation for the BaSyx Test Orchestrator.
 This module provides automated validation for Asset Administration Shell (AAS) submodels.
 
 - [Getting Started](getting_started.md)
+- [System Components](system_components.md)
 - [Validation Logic](validation_logic.md)
+- [Recursive Validation](recursive_validation.md)
 - [Extending Validation](extending.md)
+- [Results Visualization](results_visualization.md)
 - [Example](./features/Example.md)
 - [Visualization](./features/Visualization.md)
 - [MongoDB Integration](./features/mongodbintegration.md)
@@ -21,8 +24,11 @@ See also: [BaSyx Submodel Repository](../submodel_repository/index.md)
 :maxdepth: 1
 
 getting_started
+system_components
 validation_logic
+recursive_validation
 extending
+results_visualization
 features/Example
 features/Visualization
 features/mongodbintegration
@@ -44,6 +50,14 @@ It provides:
 ## Architecture
 
 The Test Orchestrator integrates with the BaSyx Submodel Repository and listens for submodel creation, update, and deletion events via MQTT.
+
+```{figure} ./images/architecture.pdf
+---
+width: 100%
+alt: architecture
+name: architecture
+---
+```
 
 ---
 

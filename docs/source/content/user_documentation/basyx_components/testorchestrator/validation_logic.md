@@ -140,5 +140,26 @@ private void processSubmodel(String submodelJson) {
     SubmodelFactory.processReceivedSubmodel(submodel);
 }
 ```
+---
+
+## 📊 Validation Sequence
+
+The validation process is also represented in the following sequence diagram, which highlights the interaction between the Submodel Repository, Deserializer, Comparator, Recursion Function, SMEComparator, and the MQTT/Web UI integration.
+
+```{figure} ./images/ValidationSequence.pdf
+---
+width: 100%
+alt: ValidationSequence
+name: ValidationSequence
+---
+```
+
+This sequence shows:
+- **Upload/Edit** of a Submodel via MQTT/Web UI  
+- **Deserialization** of input and schema JSON files  
+- **Recursive comparison** of elements, including SemanticId mapping  
+- **Multiplicity checks** (Zero/One/Many)  
+- **Result generation** stored in the Submodel Repository and displayed to the user
+
 
 [Next: Extending Validation](extending.md)
