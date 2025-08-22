@@ -112,9 +112,13 @@ content/developer_documentation/basyx_python_sdk/index
 
 ### Concepts
 
+* [Introduction](./content/concepts/introduction.md)
+
 ```{toctree}
 :hidden:
 :maxdepth: 1
 :caption: Concepts
+
+content/concepts/introduction
 
 ```
