@@ -118,7 +118,7 @@ The Aggregated Swagger UI for the endpoints is available at:
 It supports DotAAS Part 1 V3 and all HTTP/REST endpoints defined in [DotAAS Part 2 V3 - AasDiscovery Service](https://app.swaggerhub.com/apis/Plattform_i40/DiscoveryServiceSpecification/V3.0.1_SSP-001).
 In addition, it supports InMemory as well as MongoDB backends. 
 
-For a configuration example, see [application.properties](https://github.com/eclipse-basyx/basyx-java-server-sdk/basyx.aasdiscoveryservice.component/src/main/resources/application.properties)
+For a configuration example, see [application.properties](https://github.com/eclipse-basyx/basyx-java-server-sdk/blob/main/basyx.aasdiscoveryservice/basyx.aasdiscoveryservice.component/src/main/resources/application.properties)
 
 Right now, no additional input parameters modifying the output (e.g., cursor, serializationModifier) are supported.
 

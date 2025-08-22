@@ -53,6 +53,7 @@ It also contains a quick start guide that will help you to get started with Ecli
 * [Why use BaSyx?](./content/introduction/why_basyx.md)
 * [BaSyx explained](./content/introduction/basyx_explained.md)
 * [Quick Start Guide](./content/introduction/quickstart.md)
+* [Contributing](./content/introduction/contributing.md)
 
 ```{toctree}
 :hidden:
@@ -63,6 +64,7 @@ content/introduction/industrie4.0_intro
 content/introduction/why_basyx
 content/introduction/basyx_explained
 content/introduction/quickstart
+content/introduction/contributin
 ```
 
 ### User Documentation
@@ -91,22 +93,32 @@ content/user_documentation/concepts and architecture/index
 
 ### Developer Documentation
 
-* [Contributing](./content/user_documentation/developer/contributing.md)
-* [BaSyx Java Version 1](./content/user_documentation/developer/basyx_java_v1/index.md)
-* [BaSyx Java Version 2](./content/user_documentation/developer/basyx_java_v2/index.md)
+* [Contributing](./content/developer_documentation/contributing.md)
+* [BaSyx Java Version 1](./content/developer_documentation/basyx_java_v1/index.md)
+* [BaSyx Java Version 2](./content/developer_documentation/basyx_java_v2/index.md)
+* [BaSyx Python SDK](./content/developer_documentation/basyx_python_sdk/index.md)
 
 ```{toctree}
 :hidden:
 :maxdepth: 1
 :caption: Developer Documentation
 
-content/user_documentation/developer/index
+content/developer_documentation/contributing
+content/developer_documentation/basyx_java_v1/index
+content/developer_documentation/basyx_java_v2/index
+content/developer_documentation/basyx_python_sdk/index
 
 ```
-### Research and Resources
 
-### Community and Support
+### Concepts
 
-### Glossary
+* [Introduction](./content/concepts/introduction.md)
 
-### Appendices and Additional Resources
+```{toctree}
+:hidden:
+:maxdepth: 1
+:caption: Concepts
+
+content/concepts/introduction
+
+```
