@@ -96,13 +96,17 @@ content/user_documentation/concepts and architecture/index
 * [Contributing](./content/developer_documentation/contributing.md)
 * [BaSyx Java Version 1](./content/developer_documentation/basyx_java_v1/index.md)
 * [BaSyx Java Version 2](./content/developer_documentation/basyx_java_v2/index.md)
+* [BaSyx Python SDK](./content/developer_documentation/basyx_python_sdk/index.md)
 
 ```{toctree}
 :hidden:
 :maxdepth: 1
 :caption: Developer Documentation
 
-content/developer_documentation/index
+content/developer_documentation/contributing
+content/developer_documentation/basyx_java_v1/index
+content/developer_documentation/basyx_java_v2/index
+content/developer_documentation/basyx_python_sdk/index
 
 ```
 
@@ -113,5 +117,4 @@ content/developer_documentation/index
 :maxdepth: 1
 :caption: Concepts
 
-content/concepts/index
-
+```
