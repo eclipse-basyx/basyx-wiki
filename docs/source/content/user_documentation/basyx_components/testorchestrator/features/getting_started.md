@@ -1,9 +1,7 @@
 [Back to Overview](index.md) | [Next: System Components](system_components.md)
 
-# 🚀 Getting Started
+# Getting Started
 
-
-# 🛠 Getting Started with the Test Orchestrator
 ## Overview
 
 The **Test Orchestrator** is a Java/Spring Boot validation engine that automates the verification of AAS (Asset Administration Shell) Submodels against IDTA‑compliant templates. It ensures **structural integrity** and **semantic correctness** by matching uploaded Submodels to reference schemas (via `SemanticId`) and running a recursive, rule‑based check across all elements.

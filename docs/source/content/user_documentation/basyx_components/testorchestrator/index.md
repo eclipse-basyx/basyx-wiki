@@ -3,18 +3,17 @@
 Welcome to the documentation for the BaSyx Test Orchestrator.
 This module provides automated validation for Asset Administration Shell (AAS) submodels.
 
-- [Getting Started](getting_started.md)
-- [System Components](system_components.md)
-- [Validation Logic](validation_logic.md)
-- [Recursive Validation](recursive_validation.md)
-- [Extending Validation](extending.md)
-- [Results Visualization](results_visualization.md)
+- [Getting Started](./features/getting_started.md)
 - [Example](./features/Example.md)
-- [Visualization](./features/Visualization.md)
-- [MongoDB Integration](./features/mongodbintegration.md)
+- [System Components](./features/concept/system_components.md)
+- [Validation Logic](./features/concept/validation_logic.md)
+- [Recursive Validation](./features/concept/recursive_validation.md)
+- [Extending Validation](./features/feature/extending.md)
+- [Results Visualization](./features/Visualization.md)
+- [MongoDB Integration](./features/feature/mongodbintegration.md)
 - Semantic Validation:
-    - [ECLASS](./features/SemanticValidation/ECLASS.md)
-    - [Generative AI](./features/SemanticValidation/GenerativeAI.md)
+    - [ECLASS](./features/feature/SemanticValidation/ECLASS.md)
+    - [Generative AI](./features/feature/SemanticValidation/GenerativeAI.md)
 - [References](#references)
 
 See also: [BaSyx Submodel Repository](../submodel_repository/index.md)
@@ -23,17 +22,10 @@ See also: [BaSyx Submodel Repository](../submodel_repository/index.md)
 :hidden:
 :maxdepth: 1
 
-getting_started
-system_components
-validation_logic
-recursive_validation
-extending
-results_visualization
+features/getting_started
 features/Example
-features/Visualization
-features/mongodbintegration
-features/SemanticValidation/ECLASS
-features/SemanticValidation/GenerativeAI
+features/concept/index
+features/feature/index
 ```
 ## Overview
 

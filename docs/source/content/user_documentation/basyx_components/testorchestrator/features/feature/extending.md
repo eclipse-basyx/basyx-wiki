@@ -1,7 +1,6 @@
 [Back: Results Visualization](../results_visualization.md) | [Back to Overview](../index.md)
 
-# ⚙️ Extending Validation
-
+# Extending Validation
 
 ## Adding New Schemas
 
