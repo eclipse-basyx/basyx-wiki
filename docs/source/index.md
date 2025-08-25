@@ -64,7 +64,7 @@ content/introduction/industrie4.0_intro
 content/introduction/why_basyx
 content/introduction/basyx_explained
 content/introduction/quickstart
-content/introduction/contributin
+content/introduction/contributing
 ```
 
 ### User Documentation
