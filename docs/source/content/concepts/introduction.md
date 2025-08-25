@@ -9,4 +9,5 @@ The following subsections will cover the following topics:
 - Conformance and Consistency
 - Use Cases
 - Best Practices
-- LLM based Submodel Creation
+- LLM based attribute matching for technical data submodels
+- Further work package results
