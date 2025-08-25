@@ -4,6 +4,7 @@
 * [BaSyx Java Version 2](./v2/index.md)
 * [AAS Web UI](./web_ui/index.md)
 * [Databridge Component](./databridge/index.md)
+* [Test Orchestrator](./testorchestrator/index.md)
 
 ```{toctree}
 :hidden:
@@ -13,4 +14,5 @@ v1/index
 v2/index
 web_ui/index
 databridge/index
+testorchestrator/index
 ```
