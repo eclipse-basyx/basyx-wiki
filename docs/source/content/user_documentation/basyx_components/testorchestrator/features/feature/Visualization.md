@@ -51,7 +51,7 @@ The validation results can be downloaded:
 - For individual submodels.
 - For all tested submodels as a single JSON file.
 
-```{figure} ./images/Test_Orchestrator_Module.png
+```{figure} ./images/Test_Orchestrator_Module.jpeg
 ---
 width: 100%
 alt: Test Orchestrator Module
