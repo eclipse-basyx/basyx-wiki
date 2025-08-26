@@ -1,13 +1,13 @@
 
 # Components
 The components 
-* [AAS Repository](../../basyx_components/v2/aas_repository/index.md)
-* [Submodel Repository](../../basyx_components/v2/submodel_repository/index.md)
-* [Concept Description Repository](../../basyx_components/v2/cd_repository/index.md)
-* [AAS Environment](../../basyx_components/v2/aas_environment/index.md)
-* [AAS Registry](../../basyx_components/v2/aas_registry/index.md)
-* [Submodel Registry](../../basyx_components/v2/submodel_registry/index.md)
-* [AAS Discovery](../../basyx_components/v2/aas_discovery/index.md)
+* [AAS Repository](../../user_documentation/basyx_components/v2/aas_repository/index.md)
+* [Submodel Repository](../../user_documentation/basyx_components/v2/submodel_repository/index.md)
+* [Concept Description Repository](../../user_documentation/basyx_components/v2/cd_repository/index.md)
+* [AAS Environment](../../user_documentation/basyx_components/v2/aas_environment/index.md)
+* [AAS Registry](../../user_documentation/basyx_components/v2/aas_registry/index.md)
+* [Submodel Registry](../../user_documentation/basyx_components/v2/submodel_registry/index.md)
+* [AAS Discovery](../../user_documentation/basyx_components/v2/aas_discovery/index.md)
 
 are highly configurable by leveraging the Spring framework. Thus, they utilize existing Spring configuration properties, e.g., for MongoDB. In addition, the components offer common mechanisms for checking the current health status of the application and configuring Cross-Origin Resource Sharing (CORS) options.
 The source code for all the components can be found on the `basyx-java-server-sdk` GitHub Repository:
