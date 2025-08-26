@@ -11,10 +11,3 @@ This section provides an overview of the key concepts and principles underlying 
 * Best Practices
 * LLM based attribute matching for technical data submodels
 * Further work package results
-
-```{toctree}
-:hidden:
-:maxdepth: 1
-
-use_cases/index
-```

@@ -14,7 +14,7 @@ if os.environ.get("READTHEDOCS", "") == "True":
 # -- Project information
 
 project = 'BaSyx Wiki'
-copyright = '2024, Eclipse BaSyx™'
+copyright = '2025, Eclipse BaSyx™'
 author = 'Eclipse BaSyx™'
 
 release = '2.0'
