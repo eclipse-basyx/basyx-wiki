@@ -6,7 +6,9 @@ This section covers data integration capabilities provided by BaSyx, particularl
 
 The BaSyx Databridge is a key component for data integration in the BaSyx ecosystem. Below is a comprehensive example:
 
-```{include} ../../../_external/basyx-java-server-sdk/examples/BaSyxDatabridge/README.md
+```{mdinclude} /_external/basyx-java-server-sdk/examples/BaSyxDatabridge/README.md
+:relative-docs: /_external/basyx-java-server-sdk/examples/BaSyxDatabridge
+:relative-images:
 ```
 
 ## Additional Resources
