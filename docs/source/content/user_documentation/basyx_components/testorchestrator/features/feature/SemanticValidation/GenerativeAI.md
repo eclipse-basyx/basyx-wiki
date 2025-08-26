@@ -30,3 +30,18 @@ This feature was tested for a submodel with 7 Property Submodel Elements which h
 | Power Consumption          | F          | No       | No, Suggested: [W, kW]   | Correct    |
 | Rated Operating Current    | A          | Yes      | Yes                      | Correct    |
 | Internal Inductance        | H          | Yes      | Yes                      | Correct    |
+
+For incorrect units, it is shown in `Info` and hovering over that provides suggestion for the correct units.
+
+```{figure} ./images/UnitSuggestion.jpeg
+---
+width: 100%
+alt: UnitSuggestion
+name: UnitSuggestion
+---
+```
+> **Note:** This is an optional feature, and not having a key does not impact the normal validation process of the submodels.  
+>  
+> However, this feature additionally enables semantic validation of Submodel Elements. In some cases, the program might fail to extract Concept Descriptions for certain Submodel Elements due to delays in their registration.  
+>  
+> If this occurs, delete and re-upload the submodel. Ongoing research is being conducted to improve and resolve this issue in future versions.

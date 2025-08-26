@@ -11,3 +11,16 @@ alt: keys
 name: keys
 ---
 ```
+
+The differences of preferred name are displayed in `Differences`. Moreover, user are also provided description in `Infos`. 
+```{figure} ./images/ECLASS.jpeg
+---
+width: 100%
+alt: ECLASS
+name: ECLASS
+---
+```
+
+> **Note:** This is an optional feature. Not providing a key does not affect the normal validation process of submodels. However, enabling this feature allows additional semantic validation of Submodel Elements.
+
+

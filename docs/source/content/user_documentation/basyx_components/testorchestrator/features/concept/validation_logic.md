@@ -142,7 +142,7 @@ private void processSubmodel(String submodelJson) {
 ```
 ---
 
-## 📊 Validation Sequence
+## Validation Sequence
 
 The validation process is also represented in the following sequence diagram, which highlights the interaction between the Submodel Repository, Deserializer, Comparator, Recursion Function, SMEComparator, and the MQTT/Web UI integration.
 

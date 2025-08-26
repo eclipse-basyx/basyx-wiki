@@ -49,3 +49,5 @@ In docker-compose.ymp, add the following lines inside services:
 ```
 
 Now, when all the containers are up, you can access MongoDB in port 27017. MongoDBCompass can be used to see the database and all the documents inside. 
+
+> **Warning:** Restarting the container `TestOrchestrator` might result in an error because the `TestOrchestrator` submodel is not checked for prior existence in the Submodel Repository. It is recommended to restart all containers at once, which ensures that all previously registered submodels are removed.
