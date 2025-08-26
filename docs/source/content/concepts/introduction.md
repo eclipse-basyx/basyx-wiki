@@ -1,4 +1,4 @@
-# BaSys Concepts
+# Introduction
 
 This section provides an overview of the key concepts and principles underlying the BaSys middleware and its related Eclipse BaSyx components.
 
