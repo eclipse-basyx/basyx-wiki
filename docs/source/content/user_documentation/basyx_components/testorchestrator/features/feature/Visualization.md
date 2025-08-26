@@ -1,10 +1,16 @@
 ## Visualization
 All validation results are persisted in dedicated Submodels:
 
-- **TestResults** – for successful validations
-- **UnsuccessfulTestResults** – for failed or incomplete validations
+- **Tested Submodels** – for successful validations
+- **Invalid Submodels** – for failed or incomplete validations. These are the submodels that do not have any Semantic ID.
 
+```{figure} ./images/filteredResults.PNG
 ---
+width: 100%
+alt: filteredResults
+name: filteredResults
+---
+```
 
 ## Result Structure
 
@@ -53,19 +59,12 @@ name: Test_Orchestrator_Module
 ---
 ```
 
+The results can also be filtered so that only specific submodels can be viewed. 
+
 ```{figure} ./images/WebUI_suggestion.png
 ---
 width: 100%
 alt: Visualization of Module
 name: WebUI_suggestion
----
-```
-The results can also be filtered so that only specific submodels can be viewed. 
-
-```{figure} ./images/filteredResults.PNG
----
-width: 100%
-alt: filteredResults
-name: filteredResults
 ---
 ```

@@ -1,7 +1,6 @@
+
+# Testing Options
 You can directly start using test orchestrator and validate your submodel(s). For doing that, navigate to [Test Orchestrator Example](https://github.com/eclipse-basyx/basyx-applications/tree/main/test-orchestrator/example).
-
-## Testing Options
-
 ### 1. Test by Uploading Files
 
 #### Standard Submodel Validation
