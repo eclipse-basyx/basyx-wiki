@@ -21,7 +21,7 @@ For each presented use case we provide a brief description, the involved compone
 :maxdepth: 1
 
 data_integration
-data_synchronization
+data_transformation
 rbac
 event_communication
 aas_operations
