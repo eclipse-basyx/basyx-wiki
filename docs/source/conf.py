@@ -43,6 +43,7 @@ source_suffix = {
 # Enable fenced directives like ```{include} ... ```
 myst_enable_extensions = [
     "colon_fence",
+    "attrs_block",
     "linkify",
     "deflist",
     "attrs",

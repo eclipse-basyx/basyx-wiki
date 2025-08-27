@@ -9,6 +9,9 @@ build:
 sphinx:
   configuration: docs/source/conf.py
 
+apt_packages:
+  - plantuml
+
 # Explicitly set the version of Python and its requirements
 python:
   install:
