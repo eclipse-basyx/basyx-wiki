@@ -30,6 +30,8 @@ extensions = [
     'sphinx.ext.intersphinx',
     'myst_parser',
     'sphinx_copybutton',
+    'sphinxcontrib.plantuml',
+    'sphinxcontrib.mermaid',
 ]
 
 # Make Sphinx parse .md files
@@ -47,6 +49,9 @@ myst_enable_extensions = [
     "dollarmath",
     "amsmath",
 ]
+
+# Mermaid configuration
+myst_fence_as_directive = ["mermaid"]
 
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3/', None),

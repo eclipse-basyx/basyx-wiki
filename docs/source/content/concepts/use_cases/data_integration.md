@@ -4,10 +4,55 @@ An essential functionality when deploying Digital Twins is the possibility to ex
 
 This section covers data integration capabilities provided by BaSyx, particularly focusing on the BaSyx Databridge component. The following example will illustrate how to use the Databridge to retrieve data from a MQTT datasource (broker) and transfer it into Properties inside of an AAS Submodel.
 
+## Data Flow Architecture
+
+The following diagram illustrates the data flow from an MQTT client through the Mosquitto broker, BaSyx Databridge, to the AAS Environment:
+
+```{mermaid}
+graph LR
+    A[MQTT Client/Sensor] -->|Publishes Data| B[Mosquitto Broker]
+    B -->|MQTT Topic| C[BaSyx Databridge]
+    C -->|REST API| D[AAS Environment]
+    D --> E[AAS Submodel]
+    E --> F[Property Value Updated]
+    
+    style A fill:#e1f5fe
+    style B fill:#f3e5f5
+    style C fill:#e8f5e8
+    style D fill:#fff3e0
+    style E fill:#fce4ec
+    style F fill:#f1f8e9
+```
+
+### Detailed Component Interaction
+
+```{mermaid}
+sequenceDiagram
+    participant Client as MQTT Client
+    participant Broker as Mosquitto Broker
+    participant Bridge as BaSyx Databridge
+    participant AAS as AAS Environment
+    participant SM as Submodel
+    participant Prop as Property
+    
+    Client->>Broker: Publish sensor data to topic
+    Note over Broker: Topic: /sensors/temperature
+    
+    Bridge->>Broker: Subscribe to MQTT topic
+    Broker->>Bridge: Forward message with sensor data
+    
+    Note over Bridge: Transform MQTT payload<br/>to AAS property format
+    
+    Bridge->>AAS: HTTP PUT request
+    AAS->>SM: Update submodel
+    SM->>Prop: Set property value
+    
+    Note over Prop: Property value updated<br/>with live sensor data
+```
+
 ```{note}
 The example can be found on in the <a href="https://github.com/eclipse-basyx/basyx-java-server-sdk/tree/main/examples/BaSyxDatabridge" target="_blank">Examples on GitHub</a>. Feel free to try it out yourself!
 ```
-
 
 ```{include} ../../../_external/basyx-java-server-sdk/examples/BaSyxDatabridge/README.md
 ```
