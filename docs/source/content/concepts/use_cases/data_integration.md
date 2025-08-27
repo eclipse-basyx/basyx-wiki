@@ -8,12 +8,12 @@ This section covers data integration capabilities provided by BaSyx, particularl
 
 The following diagram illustrates the data flow from an MQTT client through the Mosquitto broker, BaSyx Databridge, to the AAS Environment:
 
-```{uml} charts/data_flow_architecture.uml
+```{uml} charts/data_flow_architecture.puml
 ```
 
 ### Detailed Component Interaction
 
-```{uml} charts/component_interaction.uml
+```{uml} charts/component_interaction.puml
 ```
 
 ```{note}
