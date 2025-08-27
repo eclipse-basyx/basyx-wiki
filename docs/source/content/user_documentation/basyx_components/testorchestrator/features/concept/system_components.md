@@ -20,11 +20,14 @@ name: architecture
 ---
 ```
 
-*Figure 3: Architecture of the Test Orchestrator and its integration with BaSyx modules and MQTT*
+*Architecture of the Test Orchestrator and its integration with BaSyx modules and MQTT*
 
 ---
 
 ## Component Breakdown
+
+At a high level, the orchestrator integrates with the BaSyx Submodel Repository, listens to MQTT events, deserializes incoming Submodels, performs template matching and recursive comparison, and stores the outcome as result Submodels.
+
 
 ### 1. AAS/Submodel Repository
 Stores the uploaded submodels and triggers events on creation/update/deletion.
@@ -42,6 +45,7 @@ Coordinates the comparison logic using schema matching and validation rules.
 All results—errors, warnings, etc.—are written back to dedicated TestResult submodels.
 
 ---
+![Test Orchestrator ValidationWorkflow](./images/ValidationWorkflow.png)
 
 ## Core Modules
 
@@ -65,9 +69,7 @@ All results—errors, warnings, etc.—are written back to dedicated TestResult 
 
 ---
 
-## Diagram
-
-The figure below illustrates the orchestration of these components:
+The figure below illustrates the class diagram:
 
 ```{figure} ./images/ClassDiagram.png
 ---
@@ -76,6 +78,15 @@ alt: ClassDiagram
 name: ClassDiagram
 ---
 ```
+---
+
+##  Further Reading
+
+For deeper architectural insights, continue reading the published paper:  
+**[Semantic Validation for AAS Submodels using Semantic Dictionary and Generative AI](#)**  
+*(IN4PL 2025 – Springer CCIS Series Book, Paper #44)*
+
+---
 
 
 ---

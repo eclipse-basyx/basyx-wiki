@@ -29,28 +29,52 @@ The orchestrator is designed for **production use**: it validates on every creat
 
 ---
 
-## System Architecture 
+## Tool Comparison
 
-At a high level, the orchestrator integrates with the BaSyx Submodel Repository, listens to MQTT events, deserializes incoming Submodels, performs template matching and recursive comparison, and stores the outcome as result Submodels.
+| Feature                                      | [aas-test-engines](https://github.com/admin-shell-io/aas-test-engines) | [Twinfix](https://twinfix.twinsphere.io/) | [Basyx AAS Compliance Tool](https://github.com/eclipse-basyx/basyx-python-sdk/tree/main/compliance_tool) | Test Orchestrator (This Repository) |
+|---------------------------------------------|------------------|------------|-------------------------------|-------------------------------|
+| **IDTA-compliant validation**               | ✅               | ✅         | ✅                            | ✅                            |
+| **Validation against Submodel Templates**   | ⚠️ Only ContactInformation and Digital Nameplate | ❌ | ❌                            | ✅ (standardized and custom Submodels) |
+| **Meta model conformity check**             | ❌               | ✅         | ✅                            | ❌                            |
+| **API validation**                          | ✅               | ❌         | ❌                            | ❌                            |
+| **Automatic triggering**                    | ❌               | ❌         | ❌                            | ✅ via MQTT                   |
+| **Parallel/concurrent validation**          | ❌               | ✅         | ❌                            | ✅                            |
+| **Result storage**                          | ❌ Console output only | ❌     | ❌ Console text output only  | ✅ Persisted in Submodel Repository |
+| **Auto-fix suggestions**                    | ❌               | 🧪 Experimental | ❌                        | ✅ Suggestions for fixing errors and warnings |
+| **Distribution of the tool**                | local            | online     | local                         | local and online             |
+| **User interface**                          | CLI only         | Web Interface | CLI                         | Web UI, REST API            |
+| **Supported formats**                       | AASX, JSON, XML  | AASX       | AASX, JSON, XML               | AASX, JSON, XML              |
+| **Output format**                           | HTML view / console | Detailed web UI + downloadable JSON report | Console log (CLI steps and errors) | Categorized results + Visualization in Web UI + downloadable JSON report |
+| **Result classification**                   | Flat errors      | Flat errors grouped by occurrence | Steps with SUCCESS/FAILED | Categorized – Errors, Warnings, Differences, Infos grouped by Submodel |
 
-```{figure} ./images/ValidationWorkflow.png
 ---
-width: 100%
-alt: ValidationWorkflow
-name: ValidationWorkflow
+
+✅ = Fully Supported  ❌ = Not Supported  ⚠️ = Limited Support  🧪 = Experimental Feature
+
+ 
 ---
+
+## Getting Started 
+
+### Option 1: Run via Docker (Recommended for Fast Start)
+
+You can use a Docker-based setup to quickly run the Test Orchestrator with BaSyx components:
+
+```bash
+git clone https://github.com/eclipse-basyx/basyx-applications.git
+cd basyx-applications/test-orchestrator/example
+docker-compose up -d
 ```
-**Core components (see paper / architecture page):**
-- **Deserializer** – Parses AAS JSON into model objects and enforces version compatibility.  
-- **Comparator** – Selects the right schema via `SemanticId` and orchestrates the check.  
-- **RecursionFunc / SMEComparator** – Implements the depth‑first traversal and rule set (multiplicity, qualifiers, idShort/type/value checks).  
-- **ResultSubmodelFactory** – Writes standardized results, including special cases (unsupported version, missing `SemanticId`).  
 
-For deeper details, continue to [Validation Logic](validation_logic.md).
+Then navigate to the local interface at:
+```bash
+http://localhost:9080
+```
+
+> Note: This setup launches the orchestrator, BaSyx backend components, and MQTT broker.
 
 ---
-
-## Getting Started (Quick)
+### Option 2: Manual Spring Boot Setup
 
 1. **Prerequisites**  
    - BaSyx Submodel Repository  
@@ -69,6 +93,7 @@ For deeper details, continue to [Validation Logic](validation_logic.md).
    Query the repository for the **TestResults** Submodel related to your Submodel to review categorized findings.
 
 ---
+
 
 ## Configuration Notes
 

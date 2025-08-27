@@ -19,7 +19,9 @@ client.subscribe(TOPIC_DELETE);
 ```
 
 **On creation/update:**
-- Deserializes the submodel, checks the AASX version, and validates the presence of a SemanticId.
+- Deserializes the submodel
+- Checks the AASX version
+- Validates presence of `SemanticId`
 
 **On deletion:**
 - Cleans up related test results in the repository.
@@ -28,22 +30,34 @@ client.subscribe(TOPIC_DELETE);
 
 ## 2. Validation Logic
 
+###  Validation Sequence
+
+The validation process is illustrated in the sequence diagram below, showing the interactions between the Submodel Repository, Deserializer, Comparator, Recursion Function, SMEComparator, and MQTT/Web UI interface.
+
+```{figure} ./images/ValidationSequence.png
+---
+width: 100%
+alt: ValidationSequence
+name: ValidationSequence
+---
+```
+---
 **Deserialization:**  
-All submodels and schemas are parsed using the IDTA-compatible JSON format:
+Parses all input submodels and templates using IDTA-compatible JSON:
 
 ```java
 Environment inputEnv = Deserializer.deserializejsonFile(jsonString);
 ```
 
-**Comparison:**  
-Each input submodel is compared to all available schema submodels (from IDTA or custom sources) by matching their SemanticId:
+**Comparison Logic:**  
+Each input submodel is compared to schema submodels by matching `SemanticId`:
 
 ```java
 ComparisonResult result = Comparator.compare(schemaSubmodel, inputSubmodel);
 ```
 
 **Recursive Validation:**  
-The main routine for comparing submodel elements:
+Main logic for comparing submodel elements recursively:
 
 ```java
 RecursionFunc.compareSubmodelElements(
@@ -54,10 +68,11 @@ RecursionFunc.compareSubmodelElements(
 ```
 
 This function:
-- Validates multiplicity rules
-- Checks required/optional elements (using qualifiers)
-- Compares properties, types, values, and semantic IDs
-- Recurses into nested SubmodelElementCollections
+- Checks multiplicity (One, ZeroToOne, etc.)
+- Verifies qualifiers (required/optional)
+- Compares type, value, and semanticId
+- Recurses into nested `SubmodelElementCollection`s
+---
 
 **Multiplicity Checks Example:**
 
@@ -67,13 +82,17 @@ if ("One".equals(multiplicity)) {
 }
 ```
 
-All multiplicity rules (`One`, `ZeroToOne`, `OneToMany`, `ZeroToMany`) are supported according to IDTA specifications.
+All four multiplicity types are supported:
+- `One`
+- `ZeroToOne`
+- `OneToMany`
+- `ZeroToMany`
 
 ---
 
 ## 3. Test Results & Reporting
 
-All validation outcomes are written as `SubmodelElementCollections` in a dedicated `TestResults` submodel in the repository.
+All validation results are written as Submodels in the repository:
 
 ```java
 ResultSubmodelFactory.addResultToSubmodel(comparisonResult, inputSubmodel);
@@ -94,21 +113,23 @@ ResultSubmodelFactory.addResultToSubmodel(comparisonResult, inputSubmodel);
 
 ---
 
-## Handling Unsupported Versions and Missing Semantic IDs
+##  Handling Edge Cases:
 
-**Unsupported AASX version:**  
-Detected early, and a result is recorded using:
+### Unsupported AASX Versions
 
 ```java
 ResultSubmodelFactory.addUnsupportedVersionResult(rawJson);
 ```
 
-**Missing SemanticId:**  
-Triggers a warning and skips validation.
+### Missing SemanticId
 
----
-
-## Example: Submodel Comparison Core Logic
+```java
+if (submodel.getSemanticId() == null) {
+    ResultSubmodelFactory.addUnsuccessfulResultToSubmodel(submodel);
+    return;
+}
+```
+##  Full Comparison Function Example
 
 ```java
 public static ComparisonResult compare(Submodel schemaSubmodel, Submodel inputSubmodel) {
@@ -122,9 +143,10 @@ public static ComparisonResult compare(Submodel schemaSubmodel, Submodel inputSu
 }
 ```
 
+
 ---
 
-## Example: Handling a New Submodel Event
+##  Handling New Submodel Event
 
 ```java
 private void processSubmodel(String submodelJson) {
@@ -132,34 +154,20 @@ private void processSubmodel(String submodelJson) {
         ResultSubmodelFactory.addUnsupportedVersionResult(submodelJson);
         return;
     }
+
     Submodel submodel = deserializer.read(submodelJson, Submodel.class);
+
     if (submodel.getSemanticId() == null) {
         ResultSubmodelFactory.addUnsuccessfulResultToSubmodel(submodel);
         return;
     }
+
     SubmodelFactory.processReceivedSubmodel(submodel);
 }
 ```
+
 ---
 
-## Validation Sequence
-
-The validation process is also represented in the following sequence diagram, which highlights the interaction between the Submodel Repository, Deserializer, Comparator, Recursion Function, SMEComparator, and the MQTT/Web UI integration.
-
-```{figure} ./images/ValidationSequence.png
----
-width: 100%
-alt: ValidationSequence
-name: ValidationSequence
----
-```
-
-This sequence shows:
-- **Upload/Edit** of a Submodel via MQTT/Web UI  
-- **Deserialization** of input and schema JSON files  
-- **Recursive comparison** of elements, including SemanticId mapping  
-- **Multiplicity checks** (Zero/One/Many)  
-- **Result generation** stored in the Submodel Repository and displayed to the user
 
 
 [Next: Extending Validation](extending.md)

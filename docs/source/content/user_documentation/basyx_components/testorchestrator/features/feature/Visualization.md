@@ -1,8 +1,10 @@
-## Visualization
-All validation results are persisted in dedicated Submodels:
+## Results Visualization
+---
+## Viewing Results
 
-- **Tested Submodels** – for successful validations
-- **Invalid Submodels** – for failed or incomplete validations. These are the submodels that do not have any Semantic ID.
+- Through the **BaSyx Submodel Repository API**
+- Via the **BaSyx Web UI**, where categorized results are displayed
+- As downloadable JSON files for further processing
 
 ```{figure} ./images/filteredResults.PNG
 ---
@@ -11,6 +13,13 @@ alt: filteredResults
 name: filteredResults
 ---
 ```
+
+---
+All Validation results are persisted in dedicated Submodels:
+
+- **TestResults** - for successful validations
+- **UnsuccessfulTestResults** - for failed or incomplete validations
+---
 
 ## Result Structure
 
