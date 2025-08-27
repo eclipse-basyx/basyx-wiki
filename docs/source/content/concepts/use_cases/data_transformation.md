@@ -14,14 +14,14 @@ The example can be found on in the <a href="https://github.com/eclipse-basyx/bas
 
 The following diagram illustrates the data flow from an MQTT client through Node-RED for transformation, before being stored in the AAS Environment:
 
-```{uml} charts/data_transformation.uml
+```{uml} charts/data_transformation.puml
 ```
 
 ### Detailed Transformation Process
 
 The sequence diagram below shows the step-by-step process of how Node-RED receives, transforms, and forwards data:
 
-```{uml} charts/nodered_sequence.uml
+```{uml} charts/nodered_sequence.puml
 ```
 
 ## Key Benefits of Node-RED for Data Transformation
