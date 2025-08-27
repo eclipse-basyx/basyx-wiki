@@ -33,3 +33,36 @@ table tr:last-child td {
 table thead th {
     background-color: var(--pst-color-surface) !important;
 }
+
+/* Mermaid diagram dark mode improvements */
+.mermaid {
+    background-color: var(--pst-color-surface, #ffffff) !important;
+    border: 1px solid var(--pst-color-border, #cccccc);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 1rem 0;
+}
+
+/* Dark mode specific adjustments */
+[data-theme="dark"] .mermaid,
+html[data-theme="dark"] .mermaid {
+    background-color: #2d3748 !important;
+    border-color: #4a5568 !important;
+}
+
+/* Ensure mermaid text is visible in dark mode */
+[data-theme="dark"] .mermaid .node rect,
+[data-theme="dark"] .mermaid .node circle,
+[data-theme="dark"] .mermaid .node ellipse,
+[data-theme="dark"] .mermaid .node polygon {
+    stroke: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .mermaid .node .label,
+[data-theme="dark"] .mermaid .edgeLabel {
+    color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .mermaid .edgePath .path {
+    stroke: #e2e8f0 !important;
+}
