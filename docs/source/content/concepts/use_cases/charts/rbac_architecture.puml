@@ -1,0 +1,42 @@
+@startuml
+!define RECTANGLE class
+
+rectangle "User/Client Application" as client
+rectangle "Keycloak Identity Provider" as keycloak
+rectangle "AAS Repository" as aasrepo
+rectangle "Submodel Repository" as smrepo
+rectangle "AAS Registry" as aasreg
+rectangle "Submodel Registry" as smreg
+
+client -down-> keycloak : Authentication
+keycloak -down-> client : JWT Token
+
+client -down-> aasrepo : Request + JWT
+client -down-> smrepo : Request + JWT
+client -down-> aasreg : Request + JWT
+client -down-> smreg : Request + JWT
+
+note right of keycloak
+  Authentication:
+  • User/Service authentication
+  • Role assignment
+  • JWT token issuance
+  • Token validation
+end note
+
+note right of aasrepo
+  RBAC Enforcement:
+  • Token validation
+  • Role extraction
+  • Permission checking
+  • Access control
+end note
+
+note bottom of aasrepo
+  Protected Resources:
+  • Asset Administration Shells
+  • Submodels
+  • Properties
+  • Operations
+end note
+@enduml
