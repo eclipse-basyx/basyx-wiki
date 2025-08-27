@@ -51,19 +51,18 @@ myst_enable_extensions = [
 ]
 
 # Configure MyST to recognize diagram directives
-myst_fence_as_directive = ["mermaid", "plantuml"]
+myst_fence_as_directive = ["mermaid", "uml"]
 
 # PlantUML configuration
-# Try to use PlantUML server first (for hosted environments like Read the Docs)
+# Use PlantUML server (works without local Java/PlantUML installation)
 plantuml = 'http://www.plantuml.com/plantuml'
 plantuml_output_format = 'svg'
 
-# Alternative: Use local PlantUML if available
-# plantuml = 'java -jar plantuml.jar'
-
 # Additional PlantUML options
 plantuml_latex_output_format = 'pdf'
-plantuml_epstopdf = 'epstopdf'
+
+# PlantUML directive aliases
+plantuml_syntax_error_image = True
 
 # Configure Mermaid for better dark mode support
 mermaid_config = {
