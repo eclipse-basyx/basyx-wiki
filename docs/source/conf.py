@@ -44,6 +44,8 @@ myst_enable_extensions = [
     "linkify",
     "deflist",
     "attrs",
+    "dollarmath",
+    "amsmath",
 ]
 
 intersphinx_mapping = {
