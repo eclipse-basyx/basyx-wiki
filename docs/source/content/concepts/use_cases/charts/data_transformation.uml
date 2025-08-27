@@ -1,0 +1,11 @@
+@startuml
+rectangle "MQTT Client/Sensor" as client
+rectangle "Mosquitto Broker" as broker  
+rectangle "Node-RED" as nodered
+rectangle "AAS Environment" as aas
+
+client --> broker : Publishes Raw Data
+broker --> nodered : MQTT Topic
+note over nodered : Data Transformation\n• Format conversion\n• Data validation\n• Calculations\n• Filtering
+nodered --> aas : REST API
+@enduml

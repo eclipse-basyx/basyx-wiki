@@ -9,7 +9,7 @@ For each presented use case we provide a brief description, the involved compone
 ## Use Cases
 
 * [Live Data Integration with the Databridge](./data_integration.md)
-* [Data Synchronization using Node-RED](./data_synchronization.md)
+* [Data Transformation using Node-RED](./data_transformation.md)
 * [Role Based Access Control](./rbac.md)
 * [Event-Driven Communication with MQTT and Kafka](./event_communication.md)
 * [AAS Operations and Operation Delegation](./aas_operations.md)

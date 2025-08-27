@@ -1,0 +1,24 @@
+@startuml
+participant "MQTT Client" as Client
+participant "Mosquitto Broker" as Broker
+participant "Node-RED" as NodeRED
+participant "Function Node" as Function
+participant "AAS Environment" as AAS
+
+Client -> Broker : Publish raw sensor data
+note over Broker : Topic: /sensors/raw_temperature\nPayload: {"temp": "23.5°C", "unit": "celsius"}
+
+NodeRED -> Broker : Subscribe to MQTT topic
+Broker -> NodeRED : Forward raw message
+
+NodeRED -> Function : Process raw data
+note over Function : Transform data:\n• Parse temperature value\n• Convert to numeric\n• Apply calibration\n• Add metadata
+
+Function -> NodeRED : Return transformed data
+note over NodeRED : Transformed payload:\n{"value": 23.5, "unit": "°C", "timestamp": "2025-08-27T10:00:00Z"}
+
+NodeRED -> AAS : HTTP PUT request with transformed data
+note over AAS : Update AAS property\nwith processed value
+
+AAS -> NodeRED : Confirmation response
+@enduml
