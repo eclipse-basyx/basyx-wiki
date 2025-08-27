@@ -1,0 +1,14 @@
+@startuml
+rectangle "MQTT Client/Sensor" as client
+rectangle "Mosquitto Broker" as broker  
+rectangle "BaSyx Databridge" as bridge
+rectangle "AAS Environment" as aas
+rectangle "AAS Submodel" as submodel
+rectangle "Property Value Updated" as property
+
+client --> broker : Publishes Data
+broker --> bridge : MQTT Topic
+bridge --> aas : REST API
+aas --> submodel
+submodel --> property
+@enduml
