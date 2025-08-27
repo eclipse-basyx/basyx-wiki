@@ -1,0 +1,47 @@
+@startuml
+rectangle "Client Applications" as clients
+rectangle "Event Consumers" as consumers
+
+rectangle "AAS Repository" as aasrepo
+rectangle "AAS Registry" as aasreg
+
+package "Event Infrastructure" {
+    rectangle "MQTT Broker" as mqtt
+    rectangle "Kafka Cluster" as kafka
+}
+
+clients -down-> aasrepo : CRUD Operations
+clients -down-> aasreg : Registry Operations
+
+aasrepo -down-> mqtt : MQTT Events
+aasrepo -down-> kafka : Kafka Events
+aasreg -down-> kafka : Kafka Events
+
+mqtt -down-> consumers : Event Subscriptions
+kafka -down-> consumers : Event Subscriptions
+
+note right of aasrepo
+  AAS Repository supports:
+  • MQTT Events
+  • Kafka Events
+end note
+
+note right of aasreg
+  AAS Registry supports:
+  • Kafka Events only
+end note
+
+note bottom of consumers
+  Event Types:
+  • AAS Created/Updated/Deleted
+  • Submodel Reference Changes
+  • Registry Descriptor Changes
+end note
+
+note top of clients
+  Similar event patterns apply to:
+  • Submodel Repository
+  • ConceptDescription Repository
+  • Submodel Registry
+end note
+@enduml
