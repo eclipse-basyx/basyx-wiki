@@ -14,7 +14,7 @@ if os.environ.get("READTHEDOCS", "") == "True":
 # -- Project information
 
 project = 'BaSyx Wiki'
-copyright = '2024, Eclipse BaSyx™'
+copyright = '2025, Eclipse BaSyx™'
 author = 'Eclipse BaSyx™'
 
 release = '2.0'
@@ -30,7 +30,79 @@ extensions = [
     'sphinx.ext.intersphinx',
     'myst_parser',
     'sphinx_copybutton',
+    'sphinxcontrib.plantuml',
+    'sphinxcontrib.mermaid',
 ]
+
+# Make Sphinx parse .md files
+source_suffix = {
+    ".rst": "restructuredtext",
+    ".md": "markdown",
+}
+
+# Enable fenced directives like ```{include} ... ```
+myst_enable_extensions = [
+    "colon_fence",
+    "attrs_block",
+    "linkify",
+    "deflist",
+    "attrs",
+    "dollarmath",
+    "amsmath",
+]
+
+# Configure MyST to recognize diagram directives
+myst_fence_as_directive = ["mermaid", "uml"]
+
+# PlantUML configuration
+# Use PlantUML server for local development, local plantuml for Read the Docs
+if os.environ.get("READTHEDOCS", "") == "True":
+    plantuml = 'plantuml'  # Use system-installed plantuml on RTD
+else:
+    plantuml = 'http://www.plantuml.com/plantuml'  # Use server for local dev
+
+plantuml_output_format = 'svg'
+
+# Additional PlantUML options
+plantuml_latex_output_format = 'pdf'
+
+# PlantUML directive aliases
+plantuml_syntax_error_image = True
+
+# Configure Mermaid for better dark mode support
+mermaid_config = {
+    "theme": "base",
+    "themeVariables": {
+        "primaryColor": "#ffffff",
+        "primaryTextColor": "#000000",
+        "primaryBorderColor": "#444444",
+        "lineColor": "#666666",
+        "secondaryColor": "#f0f0f0",
+        "tertiaryColor": "#e8e8e8",
+        "background": "#ffffff",
+        "mainBkg": "#ffffff",
+        "secondBkg": "#f5f5f5",
+        "tertiaryBkg": "#eeeeee",
+        "nodeBkg": "#ffffff",
+        "nodeBorder": "#cccccc",
+        "clusterBkg": "#f9f9f9",
+        "clusterBorder": "#dddddd",
+        "edgeLabelBackground": "#ffffff",
+        "actorBorder": "#cccccc",
+        "actorBkg": "#ffffff",
+        "actorTextColor": "#000000",
+        "actorLineColor": "#666666",
+        "signalColor": "#333333",
+        "signalTextColor": "#333333",
+        "labelBoxBkgColor": "#ffffff",
+        "labelBoxBorderColor": "#cccccc",
+        "labelTextColor": "#000000",
+        "loopTextColor": "#000000",
+        "noteBorderColor": "#cccccc",
+        "noteBkgColor": "#ffffcc",
+        "noteTextColor": "#000000"
+    }
+}
 
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3/', None),

@@ -1,0 +1,56 @@
+@startuml
+participant "Client Application" as client
+participant "AAS Environment" as aasenv
+participant "Submodel Service" as smservice
+participant "External Operation Service" as opservice
+
+client -> aasenv : POST /invoke
+activate aasenv
+
+aasenv -> smservice : Invoke Operation
+activate smservice
+
+smservice -> smservice : Parse Operation Definition
+smservice -> smservice : Extract Delegation Qualifier
+
+smservice -> opservice : POST /calculate-efficiency
+activate opservice
+
+opservice -> opservice : Execute Business Logic
+opservice -> opservice : Process Input Parameters
+opservice -> opservice : Calculate Results
+
+opservice -> smservice : Return Operation Results
+deactivate opservice
+
+smservice -> aasenv : Return Response
+deactivate smservice
+
+aasenv -> client : HTTP 200 OK\n(Operation Results)
+deactivate aasenv
+
+note over smservice
+  Delegation Process:
+  1. Parse operation qualifiers
+  2. Extract endpoint URL
+  3. Transform parameters
+  4. Forward HTTP request
+  5. Handle response
+end note
+
+note over opservice
+  External Service Logic:
+  • Receives standard HTTP request
+  • Processes operation parameters
+  • Executes domain-specific logic
+  • Returns standardized response
+end note
+
+note over client
+  Operation Invocation:
+  • Standard AAS API call
+  • Transparent delegation
+  • Consistent response format
+  • Error handling
+end note
+@enduml

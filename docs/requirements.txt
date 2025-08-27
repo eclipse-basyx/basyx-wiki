@@ -5,3 +5,5 @@ myst_parser
 sphinx-markdown-tables
 sphinx-book-theme
 sphinx-copybutton
+sphinxcontrib-plantuml
+sphinxcontrib-mermaid
