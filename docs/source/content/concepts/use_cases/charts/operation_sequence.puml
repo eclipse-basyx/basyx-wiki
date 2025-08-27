@@ -4,7 +4,7 @@ participant "AAS Environment" as aasenv
 participant "Submodel Service" as smservice
 participant "External Operation Service" as opservice
 
-client -> aasenv : POST /submodels/{id}/submodel-elements/CalculateEfficiency/invoke
+client -> aasenv : POST /invoke
 activate aasenv
 
 aasenv -> smservice : Invoke Operation
@@ -13,7 +13,7 @@ activate smservice
 smservice -> smservice : Parse Operation Definition
 smservice -> smservice : Extract Delegation Qualifier
 
-smservice -> opservice : POST /operations/calculate-efficiency
+smservice -> opservice : POST /calculate-efficiency
 activate opservice
 
 opservice -> opservice : Execute Business Logic
@@ -23,7 +23,7 @@ opservice -> opservice : Calculate Results
 opservice -> smservice : Return Operation Results
 deactivate opservice
 
-smservice -> aasenv : Return Structured Response
+smservice -> aasenv : Return Response
 deactivate smservice
 
 aasenv -> client : HTTP 200 OK\n(Operation Results)
