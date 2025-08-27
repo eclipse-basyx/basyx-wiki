@@ -55,8 +55,12 @@ myst_enable_extensions = [
 myst_fence_as_directive = ["mermaid", "uml"]
 
 # PlantUML configuration
-# Use PlantUML server (works without local Java/PlantUML installation)
-plantuml = 'http://www.plantuml.com/plantuml'
+# Use PlantUML server for local development, local plantuml for Read the Docs
+if os.environ.get("READTHEDOCS", "") == "True":
+    plantuml = 'plantuml'  # Use system-installed plantuml on RTD
+else:
+    plantuml = 'http://www.plantuml.com/plantuml'  # Use server for local dev
+
 plantuml_output_format = 'svg'
 
 # Additional PlantUML options

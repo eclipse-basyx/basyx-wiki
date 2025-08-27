@@ -4,13 +4,12 @@ build:
   os: "ubuntu-22.04"
   tools:
     python: "3.11"
+  apt_packages:
+    - plantuml
 
 # Build from the docs/ directory with Sphinx
 sphinx:
   configuration: docs/source/conf.py
-
-apt_packages:
-  - plantuml
 
 # Explicitly set the version of Python and its requirements
 python:
