@@ -1,0 +1,31 @@
+@startuml
+participant "Client Application" as client
+participant "Keycloak" as keycloak
+participant "AAS Repository" as aasrepo
+database "RBAC Rules" as rules
+
+client -> keycloak : 1. Authentication Request
+keycloak -> client : 2. JWT Token
+
+client -> aasrepo : 3. API Request + JWT Token
+aasrepo -> keycloak : 4. Validate Token
+keycloak -> aasrepo : 5. Token Valid + User Roles
+
+aasrepo -> rules : 6. Check Permissions\n(Role + Action + Resource)
+rules -> aasrepo : 7. Permission Result
+
+alt Permission Granted
+    aasrepo -> aasrepo : 8. Process Request
+    aasrepo -> client : 9. Success Response
+else Permission Denied
+    aasrepo -> client : 10. 403 Forbidden
+end
+
+note over aasrepo
+  RBAC Decision Point:
+  • Extract roles from JWT
+  • Match resource & action
+  • Apply access rules
+  • Enforce decision
+end note
+@enduml

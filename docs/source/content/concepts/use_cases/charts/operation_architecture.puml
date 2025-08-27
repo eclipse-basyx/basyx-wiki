@@ -1,0 +1,33 @@
+@startuml
+rectangle "Client Application" as client
+
+package "BaSyx" {
+    rectangle "AAS Environment" as aasenv
+    rectangle "Submodel Service" as smservice
+}
+
+rectangle "External Operation Service" as opservice
+
+client -down-> aasenv : Call Operation
+aasenv -down-> smservice : Invoke Operation
+
+smservice -right-> opservice : HTTP Request\n(Delegated Execution)
+smservice -up-> aasenv : Return Result
+aasenv -up-> client : Operation Response
+
+note bottom of opservice
+  External Service:
+  • Implements actual logic
+  • Processes operation parameters
+  • Executes business logic
+  • Returns structured results
+end note
+
+note right of aasenv
+  AAS Operation Definition:
+  • Input/Output variables
+  • Delegation qualifiers
+  • Endpoint configuration
+  • Security settings
+end note
+@enduml

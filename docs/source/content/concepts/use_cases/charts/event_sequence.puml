@@ -1,0 +1,49 @@
+@startuml
+participant "Client Application" as client
+participant "AAS Repository" as aasrepo
+participant "MQTT Broker" as mqtt
+participant "Kafka Cluster" as kafka
+participant "Event Consumer" as consumer
+
+client -> aasrepo : Create/Update AAS
+activate aasrepo
+
+aasrepo -> aasrepo : Process Operation
+aasrepo -> aasrepo : Generate Event
+
+par MQTT Publishing
+    aasrepo -> mqtt : Publish MQTT Event\n(Topic: aas-repository/aas-repo/shells/created)
+    mqtt -> consumer : Event Notification
+else Kafka Publishing
+    aasrepo -> kafka : Publish Kafka Event\n(Topic: basyx-aas-events)
+    kafka -> consumer : Event Notification
+end
+
+aasrepo -> client : Operation Success Response
+deactivate aasrepo
+
+note over consumer
+  Event Processing:
+  • Parse event payload
+  • Extract AAS data
+  • Trigger business logic
+  • Update external systems
+end note
+
+note over mqtt
+  MQTT Topics Examples:
+  • aas-repository/aas-repo/shells/created
+  • aas-repository/aas-repo/shells/updated
+  • aas-repository/aas-repo/shells/deleted
+  • sm-repository/sm-repo/submodels/updated
+  • sm-repository/sm-repo/submodels/created
+end note
+
+note over kafka
+  Kafka Topics:
+  • basyx-aas-events
+  • basyx-submodel-events
+  • basyx-registry-events
+  • basyx-conceptdescription-events
+end note
+@enduml

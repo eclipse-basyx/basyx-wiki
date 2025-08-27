@@ -1,0 +1,16 @@
+@startuml
+participant "MQTT Client" as Client
+participant "Mosquitto Broker" as Broker
+participant "BaSyx Databridge" as Bridge
+participant "AAS Environment" as AAS
+
+Client -> Broker : Publish sensor data to topic
+note over Broker : Topic: /sensors/temperature
+
+Bridge -> Broker : Subscribe to MQTT topic
+Broker -> Bridge : Forward message with sensor data
+
+note over Bridge : Transform MQTT payload\nto AAS property format
+
+Bridge -> AAS : HTTP PUT request
+@enduml

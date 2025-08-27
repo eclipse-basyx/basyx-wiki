@@ -120,5 +120,5 @@ content/developer_documentation/basyx_python_sdk/index
 :caption: Concepts
 
 content/concepts/introduction
-
+content/concepts/use_cases/index
 ```
