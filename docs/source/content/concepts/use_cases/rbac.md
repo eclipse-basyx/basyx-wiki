@@ -161,5 +161,3 @@ For more information about access control and security in BaSyx:
 - [AAS Repository Authorization](../../user_documentation/basyx_components/v2/aas_repository/features/authorization.md)
 - [Submodel Service Authorization](../../user_documentation/basyx_components/v2/submodel_service/features/authorization.md)
 - [AAS Environment Authorization](../../user_documentation/basyx_components/v2/aas_environment/features/authorization.md)
-- [Security Best Practices](../../user_documentation/concepts%20and%20architecture/security.md)
-
