@@ -81,7 +81,6 @@ name: ClassDiagram
 ##  Further Reading
 
 For deeper architectural insights, continue reading the published paper:  
-**[Semantic Validation for AAS Submodels using Semantic Dictionary and Generative AI](#)**  
-*(IN4PL 2025 – Springer CCIS Series Book, Paper #44)*
+[**An Automated Approach to Compliance Testing of Standardized Submodel Templates**](https://ieeexplore.ieee.org/document/11087912)
 
 ---
