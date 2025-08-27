@@ -8,7 +8,17 @@ This section covers data integration capabilities provided by BaSyx, particularl
 
 The following diagram illustrates the data flow from an MQTT client through the Mosquitto broker, BaSyx Databridge, to the AAS Environment:
 
-```{plantuml} charts/data_flow_architecture.puml
+```{plantuml}
+@startuml
+rectangle "MQTT Client" as client
+rectangle "Mosquitto Broker" as broker
+rectangle "BaSyx Databridge" as bridge
+rectangle "AAS Environment" as aas
+
+client --> broker : Publishes Data
+broker --> bridge : MQTT Topic
+bridge --> aas : REST API
+@enduml
 ```
 
 ### Detailed Component Interaction
