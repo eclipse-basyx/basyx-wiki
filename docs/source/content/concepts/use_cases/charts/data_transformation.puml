@@ -6,6 +6,12 @@ rectangle "AAS Environment" as aas
 
 client --> broker : Publishes Raw Data
 broker --> nodered : MQTT Topic
-note over nodered : Data Transformation\nFormat conversion\nData validation\nCalculations\nFiltering
+note over nodered
+Data Transformation:
+- Format conversion
+- Data validation  
+- Calculations
+- Filtering
+end note
 nodered --> aas : REST API
 @enduml

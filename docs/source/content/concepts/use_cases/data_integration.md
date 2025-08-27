@@ -20,7 +20,9 @@ The following diagram illustrates the data flow from an MQTT client through the 
 ```{uml} charts/component_interaction.puml
 ```
 
-```{include} ../../../_external/basyx-java-server-sdk/examples/BaSyxDatabridge/README.md
+```{include} /_external/basyx-java-server-sdk/examples/BaSyxDatabridge/README.md
+:relative-docs: /_external/basyx-java-server-sdk/examples/BaSyxDatabridge
+:relative-images:
 ```
 
 ## Additional Resources
