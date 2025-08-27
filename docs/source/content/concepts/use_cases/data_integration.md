@@ -1,6 +1,12 @@
 # Live Data Integration
 
-This section covers data integration capabilities provided by BaSyx, particularly focusing on the BaSyx Databridge component.
+An essential functionality when deploying Digital Twins is the possibility to exchange live data between an asset and the Digital Twin. This is also true for the Asset Administration shell as standardized Digital Twins. In the case of the BaSyx ecosystem, the BaSyx Databridge plays a crucial role in facilitating this data exchange.
+
+This section covers data integration capabilities provided by BaSyx, particularly focusing on the BaSyx Databridge component. The following example will illustrate how to use the Databridge to retrieve data from a MQTT datasource (broker) and transfer it into Properties inside of an AAS Submodel.
+
+```{note}
+The example can be found on in the [Examples on GitHub](https://github.com/eclipse-basyx/basyx-java-server-sdk/tree/main/examples/BaSyxDatabridge). Feel free to try it out yourself!
+```
 
 
 ```{include} ../../../_external/basyx-java-server-sdk/examples/BaSyxDatabridge/README.md
