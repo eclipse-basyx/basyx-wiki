@@ -8,37 +8,12 @@ This section covers data integration capabilities provided by BaSyx, particularl
 
 The following diagram illustrates the data flow from an MQTT client through the Mosquitto broker, BaSyx Databridge, to the AAS Environment:
 
-```{mermaid}
-graph LR
-    A[MQTT Client/Sensor] -->|Publishes Data| B[Mosquitto Broker]
-    B -->|MQTT Topic| C[BaSyx Databridge]
-    C -->|REST API| D[AAS Environment]
+```{plantuml} charts/data_flow_architecture.puml
 ```
 
 ### Detailed Component Interaction
 
-```{mermaid}
-sequenceDiagram
-    participant Client as MQTT Client
-    participant Broker as Mosquitto Broker
-    participant Bridge as BaSyx Databridge
-    participant AAS as AAS Environment
-    participant SM as Submodel
-    participant Prop as Property
-    
-    Client->>Broker: Publish sensor data to topic
-    Note over Broker: Topic: /sensors/temperature
-    
-    Bridge->>Broker: Subscribe to MQTT topic
-    Broker->>Bridge: Forward message with sensor data
-    
-    Note over Bridge: Transform MQTT payload<br/>to AAS property format
-    
-    Bridge->>AAS: HTTP PUT request
-    AAS->>SM: Update submodel
-    SM->>Prop: Set property value
-    
-    Note over Prop: Property value updated<br/>with live sensor data
+```{plantuml} charts/component_interaction.puml
 ```
 
 ```{note}

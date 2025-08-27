@@ -1,0 +1,32 @@
+@startuml data_flow_architecture
+!theme plain
+skinparam backgroundColor white
+skinparam defaultFontSize 12
+skinparam defaultFontName Arial
+
+skinparam rectangle {
+    BackgroundColor #E3F2FD
+    BorderColor #1976D2
+    FontColor #000000
+}
+
+skinparam arrow {
+    Color #1976D2
+    FontColor #000000
+    FontSize 11
+}
+
+rectangle "MQTT Client/Sensor" as client #E8F5E8
+rectangle "Mosquitto Broker" as broker #F3E5F5
+rectangle "BaSyx Databridge" as bridge #E1F5FE
+rectangle "AAS Environment" as aas #FFF3E0
+rectangle "AAS Submodel" as submodel #FCE4EC
+rectangle "Property Value Updated" as property #F1F8E9
+
+client -right-> broker : Publishes Data
+broker -right-> bridge : MQTT Topic
+bridge -right-> aas : REST API
+aas -down-> submodel
+submodel -down-> property
+
+@enduml
