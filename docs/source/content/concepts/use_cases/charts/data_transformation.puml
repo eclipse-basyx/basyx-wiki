@@ -4,8 +4,8 @@ rectangle "Mosquitto Broker" as broker
 rectangle "Node-RED" as nodered
 rectangle "AAS Environment" as aas
 
-client -right-> broker : Publishes raw data
-broker -right-> nodered : MQTT topic
+client -down-> broker : Publishes raw data
+broker -down-> nodered : MQTT topic
 
 note right of nodered
   Data Transformation:
@@ -15,5 +15,5 @@ note right of nodered
   • Filtering
 end note
 
-nodered -right-> aas : REST API
+nodered -down-> aas : REST API
 @enduml
