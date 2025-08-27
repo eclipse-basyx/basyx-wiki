@@ -24,7 +24,7 @@ note right of keycloak
   • Token validation
 end note
 
-note right of aasrepo
+note top of aasrepo
   RBAC Enforcement:
   • Token validation
   • Role extraction
