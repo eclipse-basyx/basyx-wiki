@@ -59,4 +59,3 @@ name: architecture
 - [Eclipse BaSyx Documentation](https://wiki.basyx.org/en/latest/)
 - [AASX Package Explorer](https://github.com/admin-shell-io/aasx-package-explorer)
 
-[Next: Getting Started](getting_started.md)

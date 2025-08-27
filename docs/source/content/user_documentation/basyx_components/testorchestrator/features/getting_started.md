@@ -1,5 +1,3 @@
-[Back to Overview](index.md) | [Next: System Components](system_components.md)
-
 # Getting Started
 
 ## Overview
@@ -117,5 +115,3 @@ http://localhost:9080
 
 
 ---
-
-[Back to Overview](index.md) | [Next: System Components](../system_components.md)

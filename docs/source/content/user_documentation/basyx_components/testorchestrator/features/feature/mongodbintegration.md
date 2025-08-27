@@ -1,4 +1,4 @@
-## MongoDB Integration
+# MongoDB Integration
 
 Test Orchestrator can use both InMemory and MongoDB.
 

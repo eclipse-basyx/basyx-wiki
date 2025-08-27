@@ -1,4 +1,4 @@
-## Semantic Validation with ECLASS
+# Semantic Validation with ECLASS
 
 The semantics of the submodel can be validated using ECLASS definition. To achieve this, the key is needed using which the ECLASS Webservice can be accessed. This is an optional feature. Thus, if the key is absent, the semantic validation will not be conducted. 
 

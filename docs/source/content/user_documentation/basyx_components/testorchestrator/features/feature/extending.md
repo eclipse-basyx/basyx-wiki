@@ -1,12 +1,9 @@
-[Back: Results Visualization](../results_visualization.md) | [Back to Overview](../index.md)
-
 # Extending Validation
 
 ## Adding New Schemas
 
 To validate against additional standards or templates, place your JSON schema files in the `/schema/` directory of the Test Orchestrator project.  
-If you want to use external schemas, update the schema links in the `getPredefinedLinks()` method in the code.  
-Any schema with a matching `SemanticId` will be automatically considered during validation.
+If you want to use external schemas, update the schema links in the `getPredefinedLinks()` method in the code.  Any schema with a matching `SemanticId` will be automatically considered during validation.
 
 ---
 
@@ -33,5 +30,3 @@ Add your MQTT topics there to enable automated validation for your specific work
 5. View the test results in the `TestResults` submodel via the repository API.
 
 ---
-
-[Back: Results Visualization](../results_visualization.md) | [Next: MongoDB Integration](mongodbintegration.md)

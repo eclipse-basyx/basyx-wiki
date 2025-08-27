@@ -1,4 +1,4 @@
-## Semantic Validation with Generative AI
+# Semantic Validation with Generative AI
 
 The user can also use **Generative AI** to validate the **semantics of Property Submodel Elements**. This feature checks whether the units used for `Property` elements are semantically appropriate. If not, the AI suggests alternative units.
 
@@ -40,7 +40,7 @@ alt: UnitSuggestion
 name: UnitSuggestion
 ---
 ```
-> **Note:** This is an optional feature, and not having a key does not impact the normal validation process of the submodels.  
+> **Note:** This is an optional feature, and not having an API key, model name, and endpoint does not impact the normal validation process of the submodels.  
 >  
 > However, this feature additionally enables semantic validation of Submodel Elements. In some cases, the program might fail to extract Concept Descriptions for certain Submodel Elements due to delays in their registration.  
 >  

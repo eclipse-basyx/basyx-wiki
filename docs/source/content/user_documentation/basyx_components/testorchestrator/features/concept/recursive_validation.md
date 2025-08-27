@@ -1,6 +1,3 @@
----
-[Back: Validation Logic](validation_logic.md) | [Next: Results Visualization](results_visualization.md)
----
 
 # Recursive Validation
 
@@ -31,4 +28,3 @@ name: ValidationWorkflow
 
 ---
 
-[Back: Validation Logic](validation_logic.md) | [Next: Results Visualization](results_visualization.md)

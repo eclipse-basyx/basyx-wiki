@@ -1,5 +1,5 @@
-## Results Visualization
----
+# Results Visualization
+
 ## Viewing Results
 
 - Through the **BaSyx Submodel Repository API**
@@ -44,7 +44,7 @@ The results are divided into 4 different categories:
 - **Warnings**: This part includes the optional elements that are expected in the standardized submodels but are not added by the user. 
   - The optional elements are those elements that have Multiplicity `Zero to One` or `Zero to Many`. 
   - The use of spaces in Semantic IDs and ID Shorts is considered a poor practice, as it can lead to inconsistencies and interpretation issues. Therefore, if any spaces are detected in these fields, then that is added as a warning.
-- **Differences**: The Id Short Mismatch for the same Semantic ID is recorded in this part of the result.
+- **Differences**: The Id Short Mismatch for the same Semantic ID is recorded in this part of the result. Moreover, the value type mismatch is also displayed in this part. 
 - **Infos**: This part contains all the results of the Property type Submodel Elements. 
   - When a Submodel Element has a value type mismatch or the added value does not conform to the value type, the results are added in this part. 
   - The unit mismatch of the elements is also recorded here. 
@@ -56,9 +56,6 @@ The Test Orchestrator uses the [Basyx AAS Web UI Module](https://github.com/ecli
 - View all test results and statistics.
 - See the suggestions for improving the submodel. 
 
-The validation results can be downloaded:
-- For individual submodels.
-- For all tested submodels as a single JSON file.
 
 ```{figure} ./images/Test_Orchestrator_Module.jpeg
 ---
@@ -67,8 +64,11 @@ alt: Test Orchestrator Module
 name: Test_Orchestrator_Module
 ---
 ```
+The validation results can be downloaded:
+- For individual submodels.
+- For all tested submodels as a single JSON file.
 
-The results can also be filtered so that only specific submodels can be viewed. 
+The user interface allows users to filter results by specific submodels, helping focus only on relevant data. Additionally, hovering over individual validation issues provides contextual suggestions to help resolve the problem, thereby guiding users toward improving their submodels.
 
 ```{figure} ./images/WebUI_suggestion.png
 ---

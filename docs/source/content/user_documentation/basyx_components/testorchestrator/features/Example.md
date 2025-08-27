@@ -1,6 +1,7 @@
 
 # Testing Options
-You can directly start using test orchestrator and validate your submodel(s). For doing that, navigate to [Test Orchestrator Example](https://github.com/eclipse-basyx/basyx-applications/tree/main/test-orchestrator/example).
+You can directly start using test orchestrator and validate your submodel(s). For doing that, navigate to [Test Orchestrator Example](https://github.com/eclipse-basyx/basyx-applications/tree/main/test-orchestrator/example). There are three different ways of testing the submodels. 
+
 ### 1. Test by Uploading Files
 
 #### Standard Submodel Validation
@@ -16,7 +17,7 @@ name: Test_Orchestrator_Upload
 ```
 
 #### Custom Submodel Validation
-For validating custom created submodels that are different than the standardized submodels from [IDTA](https://smt-repo.admin-shell-io.com/), the user needs to keep the json file of the submodel in the folder `external-schemas`. When a file is uploaded, the reference submodel against which the uploaded submodel will be tested are serached from the IDTA submodel. If the Semantic ID of the uploaded submodel does not match any standardized submodels from IDTA then this `external-schemas` folder is searched to find the reference custom submodel. 
+For validating custom created submodels that are different than the standardized submodels from [IDTA](https://smt-repo.admin-shell-io.com/), the user needs to keep the json file of the submodel in the folder `external-schemas`. When a file is uploaded, the reference submodel against which the uploaded submodel will be tested are searched from the IDTA submodel. If the Semantic ID of the uploaded submodel does not match any standardized submodels from IDTA then this `external-schemas` folder is searched to find the reference custom submodel. 
 
 ```{figure} ./images/external-schema.PNG
 ---

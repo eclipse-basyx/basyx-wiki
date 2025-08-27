@@ -1,6 +1,3 @@
-[Back to Getting Started](getting_started.md) | [Next: Extending Validation](extending.md)
-
----
 
 # Validation Logic
 
@@ -168,6 +165,3 @@ private void processSubmodel(String submodelJson) {
 
 ---
 
-
-
-[Next: Extending Validation](extending.md)
