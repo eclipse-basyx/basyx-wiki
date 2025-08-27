@@ -35,6 +35,8 @@ Each result contains:
   "Infos": "..."
 }
 ```
+
+## Result Categories
 The results are divided into 4 different categories:
 
 - **Errors**: This category contains all the errors that must be corrected for ensuring conformity of the submodels. This category contains the following:
@@ -50,6 +52,8 @@ The results are divided into 4 different categories:
   - The unit mismatch of the elements is also recorded here. 
   - After querying ECLASS for a specific IRDI of a property, the ID short and preferred name mismatches are also logged in this part. 
   - The semantic validation of units by AI and the suggested units are also reported in this part.    
+
+## Test Orchestrator Module
 
 The Test Orchestrator uses the [Basyx AAS Web UI Module](https://github.com/eclipse-basyx/basyx-aas-web-ui/tree/main/aas-web-ui/src/pages/modules) for displaying the validation results in user-friendly manner. Navigate to the `Test Orchestrator` module to:
 
