@@ -113,6 +113,8 @@ content/developer_documentation/basyx_python_sdk/index
 ### Concepts
 
 * [Introduction](./content/concepts/introduction.md)
+* [Conformity and Consistency](./content/concepts/conformity_and_consistency/index.md)
+* [Use Cases](./content/concepts/use_cases/index.md)
 
 ```{toctree}
 :hidden:
@@ -120,5 +122,6 @@ content/developer_documentation/basyx_python_sdk/index
 :caption: Concepts
 
 content/concepts/introduction
+content/concepts/conformity_and_consistency/index
 content/concepts/use_cases/index
 ```
