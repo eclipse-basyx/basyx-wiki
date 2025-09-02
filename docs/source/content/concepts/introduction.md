@@ -6,7 +6,7 @@ This section provides an overview of the key concepts and principles underlying 
 
 * Asset Integration
 * Security
-* Conformance and Consistency
+* [Conformance and Consistency](./conformity_and_consistency/index.md)
 * [Use Cases](./use_cases/index.md)
 * Best Practices
 * LLM based attribute matching for technical data submodels
