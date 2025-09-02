@@ -1,4 +1,4 @@
-# Conformity & Consistency Checking - Background & Definitions
+# Background & Definitions
 
 ## Definitions of Conformity
 In general, conformity (synonyms: conformance, compliance) indicates whether (or to what extent) something exists/behaves like it was meant/specified/defined/required by something or someone through, e.g., requirements, rules, specifications, etc.

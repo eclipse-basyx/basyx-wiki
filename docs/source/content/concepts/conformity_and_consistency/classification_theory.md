@@ -1,4 +1,4 @@
-# Conformity & Consistency Checking - Conformity Classification Theory
+# Conformity Classification Theory
 
 As already explained in [Background & Definitions](./background.md), this classification is focused in conformity, but it can be seen as a specialization of consistency, the following classification can also mostly be applied/translated to consistency.
 

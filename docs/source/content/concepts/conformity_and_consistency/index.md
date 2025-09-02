@@ -9,7 +9,7 @@ The scope of this subsection covers three complementary perspectives:
 
 - [Background & Definitions](./background.md) – providing core terminology and clarifying the distinction between conformity and consistency.
 - [Classification Theory](./classification_theory.md) – outlining a structured way to categorize different types of conformity relations and criteria for comparison.
-- [Implementation: The Conformity & Consistency Checker](./implementation.md) – presenting the developed tool, its architecture, and how it can be deployed and tried out in an open-source container environment.
+- [Implementation of the Checker](./implementation.md) – presenting the developed tool, its architecture, and how it can be deployed and tried out in an open-source container environment.
 
 Together, these pages provide both the theoretical basis and a concrete implementation for applying conformity and consistency checking in research and practice, with a focus on the digital twin ecosystem but extensible to broader engineering and systems contexts.
 
