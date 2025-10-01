@@ -22,7 +22,6 @@ The following environment variables can be used to configure the AAS Web UI:
 | AAS_REPO_PATH | The path to the AAS Repository | - |
 | SUBMODEL_REPO_PATH | The path to the Submodel Repository | - |
 | CD_REPO_PATH | The path to the Concept Description Repository | - |
-| DASHBOARD_SERVICE_PATH | The path to the Dashboard Service | - |
 | PRIMARY_COLOR | The primary color of the AAS Web UI | - |
 | PRIMARY_LIGHT_COLOR | The primary color of the AAS Web UI of the light theme (ENV variable available starting with eclipsebasyx/aas-gui:v2-241114) | "#0cb2f0" |
 | PRIMARY_DARK_COLOR | The primary color of the AAS Web UI of the dark theme (ENV variable available starting with eclipsebasyx/aas-gui:v2-241114) | "#f69222" |
@@ -39,8 +38,10 @@ The following environment variables can be used to configure the AAS Web UI:
 | ENDPOINT_CONFIG_AVAILABLE | Specifies whether the endpoint configuration should be available in the AAS Web UI (ENV variable available starting with eclipsebasyx/aas-gui:v2-241114) | true |
 | SINGLE_AAS | Specifies whether the aas-gui should show only one specific AAS or an List of all AAS "<true/false>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-241220) | false |
 | SINGLE_AAS_REDIRECT | Specifies a URL to which redirection should occur in the case of SINGLE_AAS = true and missing `aas` URL query parameter (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-241220) | - |
+| SM_VIEWER_EDITOR | Flag to enable/disable the standalone Submodel Viewer and Editor (ENV variable available starting with eclipsebasyx/aas-gui:v2-250821) | true |
 | ALLOW_EDITING | Flag to enable/disable the editor mode (ENV variable available starting with eclipsebasyx/aas-gui:v2-250417) | true |
 | ALLOW_UPLOADING | Flag to enable/disable uploading AAS (ENV variable available starting with eclipsebasyx/aas-gui:v2-250417) | true |
+| ALLOW_LOGOUT | Flag to enable/disable logout functionality when keycloak is active (ENV variable available starting with eclipsebasyx/aas-gui:v2-251001) | true |
 | BASIC_AUTH_USERNAME | The username that will be used for basic auth in the authorization header of each request (ENV variable available starting with eclipsebasyx/aas-gui:v2-250417) | - |
 | BASIC_AUTH_PASSWORD | The password that will be used for basic auth in the authorization header of each request (ENV variable available starting with eclipsebasyx/aas-gui:v2-250417) | - |
 | EDITOR_ID_PREFIX | The default prefix for AAS IDs and GlobalAssetIDs in the editor mode (ENV variable available starting with eclipsebasyx/aas-gui:v2-250417) | "https://example.com/" |
@@ -83,7 +84,6 @@ services:
             AAS_REPO_PATH: "<aas_repo_path>"
             SUBMODEL_REPO_PATH: "<submodel_repo_path>"
             CD_REPO_PATH: "<concept_description_repo_path>"
-            DASHBOARD_SERVICE_PATH: "<dashboard_service_path>" (optional; Time Series Data)
             PRIMARY_COLOR: "<primary_color>" (optional; Corporate Design)
             PRIMARY_LIGHT_COLOR: "<primary_light_color>" (optional; Corporate Design light theme; ENV variable available starting with eclipsebasyx/aas-gui:v2-241114)
             PRIMARY_DARK_COLOR: "<primary_dark_color>" (optional; Corporate Design dark theme; ENV variable available starting with eclipsebasyx/aas-gui:v2-241114)
@@ -100,8 +100,10 @@ services:
             ENDPOINT_CONFIG_AVAILABLE: "<true/false>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-241114)
             SINGLE_AAS: "<true/false>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-241220)
             SINGLE_AAS_REDIRECT: "<URL>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-241220)
+            SM_VIEWER_EDITOR: "<true/false>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-250821)
             ALLOW_EDITING: "<true/false>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-250417)
             ALLOW_UPLOADING: "<true/false>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-250417)
+            ALLOW_LOGOUT: "<true/false>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-251001)
             BASIC_AUTH_USERNAME: "<basic_auth_username>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-250417)
             BASIC_AUTH_PASSWORD: "<basic_auth_password>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-250417)
             EDITOR_ID_PREFIX: "<id_prefix>" (optional; ENV variable available starting with eclipsebasyx/aas-gui:v2-250417)
