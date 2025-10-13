@@ -15,7 +15,7 @@ For each presented use case we provide a brief description, the involved compone
 * [AAS Operations and Operation Delegation](./aas_operations.md)
 * [AAS Query Language](./aas_query_language.md)
 * [Complex Deployment Scenarios](./deployment_scenarios.md)
-* [Integration of CAD Data](./cad_integration.md) (./cad_integration.md)
+* [Integration of CAD Data](./cad_integration.md)
 
 ```{toctree}
 :hidden:

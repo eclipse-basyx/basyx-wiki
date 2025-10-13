@@ -31,27 +31,19 @@ An example setup can be found in the <a href="https://github.com/eclipse-basyx/b
 1. Create or select an AAS Submodel in the BaSyx AAS Web UI
 2. Add a File Submodel Element for the CAD file
 
-   ::::{grid} 2
-   
-   :::{grid-item}
    ```{figure} images/add_sme.png
    ---
    name: add_sme
    ---
    Adding a Submodel Element.
    ```
-   :::
-   
-   :::{grid-item}
+
    ```{figure} images/add_file_sme.png
    ---
    name: add_file_sme
    ---
    Adding a File Submodel Element.
    ```
-   :::
-   
-   ::::
 
 3. Upload a CAD file via the AAS Editor (drag & drop or file selection)
 
@@ -61,6 +53,7 @@ An example setup can be found in the <a href="https://github.com/eclipse-basyx/b
    ---
    Uploading a CAD file.
    ```
+
 4. Preview the model in the Web UI (if supported format)
 5. Distribute or share the CAD file through the AAS interfaces (attachment endpoints)
 
@@ -69,6 +62,15 @@ An example setup can be found in the <a href="https://github.com/eclipse-basyx/b
    name: cad_download
    ---
    Downloading a CAD file.
+   ```
+
+6. Share the AAS including the CAD file using the standardized AASX file format by downloading the AAS
+
+   ```{figure} images/aas_download.png
+   ---
+   name: aas_download
+   ---
+   Downloading an AAS including the CAD file.
    ```
 
 ```{warning}
