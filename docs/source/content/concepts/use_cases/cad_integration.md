@@ -18,9 +18,9 @@ BaSyx goes beyond the basic AAS specification by providing specialized support f
   Visualization of a CAD model in the BaSyx AAS Web UI Visualization Panel.
   ```
 
-- **Easy Integration**: The integration of CAD files into the AAS is straightforward. Users can upload CAD files via the `/attachment` endpoint, and these files are automatically linked to the corresponding `File` SubmodelElement.
+- **Easy Integration**: The integration of CAD files into the AAS is straightforward. Users can upload CAD files via the `/attachment` endpoint. Uploaded files are automatically linked to the corresponding `File` SubmodelElement. But don't worry, the BaSyx AAS Web UI supports this endpoint out of the box, so you can upload CAD files directly via the web interface.
 
-- **Standardized Access**: Once integrated, CAD files can be accessed and managed using standard AAS operations, making it easy to incorporate them into broader Digital Twin applications. This also includes downloading the files via the `/attachment` endpoint.
+- **Standardized Access**: Once integrated, CAD files can be accessed and managed using standard AAS operations, making it easy to incorporate them into broader Digital Twin applications. This also includes downloading the files via the `/attachment` endpoint. THe BaSyx Web UI offers aconvenient download button for this purpose.
 
 ```{note}
 An example setup can be found in the <a href="https://github.com/eclipse-basyx/basyx-java-server-sdk/tree/main/examples/BaSyxCADFiles" target="_blank">Examples on GitHub</a>. Feel free to try it out yourself!
