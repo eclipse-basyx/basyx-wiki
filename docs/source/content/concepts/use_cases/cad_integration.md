@@ -86,6 +86,13 @@ Some content types may not be recognized automatically by the browser when uploa
 ![Changing the content type](images/change_contenttype.png)
 ```
 
+## Real-World application scenarios
+
+Of course, adding CAD files into file SubmodelElements is only the last step of a complete digital twin solution leveraging the AAS for CAD data. Typical real-world scenarios would include those files as part of standardized submodel templates by the IDTA (Industrial Digital Twin Association). Examples are:
+
+- **Handover Documentation (IDTA 02004)**: Machine builders can include CAD files in handover documentation submodels, allowing for a standardized way to provide information or documentation for an asset.
+- **Provision of 3D Models (IDTA 02026-1-0)**: Providing 3D models of machinery or components for maintenance, repair, or training purposes, including relevant metadata to find and use the models effectively.
+
 ## Additional Resources
 
 For more information about file integrations with BaSyx:
