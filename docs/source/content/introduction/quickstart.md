@@ -32,7 +32,7 @@ After you have completed the setup process, you can download the generated confi
 Afterwards, you need to unzip the donwloaded file and run the following command inside the folder:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 You can acces the BaSyx AAS Web UI by navigating to [http://localhost:3000](http://localhost:3000) in your browser.
