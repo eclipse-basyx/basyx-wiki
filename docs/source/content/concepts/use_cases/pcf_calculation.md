@@ -56,7 +56,7 @@ The PCF Process module is meant to serve as a reference implementation and start
 
 ## Example Setup
 
-BaSyx provides a complete, runnable example that demonstrates the PCF workflow end to end:
+BaSyx provides a complete, runnable example that demonstrates the PCF workflow for a product made from multiple materials.
 
 ```{note}
 PCF calculation <a href="https://github.com/eclipse-basyx/basyx-aas-web-ui/tree/main/examples/PcfCalculation" target="_blank">Example on GitHub</a>. Feel free to try it out yourself!
