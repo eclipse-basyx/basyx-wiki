@@ -16,7 +16,7 @@ For each presented use case we provide a brief description, the involved compone
 * [AAS Query Language](./aas_query_language.md)
 * [Complex Deployment Scenarios](./deployment_scenarios.md)
 * [Integration of CAD Data](./cad_integration.md)
-* [Product Carbon Footprint Calculation](./pcf_calculation.md)
+* [Product Carbon Footprint](./pcf_calculation.md)
 
 ```{toctree}
 :hidden:
