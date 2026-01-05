@@ -14,6 +14,7 @@ For each presented use case we provide a brief description, the involved compone
 * [Event-Driven Communication with MQTT and Kafka](./event_communication.md)
 * [AAS Operations and Operation Delegation](./aas_operations.md)
 * [AAS Query Language](./aas_query_language.md)
+* [Reverse Proxy](./reverse_proxy.md)
 * [Complex Deployment Scenarios](./deployment_scenarios.md)
 * [Integration of CAD Data](./cad_integration.md)
 
