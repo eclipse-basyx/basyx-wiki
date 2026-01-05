@@ -1,4 +1,4 @@
-# Product Carbon Footprint (PCF) Calculation
+# Product Carbon Footprint
 
 Reducing and transparently reporting the **Product Carbon Footprint (PCF)** is becoming a key requirement across manufacturing industries. Regulations, customer expectations, and initiatives such as Catena-X or Manufacturing-X increasingly demand traceable, product-level carbon data instead of aggregated company-level metrics.
 
