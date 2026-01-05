@@ -1,5 +1,7 @@
 # BaSyx Wiki
 
+
+
 Eclipse BaSyx is the open source platform for next generation automation.
 Our mission is to provide a free software platform that enables all interested parties, large and small industries, research institutes, academia, and interested persons, to participate and to shape the fourth industrial revolution.
 We believe that the availability of a free reference technology platform is a key success factor for the Industrie 4.0.
@@ -76,7 +78,7 @@ This section contains the user documentation of the Eclipse BaSyx middleware.
 * [Integrated End-User Applications](./content/user_documentation/integrated%20end-user%20applications/monitoring_scenarios.md)
 * [Releases](./content/user_documentation/releases/releases_and_features.md)
 * [3rd Party Applications and Frameworks](./content/user_documentation/3rdparty_apps_and_frameworks.md)
-* [Concepts and Architecture](./content/user_documentation/concepts%20and%20architecture/index.md)
+* [Specifications and Architecture](./content/user_documentation/concepts%20and%20architecture/index.md)
 
 ```{toctree}
 :hidden:
@@ -112,7 +114,7 @@ content/developer_documentation/basyx_python_sdk/index
 
 ### Concepts
 
-* [Introduction](./content/concepts/introduction.md)
+* [BaSyx Concepts](./content/concepts/basyx_concepts.md)
 * [Conformity and Consistency](./content/concepts/conformity_and_consistency/index.md)
 * [Use Cases](./content/concepts/use_cases/index.md)
 
@@ -121,7 +123,6 @@ content/developer_documentation/basyx_python_sdk/index
 :maxdepth: 1
 :caption: Concepts
 
-content/concepts/introduction
 content/concepts/conformity_and_consistency/index
 content/concepts/use_cases/index
 ```

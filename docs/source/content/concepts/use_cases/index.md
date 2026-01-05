@@ -28,6 +28,7 @@ rbac
 event_communication
 aas_operations
 aas_query_language
+reverse_proxy
 deployment_scenarios
 cad_integration
 ```

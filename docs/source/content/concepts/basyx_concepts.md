@@ -1,5 +1,7 @@
 # BaSyx Concepts
 
+
+
 The Eclipse BaSys middleware depends on the core concepts Asset Administration Shell (AAS), AAS sub model, control component, registry, and end-to-end communication. These are the core components that are required for the realization of an operational BaSys system. Additional components extend the capabilities of this BaSys system. Every main component of Eclipse BaSyx is described in its own section. The following gives a brief overview on Eclipse BaSyx.
 
 ````{sidebar}
