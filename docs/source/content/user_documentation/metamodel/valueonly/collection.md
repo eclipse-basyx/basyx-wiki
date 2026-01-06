@@ -33,7 +33,9 @@ Consider a Submodel Element Collection representing various sensor readings:
     ]
 }
 ```
-Its corresponding Value Only representation would be:```json
+
+Its corresponding Value Only representation would be:
+```json
 {
     "Temperature": 22.5,
     "Humidity": 60
