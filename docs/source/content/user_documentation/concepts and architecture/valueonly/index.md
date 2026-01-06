@@ -26,3 +26,20 @@ The Value Only format is supported for the following types:
 - [Reference Element](reference_element.md)
 - [Relationship Element](relationship_element.md)
 - [Annotated Relationship Element](annotated_relationship_element.md)
+
+```{toctree}
+:hidden:
+:maxdepth: 1
+
+:caption: Value Only Representations
+content/user_documentation/concepts and architecture/valueonly/submodel
+content/user_documentation/concepts and architecture/valueonly/collection
+content/user_documentation/concepts and architecture/valueonly/list
+content/user_documentation/concepts and architecture/valueonly/property
+content/user_documentation/concepts and architecture/valueonly/range
+content/user_documentation/concepts and architecture/valueonly/file
+content/user_documentation/concepts and architecture/valueonly/blob
+content/user_documentation/concepts and architecture/valueonly/reference_element
+content/user_documentation/concepts and architecture/valueonly/relationship_element
+content/user_documentation/concepts and architecture/valueonly/annotated_relationship_element
+```
