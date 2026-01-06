@@ -10,7 +10,9 @@ In many scenarios, applications working with Asset Administration Shell (AAS) da
 
 **Efficient UI Updates**: By using separate requests for metadata and values, applications can build user interfaces efficiently and update displayed values quickly without repeatedly transferring static information.
 
-[!] For a more in-depth explanation see [IDTA Part 1: Metamodel v3.1.1](https://industrialdigitaltwin.io/aas-specifications/IDTA-01001/v3.1.1/mappings/mappings.html#value-only-serialization-in-json)
+```{hint}
+For a more in-depth explanation see [IDTA Part 1: Metamodel v3.1.1](https://industrialdigitaltwin.io/aas-specifications/IDTA-01001/v3.1.1/mappings/mappings.html#value-only-serialization-in-json)
+```
 
 # Available Value Only Representations
 
