@@ -24,6 +24,4 @@ controlcomponent
 gateway
 vab/index
 device_integration
-valueonly/index
-
 ```
