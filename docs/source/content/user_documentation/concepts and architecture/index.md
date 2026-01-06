@@ -9,6 +9,7 @@
 * [BaSyx VAB Gateway](gateway.md)
 * [Virtual Automation Bus](./vab/index.md)
 * [BaSyx Device Integration](device_integration.md)
+* [Value Only](./valueonly/index.md)
 
 ```{toctree}
 :hidden:
