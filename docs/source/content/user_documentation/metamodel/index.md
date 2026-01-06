@@ -9,6 +9,6 @@ This section provides User Documentation about the AAS Metamodel.
 :maxdepth: 1
 :caption: Metamodel
 
-content/user_documentation/metamodel/valueonly/index
+valueonly/index
 
 ```
