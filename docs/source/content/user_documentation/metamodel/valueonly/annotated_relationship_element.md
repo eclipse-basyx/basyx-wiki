@@ -7,7 +7,7 @@ An Annotated Relationship Element is serialized using the same format as a Relat
 The annotations property is an array where each item is serialized according to its specific data element type.
 
 ## Example
-Consider an Annotated Relationship Element that defines a relationship between two assets with annotations:
+Consider an Annotated Relationship Element that defines a relationship between two assets with one Property as an annotation:
 ```json
 {
     "idShort": "AnnotatedAssetRelationship",
@@ -32,7 +32,7 @@ Consider an Annotated Relationship Element that defines a relationship between t
     },
     "annotations": [
         {
-            "idShort": "Annotation1",
+            "idShort": "AnnotationProperty",
             "modelType": "Property",
             "value": "This is an important relationship",
             "valueType": "xs:string"
@@ -71,7 +71,7 @@ Its corresponding Value Only representation would be:
         },
         "annotations": [
             {
-                "Annotation1": "This is an important relationship"
+                "AnnotationProperty": "This is an important relationship"
             }
         ]
     }
