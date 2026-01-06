@@ -18,16 +18,16 @@ For a more in-depth explanation see [IDTA Part 1: Metamodel v3.1.1](https://indu
 
 The Value Only format is supported for the following types:
 
-- [Submodel](submodel.md)
-- [Submodel Element Collection](collection.md)
-- [Submodel Element List](list.md)
-- [Property](property.md)
-- [Range](range.md)
-- [File](file.md)
-- [Blob](blob.md)
-- [Reference Element](reference_element.md)
-- [Relationship Element](relationship_element.md)
-- [Annotated Relationship Element](annotated_relationship_element.md)
+* [Submodel](submodel.md)
+* [Submodel Element Collection](collection.md)
+* [Submodel Element List](list.md)
+* [Property](property.md)
+* [Range](range.md)
+* [File](file.md)
+* [Blob](blob.md)
+* [Reference Element](reference_element.md)
+* [Relationship Element](relationship_element.md)
+* [Annotated Relationship Element](annotated_relationship_element.md)
 
 ```{toctree}
 :hidden:
