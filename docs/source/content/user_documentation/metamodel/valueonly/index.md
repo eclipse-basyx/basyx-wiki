@@ -1,6 +1,6 @@
 # Value Only
 
-In many scenarios, applications working with Asset Administration Shell (AAS) data already know the structure and meaning of a Submodel. Since attributes, structure, and semantics usually remain unchanged, transferring complete model information with every request is unnecessary. Metadata can still be requested separately using the Content modifier set to Metadata (see [IDTA-01002](https://industrialdigitaltwin.io/aas-specifications/IDTA-01001/v3.1.1/mappings/mappings.html#_format_metadata_metadata_serialization)).
+In many scenarios, applications working with Asset Administration Shell (AAS) data already know the structure and meaning of a Submodel. Since attributes, structure, and semantics usually remain unchanged, transferring complete model information with every request is unnecessary. Metadata can still be requested separately using the Content modifier set to Metadata (see [IDTA-01002](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.1.1/index.html)).
 
 ## Benefits
 
