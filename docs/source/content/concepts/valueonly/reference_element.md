@@ -35,7 +35,8 @@ Consider a Reference Element representing a reference to an external asset:
     "displayName": {
         "en": "External Asset Reference"
     }
-}```
+}
+```
 
 Its corresponding Value Only representation would be:
 ```json

@@ -19,7 +19,8 @@ Consider a Blob holding a text:
     "displayName": {
         "en": "Text Blob"
     }
-}```
+}
+```
 
 Its corresponding Value Only representation would be:
 ```json

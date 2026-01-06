@@ -19,7 +19,8 @@ Consider a File representing a configuration file:
     "displayName": {
         "en": "Configuration File"
     }
-}```
+}
+```
 
 Its corresponding Value Only representation would be:
 ```json

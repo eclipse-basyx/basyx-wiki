@@ -31,7 +31,8 @@ Consider a Submodel Element Collection representing various sensor readings:
         "valueType": "xs:integer"
     }
     ]
-}```
+}
+```
 Its corresponding Value Only representation would be:```json
 {
     "Temperature": 22.5,

@@ -20,7 +20,8 @@ Consider a Range representing acceptable temperature limits:
     "displayName": {
         "en": "Temperature Range"
     }
-}```
+}
+```
 
 Its corresponding Value Only representation would be:
 ```json

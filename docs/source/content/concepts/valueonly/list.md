@@ -31,7 +31,8 @@ Consider a Submodel Element List representing a series of temperature readings (
         "valueType": "xs:double",
     }
     ]
-}```
+}
+```
 
 Its corresponding Value Only representation would be:
 ```json

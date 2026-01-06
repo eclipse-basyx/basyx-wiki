@@ -33,6 +33,7 @@ Consider a Submodel representing the temperature and humidity of a sensor:
   ]
 }
 ```
+
 Its corresponding Value Only representation would be:
 ```json
 {
