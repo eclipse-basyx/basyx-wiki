@@ -124,4 +124,5 @@ content/developer_documentation/basyx_python_sdk/index
 content/concepts/introduction
 content/concepts/conformity_and_consistency/index
 content/concepts/use_cases/index
+content/concepts/valueonly/index
 ```
