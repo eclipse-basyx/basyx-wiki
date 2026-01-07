@@ -1,7 +1,7 @@
 # Releases and Features
 
 
-This page provides direct links to the **official release pages** for key Eclipse BaSyx components. Each link points to the GitHub releases page, where you can find detailed version histories, release notes, and downloadable assets.
+This page provides direct links to the **official release pages** for key Eclipse BaSyx components. Each link points to the releases page, where you can find detailed version histories, release notes, and downloadable assets.
 
 ---
 
