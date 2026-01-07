@@ -1,4 +1,4 @@
-# Reverse Proxy with BaSyx (Apache HTTP Server)
+# Reverse Proxy with BaSyx
 
 In distributed **Asset Administration Shell (AAS)** environments, BaSyx
 components such as **AAS Environments**, **Registries**, and **Discovery
