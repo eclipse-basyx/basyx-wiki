@@ -121,6 +121,7 @@ content/developer_documentation/basyx_python_sdk/index
 :maxdepth: 1
 :caption: Concepts
 
+content/concepts/basyx_concepts
 content/concepts/conformity_and_consistency/index
 content/concepts/use_cases/index
 ```
