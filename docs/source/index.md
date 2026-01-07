@@ -89,6 +89,7 @@ content/user_documentation/basyx_components/index
 content/user_documentation/integrated end-user applications/monitoring_scenarios
 content/user_documentation/releases/releases_and_features
 content/user_documentation/concepts and architecture/index
+content/user_documentation/metamodel/index
 ```
 
 ### Developer Documentation

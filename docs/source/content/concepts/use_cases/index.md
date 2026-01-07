@@ -17,6 +17,7 @@ For each presented use case we provide a brief description, the involved compone
 * [Reverse Proxy](./reverse_proxy.md)
 * [Complex Deployment Scenarios](./deployment_scenarios.md)
 * [Integration of CAD Data](./cad_integration.md)
+* [Product Carbon Footprint](./pcf_calculation.md)
 
 ```{toctree}
 :hidden:
@@ -31,4 +32,5 @@ aas_query_language
 reverse_proxy
 deployment_scenarios
 cad_integration
+pcf_calculation
 ```
