@@ -1,7 +1,7 @@
-# BaSyx Concepts
+# Introduction
 
 
-
+## BaSyx Concepts
 The Eclipse BaSys middleware depends on the core concepts Asset Administration Shell (AAS), AAS sub model, control component, registry, and end-to-end communication. These are the core components that are required for the realization of an operational BaSys system. Additional components extend the capabilities of this BaSys system. Every main component of Eclipse BaSyx is described in its own section. The following gives a brief overview on Eclipse BaSyx.
 
 ````{sidebar}
@@ -59,3 +59,11 @@ An Eclipse BaSyx system consists therefore of the following core and optionally 
 | [Gateway](gateway.md)                       | Virtual Automation Bus protocol gateways bridges communication networks to enable inter-network communication. Every gateway needs to provide a mapping of all of the five BaSys communication primitives to its supported protocols to enable end-to-end communication. Gateways can be cascaded to bridge multiple networks.                                                                                                                                                                                                                                                                                                                                                                                                                       | <td style= "background-color:orange;">Extended</td> |
 | Process control                             | The process control component executes the production plans that the Strategy/Optimization component did create. Eclipse BaSyx integrates the open source Camunda BPMN engine as process control engine.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | <td style= "background-color:orange;">Extended</td> |
 | Monitoring                                  | A monitoring component enables the monitoring of the production process. It for example collects and aggregates data for analysis or pushes selected and aggregated data to a dashboard. BaSyx integrates both Eclipse Grafana and Streamsheets applications for this functionality.                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | <td style= "background-color:orange;">Extended</td> |
+
+
+## Further Topics
+
+This section provides an overview of the key concepts and principles underlying the BaSys middleware and its related Eclipse BaSyx components.
+
+* [Conformance and Consistency](./conformity_and_consistency/index.md)
+* [Use Cases](./use_cases/index.md)
