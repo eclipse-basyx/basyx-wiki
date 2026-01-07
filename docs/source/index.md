@@ -77,7 +77,6 @@ This section contains the user documentation of the Eclipse BaSyx middleware.
 * [BaSyx Components](./content/user_documentation/basyx_components/index.md)
 * [Integrated End-User Applications](./content/user_documentation/integrated%20end-user%20applications/monitoring_scenarios.md)
 * [Releases](./content/user_documentation/releases/releases_and_features.md)
-* [3rd Party Applications and Frameworks](./content/user_documentation/3rdparty_apps_and_frameworks.md)
 * [Specifications and Architecture](./content/user_documentation/concepts%20and%20architecture/index.md)
 
 ```{toctree}
@@ -89,7 +88,6 @@ content/user_documentation/user_tutorials/index
 content/user_documentation/basyx_components/index
 content/user_documentation/integrated end-user applications/monitoring_scenarios
 content/user_documentation/releases/releases_and_features
-content/user_documentation/3rdparty_apps_and_frameworks
 content/user_documentation/concepts and architecture/index
 ```
 
