@@ -1,6 +1,7 @@
-# BaSys Use Cases
+# BaSyx Use Cases
 
-This subsection introduces various BaSys use cases leveraging Eclipse BaSyx and related components and concepts.
+
+This subsection introduces various BaSyx use cases leveraging Eclipse BaSyx and related components and concepts.
 
 ```{hint}
 For each presented use case we provide a brief description, the involved components, and a containerized environment for trying out the use case.
@@ -14,6 +15,7 @@ For each presented use case we provide a brief description, the involved compone
 * [Event-Driven Communication with MQTT and Kafka](./event_communication.md)
 * [AAS Operations and Operation Delegation](./aas_operations.md)
 * [AAS Query Language](./aas_query_language.md)
+* [Reverse Proxy](./reverse_proxy.md)
 * [Complex Deployment Scenarios](./deployment_scenarios.md)
 * [Integration of CAD Data](./cad_integration.md)
 * [Product Carbon Footprint](./pcf_calculation.md)
@@ -28,6 +30,7 @@ rbac
 event_communication
 aas_operations
 aas_query_language
+reverse_proxy
 deployment_scenarios
 cad_integration
 pcf_calculation
