@@ -39,7 +39,7 @@ A **reverse proxy with Apache** solves these issues by providing:
 The following diagram illustrates the typical interaction between a
 Client, Apache as reverse proxy, and BaSyx components.
 
-![Reverse proxy Setup with Apache HTTP Server](images\reverseproxy.png)
+![Reverse proxy Setup with Apache HTTP Server](images/reverseproxy.png)
 
 **Key idea:**
 
