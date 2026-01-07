@@ -1,6 +1,7 @@
-# BaSys Use Cases
+# BaSyx Use Cases
 
-This subsection introduces various BaSys use cases leveraging Eclipse BaSyx and related components and concepts.
+
+This subsection introduces various BaSyx use cases leveraging Eclipse BaSyx and related components and concepts.
 
 ```{hint}
 For each presented use case we provide a brief description, the involved components, and a containerized environment for trying out the use case.
