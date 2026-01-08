@@ -1,4 +1,4 @@
-# BaSyx Java V2 Documentation
+# BaSyx Java V2
 This section provides in-depth documentation intended for developers. If your goal is using the off-the-shelf components as-is, please refer to the [Components Documentation](../../basyx_components/v2/index.md).
 Please note that this documentation is work-in-progress and will be extended continuously.
 

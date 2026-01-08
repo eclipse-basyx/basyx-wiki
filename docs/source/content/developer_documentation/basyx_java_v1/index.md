@@ -1,4 +1,4 @@
-# BaSyx Java Version 1
+# BaSyx Java V1 (Deprecated)
 
 * [Java SDK Architecture Overview](./sdk/java/index.md)
 * [Java SDK VAB Provider Overview](./vab_providers/index.md)
