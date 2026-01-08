@@ -46,6 +46,9 @@ The `src/` directory is the primary focus for developers extending or maintainin
 
 ## Application Layers
 
+```{uml} charts/architecture.puml
+```
+
 ### Pages and Modules
 
 Pages define the top-level views of the application and are directly connected to routing. Core pages (located in `src/pages/`) handle generic AAS and submodel interaction, such as viewing or editing shells and submodels.

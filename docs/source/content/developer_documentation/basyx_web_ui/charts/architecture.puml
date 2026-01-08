@@ -1,0 +1,37 @@
+@startuml
+title BaSyx AAS Web UI - Where to put what?
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+package "aas-web-ui/" {
+  package "public/" {
+    [config/\nbasyx-infra.yml] as cfg
+  }
+
+  package "src/" {
+    [pages/\n(core pages)] as pages
+    [pages/modules/\n(custom modules)] as modules
+
+    [components/\n(reusable UI)] as comps
+    [components/Plugins/\n(built-in plugins)] as builtins
+    [UserPlugins/\n(user plugins)] as userplugins
+
+    [composables/\n(logic + API clients)] as composables
+    [store/\n(Pinia state)] as store
+    [router/\n(routes + guards)] as router
+    [utils/ + types/] as utils
+  }
+}
+
+router --> pages
+router --> modules : auto routes
+pages --> comps
+modules --> comps
+comps --> builtins : semanticId match
+comps --> userplugins : semanticId match
+pages --> composables
+modules --> composables
+composables --> store
+cfg --> composables : load infra config
+@enduml
