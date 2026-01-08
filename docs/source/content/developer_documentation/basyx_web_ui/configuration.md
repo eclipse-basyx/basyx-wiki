@@ -24,7 +24,7 @@ The effective precedence (highest first) is:
 Legacy infrastructure-related environment variables intentionally have higher precedence than the YAML configuration to avoid breaking existing deployments.
 ```
 
-## Infrastructure Configuration (`basyx-infra.yml`)
+## Infrastructure Configuration
 
 The primary and recommended way to configure backend infrastructures is the YAML file:
 

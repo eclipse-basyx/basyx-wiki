@@ -29,7 +29,6 @@ If you are primarily interested in using the Web UI rather than developing or ex
 * [Creating Submodel Plugins](creating_submodel_plugins.md)
 * [Developing Custom Modules](developing_custom_modules.md)
 * [Testing & Quality Assurance](testing.md)
-* [Development & Contribution Workflow](development_workflow.md)
 
 ```{toctree}
 :hidden:
@@ -43,5 +42,4 @@ design_guidelines
 creating_submodel_plugins
 developing_custom_modules
 testing
-development_workflow
 ```
