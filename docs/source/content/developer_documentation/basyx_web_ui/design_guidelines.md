@@ -65,7 +65,7 @@ Example: the *Technical Data* submodel plugin supports both list and table views
 
 Guidelines for component size:
 
-* > 1000 lines: strongly discouraged
+* more than 1000 lines: strongly discouraged
 * 200–500 lines: preferred sweet spot
 
 Components should be split when it improves:
