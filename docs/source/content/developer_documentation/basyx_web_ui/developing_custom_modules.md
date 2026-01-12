@@ -152,7 +152,7 @@ Menu behavior:
 
 The application distinguishes between mobile and desktop layouts using responsive breakpoints.
 
-Use `isDDesktopModule` and `isMobileModule` to control where a module appears.
+Use `isDesktopModule` and `isMobileModule` to control where a module appears.
 
 Typical patterns:
 
