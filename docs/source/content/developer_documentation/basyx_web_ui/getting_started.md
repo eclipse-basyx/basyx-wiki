@@ -129,7 +129,7 @@ During development, configuration can be adjusted via:
 * Editing `env.development`
 * Modifying infrastructure entries via the UI (stored in localStorage)
 
-This allows experimentation without rebuilding the application.0
+This allows experimentation without rebuilding the application.
 
 ## Backend Infrastructure Requirements
 
