@@ -26,9 +26,9 @@ If you are primarily interested in using the Web UI rather than developing or ex
 * [Getting Started with Development](getting_started.md)
 * [Configuration & Environment](configuration.md)
 * [Design Guidelines](design_guidelines.md)
+* [Testing & Quality Assurance](testing.md)
 * [Creating Submodel Plugins](creating_submodel_plugins.md)
 * [Developing Custom Modules](developing_custom_modules.md)
-* [Testing & Quality Assurance](testing.md)
 
 ```{toctree}
 :hidden:
@@ -39,7 +39,7 @@ architecture
 getting_started
 configuration
 design_guidelines
+testing
 creating_submodel_plugins
 developing_custom_modules
-testing
 ```
