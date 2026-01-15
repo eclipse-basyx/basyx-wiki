@@ -315,13 +315,13 @@ If your shortcuts aren't working:
 
 ## Future Enhancements
 
-Potential improvements for the shortcut system:
+Potential future improvements for the shortcut system:
 
-- [ ] User-customizable key bindings
-- [ ] Shortcut conflict detection
-- [ ] Shortcut cheat sheet overlay
-- [ ] Context-aware shortcut suggestions
-- [ ] Export/import shortcut configurations
+- User-customizable key bindings
+- Shortcut conflict detection
+- Shortcut cheat sheet overlay
+- Context-aware shortcut suggestions
+- Export/import shortcut configurations
 
 ## Next Steps
 
