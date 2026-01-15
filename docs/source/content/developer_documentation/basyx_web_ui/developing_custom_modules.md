@@ -129,7 +129,7 @@ If `isOnlyVisibleWithSelectedAas` or `isOnlyVisibleWithSelectedNode` is set, `pr
 
 Modules can also define their own hotkeys. Hotkeys are a way to provide keyboard shortcuts for actions within the module.
 
-In order to define hotkeys for a module, it is recommended to create a second `<script setup>` block in the module's main Vue file. This block should import and use the type `PageShortcutDefinitions` from the `useRouteShortcuts` composable.
+In order to define hotkeys for a module, it is recommended to create a second `<script>` block (without `setup`) in the module's main Vue file. This block should import and use the type `PageShortcutDefinitions` from the `useRouteShortcuts` composable.
 
 The following example showcases how to define a hotkey that clears an asset ID input field when the user presses `Cmd+Shift+Backspace`:
 

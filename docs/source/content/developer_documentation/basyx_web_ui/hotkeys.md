@@ -57,7 +57,7 @@ All global shortcuts must use the category `'Global Shortcuts'` to ensure they a
 
 ## Adding Route-Specific Shortcuts
 
-All pages (both core pages and modules) can define their own shortcuts using the same pattern. Add a second `<script setup>` block to your page file that exports a `shortcuts` function.
+All pages (both core pages and modules) can define their own shortcuts using the same pattern. Add a second `<script>` block (without `setup`) to your page file that exports a `shortcuts` function.
 
 ### How to Add Shortcuts to Any Page
 
