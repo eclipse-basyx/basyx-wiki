@@ -183,6 +183,9 @@ keys: 'cmd+s'  // Automatically works as Cmd+S on Mac, Ctrl+S on Windows/Linux
 ## Complete Example: Adding Shortcuts to a New Page
 
 Let's say you're creating a new "Dashboard" page and want to add shortcuts for it.
+
+### 1. Create the Page Component
+
 Create your page file `@/pages/Dashboard.vue`:
 
 ```vue
