@@ -29,6 +29,7 @@ If you are primarily interested in using the Web UI rather than developing or ex
 * [Testing & Quality Assurance](testing.md)
 * [Creating Submodel Plugins](creating_submodel_plugins.md)
 * [Developing Custom Modules](developing_custom_modules.md)
+* [Defining Hotkeys](hotkeys.md)
 
 ```{toctree}
 :hidden:
@@ -42,4 +43,5 @@ design_guidelines
 testing
 creating_submodel_plugins
 developing_custom_modules
+hotkeys
 ```

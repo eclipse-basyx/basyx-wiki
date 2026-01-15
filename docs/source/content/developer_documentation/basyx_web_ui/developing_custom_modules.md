@@ -125,6 +125,45 @@ defineOptions({
 If `isOnlyVisibleWithSelectedAas` or `isOnlyVisibleWithSelectedNode` is set, `preserveRouteQuery` is enabled automatically.
 ```
 
+### Hotkeys
+
+Modules can also define their own hotkeys. Hotkeys are a way to provide keyboard shortcuts for actions within the module.
+
+In order to define hotkeys for a module, it is recommended to create a second `<script>` block (without `setup`) in the module's main Vue file. This block should import and use the type `PageShortcutDefinitions` from the `useRouteShortcuts` composable.
+
+The following example showcases how to define a hotkey that clears an asset ID input field when the user presses `Cmd+Shift+Backspace`:
+
+```ts
+<script lang="ts">
+    import type { PageShortcutDefinitions } from '@/composables/Shortcuts/useRouteShortcuts';
+
+    // Module shortcuts definition - available when this module is active
+    export const shortcuts: PageShortcutDefinitions = () => [
+        {
+            id: 'my-module-clear-asset-id',
+            title: 'Clear Asset ID',
+            description: 'Clear the asset ID input field',
+            prependIcon: 'mdi-eraser',
+            category: 'My Module Shortcuts',
+            keys: 'cmd+shift+backspace',
+            handler: (event: KeyboardEvent) => {
+                event.preventDefault();
+                event.stopPropagation();
+                const assetIdInput = document.querySelector('#asset-id-input input') as HTMLInputElement;
+                if (assetIdInput) {
+                    assetIdInput.value = '';
+                    assetIdInput.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            },
+        },
+    ];
+</script>
+```
+
+```{hint}
+For more details on defining hotkeys, refer to the [Defining Hotkeys](hotkeys.md) section.
+```
+
 ## Modules in the Main Menu
 
 The main menu contains three tabs:
