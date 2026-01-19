@@ -83,7 +83,7 @@ For more details on how to connect to an AAS infrastructure, please refer to the
 ---
 width: 80%
 alt: Connect to AAS Infrastructure
-name: connect_aas_infrastructure
+name: connect_to_aas_infrastructure
 ---
 ```
 
@@ -182,15 +182,15 @@ The Visualization tab shows the Submodel/SubmodelElement in a graphical represen
 
 1. The AAS Web UI checks for the presence of a SemanticId in the Submodel/SubmodelElement. If a SemanticId is present, the AAS Web UI will try to find a visualization for the SemanticId from the List of Submodel/SubmodelElement Plugins.
 
-```{figure} ./images/ui_visualization.png
----
-width: 60%
-alt: Visualization Panel
-name: ui_visualization
----
-```
+  ```{figure} ./images/ui_visualization.png
+  ---
+  width: 60%
+  alt: Visualization Panel
+  name: ui_visualization
+  ---
+  ```
 
-2. The File and Blob SubmodelElements have a special visualization. If the SubmodelElement contains an image, a PDF or a CAD file (.stl/.glTF/.obj), the AAS Web UI displays the file contents in the visualization page.
+2. The File and Blob SubmodelElements have a special visualization. If the SubmodelElement contains an image, a PDF or a CAD file (.stl/.glTF/.obj), the AAS Web UI displays the file contents in the visualization tab.
 
 ```{figure} ./images/image_preview.png
 ---
@@ -219,24 +219,24 @@ name: cad_preview
 CAD Preview in the Visualization Panel
 ```
 
-## AAS Viewer
+## AAS Submodel Viewer
 
-The AAS Viewer is a separate window that can be used to visualize the content of an Asset Administration Shell in a user friendly manner. It can be accessed via the main menu by clicking on the **AAS Viewer** button.
-Like in the normal view, the AAS Viewer requires the selection of an AAS from the AAS List Sidebar.
+The AAS Submodel Viewer is a separate page that can be used to visualize the content of an Asset Administration Shell in a user friendly manner. It can be accessed via the main menu by clicking on the **AAS Submodel Viewer** button.
+Like in the normal view, the AAS Submodel Viewer requires the selection of an AAS from the AAS List Sidebar.
 After selecting an AAS, the user can navigate through a list of Submodels for the selected AAS.
-In contrast to the normal view, the AAS Viewer does not show the SubmodelElements in a tree structure but only visualizes the top level Submodels.
+In contrast to the normal view, the AAS Submodel Viewer does not show the SubmodelElements in a tree structure but only visualizes the top level Submodels.
 
-The AAS Viewer shows the visualization of Submodels using the same criteria as the **Visualization Panel** in the normal view.
+The AAS Submodel Viewer shows the visualization of Submodels using the same criteria as the **Visualization Panel** in the normal view.
 This means that primarily the SemanticId of the Submodel is used to find a suitable visualization using dedicated Submodel Plugins.
-If no fitting Plugin is found, the AAS Viewer will try to display the Submodel in a generic way.
+If no fitting Plugin is found, the AAS Submodel Viewer will try to display the Submodel in a generic way.
 
-```{figure} ./images/aas_viewer.png
+```{figure} ./images/aas_submodel_viewer.png
 ---
 width: 100%
-alt: AAS Viewer
-name: aas_viewer
+alt: AAS Submodel Viewer
+name: aas_submodel_viewer
 ---
-AAS Viewer Window
+AAS Submodel Viewer Page
 ```
 
 ## Compatibility to BaSyx V1
