@@ -198,6 +198,356 @@ This allows the same image to be reused across environments without rebuilding.
 * Using OAuth client secrets in frontend configuration
 * Forgetting to adjust mounted paths when changing `BASE`/`BASE_PATH`
 
+## YAML Infrastructure Configuration
+
+The primary and recommended method for configuring infrastructure connections is through the `basyx-infra.yml` file. This section provides comprehensive technical details for system administrators and developers.
+
+### File Locations
+
+* **Development Mode**: `/aas-web-ui/public/config/basyx-infra.yml`
+* **Production Mode (Docker)**: Mount to `/basyx-infra.yml` in the container
+
+The configuration file is copied to the application's config directory at container startup and parsed client-side by the browser using the `js-yaml` library.
+
+### Basic Structure
+
+```yaml
+infrastructures:
+  default: <default-infra-key>
+
+  <infra-key>:
+    name: <infrastructure-name>
+    components:
+      aasDiscovery:
+        baseUrl: "<url>"
+      aasRegistry:
+        baseUrl: "<url>"
+      submodelRegistry:
+        baseUrl: "<url>"
+      aasRepository:
+        baseUrl: "<url>"
+      submodelRepository:
+        baseUrl: "<url>"
+      conceptDescriptionRepository:
+        baseUrl: "<url>"
+    security:
+      type: <auth-type>
+      config:
+        # Authentication-specific configuration
+```
+
+### Configuration Examples
+
+#### No Authentication
+
+```yaml
+infrastructures:
+  default: local
+
+  local:
+    name: Local Development Environment
+    components:
+      aasRegistry:
+        baseUrl: "http://localhost:9082"
+      submodelRegistry:
+        baseUrl: "http://localhost:9083"
+      aasRepository:
+        baseUrl: "http://localhost:9081"
+      submodelRepository:
+        baseUrl: "http://localhost:9081"
+      conceptDescriptionRepository:
+        baseUrl: "http://localhost:9081"
+      aasDiscovery:
+        baseUrl: "http://localhost:9084"
+    security:
+      type: none
+```
+
+#### OAuth2 Authorization Code Flow
+
+```yaml
+infrastructures:
+  default: production
+
+  production:
+    name: Production Environment
+    components:
+      aasRegistry:
+        baseUrl: "https://aasreg.basyx.example.com"
+      submodelRegistry:
+        baseUrl: "https://smreg.basyx.example.com"
+      aasRepository:
+        baseUrl: "https://aasenv.basyx.example.com"
+      submodelRepository:
+        baseUrl: "https://aasenv.basyx.example.com"
+      conceptDescriptionRepository:
+        baseUrl: "https://aasenv.basyx.example.com"
+      aasDiscovery:
+        baseUrl: "https://discovery.basyx.example.com"
+    security:
+      type: oauth2
+      config:
+        flow: auth_code
+        issuer: "https://keycloak.example.com/auth/realms/BaSyx"
+        clientId: "basyx-web-ui"
+        scope: "openid profile email"
+```
+
+#### OAuth2 Client Credentials Flow
+
+```{danger}
+Client Credentials Flow exposes the client secret in the browser. Only use for internal/trusted environments.
+```
+
+```yaml
+infrastructures:
+  default: service
+
+  service:
+    name: Service Account Environment
+    components:
+      aasRegistry:
+        baseUrl: "https://aasreg.internal.basyx.com"
+      submodelRegistry:
+        baseUrl: "https://smreg.internal.basyx.com"
+      aasRepository:
+        baseUrl: "https://aasenv.internal.basyx.com"
+      submodelRepository:
+        baseUrl: "https://aasenv.internal.basyx.com"
+      conceptDescriptionRepository:
+        baseUrl: "https://aasenv.internal.basyx.com"
+    security:
+      type: oauth2
+      config:
+        flow: client_credentials
+        issuer: "https://keycloak.internal.basyx.com/auth/realms/BaSyx"
+        clientId: "basyx-service-client"
+        clientSecret: "your-client-secret-here"
+        scope: ""
+```
+
+#### Basic Authentication
+
+```yaml
+infrastructures:
+  default: staging
+
+  staging:
+    name: Staging Environment
+    components:
+      aasRegistry:
+        baseUrl: "https://aasreg.staging.basyx.com"
+      submodelRegistry:
+        baseUrl: "https://smreg.staging.basyx.com"
+      aasRepository:
+        baseUrl: "https://aasenv.staging.basyx.com"
+      submodelRepository:
+        baseUrl: "https://aasenv.staging.basyx.com"
+      conceptDescriptionRepository:
+        baseUrl: "https://aasenv.staging.basyx.com"
+    security:
+      type: basic
+      config:
+        username: "admin"
+        password: "admin123"
+```
+
+#### Bearer Token Authentication
+
+```yaml
+infrastructures:
+  default: test
+
+  test:
+    name: Test Environment
+    components:
+      aasRegistry:
+        baseUrl: "https://aasreg.test.basyx.com"
+      submodelRegistry:
+        baseUrl: "https://smreg.test.basyx.com"
+      aasRepository:
+        baseUrl: "https://aasenv.test.basyx.com"
+      submodelRepository:
+        baseUrl: "https://aasenv.test.basyx.com"
+      conceptDescriptionRepository:
+        baseUrl: "https://aasenv.test.basyx.com"
+    security:
+      type: bearer
+      config:
+        token: "your-bearer-token-here"
+```
+
+#### Multiple Infrastructures
+
+```yaml
+infrastructures:
+  default: production
+
+  production:
+    name: Production Environment
+    components:
+      # ... production components
+    security:
+      type: oauth2
+      config:
+        flow: auth_code
+        issuer: "https://auth.prod.example.com/realms/basyx"
+        clientId: "basyx-web-ui"
+        scope: "openid profile email"
+
+  development:
+    name: Development Environment
+    components:
+      # ... development components
+    security:
+      type: none
+
+  partner-a:
+    name: Partner A Infrastructure
+    components:
+      # ... partner A components
+    security:
+      type: oauth2
+      config:
+        flow: auth_code
+        issuer: "https://auth.partner-a.com/realms/basyx"
+        clientId: "basyx-integration"
+        scope: "openid"
+```
+
+### Docker Deployment
+
+#### Mounting the Configuration File
+
+```yaml
+services:
+  aas-web-ui:
+    image: eclipsebasyx/aas-gui:latest
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./basyx-infra.yml:/basyx-infra.yml:ro
+    environment:
+      # Control whether users can edit infrastructures
+      ENDPOINT_CONFIG_AVAILABLE: "false"  # Locked mode
+```
+
+#### Configuration Precedence
+
+Environment variables take precedence over YAML for backward compatibility:
+
+1. **Environment Variables** (highest): If any infrastructure-related env vars are set (e.g., `AAS_REGISTRY_PATH`, `KEYCLOAK_URL`), the YAML file is ignored
+2. **YAML Configuration**: Only used when no env vars are configured
+3. **User Edits (localStorage)**: User modifications in the UI (if `ENDPOINT_CONFIG_AVAILABLE=true`)
+
+#### Configuration Locking
+
+Control user ability to modify infrastructures with `ENDPOINT_CONFIG_AVAILABLE`:
+
+* **`false`** (Locked Mode):
+  - Configuration source (env vars or YAML) takes full precedence
+  - Users cannot add or edit infrastructures
+  - Recommended for production
+
+* **`true`** (Editable Mode - Default):
+  - Configurations from source are loaded as templates
+  - Users can edit and create infrastructures
+  - Changes stored in browser localStorage
+  - Recommended for development
+
+### Security Configuration Reference
+
+#### Authentication Types
+
+The `security.type` field accepts:
+
+* **`none`**: No authentication
+* **`oauth2`**: OAuth2/OIDC authentication
+* **`basic`**: HTTP Basic authentication
+* **`bearer`**: Bearer token authentication
+
+#### OAuth2 Fields
+
+**Common Fields (Both Flows):**
+
+* `flow` (required): `auth_code` or `client_credentials`
+* `issuer` (required): OAuth2 authorization server URL
+* `clientId` (required): Client identifier
+* `scope` (optional): Space-separated OAuth2 scopes (default: `""`)
+
+**Client Credentials Flow Only:**
+
+* `clientSecret` (required): Client secret for authentication
+
+```{warning}
+Client secrets in YAML files are visible in the browser. Never use client credentials flow in production environments with external access.
+```
+
+#### Basic Authentication Fields
+
+* `username` (required): Username for authentication
+* `password` (required): Password for authentication
+
+#### Bearer Token Fields
+
+* `token` (required): Bearer token string
+
+### Implementation Details
+
+#### Infrastructure IDs
+
+* YAML-based: `yaml_<yamlKey>` (stable across reloads)
+* User-created: `infra_<timestamp>` (unique per creation)
+
+#### YAML to Internal Format Mapping
+
+* YAML `baseUrl` → Internal `url`
+* YAML field names match internal store structure
+* Security types map: `none` → `No Authentication`, `oauth2` → `OAuth2`, etc.
+
+#### Loading Process
+
+1. **Container Startup** (`entrypoint.sh`):
+   ```bash
+   if [ -f "/basyx-infra.yml" ]; then
+     cp /basyx-infra.yml /usr/src/app/dist/config/basyx-infra.yml
+   fi
+   ```
+
+2. **Application Startup** (`useInfrastructureConfigLoader`):
+   - Determine base path (dev: `import.meta.env.BASE_URL`, prod: `envStore.getEnvBasePath`)
+   - Fetch from `${basePath}/config/basyx-infra.yml`
+   - Return null if file doesn't exist (404)
+
+3. **YAML Parsing** (`useInfrastructureYamlParser`):
+   - Convert YAML structure to internal format
+   - Transform `baseUrl` to `url` for each component
+   - Map security types to internal enums
+   - Generate infrastructure IDs: `yaml_<yamlKey>`
+
+4. **Configuration Merging** (`useInfrastructureStorage`):
+   - Check if environment variables are configured
+   - Load YAML file and parse infrastructures
+   - Merge with localStorage based on `ENDPOINT_CONFIG_AVAILABLE`
+   - Authenticate client credentials flows automatically
+
+#### OAuth2 Client Credentials Auto-Authentication
+
+When `client_credentials` flow is detected:
+* Application automatically authenticates on load
+* Token refresh handled automatically
+* No user interaction required
+
+### Best Practices
+
+1. **Use YAML for Production**: Avoid deprecated environment variables for infrastructure config
+2. **Lock Configuration**: Set `ENDPOINT_CONFIG_AVAILABLE=false` in production
+3. **Secure Secrets**: Never use client credentials flow with external access
+4. **Multiple Infrastructures**: Define all environments in one YAML file
+5. **Default Infrastructure**: Always set a sensible `default` key
+6. **Version Control**: Commit YAML templates, not files with real credentials
+7. **Read-Only Mount**: Mount YAML files as read-only (`:ro`) in Docker
+
 ## Introducing new Environment Variables
 
 When introducing new environment variables, the following files need to be updated accordingly:
