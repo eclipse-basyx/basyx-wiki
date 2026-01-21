@@ -20,7 +20,7 @@ name: web_ui
 * [Configuration & Environment](./features/configuration.md)
 * [Data Synchronization](./features/data_sync.md)
 * [Docker Configuration](./features/docker_config.md)
-* [Role Based Access Control](./features/rbac.md)
+* [Security](./features/security.md)
 * [Corporate Design](./features/corporate_design.md)
 * [Mobile Support](./features/mobile_support.md)
 * [Plugin Mechanism](./features/plugin_mechanism.md)
@@ -35,7 +35,7 @@ name: web_ui
 features/configuration
 features/data_sync
 features/docker_config
-features/rbac
+features/security
 features/corporate_design
 features/mobile_support
 features/plugin_mechanism

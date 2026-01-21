@@ -601,7 +601,7 @@ When RBAC (Role-Based Access Control) or ABAC (Attribute-Based Access Control) i
 - Some operations may be restricted based on user roles
 
 ```{seealso}
-For information on configuring access control, see the [Role Based Access Control](./rbac.md) feature page.
+For information on configuring access control, see the [Security](./security.md) feature page.
 ```
 
 ## Troubleshooting
