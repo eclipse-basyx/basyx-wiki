@@ -21,13 +21,11 @@ name: web_ui
 * [Data Synchronization](./features/data_sync.md)
 * [Docker Configuration](./features/docker_config.md)
 * [Role Based Access Control](./features/rbac.md)
-* [Status Check and Error Notifications](./features/statuscheck.md)
 * [Corporate Design](./features/corporate_design.md)
 * [Mobile Support](./features/mobile_support.md)
 * [Plugin Mechanism](./features/plugin_mechanism.md)
 * [AAS Editor](./features/aas_editor.md)
 * [AAS Routing](./features/routing.md)
-* [AAS Environment Integration](./features/aas_environment_integration.md)
 * [Application Theme](./features/theme.md)
 
 ```{toctree}
@@ -38,12 +36,10 @@ features/configuration
 features/data_sync
 features/docker_config
 features/rbac
-features/statuscheck
 features/corporate_design
 features/mobile_support
 features/plugin_mechanism
 features/aas_editor
-features/aas_environment_integration
 features/routing
 features/theme
 ```
