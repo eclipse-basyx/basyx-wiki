@@ -101,7 +101,7 @@ After connecting to an AAS infrastructure, you can start interacting with the As
 
 ```{figure} ./images/aas_list.png
 ---
-width: 30%
+width: 40%
 alt: AAS List Sidebar
 name: aas_list
 ---
@@ -238,6 +238,10 @@ name: aas_submodel_viewer
 ---
 AAS Submodel Viewer Page
 ```
+
+## Submodel Viewer & Editor
+
+## Extension Modules
 
 ## Compatibility to BaSyx V1
 
