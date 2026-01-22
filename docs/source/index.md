@@ -72,7 +72,6 @@ content/introduction/contributing
 This section contains the user documentation of the Eclipse BaSyx middleware.
 
 * [User Tutorials](./content/user_documentation/user_tutorials/index.md)
-* [Set-Up and Configuration Guide (Go)](./content/user_documentation/v1_go/index.md)
 * [BaSyx Components](./content/user_documentation/basyx_components/index.md)
 * [Integrated End-User Applications](./content/user_documentation/integrated%20end-user%20applications/monitoring_scenarios.md)
 * [Releases](./content/user_documentation/releases/releases_and_features.md)
@@ -84,7 +83,6 @@ This section contains the user documentation of the Eclipse BaSyx middleware.
 :caption: User Documentation
 
 content/user_documentation/user_tutorials/index
-content/user_documentation/v1_go/index
 content/user_documentation/basyx_components/index
 content/user_documentation/integrated end-user applications/monitoring_scenarios
 content/user_documentation/releases/releases_and_features
