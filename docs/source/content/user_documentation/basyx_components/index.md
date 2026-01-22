@@ -1,5 +1,6 @@
 # BaSyx Components
 
+* [BaSyx Go Version 1](./v1_go/index.md)
 * [BaSyx Java Version 1](./v1/index.md)
 * [BaSyx Java Version 2](./v2/index.md)
 * [AAS Web UI](./web_ui/index.md)
@@ -12,6 +13,7 @@
 
 v1/index
 v2/index
+v1_go/index
 web_ui/index
 databridge/index
 testorchestrator/index
