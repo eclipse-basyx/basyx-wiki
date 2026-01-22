@@ -4,6 +4,10 @@ This section defines the **design, architectural, and code-style guidelines** fo
 
 These guidelines complement automated checks enforced by ESLint, Prettier, and CI, and document conventions that go beyond what tooling alone can express.
 
+```{seealso}
+Before contributing to the BaSyx AAS Web UI, please review the general [Contributing Guide](../../../introduction/contributing.md) for information on the Eclipse Contributor Agreement (ECA), GitHub workflow, and how to submit pull requests to Eclipse BaSyx projects.
+```
+
 ## UI & UX Design Principles
 
 ### Vuetify Usage and Theming
