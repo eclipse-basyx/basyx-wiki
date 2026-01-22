@@ -46,3 +46,4 @@ services:
 ```
 *docker-compose.yml including PostgreSQL 18 and BaSyx Go Submodel Repository Snapshot*
 
+If you need advanced configuration options, please refer to the [Configuration](configuration) section.
