@@ -1,4 +1,4 @@
-# BaSyx Go Version 1
+# Set-Up and Configuration Guide (Go)
 
 * [Submodel Repository](submodel_repository/index)
 
