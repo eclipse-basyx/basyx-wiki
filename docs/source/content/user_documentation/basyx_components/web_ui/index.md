@@ -79,11 +79,11 @@ To connect to an AAS infrastructure, open the settings by clicking on the gear i
 For more details on configuration options, backend connections, and advanced setup, please refer to the [Configuration & Environment](./features/configuration.md) page.
 ```
 
-```{figure} ./images/connect_to_aas_infrastructure.png
+```{figure} ./images/connect_to_aas_Infrastructure.png
 ---
 width: 80%
 alt: Connect to AAS Infrastructure
-name: connect_to_aas_infrastructure
+name: connect_to_aas_Infrastructure
 ---
 ```
 
