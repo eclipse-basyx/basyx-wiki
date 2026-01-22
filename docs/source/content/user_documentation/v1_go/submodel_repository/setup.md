@@ -1,5 +1,5 @@
 # Setting Up the Submodel Repository
-We provide example Set-Ups to get you started with the new BaSyx Go Components on our [GitHub Repository](https://github.com/eclipse-basyx/basyx-go-components).
+We provide example Set-Ups to get you started with the new BaSyx Go Components on our [GitHub Repository](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples).
 But if you need to configure the service yourself, this page will guide you through.
 
 ## Using Docker Compose
@@ -19,8 +19,9 @@ services:
       POSTGRES_PASSWORD: admin123
       POSTGRES_DB: basyx
     command: ["postgres", "-c", "listen_addresses=*"]
-    ports:
-      - "6432:5432"
+    # Uncomment the following lines to expose PostgreSQL on your host machine (not required for BaSyx to work)
+    # ports:
+    #  - "6432:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U admin -d basyx"]
       interval: 10s
@@ -29,17 +30,13 @@ services:
   submodel_repository_it:
     image: eclipsebasyx/submodelrepository-go      
     environment:
-      - SERVER_PORT=5004
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin123
       - POSTGRES_DBNAME=basyx
-      - POSTGRES_MAXOPENCONNECTIONS=500
-      - POSTGRES_MAXIDLECONNECTIONS=500
-      - POSTGRES_CONNMAXLIFETIMEMINUTES=5
     ports:
-      - "5004:5004"
+      - "YOURPORT:5004" # Set your desired external port here
     depends_on:
       postgres:
         condition: service_healthy
