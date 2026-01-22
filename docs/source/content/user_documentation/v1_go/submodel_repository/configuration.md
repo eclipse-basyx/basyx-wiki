@@ -7,14 +7,14 @@ BaSyx is configured via *Environment Variables* in the docker-compose file.
 ### Server Configuration
 Variable Name      | Default | Description
 -------------------|---------|---------------------------------------------------------------------------------------------------------------------------
-SERVER_HOST        | 0.0.0.0    | Sets the Servers <b>internal</b> Host
-SERVER_PORT        | 5004    | Sets the Servers <b>internal</b> Port
-SERVER_CONTEXTPATH | /       | Sets the base (context) Path of the server. If set to /myServer the Server is listening to http://locahost:5004/myServer/*
+SERVER_HOST        | 0.0.0.0    | Sets the server`s <b>internal</b> Host
+SERVER_PORT        | 5004    | Sets the server`s <b>internal</b> Port
+SERVER_CONTEXTPATH | /       | Sets the base (context) Path of the server. If set to /myServer the server is listening to http://localhost:5004/myServer/*
 
 ### PostgreSQL Configuration
 Variable Name                   | Default     | Description
 --------------------------------|-------------|------------------------------------------------------------------
-POSTGRES_HOST                   | db          | The <b>IP-Address</b> or <b>Hostname</b> of the PostgreSQL Server
+POSTGRES_HOST                   | db          | The <b>IP-Address</b> or <b>Hostname</b> of the PostgreSQL server
 POSTGRES_PORT                   | 5432        | The Port of the PostgreSQL Server
 POSTGRES_DBNAME                 | basyxTestDB | The Database to use by BaSyx
 POSTGRES_USER                   | admin       | Username of the Database User
@@ -26,7 +26,7 @@ POSTGRES_CONNMAXLIFETIMEMINUTES | 5           | Lifetime of a single Connection 
 ### CORS Configuration
 Variable Name         | Default                                | Description
 ----------------------|----------------------------------------|------------
-CORS_ALLOWEDORIGINS   | --                                     | A comma-seperated list of allowed origins. If set to `*` all origins are allowed. (NOTE: This is important for <b>Front-End Applications</b> like the <b>BaSyx AAS Web UI</b>)
+CORS_ALLOWEDORIGINS   | --                                     | A comma-separated list of allowed origins. If set to `*` all origins are allowed. (NOTE: This is important for <b>Front-End Applications</b> like the <b>BaSyx AAS Web UI</b>)
 CORS_ALLOWEDMETHODS   | GET, POST, PUT, PATCH, DELETE, OPTIONS | Allowed HTTP Methods
 CORS_ALLOWEDHEADERS   | --                                     | Allowed Headers
 CORS_ALLOWCREDENTIALS | false                                  | Whether to allow credentials (like Cookies, Authorization Headers or TLS Client Certificates)
@@ -35,7 +35,7 @@ CORS_ALLOWCREDENTIALS | false                                  | Whether to allo
 Variable Name                  | Default | Description
 -------------------------------|----------------------------------|----
 ABAC_ENABLED                   | false | Enable/Disable the ABAC Feature
-ABAC_ENABLEDEBUGERRORRESPONSES | false | Enables/Disable additional Debugging Information on the console and in HTTP Responses (<b>Do not use this in production, this may leak confidential information in plain-text</b>)
+ABAC_ENABLEDEBUGERRORRESPONSES | false | Enable/Disable additional Debugging Information on the console and in HTTP Responses (<b>Do not use this in production, this may leak confidential information in plain-text</b>)
 ABAC_MODELPATH                 | config/access_rules/access-rules.json | (Docker Internal-) Path to the ABAC Rules.
 OIDC_TRUSTLISTPATH | -- | Path to a JSON File containing trusted OIDC Issuers. See [here](https://github.com/eclipse-basyx/basyx-go-components/blob/main/cmd/aasregistryservice/config/trustlist.json)
 
