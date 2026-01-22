@@ -8,3 +8,12 @@
 * [Creating your own Set-Up](setup)
 * [Configuration](configuration)
 * [Swagger UI](swagger)
+
+```{toctree}
+:hidden:
+:maxdepth: 1
+
+setup
+configuration
+swagger
+```
