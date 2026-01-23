@@ -1,0 +1,78 @@
+# Setting Up the Submodel Repository
+We provide example Set-Ups to get you started with the new BaSyx Go Components on our [GitHub Repository](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples).
+But if you need to configure the service yourself, this page will guide you through.
+
+## Using Docker Compose
+The easiest way to use and set-up the Submodel Repository, is by using Docker Compose.
+
+The minimal configuration includes two services:
+1. PostgreSQL (>=15)
+2. BaSyx Submodel Repository (Go)
+
+```yaml
+services:
+  postgres:
+    image: postgres:18
+    container_name: postgres_basyx
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: basyx
+    command: ["postgres", "-c", "listen_addresses=*"]
+    # Uncomment the following lines to expose PostgreSQL on your host machine (not required for BaSyx to work)
+    # ports:
+    #  - "6432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d basyx"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  submodel_repository_it:
+    image: eclipsebasyx/submodelrepository-go      
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin123
+      - POSTGRES_DBNAME=basyx
+    ports:
+      - "YOURPORT:5004" # Set your desired external port here
+    depends_on:
+      postgres:
+        condition: service_healthy
+```
+*docker-compose.yml including PostgreSQL 18 and BaSyx Go Submodel Repository Snapshot*
+
+If you need advanced configuration options, please refer to the [Configuration](configuration) section.
+
+## Using BaSyx Go Components without Docker
+If you need to run the Submodel Repository without Docker, you need to build the Binary from source. (Important Note: You need to build this for the target platform you want to run it on)
+
+```{warning}
+We recommend using the Docker Images for production use-cases, as they are pre-configured and optimized for production environments.
+```
+
+### Prerequisites
+- [Go (>=1.20; 1.25 recommended)](https://golang.org/dl/)
+- [Git](https://git-scm.com/)
+
+### Cloning the Repository
+First, clone the BaSyx Go Components repository from GitHub:
+```bash
+git clone https://github.com/eclipse-basyx/basyx-go-components
+```
+
+### Building the Binary
+Navigate to the Submodel Repository directory and build the binary:
+```bash
+cd basyx-go-components/cmd/submodelrepositoryservice
+go build -o submodelrepository
+```
+
+### Running the Submodel Repository
+Before running the Submodel Repository, ensure that you have a running PostgreSQL instance and configure the connection settings via environment variables or a configuration file as described in the [Configuration](configuration) section.
+
+Assuming you provide a configuration.yaml file at the same location as the binary, you can start the Submodel Repository with:
+```bash
+./submodelrepository -config ./config.yaml -databaseSchema ../../basyxschema.sql
+```
