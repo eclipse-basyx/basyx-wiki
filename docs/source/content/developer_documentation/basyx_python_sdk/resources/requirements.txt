@@ -1,9 +1,0 @@
-basyx-python-sdk
-flask
-waitress
-dash
-requests
-pytest
-isort
-pylint
-black

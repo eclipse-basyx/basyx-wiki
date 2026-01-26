@@ -197,28 +197,28 @@ Keep this running in a separate terminal.
 #### Load AAS Files
 
 ```python
-import pathlib
-from basyx.aas import adapter
+from basyx.aas.adapter import load_directory
 
-object_store = model.DictObjectStore()
-
-for file in pathlib.Path(storage_path).iterdir():
-    if file.suffix.lower() == ".json":
-        with open(file, 'r') as f:
-            adapter.json.read_aas_json_file_into(object_store, f)
+# Load AAS data from input directory
+if os.path.isdir(env_input):
+    object_store, file_store = load_directory(env_input)
+    logger.info(
+        "Loaded %d identifiable(s) and %d supplementary file(s)",
+        len(list(object_store)), len(list(file_store))
+    )
 ```
 
-The server scans the storage directory and loads all AAS files (JSON, XML, or AASX) into an in-memory object store.
+The server uses the `load_directory` function to recursively scan the input directory and load all AAS files (JSON, XML, or AASX) into an object store. The server supports both in-memory (read-only) and persistent storage modes.
 
 #### Create WSGI Application
 
 ```python
-from basyx.aas.adapter.http import WSGIApp
+from interfaces.repository import WSGIApp
 
-application = WSGIApp(object_store, file_store)
+application = WSGIApp(object_store, file_store, base_path="/api/v3.0")
 ```
 
-The `WSGIApp` creates a REST API that exposes the AAS data according to the official AAS API specification.
+The custom `WSGIApp` (from the `interfaces` module) creates a REST API that exposes the AAS data according to the official AAS API specification. This implementation provides full control over the API endpoints and behavior.
 
 #### Start the Server
 
@@ -233,9 +233,12 @@ Waitress is a production-ready WSGI server that serves the BaSyx application on 
 **API Endpoints:**
 
 - `GET /api/v3.0/shells` - List all AAS
-- `GET /api/v3.0/shells/{aasIdentifier}` - Get specific AAS
+- `GET /api/v3.0/shells/{aasIdentifier}` - Get specific AAS by Base64URL-encoded ID
 - `GET /api/v3.0/submodels` - List all Submodels
-- `GET /api/v3.0/submodels/{submodelIdentifier}` - Get specific Submodel
+- `GET /api/v3.0/submodels/{submodelIdentifier}` - Get specific Submodel by Base64URL-encoded ID
+- `GET /` - Root endpoint with service information
+
+**Note:** Identifiers in URLs must be Base64URL-encoded. The server automatically handles encoding/decoding.
 
 ### Step 3: Visualizing AAS Data
 
@@ -317,9 +320,15 @@ Starts the Dash development server on port 8050.
 resources/
 ├── .devcontainer/
 │   └── devcontainer.json      # Dev container configuration
+├── interfaces/                # Custom repository interfaces
+│   ├── __init__.py
+│   ├── base.py               # Base WSGI application
+│   └── repository.py         # AAS API implementation
+├── util/                      # Utility modules
+│   ├── __init__.py
+│   └── converters.py         # URL converters for identifiers
 ├── storage/                   # AAS data storage directory
 │   └── .gitkeep              # Placeholder for empty directory
-├── Dockerfile                 # Container image definition
 ├── requirements.txt           # Python dependencies
 ├── main.py                    # Main script with interactive menu
 ├── create_aas.py             # Step 1: Create AAS and Submodel
@@ -334,17 +343,34 @@ resources/
 
 Configure the BaSyx server behavior using environment variables:
 
-- **`STORAGE_TYPE`** (default: `LOCAL_FILE_READ_ONLY`)
-  - `LOCAL_FILE_READ_ONLY`: Read-only mode, loads files into memory
-  - `LOCAL_FILE_BACKEND`: Writable backend for persistence
+- **`INPUT`** (default: `storage`)
+  - Directory path to load AAS data from at startup
 
-- **`API_BASE_PATH`** (optional)
-  - Custom base path for API endpoints (e.g., `/basyx`)
+- **`STORAGE`** (default: `storage`)
+  - Directory path for persistent storage (used when STORAGE_PERSISTENCY is enabled)
+
+- **`STORAGE_PERSISTENCY`** (default: `false`)
+  - `true`: Enable persistent storage backend (changes are saved to disk)
+  - `false`: Use in-memory storage (read-only mode)
+
+- **`STORAGE_OVERWRITE`** (default: `false`)
+  - `true`: Overwrite existing files when syncing INPUT to STORAGE
+  - `false`: Skip existing files during sync
+
+- **`API_BASE_PATH`** (optional, default: `/api/v3.0`)
+  - Custom base path for the API endpoints
 
 Example:
 
 ```bash
-export STORAGE_TYPE=LOCAL_FILE_BACKEND
+# Start with persistent storage
+export STORAGE_PERSISTENCY=true
+python start_server.py
+
+# Start with custom input directory
+export INPUT=my_data
+export STORAGE=persistent_storage
+export STORAGE_PERSISTENCY=true
 python start_server.py
 ```
 
