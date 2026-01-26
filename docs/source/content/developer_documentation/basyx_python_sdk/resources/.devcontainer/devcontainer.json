@@ -1,0 +1,34 @@
+{
+  "name": "BaSyx Python SDK Example",
+  "image": "mcr.microsoft.com/devcontainers/python:1-3.12",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": true,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": "explicit"
+        },
+        "python.formatting.provider": "black"
+      },
+      "extensions": [
+        "ms-python.python",
+        "ms-python.pylint",
+        "ms-python.black-formatter"
+      ]
+    }
+  },
+  "forwardPorts": [8080, 8050],
+  "portsAttributes": {
+    "8080": {
+      "label": "BaSyx AAS Server",
+      "onAutoForward": "notify"
+    },
+    "8050": {
+      "label": "Dash Visualization",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  "postCreateCommand": "pip3 install --no-cache-dir -r requirements.txt",
+  "remoteUser": "vscode"
+}

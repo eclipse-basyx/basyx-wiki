@@ -1,0 +1,12 @@
+# Storage Directory
+
+This directory is used to store AAS (Asset Administration Shell) data files.
+
+The BaSyx server will load AAS data from this directory. Supported formats:
+- `.json` - JSON serialization of AAS
+- `.xml` - XML serialization of AAS
+- `.aasx` - AAS package files
+
+## Getting Started
+
+Run `python create_aas.py` from the parent directory to generate a sample `aas_data.json` file in this directory.
