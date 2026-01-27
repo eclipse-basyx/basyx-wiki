@@ -27,6 +27,7 @@ name: web_ui
 * [AAS Editor](./features/aas_editor.md)
 * [AAS Routing](./features/routing.md)
 * [Application Theme](./features/theme.md)
+* [Hierarchical Structures Editor](./features/bom_editor.md)
 
 ```{toctree}
 :hidden:
@@ -42,6 +43,7 @@ features/plugin_mechanism
 features/aas_editor
 features/routing
 features/theme
+features/bom_editor
 ```
 
 ## Download
