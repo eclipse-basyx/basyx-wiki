@@ -18,6 +18,7 @@ When using **Docker run**, you can configure the following:
 
 ```{note}
 Please note, that the logo and primary color for the light and dark theme can be configured separately (starting with eclipsebasyx/aas-gui:v2-241114) using `PRIMARY_LIGHT_COLOR`, `PRIMARY_DARK_COLOR` respectively `LOGO_LIGHT_PATH` and `LOGO_DARK_PATH`.
+```
 
 ## Usage with Docker
 
