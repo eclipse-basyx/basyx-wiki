@@ -38,4 +38,5 @@ The following pages provide detailed documentation for specific Submodel Plugins
 :maxdepth: 1
 
 plugins/bom_editor
+plugins/file_explorer
 ```
