@@ -1,4 +1,4 @@
-# Plugin Mechanism
+# Plugins
 
 > **As a** BaSyx AAS Web UI user  
 > **I want to** extend the UI with custom plugins  
@@ -29,3 +29,13 @@ Currently, the following plugins are available:
 ## Developing your own Plugin
 
 If you are interested in developing your own plugin for the BaSyx AAS Web UI, please refer to the [Plugin Development Guide](../../../../developer_documentation/basyx_web_ui/creating_submodel_plugins.md).
+
+## Available Plugins
+
+The following pages provide detailed documentation for specific Submodel Plugins:
+
+```{toctree}
+:maxdepth: 1
+
+plugins/bom_editor
+```
