@@ -15,35 +15,45 @@ The BaSyx AAS Web UI includes plugins for various IDTA Submodel templates and cu
 ### IDTA Standard Submodels
 
 **[Digital Nameplate](plugins/digital_nameplate.md)**
-- **Semantic IDs**: 
+
+- **Semantic IDs**:
   - V2.0: `https://admin-shell.io/zvei/nameplate/2/0/Nameplate`
   - V3.0: `https://admin-shell.io/idta/nameplate/3/0/Nameplate`
 - Visualizes Digital Nameplate Submodels in an expandable panel view
 
 **[Time Series Data](plugins/time_series_data.md)**
+
 - **Semantic ID**: `https://admin-shell.io/idta/TimeSeries/1/1`
 - Visualizes time series data using different chart types (line, bar, area)
 - Supports data from AAS properties, files, and external databases (InfluxDB)
 
 **[Bills of Material](plugins/bom_editor.md)**
+
 - **Semantic ID**: `https://admin-shell.io/idta/HierarchicalStructures/1/0/Submodel`
 - Displays Bill of Material Submodels in an interactive tree view chart
 - Supports creating and editing hierarchical structures
 
 **[Handover Documentation](plugins/handover_documentation.md)**
-- **Semantic ID**: `0173-1#01-AHF578#001`
+
+- **Semantic ID**:
+  - V1.0: `0173-1#01-AHF578#001`
 - Displays Handover Documentation in an expandable view
 - Provides built-in preview for PDFs, images, and CAD files
 
 **[Contact Information](plugins/contact_information.md)**
+
 - **Semantic ID**: `https://admin-shell.io/zvei/nameplate/1/0/ContactInformations`
 - Displays Contact Information Submodels in a table view
 
 **[Technical Data](plugins/technical_data.md)**
-- **Semantic ID**: `https://admin-shell.io/ZVEI/TechnicalData/Submodel/1/2`
-- Displays Technical Data Submodels in an expandable panel view
+
+- **Semantic ID**:
+  - V1.0: `https://admin-shell.io/ZVEI/TechnicalData/Submodel/1/2`
+- Displays Technical Data Submodels in a table view
+- Provides semantic information for each technical property (e.g., unit, description)
 
 **[Carbon Footprint](plugins/carbon_footprint.md)**
+
 - **Semantic IDs**:
   - V0.9: `https://admin-shell.io/idta/CarbonFootprint/CarbonFootprint/0/9`
   - V1.0: `https://admin-shell.io/idta/CarbonFootprint/CarbonFootprint/1/0`
@@ -52,18 +62,27 @@ The BaSyx AAS Web UI includes plugins for various IDTA Submodel templates and cu
 
 ### Custom & Development Plugins
 
+**[File Explorer](plugins/file_explorer.md)**
+
+- **Semantic ID**: `https://basyx.org/FileSystem/FileSystem/0/1`
+- Comprehensive file management interface with cloud storage-like experience
+- Supports drag & drop upload, folder management, file preview, and download
+
 **[HelloWorld Plugin](plugins/helloworld_plugin.md)**
+
 - **Semantic ID**: `http://hello.world.de/plugin_submodel`
 - Example plugin for learning and development
 - Displays Submodels generically with editing capabilities
 - Intended as a template for developing your own plugins
 
 **[JSONArray Property](plugins/jsonarray_property.md)**
+
 - **Semantic ID**: `http://iese.fraunhofer.de/prop_jsonarray`
 - Visualizes data series from Property values in charts
 - Supports single or multiple series visualization
 
 **[HTW Führungskomponente](plugins/htw_fuehrungskomponente.md)**
+
 - **Semantic ID**: `http://htw-berlin.de/smc_statemachine`
 - Visualizes and controls PackML state machines
 - Allows triggering state transitions and changing operating modes
@@ -86,6 +105,7 @@ plugins/handover_documentation
 plugins/contact_information
 plugins/technical_data
 plugins/carbon_footprint
+plugins/file_explorer
 plugins/helloworld_plugin
 plugins/jsonarray_property
 plugins/htw_fuehrungskomponente
