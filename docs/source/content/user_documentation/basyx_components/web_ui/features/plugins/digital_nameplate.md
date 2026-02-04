@@ -13,43 +13,84 @@ This plugin is activated when a Submodel has one of the following semantic IDs:
 
 ## Feature Overview
 
-The Digital Nameplate plugin provides a specialized visualization for Digital Nameplate Submodels according to the IDTA specification. It displays nameplate information in an expandable panel view, making it easy to browse through manufacturer information, product details, and other relevant nameplate data.
+The Digital Nameplate plugin provides a specialized visualization for Digital Nameplate Submodels according to the IDTA specification. It organizes nameplate information into five distinct cards for easy navigation and comprehension:
 
-```{figure} ./images/digital_nameplate.png
+1. **Product Info Card**: Displays product designation, descriptions, article numbers, serial numbers, ...
+2. **Manufacturer Info Card**: Shows manufacturer details including company name, addresses, and contact information
+3. **Address Map Card**: Interactive OpenStreetMap visualization of the company/manufacturer address
+4. **Markings Card**: Presents regulatory markings and certifications (e.g., CE marking)
+5. **Asset Specific Properties Card**: Generic expansion panel structure for additional asset-specific information
+
+```{figure} ./images/nameplate_product.png
 ---
 width: 100%
-alt: Digital Nameplate Plugin
-name: digital_nameplate_plugin
+alt: Digital Nameplate Plugin - Product Information
+name: digital_nameplate_product
 ---
-Digital Nameplate Plugin
+Digital Nameplate Plugin - Product Information Card
+```
+
+```{figure} ./images/nameplate_manufacturer.png
+---
+width: 100%
+alt: Digital Nameplate Plugin - Manufacturer Information and Map
+name: digital_nameplate_manufacturer
+---
+Digital Nameplate Plugin - Manufacturer Information and Address Map Cards
 ```
 
 ## Key Features
 
-- **Expandable Panel View**: All SubmodelElements are organized in collapsible panels for easy navigation
-- **Structured Information Display**: Nameplate data is presented in a logical, hierarchical structure
-- **Support for Multiple Versions**: Compatible with both V2.0 and V3.0 of the IDTA Digital Nameplate specification
-- **Multi-language Support**: Displays multi-language properties according to the user's language settings
+- **Card-Based Layout**: Information is organized into five dedicated cards for intuitive navigation
+- **Interactive Address Map**: OpenStreetMap integration displays manufacturer/company locations visually
+- **vCard Download**: Export manufacturer contact information as a vCard file for easy import into contact management systems
 
 ## Usage
 
 1. Navigate to a Submodel with the Digital Nameplate semantic ID in the AAS Treeview
 2. Open the **Visualization** tab
-3. The plugin will automatically display the nameplate information in an expandable panel view
-4. Click on panel headers to expand or collapse sections
-5. View detailed information for each nameplate element
+3. The plugin will automatically display the nameplate information organized in five cards:
+   - **Product Info**: View product details, descriptions, article numbers, and dimensions
+   - **Manufacturer Info**: Access manufacturer details and download contact information as a vCard
+   - **Address Map**: Explore the manufacturer's location on an interactive OpenStreetMap
+   - **Markings**: Review regulatory markings and certifications
+   - **Asset Specific Properties**: Browse additional asset-specific information in expandable panels
+4. Use the vCard download button in the Manufacturer Info card to export contact information
 
 ## Supported Submodel Elements
 
-The plugin supports all SubmodelElements defined in the IDTA Digital Nameplate specification, including:
+The plugin supports all SubmodelElements defined in the IDTA Digital Nameplate specification, organized across the five cards:
 
-- Manufacturer information
+### Product Info Card
+
 - Product designation and descriptions
 - Article numbers and serial numbers
-- Physical dimensions and classifications
-- Markings and certifications
-- Contact information
-- And more...
+- Product classifications and categories
+
+### Manufacturer Info Card
+
+- Manufacturer name and identifiers
+- Contact information with vCard export functionality
+- Company addresses
+- Web presence and communication details
+
+### Address Map Card
+
+- Interactive OpenStreetMap visualization
+- Geolocation of manufacturer/company address
+- Zoom and pan controls for detailed location viewing
+
+### Markings Card
+
+- Regulatory markings (e.g., CE marking)
+- Certifications and compliance information
+- Safety and quality markings
+
+### Asset Specific Properties Card
+
+- Custom asset properties
+- Additional technical specifications
+- Application-specific information
 
 ## References
 
