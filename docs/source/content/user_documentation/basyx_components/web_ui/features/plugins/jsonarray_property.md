@@ -27,7 +27,6 @@ JSONArray Property Plugin with Single Series
 
 - **Simple Data Format**: Works with Properties containing JSON arrays
 - **Single or Multiple Series**: Visualize one or many data series simultaneously
-- **Chart Types**: Line charts, bar charts, and area charts
 - **Interactive Visualization**: Zoom, pan, and hover for details
 - **No External Dependencies**: Data stored directly in the AAS
 - **Easy Setup**: No additional configuration required
@@ -47,7 +46,7 @@ JSONArray Property Plugin with Single Series
 For a single data series, use a simple JSON array:
 
 ```json
-[11, 32, 45, 32, 34, 52, 41]
+[31, 45, 23, 40, 45, 38]
 ```
 
 This will display as a single line/bar series in the chart.
@@ -87,18 +86,15 @@ Multiple Series Visualization
 
 The plugin provides various customization options:
 
-### Chart Type Selection
-- **Line Chart**: Continuous lines connecting data points (default)
-- **Bar Chart**: Vertical bars for each data point
-- **Area Chart**: Filled area below the line
-
 ### Display Options
+
 - **Toggle Series**: Click on legend items to show/hide series
 - **Zoom**: Select an area to zoom in
 - **Pan**: Drag to move the visible area
 - **Reset Zoom**: Return to the original view
 
 ### Color Schemes
+
 - Each series automatically gets a distinct color
 - Colors are consistent across views
 - Accessible color palette for better readability
@@ -106,7 +102,9 @@ The plugin provides various customization options:
 ## Use Cases
 
 ### Sensor Readings
+
 Store and visualize sensor measurements:
+
 ```json
 {
   "Temperature": [22.1, 22.3, 22.5, 22.8, 23.0, 22.9],
@@ -115,7 +113,9 @@ Store and visualize sensor measurements:
 ```
 
 ### Performance Metrics
+
 Track system performance over time:
+
 ```json
 {
   "CPU Usage": [45, 52, 48, 61, 58, 55, 50],
@@ -124,13 +124,17 @@ Track system performance over time:
 ```
 
 ### Quality Measurements
+
 Monitor product quality parameters:
+
 ```json
 [98.5, 99.1, 98.8, 99.3, 99.0, 98.9, 99.2]
 ```
 
 ### Production Counts
+
 Track production quantities:
+
 ```json
 {
   "ProductA": [120, 135, 128, 142, 138, 145],
@@ -141,15 +145,16 @@ Track production quantities:
 ## Advantages
 
 ### Compared to Time Series Data Submodel
+
 - **Simpler Setup**: No need for complex Submodel structure
 - **Lightweight**: Less overhead for small datasets
 - **Quick Prototyping**: Fast way to visualize data during development
 - **Embedded Data**: Everything in one Property value
 
 ### Compared to File-based Storage
+
 - **Direct Access**: No need to parse external files
 - **Real-time Updates**: Changes immediately visible
-- **Version Control**: Part of the AAS versioning
 - **No File Management**: No separate file storage needed
 
 ## Limitations
@@ -163,9 +168,8 @@ Track production quantities:
 
 1. **Keep It Reasonable**: Use for small to medium datasets (< 1000 points per series)
 2. **Name Series Meaningfully**: Use descriptive names in the multiple series format
-3. **Consistent Data Length**: Ensure all series have the same number of points for aligned visualization
-4. **Document Units**: Add description to the Property explaining units and context
-5. **Consider Alternatives**: For large datasets or time-based data, use the Time Series Data plugin instead
+3. **Document Units**: Add description to the Property explaining units and context
+4. **Consider Alternatives**: For large datasets or time-based data, use the Time Series Data plugin instead
 
 ## Example Property Configuration
 
@@ -191,11 +195,3 @@ Here's how to configure a Property for the JSONArray plugin:
   ]
 }
 ```
-
-## Tips and Tricks
-
-- **Data Validation**: Ensure your JSON is valid before storing it
-- **Decimal Precision**: Use appropriate precision for your use case
-- **Series Ordering**: Series appear in the order they're defined in the JSON object
-- **Legend Management**: Click legend items to focus on specific series
-- **Export Data**: Use browser developer tools to export data from the chart if needed
