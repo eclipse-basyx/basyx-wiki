@@ -10,7 +10,11 @@ Plugins can be integrated in the *"Visualization"* view of the UI. The Plugin-Fe
 
 ## Available Plugins
 
-The BaSyx AAS Web UI includes plugins for various IDTA Submodel templates and custom use cases:
+The BaSyx AAS Web UI includes a growing list of plugins for various IDTA Submodel templates and custom use cases.
+
+```hint
+**Missing a plugin for your use case?** [Contact us!](mailto:anfrage@iese.fraunhofer.de,frank.schnicke@iese.fraunhofer.de?subject=Commercial%20Support%20Request&body=Hello,%0D%0A%0D%0AWe%20are%20reaching%20out%20to%20inquire%20about%20commercial%20support%20for%20%3CEclipse%20BaSyx%20/%20the%20Asset%20Administration%20Shell%3E.%20We'd%20love%20to%20learn%20more%20about%20your%20offerings.%0D%0A%0D%0AName:%20%3CInsert%20Your%20Name%3E%0D%0ARole:%20%3CInsert%20Your%20Role%3E%0D%0ACompany:%20%3CInsert%20Company%20Name%3E%0D%0AContact:%20%3CInsert%20Your%20Contact%20Info%3E%0D%0A%0D%0A%3CPlease%20add%20any%20additional%20details%20or%20specific%20requests%20here%3E%0D%0A%0D%0ABest%20regards,%0D%0A%3CYour%20Name%3E) to develop a custom plugin tailored to your needs.
+```
 
 ### IDTA Standard Submodels
 
