@@ -1,4 +1,4 @@
-# HTW Führungskomponente (State Machine Control)
+# HTW Führungskomponente
 
 > **As a** BaSyx AAS Web UI user  
 > **I want to** visualize and interact with PackML state machines  

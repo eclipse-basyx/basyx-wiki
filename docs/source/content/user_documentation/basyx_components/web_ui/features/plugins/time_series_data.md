@@ -26,7 +26,7 @@ Time Series Data Plugin
 ## Key Features
 
 - **Multiple Chart Types**: Line charts, bar charts, area charts, and more
-- **Flexible Data Sources**: 
+- **Flexible Data Sources**:
   - AAS Properties
   - File SubmodelElements (CSV, JSON)
   - External time series databases (InfluxDB)
@@ -50,12 +50,15 @@ Time Series Data Plugin
 ## Data Source Configuration
 
 ### AAS Properties
+
 Time series data can be stored directly as Property values within the Submodel. The plugin reads the configured properties and renders them chronologically.
 
 ### File SubmodelElements
+
 CSV or JSON files containing time series data can be referenced as File SubmodelElements. The plugin parses these files and visualizes the data.
 
 ### External Databases (InfluxDB)
+
 For large-scale time series data, the plugin can connect to external InfluxDB instances. Connection details are configured within the Submodel.
 
 ```{figure} ./images/time_series_config.png
