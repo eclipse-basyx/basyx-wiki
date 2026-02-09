@@ -29,6 +29,9 @@ The Registry of Infrastructures has the following API endpoints:
 - `DELETE /infrastructure-descriptors/{id}`: Deletes a registered AAS infrastructure component identified by its unique ID.
 - `PUT /infrastructure-descriptors/{id}`: Updates an existing AAS infrastructure component identified by its unique ID with the new Infrastructure Descriptor provided in the request body.
 
+## Swagger UI
+
+In the [Swagger UI](swagger), you can find the API documentation for the Registry of Infrastructures. Furthermore, you can directly execute API calls from Swagger UI.
 
 ## Configuration
 The Registry of Infrastructures can be either configured through a docker-compose file or a separate configuration file
@@ -46,5 +49,6 @@ docker run --name=registry-of-infrastructures -p:8081:8081 eclipsebasyx/registry
 :hidden:
 :maxdepth: 1
 
+swagger
 configuration
 ```
