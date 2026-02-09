@@ -2,7 +2,7 @@
 
 ![GitHub](https://img.shields.io/github/license/eclipse-basyx/basyx-go-components)
 
-The BaSyx Registry of Infrastructures (RoI) is a component that can be used in Dataspaces (e.g., in MX Port Leo), to find Endpoints for AAS infrastructure components, such as AAS Servers or other Registries. It acts as a centralized directory where different components, e.g., registries and repositories, can register themselves, allowing clients to discover available components and their endpoints. The component supports filtering based on company names, enabling users to retrieve RoI descriptors specific to a particular company, as well as filtering based on the type of infrastructure component.
+The BaSyx Registry of Infrastructures (RoI) is a component that can be used in Dataspaces (e.g., in MX Port Leo), to find Endpoints for infrastructure components, such as AAS Servers or other Registries. It acts as a centralized directory where different components, e.g., registries and repositories, can register themselves, allowing clients to discover available components and their endpoints. The component supports filtering based on company names, enabling users to retrieve RoI descriptors specific to a particular company, as well as filtering based on the type of infrastructure component.
 
 ## Infrastructure Descriptor
 
@@ -21,13 +21,13 @@ As part of the Registry of Infrastructures the following new kind of Descriptor,
 
 The Registry of Infrastructures has the following API endpoints:
 
-- `GET /infrastructure-descriptors`: Retrieves all registered AAS infrastructure components. It supports the optional query parameters 
+- `GET /infrastructure-descriptors`: Retrieves all registered infrastructure components. It supports the optional query parameters 
   - `company` to filter the results based on the company name and
   - `endpointInterface` to filter the results based on the type of infrastructure component.
-- `GET /infrastructure-descriptors/{id}`: Retrieves a specific AAS infrastructure component identified by its unique ID.
-- `POST /infrastructure-descriptors`: Registers a new AAS infrastructure component by accepting a Infrastructure Descriptor in the request body.
-- `DELETE /infrastructure-descriptors/{id}`: Deletes a registered AAS infrastructure component identified by its unique ID.
-- `PUT /infrastructure-descriptors/{id}`: Updates an existing AAS infrastructure component identified by its unique ID with the new Infrastructure Descriptor provided in the request body.
+- `GET /infrastructure-descriptors/{id}`: Retrieves a specific infrastructure component identified by its unique ID.
+- `POST /infrastructure-descriptors`: Registers a new infrastructure component by accepting a Infrastructure Descriptor in the request body.
+- `DELETE /infrastructure-descriptors/{id}`: Deletes a registered infrastructure component identified by its unique ID.
+- `PUT /infrastructure-descriptors/{id}`: Updates an existing infrastructure component identified by its unique ID with the new Infrastructure Descriptor provided in the request body.
 
 ## Swagger UI
 
