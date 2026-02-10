@@ -4,5 +4,12 @@ All BaSyx components, including the Registry of Infrastructures, serve a static 
 ## What is a Swagger UI?
 The Swagger UI lists all available endpoints. It also allows you to send requests to the server.
 
+```{figure} images/BaSyx_RegistryOfInfrastructures_Swagger.png
+---
+name: basyx_roi_swagger
+---
+BaSyx Registry of Infrastructures – Swagger UI.
+```
+
 ## How do I configure it?
 There is no additional configuration needed, BaSyx automatically serves the Swagger UI to you!
