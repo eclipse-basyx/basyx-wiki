@@ -29,6 +29,22 @@ The Registry of Infrastructures has the following API endpoints:
 - `DELETE /infrastructure-descriptors/{id}`: Deletes a registered infrastructure component identified by its unique ID.
 - `PUT /infrastructure-descriptors/{id}`: Updates an existing infrastructure component identified by its unique ID with the new Infrastructure Descriptor provided in the request body.
 
+### Filtering Parameters
+
+The `GET /infrastructure-descriptors` endpoint supports optional query parameters to narrow down the results.
+
+#### company
+The `company` parameter allows filtering infrastructure descriptors by the company or institution that owns or operates the infrastructure component. This enables clients to retrieve only those components that belong to a specific organization. For example, the infrastructure components operated by Fraunhofer IESE can be retrieved as follows:
+```
+GET /infrastructure-descriptors?company=Fraunhofer%20IESE
+```
+
+#### endpointInterface
+The `endpointInterface` parameter allows filtering infrastructure descriptors based on the type of infrastructure component exposed by the endpoint. This is useful when clients are only interested in a specific kind of service. Infrastructure components may include other BaSyx components, such as an AAS Registry, or other services, such as MQTT brokers. For example, the endpoint of an AAS Registry operated by Fraunhofer IESE can be retrieved as follows:
+```
+GET /infrastructure-descriptors?company=Fraunhofer%20IESE&endpointInterface=AAS-REGISTRY-3.0
+```
+
 ## Swagger UI
 
 In the [Swagger UI](swagger), you can find the API documentation for the Registry of Infrastructures. Furthermore, you can directly execute API calls from Swagger UI.
