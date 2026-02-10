@@ -29,6 +29,8 @@ The Registry of Infrastructures has the following API endpoints:
 - `DELETE /infrastructure-descriptors/{id}`: Deletes a registered infrastructure component identified by its unique ID.
 - `PUT /infrastructure-descriptors/{id}`: Updates an existing infrastructure component identified by its unique ID with the new Infrastructure Descriptor provided in the request body.
 
+The ID used in the path parameter and special characters in the URL must be base64 URL encoded. For example, "Fraunhofer IESE" should be "Fraunhofer%20IESE".
+
 ### Filtering Parameters
 
 The `GET /infrastructure-descriptors` endpoint supports optional query parameters to narrow down the results.
@@ -40,7 +42,7 @@ GET /infrastructure-descriptors?company=Fraunhofer%20IESE
 ```
 
 #### endpointInterface
-The `endpointInterface` parameter allows filtering infrastructure descriptors based on the type of infrastructure component exposed by the endpoint. This is useful when clients are only interested in a specific kind of service. Infrastructure components may include other BaSyx components, such as an AAS Registry, or other services, such as MQTT brokers. For example, the endpoint of an AAS Registry operated by Fraunhofer IESE can be retrieved as follows:
+The `endpointInterface` parameter allows filtering infrastructure descriptors based on the type of infrastructure component exposed by the endpoint. This information is stored in the `interface` attribute of the [endpoint](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.1/specification/interfaces-payload.html#_endpoint) attribute of the Infrastructure Descriptor. This filter is useful when clients are only interested in a specific kind of service. Infrastructure components may include other BaSyx components, such as an AAS Registry, or other services, such as MQTT brokers. For example, the endpoint of an AAS Registry operated by Fraunhofer IESE can be retrieved as follows:
 ```
 GET /infrastructure-descriptors?company=Fraunhofer%20IESE&endpointInterface=AAS-REGISTRY-3.0
 ```
