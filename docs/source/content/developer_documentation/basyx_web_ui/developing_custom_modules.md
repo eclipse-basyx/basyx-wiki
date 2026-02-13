@@ -52,11 +52,24 @@ This creates:
 
 ### Larger modules
 
-For larger modules, use a dedicated directory and a top-level entry file:
+For larger modules, use a dedicated directory with an `index.vue` entry file (recommended):
+
+```
+src/pages/modules/PcfProcess/
+  ├── index.vue
+  ├── routes.ts          ← optional nested route manifest
+  ├── components/
+  ├── composables/
+  ├── stores/
+  └── utils/
+```
+
+A backward-compatible alternative keeps the entry file outside the directory:
 
 ```
 src/pages/modules/PcfProcess.vue
 src/pages/modules/PcfProcess/
+  ├── PcfProcess.routes.ts   ← optional nested route manifest
   ├── components/
   ├── composables/
   ├── stores/
@@ -65,23 +78,25 @@ src/pages/modules/PcfProcess/
 
 Best practices:
 
-* The directory name and top-level `.vue` file should match
+* Prefer the `index.vue` convention for new modules
+* The directory name and top-level `.vue` file should match (when using the legacy layout)
 * The top-level file acts as the module entry point
 * Internal views/components are imported from the module directory
 
 ## Automatic Route Generation
 
-Module routes are generated dynamically at startup:
+Module routes are generated dynamically at startup. The router scans for both top-level `.vue` files and `index.vue` files inside module directories:
 
 ```ts
 const moduleFileRecords = import.meta.glob('@/pages/modules/*.vue');
 ```
 
-For each module file:
+For each discovered module:
 
-* The file name becomes the route name and base path
+* The file or directory name becomes the route name and base path
 * The component is lazy-loaded
 * Route metadata is derived from `defineOptions`
+* If a route manifest exists (`routes.ts` or `.routes.ts`), its child routes are registered automatically
 
 Example generated route:
 
@@ -90,7 +105,7 @@ Example generated route:
 ```
 
 ```{hint}
-No manual router configuration is required.
+No manual router configuration is required — this includes nested routes defined via a route manifest.
 ```
 
 ## Module Options
@@ -234,22 +249,60 @@ Direct API calls to AAS backend services are discouraged.
 
 ## Routing Inside Modules
 
-Each module has a single base route:
+Each module has a base route:
 
 ```
 /modules/<module-name>
 ```
 
-Modules may define **nested routes** below this base route for internal navigation.
+### Nested Routes via Route Manifest
 
-Implementation choices are flexible:
+Modules can define **nested child routes** through a dedicated route manifest file. This is the recommended approach for modules that require their own internal navigation (e.g. multi-step workflows, tabbed interfaces, or detail views).
 
-* Nested Vue Router routes
-* Internal tabs
+Depending on the module layout, the manifest is placed as follows:
+
+| Module layout | Entry file | Route manifest |
+| ------------- | ---------- | -------------- |
+| Directory with `index.vue` (recommended) | `src/pages/modules/MyModule/index.vue` | `src/pages/modules/MyModule/routes.ts` |
+| Flat file (legacy) | `src/pages/modules/MyModule.vue` | `src/pages/modules/MyModule.routes.ts` |
+
+A route manifest exports a default object with a `children` array:
+
+```ts
+// src/pages/modules/MyModule/routes.ts
+export default {
+    children: [
+        {
+            path: 'technical-data',
+            name: 'TechnicalData',
+            component: () => import('@/pages/modules/MyModule/TechnicalData.vue'),
+        },
+    ],
+};
+```
+
+The example above produces the route `/modules/mymodule/technical-data`.
+
+#### Rules for nested routes
+
+* Child paths **must be relative** (no leading `/`) and stay inside `/modules/<module-name>/**`.
+* Child route names are **automatically prefixed** with `<ModuleName>__` to avoid collisions (e.g. `MyModule__TechnicalData`).
+* Child routes **inherit** module visibility, platform, and query metadata by default.
+* Existing modules **without** a route manifest continue to work unchanged.
+
+```{hint}
+The module entry component (`index.vue` / `MyModule.vue`) must include a `<router-view />` element for child routes to render.
+```
+
+### Alternative approaches
+
+For simpler internal navigation that does not require distinct URLs, modules can also use:
+
+* Internal tabs or step components
 * Navigation drawers
-* ...
+* Conditional rendering
 
-Deep linking is encouraged but not required.
+Deep linking via nested routes is encouraged but not required.
 
 ## Layout Guidelines
 

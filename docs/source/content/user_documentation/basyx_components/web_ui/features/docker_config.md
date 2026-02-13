@@ -101,6 +101,7 @@ For more details on customizing branding, see the [Corporate Design](./corporate
 | ALLOW_UPLOADING | Enable/disable uploading AAS environments | true |
 | ALLOW_LOGOUT | Enable/disable logout functionality when authentication is active | true |
 | EDITOR_ID_PREFIX | Default prefix for AAS IDs and GlobalAssetIDs in the editor | "https://example.com/" |
+| START_PAGE_ROUTE_NAME | The named route to use as the application's landing page (e.g. "AASViewer", "AASEditor") | "AASViewer" |
 
 #### Integration Features
 
@@ -258,6 +259,7 @@ services:
       
       # Application Behavior
       EDITOR_ID_PREFIX: "https://example.com/ids/"
+      START_PAGE_ROUTE_NAME: "AASEditor"
     restart: unless-stopped
 ```
 

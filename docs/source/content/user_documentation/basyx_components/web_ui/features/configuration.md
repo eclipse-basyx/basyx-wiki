@@ -130,6 +130,21 @@ Control which features are available in your deployment:
 - **Base path**: Deploy the Web UI under a custom URL path (`BASE_PATH`)
 - **Single AAS mode**: Configure the UI to display only one specific AAS (`SINGLE_AAS`)
 - **Editor ID prefix**: Set a default prefix for AAS IDs created in the editor (`EDITOR_ID_PREFIX`)
+- **Start page**: Choose which page is shown when the application first loads (`START_PAGE_ROUTE_NAME`)
+
+### Configurable Start Page
+
+By default, the Web UI opens the **AAS Viewer** page when you first navigate to it. You can change this default landing page by setting the `START_PAGE_ROUTE_NAME` environment variable to the name of any available page, such as:
+
+- `AASViewer` (default) – The main AAS Viewer
+- `AASEditor` – The editor mode of the BaSyx UI (requires `ALLOW_EDITING` to be enabled)
+- `SubmodelViewer` – The standalone Submodel Viewer (requires `SM_VIEWER_EDITOR` to be enabled)
+
+If the configured page is not available (for example, because its feature flag is disabled), the Web UI will automatically fall back to the default start page.
+
+```{hint}
+This is especially useful for deployments where the primary use case is editing Asset Administration Shells rather than viewing them or if the main entry point should be a domain specific view (module).
+```
 
 ```{seealso}
 For a complete list of environment variables and how to set them in Docker, see the [Docker Configuration](./docker_config.md) page.
