@@ -130,6 +130,7 @@ Never commit OAuth client secrets or credentials into version control. Frontend 
 * `VITE_ALLOW_EDITING`
 * `VITE_ALLOW_UPLOADING`
 * `VITE_ALLOW_LOGOUT`
+* `VITE_START_PAGE_ROUTE_NAME`
 
 ### Miscellaneous
 
@@ -152,6 +153,27 @@ This affects:
 ```{hint}
 When deploying under a non-root base path, all mounted static files must be available under the same base path.
 ```
+
+## Start Page Configuration
+
+The Web UI supports configuring which page is shown when the application is first loaded.
+
+* Controlled via the `VITE_START_PAGE_ROUTE_NAME` environment variable (`START_PAGE_ROUTE_NAME` in production)
+* The value must be a valid **named route** defined in the application router (e.g. `AASViewer`, `AASEditor`, `SubmodelViewer`)
+* Validated at startup: the configured route must exist, its associated feature flag must be enabled, and the corresponding module must be visible
+* If the value is invalid or the route is not accessible, the application falls back to the default start page
+* After authentication, the application automatically redirects to the configured start page
+
+```{note}
+The main viewer route has moved from `/` to `/aasviewer`. Navigating to `/` now shows a 404 page unless an explicit start page redirect is configured. The default start page route is `AASViewer`.
+```
+
+### Behavior
+
+* On initial load: the root path (`/`) redirects to the resolved start page route
+* After authentication: the user is redirected to the configured start page
+* Invalid route names: fall back to the application default
+* Feature flag gating: if the target route's feature flag is disabled, the fallback is used
 
 ## Infrastructure Editing via UI
 
@@ -197,6 +219,8 @@ This allows the same image to be reused across environments without rebuilding.
 * Assuming UI-edited infrastructure is persisted globally
 * Using OAuth client secrets in frontend configuration
 * Forgetting to adjust mounted paths when changing `BASE`/`BASE_PATH`
+* Setting `START_PAGE_ROUTE_NAME` to a route whose feature flag is disabled (the app will fall back silently)
+* Using a path (e.g. `/aasviewer`) instead of a named route (e.g. `AASViewer`) for `START_PAGE_ROUTE_NAME`
 
 ## YAML Infrastructure Configuration
 
