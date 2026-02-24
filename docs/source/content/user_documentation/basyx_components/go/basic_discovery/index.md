@@ -25,11 +25,13 @@ The component exposes the following Basic Discovery endpoints:
 - Global asset ID lookup is supported by using an asset link with `name = "globalAssetId"`.
 - AAS identifiers used in path parameters must be UTF8 base64 URL encoded.
 
-## Security Configuration Files
+## Common Documentation
 
-Handling of OIDC trustlist and ABAC access-rules files is documented in the shared docs:
+This component uses shared BaSyx Go infrastructure for Swagger/OpenAPI and configuration. For components using the shared security setup, OIDC trustlist and ABAC access-rules handling is documented in the shared docs:
 
-- [General Configuration](../common/configuration#security-files-oidc-trustlist-and-abac-access-rules)
+- [General Configuration](../common/configuration)
+- [Swagger UI Docs](../common/swagger)
+- [Security Configuration Files (OIDC trustlist and ABAC access-rules)](../common/configuration#security-files-oidc-trustlist-and-abac-access-rules)
 - [Common / Shared Features](../common/shared_features)
 
 ```{toctree}

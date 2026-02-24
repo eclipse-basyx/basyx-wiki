@@ -33,11 +33,13 @@ The BaSyx AAS Registry implements the Asset Administration Shell Registry API. I
 - `GET /shell-descriptors` additionally supports asset-based filtering (`assetKind`, `assetType`).
 - Path identifiers (`aasIdentifier`, `submodelIdentifier`) must be UTF8 base64 URL encoded.
 
-## Security Configuration Files
+## Common Documentation
 
-Handling of OIDC trustlist and ABAC access-rules files is documented in the shared docs:
+This component uses shared BaSyx Go infrastructure for Swagger/OpenAPI and configuration. For components using the shared security setup, OIDC trustlist and ABAC access-rules handling is documented in the shared docs:
 
-- [General Configuration](../common/configuration#security-files-oidc-trustlist-and-abac-access-rules)
+- [General Configuration](../common/configuration)
+- [Swagger UI Docs](../common/swagger)
+- [Security Configuration Files (OIDC trustlist and ABAC access-rules)](../common/configuration#security-files-oidc-trustlist-and-abac-access-rules)
 - [Common / Shared Features](../common/shared_features)
 
 ```{toctree}

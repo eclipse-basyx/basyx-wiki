@@ -47,26 +47,17 @@ The `endpointInterface` parameter allows filtering infrastructure descriptors ba
 GET /infrastructure-descriptors?company=Fraunhofer%20IESE&endpointInterface=AAS-REGISTRY-3.0
 ```
 
-## Swagger UI
+## Common Documentation
 
-In the [Swagger UI](swagger), you can find the API documentation for the Registry of Infrastructures. Furthermore, you can directly execute API calls from Swagger UI.
+The Registry of Infrastructures uses shared BaSyx Go infrastructure for Swagger/OpenAPI and configuration. For components using the shared security setup, OIDC trustlist and ABAC access-rules handling is documented in the shared docs:
 
-## Configuration
-The Registry of Infrastructures can be either configured through a docker-compose file or a separate configuration file
-
-- [Configuration](configuration)
+- [General Configuration](../common/configuration)
+- [Swagger UI Docs](../common/swagger)
+- [Common / Shared Features](../common/shared_features)
 
 ## Docker
 Eclipse BaSyx provides the Registry of Infrastructures as off-the-shelf component via DockerHub. The following command pulls the image and starts a container for the Registry of Infrastructures:
 
 ```bash
 docker run --name=registry-of-infrastructures -p:8081:8081 eclipsebasyx/registryofinfrastructures-go:SNAPSHOT
-```
-
-```{toctree}
-:hidden:
-:maxdepth: 1
-
-swagger
-configuration
 ```

@@ -6,14 +6,19 @@
 
 ## Contents
 * [Creating your own Set-Up](setup)
-* [Configuration](configuration)
-* [Swagger UI](swagger)
+
+## Common Documentation
+
+This component uses shared BaSyx Go infrastructure for Swagger/OpenAPI and configuration. For components using the shared security setup, OIDC trustlist and ABAC access-rules handling is documented in the shared docs:
+
+- [General Configuration](../common/configuration)
+- [Swagger UI Docs](../common/swagger)
+- [Security Configuration Files (OIDC trustlist and ABAC access-rules)](../common/configuration#security-files-oidc-trustlist-and-abac-access-rules)
+- [Common / Shared Features](../common/shared_features)
 
 ```{toctree}
 :hidden:
 :maxdepth: 1
 
 setup
-configuration
-swagger
 ```

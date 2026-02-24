@@ -43,7 +43,7 @@ services:
 ```
 *docker-compose.yml including PostgreSQL 18 and BaSyx Go Submodel Repository Snapshot*
 
-If you need advanced configuration options, please refer to the [Configuration](configuration) section.
+If you need advanced configuration options, please refer to the [General Configuration](../common/configuration) section.
 
 ## Using BaSyx Go Components without Docker
 If you need to run the Submodel Repository without Docker, you need to build the Binary from source. (Important Note: You need to build this for the target platform you want to run it on)
@@ -70,7 +70,7 @@ go build -o submodelrepository
 ```
 
 ### Running the Submodel Repository
-Before running the Submodel Repository, ensure that you have a running PostgreSQL instance and configure the connection settings via environment variables or a configuration file as described in the [Configuration](configuration) section.
+Before running the Submodel Repository, ensure that you have a running PostgreSQL instance and configure the connection settings via environment variables or a configuration file as described in the [General Configuration](../common/configuration) section.
 
 Assuming you provide a configuration.yaml file at the same location as the binary, you can start the Submodel Repository with:
 ```bash

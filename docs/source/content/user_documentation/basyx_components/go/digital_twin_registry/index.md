@@ -30,11 +30,13 @@ The BaSyx Digital Twin Registry combines Asset Administration Shell Registry and
 
 - `Edc-Bpn` (optional request header): Used by the Digital Twin Registry API for query filtering / access control integration in the combined API.
 
-## Security Configuration Files
+## Common Documentation
 
-Handling of OIDC trustlist and ABAC access-rules files is documented in the shared docs:
+This component uses shared BaSyx Go infrastructure for Swagger/OpenAPI and configuration. For components using the shared security setup, OIDC trustlist and ABAC access-rules handling is documented in the shared docs:
 
-- [General Configuration](../common/configuration#security-files-oidc-trustlist-and-abac-access-rules)
+- [General Configuration](../common/configuration)
+- [Swagger UI Docs](../common/swagger)
+- [Security Configuration Files (OIDC trustlist and ABAC access-rules)](../common/configuration#security-files-oidc-trustlist-and-abac-access-rules)
 - [Common / Shared Features](../common/shared_features)
 
 ## Component-Specific Notes
