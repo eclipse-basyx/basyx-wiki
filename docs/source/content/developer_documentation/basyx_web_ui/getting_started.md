@@ -10,7 +10,7 @@ The instructions below are intended for contributors and extension developers. I
 
 * **Node.js**: version **20 LTS or newer**
   * Node.js **24 (current LTS)** is recommended
-* **Yarn** package manager (lockfile-based installation is required)
+* **pnpm** package manager (lockfile-based installation is required)
 * **Git**
 
 The repository commits lockfiles. Please do not switch package managers.
@@ -49,7 +49,7 @@ The script interactively guides you through optional steps such as:
 * Starting the development server
 * Building a Docker image
 
-For most developers, this is preferred over manually navigating into `aas-web-ui/` and running Yarn commands.
+For most developers, this is preferred over manually navigating into `aas-web-ui/` and running pnpm commands.
 
 ## Manual Setup (Alternative)
 
@@ -57,8 +57,8 @@ If you prefer a manual setup, you can work directly in the application directory
 
 ```bash
 cd aas-web-ui
-yarn
-yarn dev
+pnpm install
+pnpm dev
 ```
 
 This starts the Vite development server with hot module replacement enabled.
@@ -67,26 +67,32 @@ This starts the Vite development server with hot module replacement enabled.
 
 The following scripts are defined in `aas-web-ui/package.json`:
 
-* `yarn dev` – start development server
-* `yarn build` – production build
-* `yarn preview` – preview production build locally
-* `yarn lint:check` – run ESLint checks
-* `yarn lint:fix` – fix linting and formatting issues
-* `yarn test` – run unit tests
-* `yarn test:watch` – run tests in watch mode
-* `yarn test:coverage` – generate test coverage
-* `yarn test:ui` – run Vitest UI
+* `pnpm dev` – start development server
+* `pnpm build` – production build (runs lint, tests, and type-check first)
+* `pnpm build-only` – production build without pre-checks (skips lint, tests, and type-check)
+* `pnpm preview` – preview production build locally
+* `pnpm type-check` – TypeScript type checking via `vue-tsc`
+* `pnpm lint` – run ESLint (warnings allowed)
+* `pnpm lint:check` – run ESLint and fail on any warnings
+* `pnpm lint:fix` – fix linting and formatting issues
+* `pnpm test` – run unit tests in interactive mode
+* `pnpm test:run` – run unit tests once (non-interactive, CI-safe)
+* `pnpm test:watch` – run tests in watch mode
+* `pnpm test:coverage` – generate test coverage
+* `pnpm test:ui` – run Vitest UI
+* `pnpm mcp` – apply Ruler MCP rules
+* `pnpm mcp:revert` – revert Ruler MCP rules
 
-Before a production build, the following checks are executed automatically:
+Before a production build (`pnpm build`), the following checks are executed automatically:
 
-* ESLint
+* ESLint (zero warnings)
 * Unit tests
 * TypeScript type checking (vue-tsc)
 
 The same checks are enforced in CI.
 
 ```{hint}
-It is strongly recommended to run `yarn lint:fix` before opening a pull request. The lint configuration includes Prettier and helps catch issues locally before CI runs.
+It is strongly recommended to run `pnpm lint:fix` before opening a pull request. The lint configuration includes Prettier and helps catch issues locally before CI runs.
 ```
 
 ## Configuration in Development Mode

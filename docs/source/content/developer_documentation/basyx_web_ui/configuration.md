@@ -246,12 +246,15 @@ infrastructures:
         baseUrl: "<url>"
       aasRegistry:
         baseUrl: "<url>"
+        hasDiscoveryIntegration: <true|false>  # optional
       submodelRegistry:
         baseUrl: "<url>"
       aasRepository:
         baseUrl: "<url>"
+        hasRegistryIntegration: <true|false>   # optional
       submodelRepository:
         baseUrl: "<url>"
+        hasRegistryIntegration: <true|false>   # optional
       conceptDescriptionRepository:
         baseUrl: "<url>"
     security:
@@ -271,18 +274,21 @@ infrastructures:
   local:
     name: Local Development Environment
     components:
+      aasDiscovery:
+        baseUrl: "http://localhost:9084"
       aasRegistry:
         baseUrl: "http://localhost:9082"
+        hasDiscoveryIntegration: true
       submodelRegistry:
         baseUrl: "http://localhost:9083"
       aasRepository:
         baseUrl: "http://localhost:9081"
+        hasRegistryIntegration: true
       submodelRepository:
         baseUrl: "http://localhost:9081"
+        hasRegistryIntegration: true
       conceptDescriptionRepository:
         baseUrl: "http://localhost:9081"
-      aasDiscovery:
-        baseUrl: "http://localhost:9084"
     security:
       type: none
 ```
@@ -515,6 +521,22 @@ Client secrets in YAML files are visible in the browser. Never use client creden
 #### Bearer Token Fields
 
 * `token` (required): Bearer token string
+
+#### Component Integration Options
+
+These optional boolean flags control who is responsible for synchronizing descriptors and asset links when AAS or submodels change.
+
+**`aasRegistry`:**
+
+* `hasDiscoveryIntegration` (optional, default: `true`): When `true`, the backend is expected to handle Discovery Service synchronization itself — the Web UI will not create, update, or delete asset links in the Discovery Service. When `false`, the Web UI takes over this responsibility and directly manages asset links based on changes to AAS.
+
+**`aasRepository` and `submodelRepository`:**
+
+* `hasRegistryIntegration` (optional, default: `true`): When `true`, the backend is expected to handle Registry synchronization itself — the Web UI will not create, update, or delete descriptors in the corresponding registry. When `false`, the Web UI takes over this responsibility and directly manages descriptors based on changes to AAS and submodels.
+
+```{note}
+Set these flags to `false` when your backend components do **not** have built-in registry or discovery integration. In that case, the Web UI automatically keeps registries and discovery in sync whenever AAS or submodels are created, updated, or deleted.
+```
 
 ### Implementation Details
 

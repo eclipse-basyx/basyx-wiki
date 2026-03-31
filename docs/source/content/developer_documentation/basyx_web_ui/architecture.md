@@ -21,7 +21,7 @@ This structure supports long-term evolution, extensibility, and parallel develop
 
 * **Vue 3** with Composition API for component-based UI development
 * **TypeScript** for strong typing and API safety
-* **Vuetify 3** as the UI component framework
+* **Vuetify 4** as the UI component framework
 * **Vite** for fast development builds and optimized production output
 * **Pinia** for centralized, reactive state management
 * **Vue Router** for declarative routing and navigation

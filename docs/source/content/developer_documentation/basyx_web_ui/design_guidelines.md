@@ -12,7 +12,7 @@ Before contributing to the BaSyx AAS Web UI, please review the general [Contribu
 
 ### Vuetify Usage and Theming
 
-The Web UI is based on **Vuetify 3**. Global UI behavior is defined in:
+The Web UI is based on **Vuetify 4**. Global UI behavior is defined in:
 
 ```bash
 src/plugins/vuetify.ts
@@ -222,7 +222,7 @@ Key conventions:
 * Absolute paths must respect the configured base path
 
 ```{hint}
-Run `yarn lint:fix` before opening a pull request to resolve formatting and style issues locally.
+Run `pnpm lint:fix` before opening a pull request to resolve formatting and style issues locally.
 ```
 
 ## Testing Considerations

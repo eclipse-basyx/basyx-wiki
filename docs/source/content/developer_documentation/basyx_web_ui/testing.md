@@ -74,25 +74,33 @@ From the `aas-web-ui/` directory:
 ### Run all tests
 
 ```bash
-yarn test
+pnpm test
 ```
+
+### Run tests once (non-interactive)
+
+```bash
+pnpm test:run
+```
+
+This is the CI-safe variant — equivalent to `vitest run`. It executes all tests once and exits without entering watch mode.
 
 ### Run tests in watch mode
 
 ```bash
-yarn test:watch
+pnpm test:watch
 ```
 
 ### Run tests with UI
 
 ```bash
-yarn test:ui
+pnpm test:ui
 ```
 
 ### Run coverage
 
 ```bash
-yarn test:coverage
+pnpm test:coverage
 ```
 
 This generates coverage reports in:
@@ -104,8 +112,8 @@ This generates coverage reports in:
 Tests are executed as part of the production build checks:
 
 * `prebuild` runs
-  * `yarn lint:check`
-  * `vitest run`
+  * `pnpm lint:check`
+  * `pnpm test:run`
   * `vue-tsc --noEmit`
 
 No minimum coverage threshold is enforced in CI at the moment.
@@ -161,7 +169,7 @@ At the moment, backend access is not a primary testing focus in this repository.
 
 The project uses `@/` alias imports. If a test fails due to module resolution issues, ensure:
 
-* The test is executed via the standard scripts (`yarn test`, `yarn test:watch`, etc.)
+* The test is executed via the standard scripts (`pnpm test`, `pnpm test:watch`, etc.)
 * The Vite/Vitest configuration is used (do not run Vitest with custom flags that bypass config)
 
 ## Summary

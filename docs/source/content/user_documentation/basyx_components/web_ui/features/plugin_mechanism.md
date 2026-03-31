@@ -91,6 +91,13 @@ The BaSyx AAS Web UI includes a growing list of plugins for various IDTA Submode
 - Visualizes and controls PackML state machines
 - Allows triggering state transitions and changing operating modes
 
+**[Production Plan](plugins/production_plan.md)**
+
+- **Semantic ID**: `https://smartfactory.de/semantics/submodel/ProductionPlan#1/0`
+- Developed in collaboration with SmartFactory Kaiserslautern (SFKL)
+- Visualizes production steps and their associated actions with real-time status tracking
+- Shows overall plan completion (`IsFinished`), per-step and per-action statuses, scheduling information, and machine assignments
+
 ## Developing your own Plugin
 
 If you are interested in developing your own plugin for the BaSyx AAS Web UI, please refer to the [Plugin Development Guide](../../../../developer_documentation/basyx_web_ui/creating_submodel_plugins.md).
@@ -113,4 +120,5 @@ plugins/file_explorer
 plugins/helloworld_plugin
 plugins/jsonarray_property
 plugins/htw_fuehrungskomponente
+plugins/production_plan
 ```
