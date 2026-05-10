@@ -147,7 +147,7 @@ html_theme_options = {
         {
             "name": "Docker",
             "url": "https://hub.docker.com/u/eclipsebasyx",
-            "icon": "https://img.shields.io/docker/pulls/eclipsebasyx/aas-server",
+            "icon": "https://img.shields.io/endpoint?url=https%3A%2F%2Fdocker-stats.basyx.org%2Fall.json",
             "type": "url",
         },
     ],
