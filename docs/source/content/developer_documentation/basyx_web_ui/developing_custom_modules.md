@@ -202,6 +202,7 @@ Menu behavior:
 
 * Modules are filtered based on mobile/desktop mode
 * Visibility depends on AAS / node selection
+* Visibility depends on active route
 * Modules are sorted alphabetically by name
 
 ## Mobile vs Desktop Modules
