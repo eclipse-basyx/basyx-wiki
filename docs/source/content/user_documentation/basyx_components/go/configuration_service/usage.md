@@ -2,15 +2,6 @@
 
 The BaSyx Configuration Service is designed as a run-once startup job. It executes its registered initialization sequences and then exits.
 
-## Startup Flow
-
-1. Load the configured PostgreSQL connection settings.
-2. Connect to PostgreSQL.
-3. Ensure the `basyxsystem` table exists and contains an initial version row.
-4. Upload the base schema when the base schema tables are not present.
-5. Apply registered schema patches if the database version is older than the patch target version.
-6. Exit successfully or fail with a non-zero exit code.
-
 ## Command-Line Options
 
 ```{hint}
