@@ -115,13 +115,14 @@ Modules declare metadata using `defineOptions`:
 ```ts
 defineOptions({
   inheritAttrs: false,
+  moduleTitle: 'Title of the Module',  
   isDesktopModule: true,
   isMobileModule: true,
   isVisibleModule: true,
   isOnlyVisibleWithSelectedAas: false,
   isOnlyVisibleWithSelectedNode: false,
-  visibleOnRoutes: [],
-  moduleTitle: 'PCF Process',
+  visibleOnRoutes: ['AASEditor', 'SMEditor'],
+  preserveRouteQuery: false,
 });
 ```
 
@@ -129,14 +130,14 @@ defineOptions({
 
 | Option | Description |
 | ------ | ----------- |
-| `moduleTitle` | Display name in the Modules menu (defaults to file name) |
+| `moduleTitle` | Display name in the Modules menu. This option is given as a string (default: file name of the module) |
 | `isDesktopModule` | Visible in desktop layout (default: `true`) |
 | `isMobileModule` | Visible in mobile layout (default: `false`) |
-| `isVisibleModule` | Controls menu visibility (route still accessible) |
-| `isOnlyVisibleWithSelectedAas` | Only visible when an AAS is selected |
-| `isOnlyVisibleWithSelectedNode` | Only visible when a Submodel or SME is selected |
-| `visibleOnRoutes` | Only visible when coming from specified routes (e.g. 'AASEditor' or 'SMEditor') |
-| `preserveRouteQuery` | Preserve `aas`/`path` query parameters in the route |
+| `isVisibleModule` | Controls menu visibility (route still accessible; default: `true`) |
+| `isOnlyVisibleWithSelectedAas` | Only visible when an AAS is selected (default: `false`) |
+| `isOnlyVisibleWithSelectedNode` | Only visible when a Submodel or SME is selected (default: `false`) |
+| `visibleOnRoutes` | Only visible when coming from specific  routes. This option is given as a string array and acts as a whitelist. `['AASEditor', 'SMEditor']` means that the module is visible only from the "AAS Editor" or "SM Editor" view. `[]` means that the module is visible from all routes. (default: `[]`) |
+| `preserveRouteQuery` | Preserve `aas`/`path` query parameters in the route (default: `false`) |
 
 ```{note}
 If `isOnlyVisibleWithSelectedAas` or `isOnlyVisibleWithSelectedNode` is set, `preserveRouteQuery` is enabled automatically.
