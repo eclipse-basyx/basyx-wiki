@@ -48,14 +48,14 @@ This means every patch that changes the schema version must include an `UPDATE b
 Patch files are registered explicitly in `main.go`:
 
 ```go
-schemInit.Register(steps.NewSchemaPatch(execCtx, filepath.Join(patchBasePath, "101.sql"), "v1.0.1"))
+schemInit.Register(steps.NewSchemaPatch(execCtx, filepath.Join(patchBasePath, "1_0_1.sql"), "v1.0.1"))
 ```
 
 To add a new patch, register it after older patches. Patch target versions must use semantic versioning:
 
 ```go
-schemInit.Register(steps.NewSchemaPatch(execCtx, filepath.Join(patchBasePath, "102.sql"), "v1.0.2"))
-schemInit.Register(steps.NewSchemaPatch(execCtx, filepath.Join(patchBasePath, "110.sql"), "v1.1.0"))
+schemInit.Register(steps.NewSchemaPatch(execCtx, filepath.Join(patchBasePath, "1_0_2.sql"), "v1.0.2"))
+schemInit.Register(steps.NewSchemaPatch(execCtx, filepath.Join(patchBasePath, "1_1_0.sql"), "v1.1.0"))
 ```
 
 ## Mandatory Patch Contents
