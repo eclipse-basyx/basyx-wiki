@@ -12,6 +12,7 @@ BaSyx Go provides Go-based BaSyx backend components and shared libraries for run
 * [Digital Twin Registry](digital_twin_registry/index)
 * [Submodel Repository](submodel_repository/index)
 * [Registry of Infrastructures](registry_of_infrastructures/index)
+* [Configuration Service](configuration_service/index)
 
 ```{toctree}
 :hidden:
@@ -24,4 +25,5 @@ submodel_registry/index
 digital_twin_registry/index
 submodel_repository/index
 registry_of_infrastructures/index
+configuration_service/index
 ```

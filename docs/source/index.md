@@ -95,6 +95,7 @@ content/user_documentation/metamodel/index
 * [Contributing](./content/developer_documentation/contributing.md)
 * [BaSyx Java Version 1](./content/developer_documentation/basyx_java_v1/index.md)
 * [BaSyx Java Version 2](./content/developer_documentation/basyx_java_v2/index.md)
+* [BaSyx Go](./content/developer_documentation/basyx_go/index.md)
 * [BaSyx Python SDK](./content/developer_documentation/basyx_python_sdk/index.md)
 * [BaSyx AAS Web UI](./content/developer_documentation/basyx_web_ui/index.md)
 
@@ -106,6 +107,7 @@ content/user_documentation/metamodel/index
 content/developer_documentation/contributing
 content/developer_documentation/basyx_java_v1/index
 content/developer_documentation/basyx_java_v2/index
+content/developer_documentation/basyx_go/index
 content/developer_documentation/basyx_python_sdk/index
 content/developer_documentation/basyx_web_ui/index
 
