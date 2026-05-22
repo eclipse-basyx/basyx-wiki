@@ -1,6 +1,6 @@
 # Release Advisor
 
-This guide explains how to keep BaSyx core services, database patches, Docker images, examples, and CI checks in sync when releasing changes that affect the database schema.
+This guide explains how to keep BaSyx core services, database patches, Docker images, and examples in sync when releasing changes that affect the database schema.
 
 ## Release Principle
 
@@ -14,7 +14,6 @@ For every schema-affecting release, these parts must move together:
 - `common.CURRENT_DATABASE_VERSION` in `internal/common/database.go`
 - Docker images for the Configuration Service and affected BaSyx core services
 - Docker Compose examples and integration-test compose files
-- CI test and release workflows
 
 If one part is updated without the others, deployments can fail at startup or run with an incompatible schema.
 
@@ -33,7 +32,13 @@ flowchart TD
     Validate -->|no| Fail[Service fails fast]
 ```
 
+```{hint}
 The Configuration Service must be able to bring the database to the same version that core services expect. For example, if `CURRENT_DATABASE_VERSION` is `v1.0.2`, the Configuration Service must register and execute patches up to `v1.0.2`.
+```
+
+```{warning}
+The Configuration Service version should match the version of the BaSyx service, for example the AAS Repository, so the database version produced during startup is the same version expected by the running service.
+```
 
 ## Schema Release Checklist
 
@@ -46,7 +51,6 @@ Use this checklist whenever a release changes the database schema.
 - Keep `database/base.sql` aligned with the full schema expected for fresh installations.
 - Do not edit already released patch files.
 - Verify Docker Compose files start `basyx_configuration` before services that validate the database version.
-- Ensure release and snapshot workflows include the Configuration Service image.
 - Run unit tests for `internal/basyxconfigurationservice`.
 - Run representative integration tests for services affected by the schema change.
 
@@ -57,16 +61,14 @@ Fresh installations and upgrades both need to end at the same database version.
 | Scenario | Expected behavior |
 | --- | --- |
 | Fresh database | `SystemTable` creates `basyxsystem` with `v1.0.0`, `SchemaUpload` uploads `base.sql`, then registered patches advance the version. |
-| Existing database at old version | `SchemaUpload` skips the base schema when base tables exist, then newer registered patches run sequentially. |
+| Existing database at old version | `SchemaUpload` skips the base schema when base tables exist, then newer registered patches run sequentially (including `SystemTable` version bump to the newest patch version). |
 | Existing database already current | Base schema upload and already applied patches are skipped. |
-
-Because fresh installations also run patches, `base.sql` and patches must be compatible. A schema change that is included in `base.sql` should still have a safe patch for existing installations, usually using `IF EXISTS` or `IF NOT EXISTS` guards where appropriate.
 
 ## Version Alignment Example
 
 When releasing `v1.0.2`:
 
-1. Create `database/patches/102.sql`.
+1. Create [`database/patches/102.sql`](https://github.com/eclipse-basyx/basyx-go-components/tree/main/database/patches).
 2. End the patch with:
 
 ```sql
@@ -80,14 +82,14 @@ WHERE identifier = (
 );
 ```
 
-3. Register the patch:
+3. Register the patch in [`cmd/basyxconfigurationservice/main.go`](https://github.com/eclipse-basyx/basyx-go-components/blob/main/cmd/basyxconfigurationservice/main.go):
 
 ```go
 schemInit.Register(steps.NewSchemaPatch(execCtx, filepath.Join(patchBasePath, "101.sql"), "v1.0.1"))
 schemInit.Register(steps.NewSchemaPatch(execCtx, filepath.Join(patchBasePath, "102.sql"), "v1.0.2"))
 ```
 
-4. Update the expected service version:
+4. Update the expected service version in [`internal/common/database.go`](https://github.com/eclipse-basyx/basyx-go-components/blob/main/internal/common/database.go):
 
 ```go
 const (
@@ -95,19 +97,7 @@ const (
 )
 ```
 
-5. Build and release both the Configuration Service image and the affected BaSyx core service images from the same commit or release tag.
-
-## Docker Image Release Coordination
-
-The Configuration Service image contains the database SQL files copied from the repository. Therefore, the image version matters for schema releases.
-
-For a release tag, ensure that:
-
-- `eclipsebasyx/basyxconfigurationservice-go` is built from the same tag as the core service images.
-- Core service images contain the matching `CURRENT_DATABASE_VERSION` constant.
-- Examples and deployment manifests use compatible image tags.
-
-Avoid combining a newer core service image with an older Configuration Service image. The core service may expect a database version that the old Configuration Service cannot create.
+5. Build and release the Configuration Service image and the affected BaSyx core service images with matching versions.
 
 ## Docker Compose Coordination
 
@@ -133,47 +123,3 @@ services:
 ```
 
 This prevents core services from starting before schema initialization and patches are complete.
-
-## CI and Release Workflow Checks
-
-Before merging or releasing schema changes, verify:
-
-- The Configuration Service unit tests run in CI.
-- Database-related path filters include `database/**` where relevant.
-- Docker snapshot and release workflows include `basyxconfigurationservice` in their image matrix.
-- Container vulnerability scanning includes the Configuration Service image when image matrices are changed.
-- Integration tests use compose files with `basyx_configuration` dependencies.
-
-Useful local checks include:
-
-```bash
-go test -v ./internal/basyxconfigurationservice/...
-go test ./cmd/basyxconfigurationservice
-go vet ./internal/basyxconfigurationservice/... ./cmd/basyxconfigurationservice
-```
-
-Run affected integration tests when schema changes touch service behavior.
-
-## Common Release Failure Modes
-
-| Failure | Likely cause | Fix |
-| --- | --- | --- |
-| Core service fails with database version mismatch | `CURRENT_DATABASE_VERSION` is newer than the DB version produced by the Configuration Service. | Add/register the missing patch or align image versions. |
-| Patch runs but version remains old | Patch SQL does not update `basyxsystem.database_version`. | Add the mandatory version update to the patch. |
-| Fresh installation differs from upgraded installation | `base.sql` and patch files are not equivalent. | Update `base.sql` and provide a safe patch for existing databases. |
-| Service starts before schema is ready | Compose/Kubernetes startup ordering does not wait for the Configuration Service. | Add dependency on successful Configuration Service completion. |
-| Reproducibility differs between environments | Released patch was modified after use. | Restore immutability and add a corrective follow-up patch. |
-
-## Release Review Questions
-
-Ask these before approving a schema-related release:
-
-- What database version will this release produce?
-- Does `CURRENT_DATABASE_VERSION` match that produced version?
-- Can a fresh database and an upgraded database both reach the same final schema?
-- Are all patches registered in deterministic order?
-- Does every new patch update `basyxsystem.database_version`?
-- Are Docker images for the Configuration Service and core services released together?
-- Do examples and integration tests use the Configuration Service dependency pattern?
-- Have already released patches remained unchanged?
-

@@ -1,0 +1,37 @@
+@startuml
+skinparam componentStyle rectangle
+
+component "1\nmain.go" as Main
+component "2\nSchemaInitializer" as Initializer
+interface "3\nSequence" as Sequence
+component "4\nExecutionContext" as Context
+component "5\nDatabaseConnection" as DBSeq
+component "6\nSystemTable" as SystemSeq
+component "7\nSchemaUpload" as UploadSeq
+component "8\nSchemaPatch" as PatchSeq
+database "9\nPostgreSQL" as Postgres
+component "10\nConfig" as Config
+component "11\nDB handle" as DBHandle
+file "base.sql" as BaseSQL
+file "patches/*.sql" as PatchSQL
+
+Main --> Initializer
+Main --> Context
+Initializer --> Sequence
+Sequence <|.. DBSeq
+Sequence <|.. SystemSeq
+Sequence <|.. UploadSeq
+Sequence <|.. PatchSeq
+DBSeq --> Config
+DBSeq --> DBHandle
+DBSeq --> Postgres
+DBSeq --> Context
+SystemSeq --> Context
+UploadSeq --> Context
+PatchSeq --> Context
+Context --> Config
+Context --> DBHandle
+DBHandle --> Postgres
+UploadSeq --> BaseSQL
+PatchSeq --> PatchSQL
+@enduml

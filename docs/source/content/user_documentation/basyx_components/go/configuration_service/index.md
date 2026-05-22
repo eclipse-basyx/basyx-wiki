@@ -15,12 +15,6 @@ Typical use cases include:
 - Serializing schema initialization in Docker Compose or containerized environments.
 - Making service startup depend on a completed database initialization job.
 
-## Existing BaSyx Setups
-
-If you already operate a BaSyx (Go) setup that was created before the BaSyx Configuration Service was introduced, read the [Docker Compose Integration](docker-compose.md) guide before updating your deployment.
-
-Existing setups must be adapted so the Configuration Service runs after PostgreSQL is healthy and before any database-backed BaSyx service starts. This is especially important for deployments that already have persistent PostgreSQL volumes, because the Configuration Service is responsible for checking the schema version and applying required patches before the updated services validate the database.
-
 ## User Benefits
 
 The BaSyx Configuration Service makes database startup and upgrades safer and easier to operate.
@@ -45,6 +39,12 @@ Key benefits include:
 - [Docker Compose Integration](docker-compose.md)
 - [Kubernetes Job Integration](kubernetes-job.md)
 - [Operational Considerations](operations.md)
+
+```{warning}
+This note is only relevant for users with BaSyx Go deployments created before v1.0.0. If you already operate such a setup, read the [Docker Compose Integration](docker-compose.md) guide before updating your deployment.
+
+Existing pre-v1.0.0 setups must be adapted so the Configuration Service runs after PostgreSQL is healthy and before any database-backed BaSyx service starts. This is especially important for deployments with persistent PostgreSQL volumes, because the Configuration Service checks the schema version and applies required patches before updated services validate the database.
+```
 
 ```{toctree}
 :hidden:

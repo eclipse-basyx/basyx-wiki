@@ -14,8 +14,6 @@ It currently supports:
 - Serializing schema and patch execution with a PostgreSQL advisory lock.
 - Exiting with a non-zero status code when initialization fails.
 
-The service uses ordered initialization sequences internally. From an integrator perspective, this means startup steps run deterministically in the order registered by the service binary.
-
 ## What the Service Does Not Do
 
 The BaSyx Configuration Service is intentionally narrow in scope.
@@ -29,6 +27,3 @@ It does not provide:
 - Automatic backup or database dump creation.
 - A browser-based administration UI.
 - Dynamic patch discovery from arbitrary folders.
-
-Deployment tooling is still responsible for starting containers, defining dependencies, configuring volumes, and managing persistent PostgreSQL storage.
-

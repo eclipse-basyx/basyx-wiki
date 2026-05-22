@@ -1,4 +1,4 @@
-# Extensibility Guidelines
+# Developer Guidelines
 
 ## Safe Extension Points
 
@@ -66,4 +66,3 @@ For sequence changes, add unit tests with SQL expectations where practical. Usef
 - Patch version comparison behavior.
 
 For database patches, prefer integration testing against PostgreSQL before release because SQL syntax and DDL behavior are database-specific.
-

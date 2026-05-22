@@ -2,7 +2,7 @@
 
 This documentation describes the internal architecture and extension points of the BaSyx Configuration Service.
 
-The service is implemented as a small ordered sequence runner. It connects to PostgreSQL, prepares the BaSyx schema-version table, uploads the base schema when needed, and applies explicitly registered SQL patches.
+The service is implemented as a small ordered sequence runner. It connects to PostgreSQL, creates and preseeds the BaSyx schema-version table, uploads the base schema if not present, and applies registered SQL patches.
 
 ## Documentation
 
@@ -13,7 +13,7 @@ The service is implemented as a small ordered sequence runner. It connects to Po
 - [Patches](patches.md)
 - [Database Patch Structure](database-patch-structure.md)
 - [Release Advisor](release-advisor.md)
-- [Extensibility Guidelines](extensibility.md)
+- [Developer Guidelines](guidelines.md)
 
 ```{toctree}
 :hidden:
@@ -26,5 +26,5 @@ custom-sequences
 patches
 database-patch-structure
 release-advisor
-extensibility
+guidelines
 ```

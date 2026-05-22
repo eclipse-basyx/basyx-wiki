@@ -8,7 +8,7 @@ A patch should include:
 
 - A header describing the patch version and purpose.
 - Idempotent schema changes where practical.
-- A final update to `basyxsystem.database_version`.
+- A final update to the schema version stored in `basyxsystem.database_version`.
 
 Example:
 
@@ -51,7 +51,7 @@ Patch files are registered explicitly in `main.go`:
 schemInit.Register(steps.NewSchemaPatch(execCtx, filepath.Join(patchBasePath, "101.sql"), "v1.0.1"))
 ```
 
-To add a new patch, register it after older patches:
+To add a new patch, register it after older patches. Patch target versions must use semantic versioning:
 
 ```go
 schemInit.Register(steps.NewSchemaPatch(execCtx, filepath.Join(patchBasePath, "102.sql"), "v1.0.2"))
@@ -67,15 +67,17 @@ Every released patch must include:
 - A database version update to the target version.
 - A version value matching the target version registered in Go.
 
-## Important Patch Disclaimer
+```{warning}
+Existing patches must NEVER be modified after release.
+```
 
-> Existing patches must NEVER be modified after release.
+## Important Patch Disclaimer
 
 Released patches are part of the migration history. Changing an already released patch can break reproducibility because two installations may both claim to have applied the same patch version while having different database structures.
 
 If a released patch contains an issue, create a new patch that corrects it. Do not edit the old patch.
 
-## Why This Rule Matters
+### Why This Rule Matters
 
 Immutable patches provide:
 
@@ -83,4 +85,3 @@ Immutable patches provide:
 - Consistent troubleshooting and support.
 - Deterministic upgrade paths.
 - Clear auditability of database changes.
-
