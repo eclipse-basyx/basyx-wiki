@@ -120,6 +120,7 @@ defineOptions({
   isVisibleModule: true,
   isOnlyVisibleWithSelectedAas: false,
   isOnlyVisibleWithSelectedNode: false,
+  visibleOnRoutes: [],
   moduleTitle: 'PCF Process',
 });
 ```
@@ -134,6 +135,7 @@ defineOptions({
 | `isVisibleModule` | Controls menu visibility (route still accessible) |
 | `isOnlyVisibleWithSelectedAas` | Only visible when an AAS is selected |
 | `isOnlyVisibleWithSelectedNode` | Only visible when a Submodel or SME is selected |
+| `visibleOnRoutes` | Only visible for specified routes (e.g. 'AASEditor' or 'SMEditor') |
 | `preserveRouteQuery` | Preserve `aas`/`path` query parameters in the route |
 
 ```{note}
