@@ -1,5 +1,7 @@
 # Developer Guidelines
 
+This page summarizes the development rules for changing or extending the BaSyx Configuration Service. It focuses on the areas where contributors most often affect runtime behavior: sequence registration, SQL patch handling, compatibility with existing databases, idempotent startup behavior, logging, and tests.
+
 ## Safe Extension Points
 
 Preferred extension points are:

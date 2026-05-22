@@ -13,6 +13,10 @@ The BaSyx Configuration Service is designed as a run-once startup job. It execut
 
 ## Command-Line Options
 
+```{hint}
+These command-line options are only relevant when the service is not run as part of a Docker container.
+```
+
 The service binary supports these options:
 
 ```bash
@@ -64,4 +68,3 @@ Patches are registered by the service implementation. The current service regist
 A patch is executed only if the current value in `basyxsystem.database_version` is lower than the registered target version. The patch SQL file itself must update the database version after successfully applying its changes.
 
 See the developer documentation for details about creating new patches.
-

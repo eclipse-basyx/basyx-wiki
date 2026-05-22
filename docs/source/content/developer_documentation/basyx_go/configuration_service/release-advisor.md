@@ -56,8 +56,6 @@ Use this checklist whenever a release changes the database schema.
 
 ## Fresh Installations vs Upgrades
 
-Fresh installations and upgrades both need to end at the same database version.
-
 | Scenario | Expected behavior |
 | --- | --- |
 | Fresh database | `SystemTable` creates `basyxsystem` with `v1.0.0`, `SchemaUpload` uploads `base.sql`, then registered patches advance the version. |
