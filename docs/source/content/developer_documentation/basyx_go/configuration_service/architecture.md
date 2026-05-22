@@ -34,6 +34,6 @@ Implementation locations:
 
 ## Interaction Overview
 
-The entry point registers sequences explicitly. The initializer does not discover sequences automatically. Each sequence receives the same `ExecutionContext`, allowing earlier sequences to provide state for later sequences.
+The entry point (`main.go`) registers sequences explicitly. The initializer does not discover sequences automatically. Each sequence receives the same `ExecutionContext`, allowing earlier sequences to provide state for later sequences.
 
 The database connection sequence populates the context with `Config` and `DB`. `Config` provides the loaded configuration values, especially PostgreSQL connection and pool settings. `DB` is the opened PostgreSQL handle used by all later database-related sequences to execute SQL against PostgreSQL.
