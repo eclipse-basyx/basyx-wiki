@@ -8,9 +8,10 @@ It currently supports:
 
 - Loading database connection settings through the common BaSyx configuration mechanism.
 - Connecting to PostgreSQL using the configured `postgres` settings.
-- Creating and seeding the `basyxsystem` version table when it is missing or empty.
+- Creating and seeding the `basyxsystem` table when it is missing or empty.
 - Uploading the base SQL schema from `base.sql` when the base schema is not yet present.
 - Applying registered SQL patch files only when the database version is older than the patch target version.
+- Tracking the schema version and schema state through `basyxsystem.schema_version` and `basyxsystem.state`.
 - Serializing schema and patch execution with a PostgreSQL advisory lock.
 - Exiting with a non-zero status code when initialization fails.
 

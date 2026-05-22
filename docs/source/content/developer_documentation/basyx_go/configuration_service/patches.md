@@ -8,7 +8,7 @@ A patch should include:
 
 - A header describing the patch version and purpose.
 - Idempotent schema changes where practical.
-- A final update to the schema version stored in `basyxsystem.database_version`.
+- A final update to the schema version and clean state stored in `basyxsystem`.
 
 Example:
 
@@ -23,7 +23,8 @@ Example:
 CREATE INDEX IF NOT EXISTS ix_example_table_name ON example_table(name);
 
 UPDATE basyxsystem
-SET database_version = 'v1.0.2'
+SET schema_version = 'v1.0.2',
+    state = 'clean'
 WHERE identifier = (
   SELECT identifier
   FROM basyxsystem
@@ -36,12 +37,12 @@ WHERE identifier = (
 
 The Go code decides whether to execute a patch by comparing:
 
-- The current database version from `basyxsystem.database_version`.
+- The current schema version from `basyxsystem.schema_version`.
 - The target version passed to `NewSchemaPatch`.
 
 The patch SQL file is responsible for updating the database version. The Go patch sequence does not update the version after executing the patch.
 
-This means every patch that changes the schema version must include an `UPDATE basyxsystem SET database_version = ...` statement.
+This means every patch that changes the schema version must update `basyxsystem.schema_version` and leave `basyxsystem.state` as `clean`.
 
 ## Registering a Patch
 

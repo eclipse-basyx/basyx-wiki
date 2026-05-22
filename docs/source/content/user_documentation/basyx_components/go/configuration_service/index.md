@@ -1,6 +1,6 @@
 # BaSyx Configuration Service
 
-The BaSyx Configuration Service is a one-shot startup component for preparing the PostgreSQL database used by BaSyx services. It connects to the configured database, ensures the BaSyx system version table exists, uploads the base database schema when required, and applies registered schema patches in version order.
+The BaSyx Configuration Service is a one-shot startup component for preparing the PostgreSQL database used by BaSyx services. It connects to the configured database, ensures the BaSyx system table exists, uploads the base database schema when required, and applies registered schema patches in version order.
 
 It is intended to run before the BaSyx services that use the same database. After all registered initialization sequences finish successfully, the process exits.
 
@@ -23,7 +23,7 @@ Key benefits include:
 
 - **Safer updates**: Database schema changes are applied centrally before regular BaSyx services start, reducing the risk of competing containers modifying the schema at the same time.
 - **Reduced risk of data loss**: Patches are versioned and executed only when required. This helps avoid accidental repeated migrations and makes upgrade behavior more predictable.
-- **Clear database versioning**: The current schema version is stored in the `basyxsystem` table. BaSyx services can verify that the database version matches the version they expect before serving requests.
+- **Clear database state**: The current schema version and schema state are stored in the `basyxsystem` table. BaSyx services can verify that the database is compatible and clean before serving requests.
 - **Fail-fast protection**: If the database schema is missing, outdated, or incompatible, services fail during startup instead of running against an unsafe database state.
 - **Traceable errors**: Startup failures include stable BaSyx error codes such as `BASYXCFG-DB-CONNECT`, `BASYXCFG-SCHEMA-EXECUTE`, and `BASYXCFG-PATCH-EXECUTE`, making troubleshooting easier in container logs and CI pipelines.
 - **Repeatable deployments**: The same initialization flow can be used for local development, Docker Compose examples, CI environments, and containerized deployments.

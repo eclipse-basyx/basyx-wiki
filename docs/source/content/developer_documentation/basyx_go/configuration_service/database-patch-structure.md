@@ -62,7 +62,8 @@ Each patch must update the first row in `basyxsystem` to the patch target versio
 
 ```sql
 UPDATE basyxsystem
-SET database_version = 'v1.0.2'
+SET schema_version = 'v1.0.2',
+    state = 'clean'
 WHERE identifier = (
   SELECT identifier
   FROM basyxsystem

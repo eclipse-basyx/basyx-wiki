@@ -23,7 +23,7 @@ Core services call the common database version validation during startup. The ex
 
 ```mermaid
 flowchart TD
-    Patch[SQL patch updates basyxsystem.database_version] --> DB[(PostgreSQL)]
+    Patch[SQL patch updates basyxsystem.schema_version] --> DB[(PostgreSQL)]
     ConfigSvc[BaSyx Configuration Service] --> Patch
     CoreVersion[common.CURRENT_DATABASE_VERSION] --> ServiceStartup[Core service startup]
     ServiceStartup --> DB
@@ -45,7 +45,7 @@ The Configuration Service version should match the version of the BaSyx service,
 Use this checklist whenever a release changes the database schema.
 
 - Add a new SQL patch file under `database/patches`.
-- Ensure the patch file updates `basyxsystem.database_version` to the new target version.
+- Ensure the patch file updates `basyxsystem.schema_version` to the new target version and leaves `basyxsystem.state` as `clean`.
 - Register the new patch in `cmd/basyxconfigurationservice/main.go` after all older patches.
 - Update `common.CURRENT_DATABASE_VERSION` in `internal/common/database.go` to the new target version.
 - Keep `database/base.sql` aligned with the full schema expected for fresh installations.
@@ -71,7 +71,8 @@ When releasing `v1.0.2`:
 
 ```sql
 UPDATE basyxsystem
-SET database_version = 'v1.0.2'
+SET schema_version = 'v1.0.2',
+    state = 'clean'
 WHERE identifier = (
   SELECT identifier
   FROM basyxsystem

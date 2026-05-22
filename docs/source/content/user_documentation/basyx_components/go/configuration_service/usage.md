@@ -54,8 +54,8 @@ POSTGRES_CONNMAXLIFETIMEMINUTES=5
 
 ## Patch Execution
 
-Patches are registered by the service implementation. The current service registers `101.sql` with target database version `v1.0.1`.
+Patches are registered by the service implementation. The current service registers `101.sql` with target schema version `v1.0.1`.
 
-A patch is executed only if the current value in `basyxsystem.database_version` is lower than the registered target version. The patch SQL file itself must update the database version after successfully applying its changes.
+A patch is executed only if the current value in `basyxsystem.schema_version` is lower than the registered target version. Successful initialization and patching leaves `basyxsystem.state` as `clean`.
 
 See the developer documentation for details about creating new patches.

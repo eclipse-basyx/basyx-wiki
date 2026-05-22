@@ -23,7 +23,7 @@ This structure avoids embedding all startup behavior in `main.go` and makes it e
 
 A patch is represented by a `SchemaPatch` sequence. The sequence owns the decision whether the patch file should run by comparing the current database version with the patch target version.
 
-The patch SQL file owns the actual schema changes and must update `basyxsystem.database_version` itself.
+The patch SQL file owns the actual schema changes and must update `basyxsystem.schema_version` itself.
 
 ## Ordering Semantics
 
@@ -53,4 +53,3 @@ The initializer does not provide automatic rollback across multiple sequences. I
 `SchemaPatch` executes the patch SQL inside a database transaction. If patch execution fails, the transaction is rolled back.
 
 `SchemaUpload` executes the full base schema SQL through the database handle without an explicit transaction wrapper in Go. The SQL file itself should remain safe and repeatable for initialization scenarios.
-

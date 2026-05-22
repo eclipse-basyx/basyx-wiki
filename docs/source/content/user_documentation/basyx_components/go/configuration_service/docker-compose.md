@@ -2,6 +2,10 @@
 
 In Docker Compose deployments, run the BaSyx Configuration Service after PostgreSQL is healthy and before regular BaSyx services start.
 
+```{warning}
+Use the same BaSyx version or build for `basyxconfigurationservice` and the runtime services.
+```
+
 ## Minimal Example
 
 ```yaml
@@ -62,7 +66,13 @@ Recommended ordering:
 3. `basyx_configuration` runs and exits successfully.
 4. BaSyx services start.
 
-Use `condition: service_completed_successfully` for services that depend on the database schema being initialized.å
+Use `condition: service_completed_successfully` for services that depend on the database schema being initialized.
+
+```{warning}
+Mutable image tags such as `latest` and `SNAPSHOT` can change between restarts. If images are pulled fresh on restart, run `basyx_configuration` before DB-backed runtime services because schema requirements may have changed.
+```
+
+Pin exact image versions or image digests for reproducible deployments.
 
 ## Custom Schema and Patch Paths
 
@@ -85,4 +95,3 @@ basyx_configuration:
   volumes:
     - ./database:/custom:ro
 ```
-

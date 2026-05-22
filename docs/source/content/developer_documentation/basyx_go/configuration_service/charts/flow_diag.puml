@@ -18,7 +18,7 @@ DB --> Init: ctx.DB populated
 Init -> System: Execute(2)
 System -> PG: Acquire advisory lock
 System -> PG: CREATE TABLE IF NOT EXISTS basyxsystem
-System -> PG: INSERT v1.0.0 if no row exists
+System -> PG: INSERT schema_version/state if no row exists
 System -> PG: Release advisory lock
 
 Init -> Upload: Execute(3)
@@ -35,12 +35,17 @@ Upload -> PG: Release advisory lock
 
 Init -> Patch: Execute(4)
 Patch -> PG: Acquire advisory lock
-Patch -> PG: Read basyxsystem.database_version
+Patch -> PG: Read basyxsystem.schema_version/state
 
 alt Current version lower than target
     Patch -> PG: Begin transaction
     Patch -> PG: Execute patch SQL
-    Patch -> PG: Commit transaction
+    alt Patch succeeds
+        Patch -> PG: Set state clean
+        Patch -> PG: Commit transaction
+    else Patch fails
+        Patch -> PG: Set state dirty
+    end
 else Current version equal or newer
     Patch --> Init: Skip patch
 end

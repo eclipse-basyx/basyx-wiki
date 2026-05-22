@@ -71,7 +71,8 @@ Common approaches include:
 - Use `restartPolicy: OnFailure` so Kubernetes retries the pod if initialization fails.
 - Use `backoffLimit` to control how many retries Kubernetes should attempt.
 - Store database credentials in a Kubernetes `Secret` instead of plain environment variables.
-- Use a fixed image tag for production deployments instead of `latest`.
+- Use the same BaSyx version or build for `basyxconfigurationservice` and the runtime services.
+- Avoid mutable image tags such as `latest` and `SNAPSHOT` for reproducible deployments. Pin exact image versions or image digests where possible.
+- If mutable-tag images are pulled fresh on restart, run the Configuration Service Job before DB-backed runtime workloads.
 - Ensure PostgreSQL is reachable and ready before the Job runs.
 - Check Job logs when initialization fails; errors include BaSyx error codes for troubleshooting.
-
