@@ -39,17 +39,15 @@ services:
 
   submodelrepository:
     image: eclipsebasyx/submodelrepository-go:latest
-    depends_on:
-      basyx_configuration:
-        condition: service_completed_successfully
-      db:
-        condition: service_healthy
     environment:
       POSTGRES_HOST: db
       POSTGRES_PORT: 5432
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin123
       POSTGRES_DBNAME: basyxTestDB
+    depends_on:
+      basyx_configuration:
+        condition: service_completed_successfully
 
 volumes:
   postgres_data:
@@ -64,11 +62,7 @@ Recommended ordering:
 3. `basyx_configuration` runs and exits successfully.
 4. BaSyx services start.
 
-Use `condition: service_completed_successfully` for services that depend on the database schema being initialized.
-
-## Persistent Storage
-
-Use persistent PostgreSQL storage for non-temporary deployments. Without persistent storage, the database is recreated whenever the database volume is removed, and the Configuration Service will upload the base schema again.
+Use `condition: service_completed_successfully` for services that depend on the database schema being initialized.å
 
 ## Custom Schema and Patch Paths
 

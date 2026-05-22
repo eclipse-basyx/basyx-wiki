@@ -25,47 +25,7 @@ These components are described in the [architecture overview](architecture.md).
 
 ## Flow Diagram
 
-```mermaid
-sequenceDiagram
-    participant Main as main.go
-    participant Init as SchemaInitializer
-    participant DB as DatabaseConnection
-    participant System as SystemTable
-    participant Upload as SchemaUpload
-    participant Patch as SchemaPatch
-    participant PG as PostgreSQL
-
-    Main->>Init: Register sequences
-    Main->>Init: Execute()
-    Init->>DB: Execute(1)
-    DB->>PG: Connect and ping
-    DB-->>Init: ctx.DB populated
-    Init->>System: Execute(2)
-    System->>PG: Acquire advisory lock
-    System->>PG: CREATE TABLE IF NOT EXISTS basyxsystem
-    System->>PG: INSERT v1.0.0 if no row exists
-    System->>PG: Release advisory lock
-    Init->>Upload: Execute(3)
-    Upload->>PG: Acquire advisory lock
-    Upload->>PG: Check base schema marker tables
-    alt Base schema missing
-        Upload->>PG: Execute base.sql
-    else Base schema present
-        Upload-->>Init: Skip upload
-    end
-    Upload->>PG: Release advisory lock
-    Init->>Patch: Execute(4)
-    Patch->>PG: Acquire advisory lock
-    Patch->>PG: Read basyxsystem.database_version
-    alt Current version lower than target
-        Patch->>PG: Begin transaction
-        Patch->>PG: Execute patch SQL
-        Patch->>PG: Commit transaction
-    else Current version equal or newer
-        Patch-->>Init: Skip patch
-    end
-    Patch->>PG: Release advisory lock
-    Init-->>Main: Success or error
+```{uml} charts/flow_diag.puml
 ```
 
 ```{hint}
