@@ -1,3 +1,9 @@
+/* Global dark mode palette: closer to VS Code Dark+ and less close to pure black. */
+html[data-theme="dark"],
+[data-theme="dark"] {
+    --pst-color-background: #1e1e1e;
+}
+
 /* Table styles with only outer border and rounded corners */
 table {
     border-spacing: 0;
