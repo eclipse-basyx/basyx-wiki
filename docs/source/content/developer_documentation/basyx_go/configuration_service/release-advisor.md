@@ -21,15 +21,7 @@ If one part is updated without the others, deployments can fail at startup or ru
 
 Core services call the common database version validation during startup. The expected version is defined centrally as `common.CURRENT_DATABASE_VERSION`.
 
-```mermaid
-flowchart TD
-    Patch[SQL patch updates basyxsystem.schema_version] --> DB[(PostgreSQL)]
-    ConfigSvc[BaSyx Configuration Service] --> Patch
-    CoreVersion[common.CURRENT_DATABASE_VERSION] --> ServiceStartup[Core service startup]
-    ServiceStartup --> DB
-    DB --> Validate{DB version equals expected version?}
-    Validate -->|yes| Run[Service starts]
-    Validate -->|no| Fail[Service fails fast]
+```{uml} charts/release_advisor_sync_model.puml
 ```
 
 ```{hint}

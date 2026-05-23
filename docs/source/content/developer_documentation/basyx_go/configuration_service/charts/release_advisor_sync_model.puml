@@ -1,0 +1,20 @@
+@startuml
+
+participant "BaSyx Configuration Service" as ConfigSvc
+participant "SQL patch" as Patch
+database "PostgreSQL" as DB
+participant "Core service startup" as Startup
+participant "common.CURRENT_DATABASE_VERSION" as CoreVersion
+
+ConfigSvc -> Patch: Execute registered patch
+Patch -> DB: Update basyxsystem.schema_version
+CoreVersion -> Startup: Expected database version
+Startup -> DB: Validate schema version
+
+alt DB version equals expected version
+    Startup -> Startup: Service starts
+else DB version differs
+    Startup -> Startup: Service fails fast
+end
+
+@enduml
