@@ -2,14 +2,6 @@
 html[data-theme="dark"],
 [data-theme="dark"] {
     --pst-color-background: #1e1e1e;
-    --pst-color-on-background: #d4d4d4;
-    --pst-color-surface: #252526;
-    --pst-color-on-surface: #d4d4d4;
-    --pst-color-border: #3c3c3c;
-    --pst-color-text-base: #d4d4d4;
-    --pst-color-text-muted: #9da1a6;
-    --bs-body-bg: #1e1e1e;
-    --bs-body-color: #d4d4d4;
 }
 
 /* Table styles with only outer border and rounded corners */
