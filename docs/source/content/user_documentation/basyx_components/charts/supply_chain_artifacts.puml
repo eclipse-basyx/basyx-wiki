@@ -1,0 +1,59 @@
+@startuml
+top to bottom direction
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam defaultTextAlignment center
+skinparam linetype polyline
+skinparam nodesep 20
+skinparam ranksep 25
+
+actor "User / Operator" as user
+
+rectangle "Eclipse BaSyx source repository\nrelease tag or snapshot branch" as buildContext
+rectangle "GitHub Actions\nrelease workflow" as workflow
+
+artifact "Published image digest\nimage@sha256:..." as digest
+
+package "Evidence attached to the image" as attached {
+  artifact "Cosign signature\nwho signed this digest" as signature
+  artifact "Cosign provenance attestation\nhow this digest was built" as cosignProvenance
+  artifact "Cosign SBOM attestation\nwhat software is included" as cosignSbom
+  artifact "BuildKit OCI attestations\nprovenance + SBOM" as buildkitAttestations
+}
+
+package "Release evidence files" as release {
+  artifact "SPDX SBOM\n*.spdx.json" as spdx
+  artifact "CycloneDX SBOM\n*.cdx.json" as cdx
+  artifact "Metadata JSON\ntraceability details" as metadata
+}
+
+rectangle "Consumer checks" as checks {
+  rectangle "Deploy by immutable digest" as deploy
+  rectangle "Verify signature and attestations\nwith expected workflow identity\nand OIDC issuer" as verify
+  rectangle "Archive SBOMs and metadata" as archive
+}
+
+buildContext -down-> workflow
+workflow -down-> digest : build and publish
+digest -down-> attached : signatures and\nattestations
+attached -down-> release : downloadable\nrelease files
+release -down-> checks
+
+signature -[hidden]down-> cosignProvenance
+cosignProvenance -[hidden]down-> cosignSbom
+cosignSbom -[hidden]down-> buildkitAttestations
+
+spdx -[hidden]down-> cdx
+cdx -[hidden]down-> metadata
+
+deploy -[hidden]down-> verify
+verify -[hidden]down-> archive
+
+user -up-> checks
+
+note right of digest
+The digest is the stable deployment target.
+Tags can move; digests identify one artifact.
+end note
+
+@enduml
