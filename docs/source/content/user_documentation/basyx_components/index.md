@@ -6,6 +6,7 @@
 * [AAS Web UI](./web_ui/index.md)
 * [Databridge Component](./databridge/index.md)
 * [Test Orchestrator](./testorchestrator/index.md)
+* [Supply Chain Security](./supply_chain_security.md)
 
 ```{toctree}
 :hidden:
@@ -17,4 +18,5 @@ go/index
 web_ui/index
 databridge/index
 testorchestrator/index
+supply_chain_security
 ```

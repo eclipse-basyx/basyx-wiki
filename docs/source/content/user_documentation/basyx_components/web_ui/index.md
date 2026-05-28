@@ -21,6 +21,7 @@ name: web_ui
 * [Data Synchronization](./features/data_sync.md)
 * [Docker Configuration](./features/docker_config.md)
 * [Security](./features/security.md)
+* [Supply Chain Security](./features/supply_chain_security.md)
 * [Corporate Design](./features/corporate_design.md)
 * [Mobile Support](./features/mobile_support.md)
 * [Plugins](./features/plugin_mechanism.md)
@@ -36,6 +37,7 @@ features/configuration
 features/data_sync
 features/docker_config
 features/security
+features/supply_chain_security
 features/corporate_design
 features/mobile_support
 features/plugin_mechanism

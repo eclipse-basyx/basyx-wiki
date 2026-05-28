@@ -10,6 +10,10 @@ The BaSyx AAS Web UI supports comprehensive security mechanisms for authenticati
 
 Security in the AAS ecosystem is based on the standardized [AAS Security Specification (IDTA-01004)](https://industrialdigitaltwin.io/aas-specifications/IDTA-01004/v3.0.1/index.html), which defines authentication, authorization, and access control mechanisms for Asset Administration Shells. The Web UI implements these security concepts, supporting both **Role-Based Access Control (RBAC)** and **Attribute-Based Access Control (ABAC)** as defined in the AAS Part 4 specification.
 
+```{seealso}
+This page describes runtime access security. To verify published container images, signatures, provenance, and SBOMs before deployment, see [Supply Chain Security](./supply_chain_security.md).
+```
+
 ```{note}
 From the Web UI perspective, it doesn't matter whether your backend implements RBAC or ABAC—both are supported transparently through standard OAuth2/OIDC token-based authentication. The backend services determine which access control model is applied.
 ```
