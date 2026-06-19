@@ -93,8 +93,8 @@ Each `claimMappings` entry contains:
 
 | Field | Purpose |
 | --- | --- |
-| `target` | Canonical target claim in the reserved `basyx.*` namespace. |
-| `mode` | Mapping strategy used to combine or select source claims. |
+| `target` | Target claim name without the `basyx.` prefix. The mapped claim is exposed as `basyx.<target>`. |
+| `mode` | Mapping mode: `list` collects values as a list, while `scalar` produces a single value. |
 | `sources` | Provider claim paths used as mapping inputs. |
 
 ### `general`
