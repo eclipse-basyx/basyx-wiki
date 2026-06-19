@@ -31,14 +31,29 @@ These sections are part of the shared configuration model. Components ignore set
 
 | Key | Default | Purpose |
 | --- | --- | --- |
+| `dsn` | `""` | Complete PostgreSQL connection string. When non-empty, it replaces the individual connection fields listed below. |
 | `host` | `db` | PostgreSQL host. |
 | `port` | `5432` | PostgreSQL port. |
 | `user` | `admin` | Database user. |
 | `password` | `admin123` | Database password. |
 | `dbname` | `basyxTestDB` | Database name. |
+| `sslmode` | `disable` | PostgreSQL TLS verification mode: `disable`, `allow`, `prefer`, `require`, `verify-ca`, or `verify-full`. |
+| `sslcert` | `""` | Path to the client certificate used for certificate-based PostgreSQL authentication. |
+| `sslkey` | `""` | Path to the private key belonging to `sslcert`. |
+| `sslrootcert` | `""` | Path to the root CA certificate used to verify the PostgreSQL server certificate. |
+| `connectTimeoutSeconds` | `0` | Connection timeout in seconds. Must not be negative; `0` leaves the timeout unspecified. |
+| `applicationName` | `""` | PostgreSQL `application_name` reported for the connection. |
+| `fallbackApplicationName` | `""` | Fallback application name used when no primary application name is supplied. |
+| `searchPath` | `""` | PostgreSQL schema search path for new sessions. |
+| `options` | `""` | Additional PostgreSQL server startup options. |
+| `timezone` | `""` | PostgreSQL session time zone. |
 | `maxOpenConnections` | `50` | Maximum number of open DB connections. |
 | `maxIdleConnections` | `50` | Maximum number of idle DB connections. |
 | `connMaxLifetimeMinutes` | `5` | Maximum DB connection lifetime in minutes. |
+
+When `postgres.dsn` is non-empty, do not explicitly configure `host`, `port`, `user`, `password`, `dbname`, TLS, timeout, application-name, search-path, options, or time-zone fields in YAML or environment variables. The service rejects this ambiguous combination. Connection-pool settings can still be used with a DSN.
+
+The DSN and database credentials are sensitive and should normally be supplied through a secret rather than committed to YAML.
 
 ### `cors`
 
@@ -177,11 +192,22 @@ server:
   verificationEndpointAvailable: true
 
 postgres:
+  dsn: ""
   host: db
   port: 5432
   dbname: basyxTestDB
   user: admin
   password: admin123
+  sslmode: disable
+  sslcert: ""
+  sslkey: ""
+  sslrootcert: ""
+  connectTimeoutSeconds: 0
+  applicationName: ""
+  fallbackApplicationName: ""
+  searchPath: ""
+  options: ""
+  timezone: ""
   maxOpenConnections: 50
   maxIdleConnections: 50
   connMaxLifetimeMinutes: 5
@@ -273,6 +299,8 @@ POSTGRES_PORT=5432
 POSTGRES_USER=admin
 POSTGRES_PASSWORD=admin123
 POSTGRES_DBNAME=basyxTestDB
+POSTGRES_SSLMODE=disable
+POSTGRES_CONNECTTIMEOUTSECONDS=10
 ABAC_ENABLED=false
 ABAC_POLICYFILEIMPORT=if_missing
 ABAC_MANAGEMENTAPI_ENABLED=false
@@ -324,9 +352,17 @@ The following explicit aliases are also supported:
 
 The explicit aliases are applied after normal environment-variable decoding and therefore take precedence when both forms are set.
 
+To use a complete PostgreSQL DSN, set only `POSTGRES_DSN` for the connection details. Do not also set individual connection variables such as `POSTGRES_HOST` or `POSTGRES_SSLMODE`:
+
+```bash
+POSTGRES_DSN=postgres://admin:secret@db:5432/basyx?sslmode=require
+POSTGRES_MAXOPENCONNECTIONS=50
+POSTGRES_MAXIDLECONNECTIONS=50
+```
+
 ## Security Files
 
-Components that use shared OIDC/ABAC security may rely on these paths:
+The shared configuration may reference these security-sensitive files:
 
 - `oidc.trustlistPath`
 - `abac.modelPath`
@@ -334,6 +370,9 @@ Components that use shared OIDC/ABAC security may rely on these paths:
 - `jws.certificateChainPath`
 - `history.evidence.signing.privateKeyPath`
 - `history.evidence.signing.publicKeyPath`
+- `postgres.sslcert`
+- `postgres.sslkey`
+- `postgres.sslrootcert`
 
 In containers, paths are resolved inside the container filesystem. Mount the files or their parent directory and point the YAML value or environment variable to the mounted path.
 
