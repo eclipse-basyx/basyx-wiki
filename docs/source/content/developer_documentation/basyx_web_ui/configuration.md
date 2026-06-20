@@ -127,6 +127,8 @@ Never commit OAuth client secrets or credentials into version control. Frontend 
 * `VITE_SINGLE_AAS`
 * `VITE_SINGLE_AAS_REDIRECT`
 * `VITE_SM_VIEWER_EDITOR`
+* `VITE_SINGLE_SM`
+* `VITE_SINGLE_SM_REDIRECT`
 * `VITE_ALLOW_EDITING`
 * `VITE_ALLOW_UPLOADING`
 * `VITE_ALLOW_LOGOUT`

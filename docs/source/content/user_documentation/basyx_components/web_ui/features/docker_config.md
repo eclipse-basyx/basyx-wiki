@@ -97,6 +97,8 @@ For more details on customizing branding, see the [Corporate Design](./corporate
 | SINGLE_AAS | Show only one specific AAS instead of a list | false |
 | SINGLE_AAS_REDIRECT | Redirect URL when SINGLE_AAS is true and no `aas` query parameter is present | - |
 | SM_VIEWER_EDITOR | Enable/disable the standalone Submodel Viewer and Editor | true |
+| SINGLE_SM | Show only one specific SM instead of a list in the SM Viewer/Editor | false |
+| SINGLE_SM_REDIRECT | Redirect URL when SINGLE_SM is true and no `path` query parameter is present | - |
 | ALLOW_EDITING | Enable/disable the AAS Editor | true |
 | ALLOW_UPLOADING | Enable/disable uploading AAS environments | true |
 | ALLOW_LOGOUT | Enable/disable logout functionality when authentication is active | true |
