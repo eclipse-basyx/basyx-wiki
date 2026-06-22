@@ -113,6 +113,7 @@ Each `claimMappings` entry contains:
 | `trustedProxyCIDRs` | `[]` | CIDR allowlist of proxy source addresses whose forwarded headers may be trusted. |
 | `uploadMaxSizeBytes` | `134217728` | Maximum upload size for repository/environment upload endpoints. |
 | `aasPreconfigPaths` | `[]` | AAS Environment startup import sources. Supports files or folders with `.aasx`, `.json`, or `.xml` files. |
+| `bulkBatchLimit` | `1000` | Maximum row count per generated bulk SQL statement. Must be greater than `0`. |
 
 When registry synchronization is enabled, `general.externalUrl` must be set to at least one absolute URL with scheme and host.
 
@@ -241,6 +242,7 @@ general:
   trustedProxyCIDRs: []
   uploadMaxSizeBytes: 134217728
   aasPreconfigPaths: []
+  bulkBatchLimit: 1000
 
 jws:
   privateKeyPath: ""
@@ -308,6 +310,7 @@ OIDC_TRUSTLISTPATH=config/trustlist.json
 GENERAL_EXTERNALURL=https://example.org/aas
 GENERAL_TRUSTPROXYHEADERS=false
 GENERAL_UPLOADMAXSIZEBYTES=134217728
+GENERAL_BULK_BATCH_LIMIT=1000
 SWAGGER_ENABLED=true
 ```
 
@@ -323,6 +326,7 @@ The following explicit aliases are also supported:
 | --- | --- |
 | `abac.policyFileImport` | `ABAC_POLICY_FILE_IMPORT` or `BASYX_ABAC_POLICY_FILE_IMPORT` |
 | `abac.managementApi.enabled` | `ABAC_MANAGEMENT_API_ENABLED`, `ABAC_MANAGEMENTAPI_ENABLED`, or `BASYX_ABAC_MANAGEMENT_API_ENABLED` |
+| `general.bulkBatchLimit` | `GENERAL_BULK_BATCH_LIMIT` or `BASYX_GENERAL_BULK_BATCH_LIMIT` |
 | `history.mode` | `BASYX_HISTORY_MODE` |
 | `history.retentionDays` | `BASYX_HISTORY_RETENTION_DAYS` |
 | `history.fullSnapshotInterval` | `BASYX_HISTORY_FULL_SNAPSHOT_INTERVAL` |
