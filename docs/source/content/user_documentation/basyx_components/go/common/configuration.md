@@ -72,9 +72,12 @@ The DSN and database credentials are sensitive and should normally be supplied t
 | `abac.enabled` | `false` | Enables OIDC authentication and ABAC authorization middleware. |
 | `abac.modelPath` | `config/access_rules/access-rules.json` | ABAC access-rules model. |
 | `abac.policyFileImport` | `""` | Controls startup import of `modelPath`: `always`, `if_missing`, or `never`. An empty value lets the service choose its default behavior. |
+| `abac.policyScope` | `""` | Optional database namespace for stored ABAC policies. An empty value uses the service's built-in scope. |
 | `abac.managementApi.enabled` | `false` | Enables the protected API for managing the active ABAC policy at runtime. |
 
-If `abac.enabled` is `false`, the shared security setup is skipped. If it is `true`, the trustlist is required. `policyFileImport` determines whether the policy file is loaded on every start, only if the database has no active policy, or never.
+If `abac.enabled` is `false`, the shared security setup is skipped. If it is `true`, the trustlist is required. `policyFileImport` determines whether the policy file is loaded on every start, only if the database has no active policy, or never. `policyScope` controls the database-backed ABAC policy namespace; use different scopes to isolate deployments that share a database, and share a scope only when services should intentionally use the same active policy.
+
+When set, `policyScope` is trimmed, must not exceed 255 characters, and may contain ASCII letters, digits, `_`, `-`, `.`, and `:`.
 
 #### OIDC trustlist provider fields
 
@@ -226,6 +229,7 @@ abac:
   enabled: false
   modelPath: "config/access_rules/access-rules.json"
   policyFileImport: ""
+  policyScope: ""
   managementApi:
     enabled: false
 
@@ -305,6 +309,7 @@ POSTGRES_SSLMODE=disable
 POSTGRES_CONNECTTIMEOUTSECONDS=10
 ABAC_ENABLED=false
 ABAC_POLICYFILEIMPORT=if_missing
+ABAC_POLICY_SCOPE=aasregistryservice
 ABAC_MANAGEMENTAPI_ENABLED=false
 OIDC_TRUSTLISTPATH=config/trustlist.json
 GENERAL_EXTERNALURL=https://example.org/aas
@@ -325,6 +330,7 @@ The following explicit aliases are also supported:
 | YAML setting | Environment variable |
 | --- | --- |
 | `abac.policyFileImport` | `ABAC_POLICY_FILE_IMPORT` or `BASYX_ABAC_POLICY_FILE_IMPORT` |
+| `abac.policyScope` | `ABAC_POLICY_SCOPE` or `BASYX_ABAC_POLICY_SCOPE` |
 | `abac.managementApi.enabled` | `ABAC_MANAGEMENT_API_ENABLED`, `ABAC_MANAGEMENTAPI_ENABLED`, or `BASYX_ABAC_MANAGEMENT_API_ENABLED` |
 | `general.bulkBatchLimit` | `GENERAL_BULK_BATCH_LIMIT` or `BASYX_GENERAL_BULK_BATCH_LIMIT` |
 | `history.mode` | `BASYX_HISTORY_MODE` |
