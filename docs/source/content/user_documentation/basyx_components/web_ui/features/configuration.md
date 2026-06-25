@@ -6,11 +6,11 @@
 
 ## Feature Overview
 
-The BaSyx AAS Web UI provides flexible configuration options to connect to different AAS infrastructures and customize the application behavior. You can configure the Web UI through the user interface itself, using environment variables, or by pre-configuring infrastructure connections for your users.
+The BaSyx AAS Web UI provides flexible configuration options to connect to different AAS infrastructures and customize the application behavior. You can configure the Web UI through the user interface itself, using environment variables, or by pre-configuring infrastructure connections for your users. Infrastructure templates help match the configuration form to the backend topology you are connecting to.
 
 ## Configuring Infrastructure Connections
 
-The Web UI allows you to connect to one or multiple AAS infrastructures, each potentially using different authentication methods and component endpoints.
+The Web UI allows you to connect to one or multiple AAS infrastructures, each potentially using different authentication methods, component endpoints, and infrastructure templates.
 
 ### Managing Infrastructures Through the UI
 
@@ -51,17 +51,23 @@ List of available infrastructures with management actions
 
 When creating a new infrastructure or editing an existing one, you'll configure:
 
-**Required Component Endpoints:**
+**Infrastructure Template:**
 
-- **AAS Registry**: For discovering Asset Administration Shell endpoints
-- **Submodel Registry**: For discovering Submodel endpoints
-- **AAS Repository**: For accessing AAS data
-- **Submodel Repository**: For accessing Submodel data
-- **Concept Description Repository**: For semantic information and concept descriptions
+The template describes how the backend services are arranged. The Web UI uses it to show only the endpoint fields and integration options that apply to the selected topology.
 
-**Optional Component Endpoints:**
+| Template | Endpoint fields shown | Typical use |
+|----------|-----------------------|-------------|
+| **Full** | AAS Discovery, AAS Registry, Submodel Registry, AAS Repository, Submodel Repository, Concept Description Repository | Separate BaSyx services for each component |
+| **Mono Repo** | AAS Discovery, AAS Registry, Submodel Registry, AAS Environment | Registries and discovery are separate, while repositories share one AAS Environment endpoint |
+| **Mono All** | AAS Environment | One AAS Environment endpoint exposes all required APIs |
+| **Identifiable** | AAS Repository | AAS and Submodels are accessed through shell paths such as `/shells/{aasId}/submodels/{submodelId}` |
+| **Catena-X** | Digital Twin Registry, Submodel Service | Catena-X style infrastructure with DTR and Submodel Service endpoints |
 
-- **AAS Discovery Service**: For discovering AAS by asset IDs
+**Endpoint URLs:**
+Enter the endpoint URLs shown for the selected template. If a template groups several backend APIs behind one URL, such as **AAS Environment**, the Web UI applies that URL to the relevant internal components automatically.
+
+**Integration Options:**
+For templates that include registries or discovery, the form may show options such as **Backend creates AAS descriptors automatically**, **Backend creates Submodel descriptors automatically**, or **Backend creates AAS discovery asset links automatically**. Disable these options when the backend does not synchronize descriptors or discovery links on its own and the Web UI should manage them.
 
 **Security Configuration:**
 See the [Security](./security.md) page for detailed information on authentication and authorization options.
@@ -90,7 +96,7 @@ The BaSyx AAS Web UI supports connecting to **multiple AAS infrastructures** sim
 
 Each infrastructure can have:
 
-- Its own set of component endpoints (registries, repositories, discovery)
+- Its own infrastructure template and component endpoints
 - Different authentication methods (OAuth2, Basic Auth, Bearer Token, or none)
 - Different identity providers (Keycloak, Azure AD, Auth0, or any OAuth2-compatible IDP)
 
@@ -155,6 +161,7 @@ For a complete list of environment variables and how to set them in Docker, see 
 If you are a **system administrator** deploying the BaSyx AAS Web UI for multiple users, you can pre-configure infrastructure connections using a YAML configuration file. This allows you to:
 
 - Define multiple infrastructures that all users can access
+- Select the infrastructure template for each backend topology
 - Configure authentication settings centrally
 - Prevent users from creating or modifying infrastructure configurations
 - Ensure consistent backend connections across your organization
@@ -218,6 +225,7 @@ The flexible configuration system makes it easy to work with multiple environmen
 If you're having trouble connecting to your AAS infrastructure:
 
 1. **Verify Endpoints**:
+   - Check that the selected infrastructure template matches your backend topology
    - Ensure all component URLs are correct and accessible from your browser
    - Check that services are running and responding to requests
    - Test endpoint URLs directly in your browser

@@ -75,7 +75,7 @@ docker run -p 3000:3000 --name=aas-web-ui eclipsebasyx/aas-gui
 
 When the container is running, you can access the AAS Web UI by navigating to [http://localhost:3000](http://localhost:3000) in your browser.
 
-To connect to an AAS infrastructure, open the settings by clicking on the gear icon in the top right corner of the Web UI. From there, you can create a new connection by providing the endpoints for the AAS Registry, Submodel Registry, AAS Repository, Submodel Repository and Concept Description Repository, as well as the optional endpoint for the AAS Discovery Service.
+To connect to an AAS infrastructure, open the settings by clicking on the gear icon in the top right corner of the Web UI. From there, you can create a new connection, choose the infrastructure template that matches your backend topology, and provide the endpoint URLs shown for that template.
 
 ```{seealso}
 For more details on configuration options, backend connections, and advanced setup, please refer to the [Configuration & Environment](./features/configuration.md) page.
@@ -110,7 +110,7 @@ name: aas_list
 AAS List Sidebar
 ```
 
-The **AAS List** displays all Asset Administration Shells that are registered in the connected AAS Registry. If no registries are configured, the AAS List will directly visualize shells coming from the configured AAS Repository.
+The **AAS List** displays all Asset Administration Shells that are registered in the connected AAS Registry. If the selected infrastructure template has no active registry, the AAS List will directly visualize shells coming from the configured AAS Repository.
 
 You can filter the list by entering a search term in the search bar, which searches through the `idShort` or `displayName` properties of the AAS.
 

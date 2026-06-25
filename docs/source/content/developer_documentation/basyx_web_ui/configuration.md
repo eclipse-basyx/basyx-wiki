@@ -35,6 +35,7 @@ public/config/basyx-infra.yml
 This file defines:
 
 * One or more AAS infrastructures
+* The infrastructure template for each backend topology
 * Component endpoints (registry, repository, discovery, etc.)
 * Authentication configuration per infrastructure
 
@@ -43,6 +44,7 @@ This file defines:
 * The file name is currently fixed and cannot be changed
 * It is loaded at runtime, not build time
 * It supports multi-infrastructure setups
+* Each infrastructure can select a topology template
 
 ```{warning}
 Changes made via the UI infrastructure editor are stored in `localStorage` only and are **not written back** to `basyx-infra.yml`.
@@ -218,6 +220,7 @@ This allows the same image to be reused across environments without rebuilding.
 * Committing local changes to `basyx-infra.yml`
 * Assuming UI-edited infrastructure is persisted globally
 * Using OAuth client secrets in frontend configuration
+* Selecting a template that does not match the actual backend topology
 * Forgetting to adjust mounted paths when changing `BASE`/`BASE_PATH`
 * Setting `START_PAGE_ROUTE_NAME` to a route whose feature flag is disabled (the app will fall back silently)
 * Using a path (e.g. `/aasviewer`) instead of a named route (e.g. `AASViewer`) for `START_PAGE_ROUTE_NAME`
@@ -241,6 +244,7 @@ infrastructures:
 
   <infra-key>:
     name: <infrastructure-name>
+    template: <template-name>
     components:
       aasDiscovery:
         baseUrl: "<url>"
@@ -263,6 +267,24 @@ infrastructures:
         # Authentication-specific configuration
 ```
 
+The `template` field is optional for backward compatibility. If it is omitted or contains an unknown value, the Web UI uses `full`.
+
+### Infrastructure Templates
+
+Infrastructure templates describe which endpoint fields are active for a backend topology. The selected template controls the endpoint fields shown in the UI, the YAML component keys that are read, and whether grouped endpoints are mapped to multiple internal components.
+
+| Template | YAML endpoint keys | Description |
+|----------|--------------------|-------------|
+| `full` | `aasDiscovery`, `aasRegistry`, `submodelRegistry`, `aasRepository`, `submodelRepository`, `conceptDescriptionRepository` | Separate discovery, registries, repositories, and concept description repository |
+| `mono-repo` | `aasDiscovery`, `aasRegistry`, `submodelRegistry`, `aasEnvironment` | Separate discovery and registries with one AAS Environment endpoint for AAS, Submodel, and Concept Description repository APIs |
+| `mono-all` | `aasEnvironment` | One AAS Environment endpoint exposes all full-template component APIs |
+| `identifiable` | `aasRepository` | AAS Repository only; Submodels are resolved through shell paths such as `/shells/{aasId}/submodels/{submodelId}` |
+| `catena-x` | `digitalTwinRegistry`, `submodelService` | Digital Twin Registry plus Submodel Service |
+
+```{note}
+Grouped endpoint keys are expanded internally. For example, `aasEnvironment` in the `mono-repo` template sets the AAS Repository, Submodel Repository, and Concept Description Repository URLs to the same base URL.
+```
+
 ### Configuration Examples
 
 #### No Authentication
@@ -273,6 +295,7 @@ infrastructures:
 
   local:
     name: Local Development Environment
+    template: full
     components:
       aasDiscovery:
         baseUrl: "http://localhost:9084"
@@ -301,7 +324,10 @@ infrastructures:
 
   production:
     name: Production Environment
+    template: full
     components:
+      aasDiscovery:
+        baseUrl: "https://discovery.basyx.example.com"
       aasRegistry:
         baseUrl: "https://aasreg.basyx.example.com"
       submodelRegistry:
@@ -312,8 +338,6 @@ infrastructures:
         baseUrl: "https://aasenv.basyx.example.com"
       conceptDescriptionRepository:
         baseUrl: "https://aasenv.basyx.example.com"
-      aasDiscovery:
-        baseUrl: "https://discovery.basyx.example.com"
     security:
       type: oauth2
       config:
@@ -335,16 +359,15 @@ infrastructures:
 
   service:
     name: Service Account Environment
+    template: mono-repo
     components:
+      aasDiscovery:
+        baseUrl: "https://discovery.internal.basyx.com"
       aasRegistry:
         baseUrl: "https://aasreg.internal.basyx.com"
       submodelRegistry:
         baseUrl: "https://smreg.internal.basyx.com"
-      aasRepository:
-        baseUrl: "https://aasenv.internal.basyx.com"
-      submodelRepository:
-        baseUrl: "https://aasenv.internal.basyx.com"
-      conceptDescriptionRepository:
+      aasEnvironment:
         baseUrl: "https://aasenv.internal.basyx.com"
     security:
       type: oauth2
@@ -364,17 +387,12 @@ infrastructures:
 
   staging:
     name: Staging Environment
+    template: catena-x
     components:
-      aasRegistry:
-        baseUrl: "https://aasreg.staging.basyx.com"
-      submodelRegistry:
-        baseUrl: "https://smreg.staging.basyx.com"
-      aasRepository:
-        baseUrl: "https://aasenv.staging.basyx.com"
-      submodelRepository:
-        baseUrl: "https://aasenv.staging.basyx.com"
-      conceptDescriptionRepository:
-        baseUrl: "https://aasenv.staging.basyx.com"
+      digitalTwinRegistry:
+        baseUrl: "https://dtr.staging.basyx.com"
+      submodelService:
+        baseUrl: "https://submodel-service.staging.basyx.com"
     security:
       type: basic
       config:
@@ -390,16 +408,9 @@ infrastructures:
 
   test:
     name: Test Environment
+    template: identifiable
     components:
-      aasRegistry:
-        baseUrl: "https://aasreg.test.basyx.com"
-      submodelRegistry:
-        baseUrl: "https://smreg.test.basyx.com"
       aasRepository:
-        baseUrl: "https://aasenv.test.basyx.com"
-      submodelRepository:
-        baseUrl: "https://aasenv.test.basyx.com"
-      conceptDescriptionRepository:
         baseUrl: "https://aasenv.test.basyx.com"
     security:
       type: bearer
@@ -415,6 +426,7 @@ infrastructures:
 
   production:
     name: Production Environment
+    template: full
     components:
       # ... production components
     security:
@@ -427,6 +439,7 @@ infrastructures:
 
   development:
     name: Development Environment
+    template: mono-repo
     components:
       # ... development components
     security:
@@ -434,6 +447,7 @@ infrastructures:
 
   partner-a:
     name: Partner A Infrastructure
+    template: catena-x
     components:
       # ... partner A components
     security:
@@ -534,6 +548,11 @@ These optional boolean flags control who is responsible for synchronizing descri
 
 * `hasRegistryIntegration` (optional, default: `true`): When `true`, the backend is expected to handle Registry synchronization itself — the Web UI will not create, update, or delete descriptors in the corresponding registry. When `false`, the Web UI takes over this responsibility and directly manages descriptors based on changes to AAS and submodels.
 
+**Grouped endpoints:**
+
+* `aasEnvironment.hasRegistryIntegration` can be used in grouped templates such as `mono-repo`. It is applied to both the internal AAS Repository and Submodel Repository compatibility slots.
+* Integration options are only relevant when the corresponding registry or discovery component is active for the selected template.
+
 ```{note}
 Set these flags to `false` when your backend components do **not** have built-in registry or discovery integration. In that case, the Web UI automatically keeps registries and discovery in sync whenever AAS or submodels are created, updated, or deleted.
 ```
@@ -548,7 +567,9 @@ Set these flags to `false` when your backend components do **not** have built-in
 #### YAML to Internal Format Mapping
 
 * YAML `baseUrl` → Internal `url`
-* YAML field names match internal store structure
+* YAML `template` → Internal infrastructure template (`full` if missing or invalid)
+* Individual YAML endpoint keys map to internal component slots
+* Grouped YAML endpoint keys, such as `aasEnvironment`, `digitalTwinRegistry`, and `submodelService`, map to the active internal component slots for the selected template
 * Security types map: `none` → `No Authentication`, `oauth2` → `OAuth2`, etc.
 
 #### Loading Process
@@ -566,8 +587,10 @@ Set these flags to `false` when your backend components do **not** have built-in
    - Return null if file doesn't exist (404)
 
 3. **YAML Parsing** (`useInfrastructureYamlParser`):
+   - Normalize the infrastructure template
    - Convert YAML structure to internal format
    - Transform `baseUrl` to `url` for each component
+   - Expand grouped endpoint fields to internal component URLs
    - Map security types to internal enums
    - Generate infrastructure IDs: `yaml_<yamlKey>`
 
@@ -590,9 +613,10 @@ When `client_credentials` flow is detected:
 2. **Lock Configuration**: Set `ENDPOINT_CONFIG_AVAILABLE=false` in production
 3. **Secure Secrets**: Never use client credentials flow with external access
 4. **Multiple Infrastructures**: Define all environments in one YAML file
-5. **Default Infrastructure**: Always set a sensible `default` key
-6. **Version Control**: Commit YAML templates, not files with real credentials
-7. **Read-Only Mount**: Mount YAML files as read-only (`:ro`) in Docker
+5. **Select the Right Template**: Use `mono-repo`, `mono-all`, `identifiable`, or `catena-x` when your deployment does not expose separate full-template endpoints
+6. **Default Infrastructure**: Always set a sensible `default` key
+7. **Version Control**: Commit YAML templates, not files with real credentials
+8. **Read-Only Mount**: Mount YAML files as read-only (`:ro`) in Docker
 
 ## Introducing new Environment Variables
 
