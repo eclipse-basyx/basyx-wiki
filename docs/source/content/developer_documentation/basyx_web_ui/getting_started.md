@@ -106,7 +106,8 @@ In development mode, the Web UI is configured using:
 This file:
 
 * Defines one or more BaSyx infrastructures
-* Configures component endpoints
+* Selects the infrastructure template for each backend topology
+* Configures the component endpoints required by the selected template
 * Specifies authentication methods
 
 The file name is currently fixed and must not be changed.
@@ -139,7 +140,7 @@ This allows experimentation without rebuilding the application.
 
 ## Backend Infrastructure Requirements
 
-For a fully functional development setup, it is recommended to have the following BaSyx components running:
+For a fully functional `full` template development setup, it is recommended to have the following BaSyx components running:
 
 * AAS Registry
 * Submodel Registry
@@ -147,6 +148,8 @@ For a fully functional development setup, it is recommended to have the followin
 * Submodel Repository
 * Concept Description Repository
 * AAS Discovery Service
+
+Other templates are supported for local development as well. For example, `mono-repo` uses one AAS Environment endpoint for repository APIs, while `identifiable` only requires an AAS Repository endpoint and resolves Submodels through shell paths.
 
 A complete setup can be obtained via the BaSyx Starter Kit:
 
