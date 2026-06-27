@@ -44,9 +44,8 @@ There is no separate configuration for a backend. To use a specific backend, you
 However, if you are using a MongoDB module, you will need to set the connection uri for the MongoDB storage implementation:
 ```properties
 spring:
-  data:
-    mongodb:
-      uri: mongodb://mongoAdmin:mongoPassword@mongo:27017
+  mongodb:
+    uri: mongodb://mongoAdmin:mongoPassword@mongo:27017
 ```
 ---
 
@@ -75,7 +74,7 @@ submodel-registry:
     container_name: submodel-registry
     volumes:
       - ./basyx/submodel-registry.properties:/application/application.properties
-	  - ./basyx/static/favicon.ico:/application/static/favicon.ico
+      - ./basyx/static/favicon.ico:/application/static/favicon.ico
     ports:
       - '8080:8080'
 ```
@@ -83,7 +82,7 @@ submodel-registry:
 ## Docker
 The following example demonstrate how to use the Submodel Registry with Docker Compose:
 
-```yml
+```yaml
 sm-registry:
     image: eclipsebasyx/submodel-registry-log-mongodb:2.0.0-SNAPSHOT
     container_name: sm-registry
@@ -135,7 +134,7 @@ In addition, maven deploy will also deploy your maven artifacts, so you can do e
 
 Have a look at the *docker-compose* sub-folder to see how the created images could be referenced in docker-compose files.
 
-Consider updating the [image name pattern](pom.xml#L16) if you want a different image name.
+Consider updating the [image name pattern](https://github.com/eclipse-basyx/basyx-java-server-sdk/blob/main/basyx.submodelregistry/pom.xml#L16) if you want a different image name.
 
 ## Swagger UI
 In the Swagger UI, you can find the API documentation for the Submodel Registry.
@@ -158,7 +157,7 @@ The Aggregated Swagger UI for the endpoints is available at:
 features/client-native
 features/service
 features/service-basemodel
-features/service-basetests
+features/service-basetest
 features/mongodb-storage
 features/inmemory-storage
 features/kafka-events

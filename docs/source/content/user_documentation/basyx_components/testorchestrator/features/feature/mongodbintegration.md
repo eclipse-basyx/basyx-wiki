@@ -12,24 +12,23 @@ In `testorchestrator.properties` and `aas-env.properties`, add the following:
 
 ```
 basyx.backend=MongoDB
-spring.data.mongodb.host=mongo
-spring.data.mongodb.port=27017
-spring.data.mongodb.database=testorchestrator
-spring.data.mongodb.authentication-database=admin
-spring.data.mongodb.username=mongoAdmin
-spring.data.mongodb.password=mongoPassword
+spring.mongodb.host=mongo
+spring.mongodb.port=27017
+spring.mongodb.database=testorchestrator
+spring.mongodb.authentication-database=admin
+spring.mongodb.username=mongoAdmin
+spring.mongodb.password=mongoPassword
 ```
 
 In `aas-registry.yml` and `sm-registry.yml`, add the following lines:
 
 ```
 spring:
-  data:
-    mongodb:
-      uri: mongodb://mongoAdmin:mongoPassword@mongo:27017
+  mongodb:
+    uri: mongodb://mongoAdmin:mongoPassword@mongo:27017
 ```
 
-In docker-compose.ymp, add the following lines inside services:
+In `docker-compose.yml`, add the following lines inside services:
 
 ```
   mongo:
