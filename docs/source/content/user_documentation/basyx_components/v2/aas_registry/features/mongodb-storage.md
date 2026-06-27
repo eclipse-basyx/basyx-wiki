@@ -20,11 +20,11 @@ You also have to set the mongodb URL.
 You can set it as a property like this:
 
 ```
--Dspring.data.mongodb.uri=mongodb://admin:admin@localhost:27017/
+-Dspring.mongodb.uri=mongodb://admin:admin@localhost:27017/
 ```
 
 Or by using the Docker environment variable:
 
 ```
-SPRING_DATA_MONGODB_URI=mongodb://admin:admin@localhost:27017/
+SPRING_MONGODB_URI=mongodb://admin:admin@localhost:27017/
 ```

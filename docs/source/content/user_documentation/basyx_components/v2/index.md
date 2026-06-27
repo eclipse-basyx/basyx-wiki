@@ -1,5 +1,9 @@
 # BaSyx Java Version 2
 
+```{important}
+The BaSyx Java Server SDK now uses Spring Boot 4. MongoDB configuration keys changed from `spring.data.mongodb.*` to `spring.mongodb.*`. In Docker and compose files, use `SPRING_MONGODB_*` instead of `SPRING_DATA_MONGODB_*`.
+```
+
 * [AAS Discovery](aas_discovery/index)
 * [AAS Environment](aas_environment/index)
 * [AAS Registry](aas_registry/index)

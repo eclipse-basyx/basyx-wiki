@@ -22,13 +22,13 @@ The server is based on the [Open-API specification](https://app.swaggerhub.com/a
 
 [basyx.aasregistry-service](features/service.md) provides the application server to access the AAS descriptor storage and offers an API for REST-based communication.
 
-[basyx.aasregistry-service-basemodel](features/service-basemodel.md) provides a base model implementation that should be used if you do not need specific model annotations for your storage. It is used for the in-memory storage implementation and you need to add it explicitly as dependency for your server deployment as it is defined as 'provided' dependency in the [basyx.aasregistry-service](basyx.aasregistry-service/README.md) POM.
+[basyx.aasregistry-service-basemodel](features/service-basemodel.md) provides a base model implementation that should be used if you do not need specific model annotations for your storage. It is used for the in-memory storage implementation and you need to add it explicitly as dependency for your server deployment as it is defined as 'provided' dependency in the [basyx.aasregistry-service](features/service.md) POM.
 
 [basyx.aasregistry-service-basetests](features/service-basetest.md) provides helper classes and abstract test classes that can be extended in storage tests or integration tests. The abstract test classes already define test methods so that you will get a good test coverage without writing any additional test cases.
 
-[basyx.aasregistry-service-mongodb-storage](features/mongodb-storage.md) provides a registry-storage implementation based on mongoDB that could be used as storage for [aasregistry-service](basyx.aasregistry-service/README.md). It comes with java-based model classes, annotated with mongoDB annotations.
+[basyx.aasregistry-service-mongodb-storage](features/mongodb-storage.md) provides a registry-storage implementation based on mongoDB that could be used as storage for [aasregistry-service](features/service.md). It comes with java-based model classes, annotated with mongoDB annotations.
 
-[basyx.aasregistry-service-inmemory-storage](features/inmemory-storage.md) provides a non-persistent registry-storage implementation where instances are stored in hash maps. It can be used as storage for [aasregistry-service](basyx.aasregistry-service/README.md).
+[basyx.aasregistry-service-inmemory-storage](features/inmemory-storage.md) provides a non-persistent registry-storage implementation where instances are stored in hash maps. It can be used as storage for [aasregistry-service](features/service.md).
 
 [basyx.aasregistry-service-kafka-events](features/kafka-events.md) extends basyx.aasregistry-service with a registry-event-sink implementation that delivers shell descriptor and submodel registration events using Apache Kafka. The default provided by aasregistry-service just logs the events.
 
@@ -40,7 +40,7 @@ The server is based on the [Open-API specification](https://app.swaggerhub.com/a
 
 [basyx.aasregistry-service-release-log-mem](features/log-mem.md) is used to combine the server artifacts to a release image that logs registry events and an in-memory storage.
 
-A docker-compose file that illustrates the setup can be found in the [docker-compose](docker-compose/docker-compose.yml) folder.
+A docker-compose file that illustrates the setup can be found in the [docker-compose](https://github.com/eclipse-basyx/basyx-java-server-sdk/blob/main/basyx.aasregistry/docker-compose/docker-compose.yml) folder.
 
 ## Server Configuration
 
@@ -50,9 +50,8 @@ There is no separate configuration for a backend. To use a specific backend, you
 However, if you are using a MongoDB module, you will need to set the connection uri for the MongoDB storage implementation:
 ```properties
 spring:
-  data:
-    mongodb:
-      uri: mongodb://mongoAdmin:mongoPassword@mongo:27017
+  mongodb:
+    uri: mongodb://mongoAdmin:mongoPassword@mongo:27017
 ```
 ---
 
@@ -81,7 +80,7 @@ aas-registry:
     container_name: aas-registry
     volumes:
       - ./basyx/aas-registry.properties:/application/application.properties
-	  - ./basyx/static/favicon.ico:/application/static/favicon.ico
+      - ./basyx/static/favicon.ico:/application/static/favicon.ico
     ports:
       - '8080:8080'
 ```
@@ -89,7 +88,7 @@ aas-registry:
 ## Docker
 The following example demonstrates how to use the AAS Registry with Docker Compose:
 
-```yml
+```yaml
 aas-registry:
     image: eclipsebasyx/aas-registry-log-mongodb:2.0.0-SNAPSHOT
     container_name: aas-registry
@@ -164,7 +163,7 @@ The Aggregated Swagger UI for the endpoints is available at:
 features/client-native
 features/service
 features/service-basemodel
-features/service-basetests
+features/service-basetest
 features/mongodb-storage
 features/inmemory-storage
 features/kafka-events

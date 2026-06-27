@@ -31,13 +31,14 @@ basyx.backend = InMemory
 #### MongoDB ![Default](https://img.shields.io/badge/default-false-blue)
 ```properties
 basyx.backend = MongoDB
-spring.data.mongodb.host=mongo
-spring.data.mongodb.host=127.0.0.1
-spring.data.mongodb.port=27017
-spring.data.mongodb.database=conceptdescription
-spring.data.mongodb.authentication-database=admin
-spring.data.mongodb.username=mongoAdmin
-spring.data.mongodb.password=mongoPassword
+spring.mongodb.host=mongo
+# Use 127.0.0.1 instead when MongoDB runs on the host machine.
+# spring.mongodb.host=127.0.0.1
+spring.mongodb.port=27017
+spring.mongodb.database=conceptdescription
+spring.mongodb.authentication-database=admin
+spring.mongodb.username=mongoAdmin
+spring.mongodb.password=mongoPassword
 ```
 ---
 
@@ -83,7 +84,7 @@ aas-env:
     container_name: cd-repo
     volumes:
       - ./basyx/cd-repo.properties:/application/application.properties
-	  - ./basyx/static/favicon.ico:/application/static/favicon.ico
+      - ./basyx/static/favicon.ico:/application/static/favicon.ico
     ports:
       - '8081:8081'
 ```
