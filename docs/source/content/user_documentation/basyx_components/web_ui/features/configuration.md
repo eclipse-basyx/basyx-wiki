@@ -135,6 +135,7 @@ Control which features are available in your deployment:
 
 - **Base path**: Deploy the Web UI under a custom URL path (`BASE_PATH`)
 - **Single AAS mode**: Configure the UI to display only one specific AAS (`SINGLE_AAS`)
+- **Single SM mode**: Configure the UI to display only one specific SM (`SINGLE_SM`)
 - **Editor ID prefix**: Set a default prefix for AAS IDs created in the editor (`EDITOR_ID_PREFIX`)
 - **Start page**: Choose which page is shown when the application first loads (`START_PAGE_ROUTE_NAME`)
 
