@@ -31,7 +31,8 @@ The rbac rules should be configured inside a json file, the rules are defined as
     "targetInformation": {
       "@type": "aas-environment",
       "aasIds": ["shell001", "shell002"],
-      "submodelIds": ["7A7104BDAB57E184", "AC69B1CB44F07935"]
+      "submodelIds": ["7A7104BDAB57E184", "AC69B1CB44F07935"],
+      "conceptDescriptionIds": ["0173-1#02-BAA120#008", "specificConceptDescriptionId"]
     }
   },
   {
@@ -40,7 +41,8 @@ The rbac rules should be configured inside a json file, the rules are defined as
     "targetInformation": {
       "@type": "aas-environment",
       "aasIds": "*",
-      "submodelIds": "*"
+      "submodelIds": "*",
+      "conceptDescriptionIds": "*"
     }
   },
   {
@@ -49,7 +51,8 @@ The rbac rules should be configured inside a json file, the rules are defined as
     "targetInformation": {
       "@type": "aas-environment",
       "aasIds": ["shell001", "shell002"],
-      "submodelIds": ["7A7104BDAB57E184"]
+      "submodelIds": ["7A7104BDAB57E184"],
+      "conceptDescriptionIds": ["0173-1#02-BAA120#008"]
     }
   }
  ]
@@ -57,7 +60,7 @@ The rbac rules should be configured inside a json file, the rules are defined as
 
 A `role` specifies which actions are permitted to be performed by said users of that role. The role is as per the configuration of identity providers or based on the organization. Action could be CREATE, READ, UPDATE, DELETE, and EXECUTE, there could be a single action or multiple actions as a list (cf. admin configuration above).
 
-The targetInformation defines coarse-grained control over the resource, you may define the aasIds and submodelIds with a wildcard (\*), it means the defined role x with action y can perform operations on all the AASs and Submodels. You can also define specific aasIds and submodelIds in place of the wildcard (\*), then the role x with action y could be performed only on that particular AASs and Submodels. Please note that filtering options are not currently supported. Therefore, for serialization requests, specifying certain aasIds or submodelIds will result in the request being rejected. This happens if there are other AAS or submodels in the environment that are not configured in the rules. A similar rule applies to upload requests.
+The targetInformation defines coarse-grained control over the resource. For an AAS Environment type rule, you may define the `aasIds`, `submodelIds`, and `conceptDescriptionIds` with a wildcard (\*), which means the defined role x with action y can perform operations on all AASs, Submodels, and Concept Descriptions. You can also define specific `aasIds`, `submodelIds`, and `conceptDescriptionIds` in place of the wildcard (\*), then the role x with action y could be performed only on those particular AASs, Submodels, and Concept Descriptions. Please note that filtering options are not currently supported. Therefore, for serialization requests, specifying certain `aasIds`, `submodelIds`, or `conceptDescriptionIds` will result in the request being rejected. This happens if there are other AASs, Submodels, or Concept Descriptions in the environment that are not configured in the rules. A similar rule applies to upload requests.
 
 ```{note}
 - The actions are static as of now and limited to `CREATE`, `READ`, `UPDATE`, `DELETE`, and `EXECUTE`
@@ -99,4 +102,3 @@ Below is a reference table that shows which actions are used in what endpoints o
 | UPDATE  | -                  |
 | DELETE  | -                  |
 | EXECUTE | -                  |
-
