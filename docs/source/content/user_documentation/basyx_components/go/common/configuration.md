@@ -26,6 +26,13 @@ These sections are part of the shared configuration model. Components ignore set
 | `cacheEnabled` | `false` | Enables descriptor persistence caches where supported. |
 | `strictVerification` | `permissive` | Semantic verification mode: `off`, `permissive`, or `strict`. |
 | `verificationEndpointAvailable` | `true` | Enables the `/verify` endpoint and Swagger entry where supported. |
+| `readHeaderTimeoutSeconds` | `15` | Maximum time in seconds to read HTTP request headers. |
+| `readTimeoutSeconds` | `300` | Maximum time in seconds to read an entire HTTP request, including its body. |
+| `writeTimeoutSeconds` | `300` | Maximum time in seconds to write an HTTP response. |
+| `idleTimeoutSeconds` | `60` | Maximum time in seconds to wait for the next request on an idle keep-alive connection. |
+| `shutdownTimeoutSeconds` | `10` | Maximum time in seconds to wait for in-flight requests during graceful shutdown. |
+
+All HTTP timeout values must be greater than `0`. When a service receives an interrupt or termination signal, it stops accepting new connections and allows in-flight requests to finish for up to `shutdownTimeoutSeconds`.
 
 ### `postgres`
 
@@ -194,6 +201,11 @@ server:
   cacheEnabled: false
   strictVerification: permissive
   verificationEndpointAvailable: true
+  readHeaderTimeoutSeconds: 15
+  readTimeoutSeconds: 300
+  writeTimeoutSeconds: 300
+  idleTimeoutSeconds: 60
+  shutdownTimeoutSeconds: 10
 
 postgres:
   dsn: ""
@@ -300,6 +312,11 @@ For regular settings, use the uppercase YAML path with dots replaced by undersco
 SERVER_PORT=5004
 SERVER_CONTEXTPATH=/api
 SERVER_STRICTVERIFICATION=permissive
+SERVER_READ_HEADER_TIMEOUT_SECONDS=15
+SERVER_READ_TIMEOUT_SECONDS=300
+SERVER_WRITE_TIMEOUT_SECONDS=300
+SERVER_IDLE_TIMEOUT_SECONDS=60
+SERVER_SHUTDOWN_TIMEOUT_SECONDS=10
 POSTGRES_HOST=db
 POSTGRES_PORT=5432
 POSTGRES_USER=admin
@@ -329,6 +346,11 @@ The following explicit aliases are also supported:
 
 | YAML setting | Environment variable |
 | --- | --- |
+| `server.readHeaderTimeoutSeconds` | `SERVER_READ_HEADER_TIMEOUT_SECONDS` or `BASYX_SERVER_READ_HEADER_TIMEOUT_SECONDS` |
+| `server.readTimeoutSeconds` | `SERVER_READ_TIMEOUT_SECONDS` or `BASYX_SERVER_READ_TIMEOUT_SECONDS` |
+| `server.writeTimeoutSeconds` | `SERVER_WRITE_TIMEOUT_SECONDS` or `BASYX_SERVER_WRITE_TIMEOUT_SECONDS` |
+| `server.idleTimeoutSeconds` | `SERVER_IDLE_TIMEOUT_SECONDS` or `BASYX_SERVER_IDLE_TIMEOUT_SECONDS` |
+| `server.shutdownTimeoutSeconds` | `SERVER_SHUTDOWN_TIMEOUT_SECONDS` or `BASYX_SERVER_SHUTDOWN_TIMEOUT_SECONDS` |
 | `abac.policyFileImport` | `ABAC_POLICY_FILE_IMPORT` or `BASYX_ABAC_POLICY_FILE_IMPORT` |
 | `abac.policyScope` | `ABAC_POLICY_SCOPE` or `BASYX_ABAC_POLICY_SCOPE` |
 | `abac.managementApi.enabled` | `ABAC_MANAGEMENT_API_ENABLED`, `ABAC_MANAGEMENTAPI_ENABLED`, or `BASYX_ABAC_MANAGEMENT_API_ENABLED` |
@@ -360,7 +382,7 @@ The following explicit aliases are also supported:
 | `eventing.outboxEnabled` | `BASYX_EVENTING_OUTBOX_ENABLED` |
 | `eventing.topicPrefix` | `BASYX_EVENTING_TOPIC_PREFIX` |
 
-The explicit aliases are applied after normal environment-variable decoding and therefore take precedence when both forms are set.
+The legacy Viper-derived names without word-separating underscores, such as `SERVER_READTIMEOUTSECONDS`, remain supported. The explicit aliases are applied after normal environment-variable decoding and therefore take precedence when both forms are set.
 
 To use a complete PostgreSQL DSN, set only `POSTGRES_DSN` for the connection details. Do not also set individual connection variables such as `POSTGRES_HOST` or `POSTGRES_SSLMODE`:
 
