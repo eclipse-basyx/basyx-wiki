@@ -47,7 +47,7 @@ The Company Lookup provides these main API endpoints:
 
 - `GET /companies`: Returns a paged list of Company Descriptors. It supports the optional query parameters
   - `name` to filter the results based on the company name and
-  - `assetId` to filter the results based on the asset ID.
+  - `assetId` to filter the results based on an asset ID.
 - `GET /companies/{companyIdentifier}`: Returns the descriptor identified by its company domain.
 - `POST /companies`: Creates a Company Descriptor.
 - `PUT /companies/{companyIdentifier}`: Replaces an existing Company Descriptor.
@@ -105,7 +105,7 @@ GET /companies?name=RnJhdW5ob2ZlciBJRVNF
 
 The `assetId` filter returns descriptors for which the decoded asset ID matches at least one regular expression in `assetIdRegexPatterns`. Regular-expression matching is case-sensitive.
 
-For example, the asset ID `https://i.iese.fraunhofer.de/assetId/assets/4711` is encoded as `aHR0cHM6Ly9pLmllc2UuZnJhdW5ob2Zlci5kZS9hc3NldElkL2Fzc2V0cy80NzEx` and matches the asset ID regular expression pattern `^https://i\\.iese\\.fraunhofer\\.de/assetId/":
+For example, the asset ID `https://i.iese.fraunhofer.de/assetId/assets/4711` is encoded as `aHR0cHM6Ly9pLmllc2UuZnJhdW5ob2Zlci5kZS9hc3NldElkL2Fzc2V0cy80NzEx` and matches the asset ID regular expression pattern `^https://i\\.iese\\.fraunhofer\\.de/assetId/`:
 
 ```http
 GET /companies?assetId=aHR0cHM6Ly9pLmllc2UuZnJhdW5ob2Zlci5kZS9hc3NldElkL2Fzc2V0cy80NzEx

@@ -80,7 +80,7 @@ We recommend using the Docker images for production use cases, as they are preco
 
 - [Go (>=1.20; 1.25 recommended)](https://golang.org/dl/)
 - [Git](https://git-scm.com/)
-- PostgreSQL (>=15)
+- [PostgreSQL (>=15)](https://www.postgresql.org/)
 
 ### Cloning the Repository
 
