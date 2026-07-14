@@ -2,6 +2,10 @@
 
 ![GitHub](https://img.shields.io/github/license/eclipse-basyx/basyx-go-components)
 
+## Contents
+
+* [Creating your own Set-Up](setup)
+
 The BaSyx Company Lookup is a component for discovering company-provided service endpoints in dataspaces, for example AAS registries, repositories, discovery services, AASX file servers, MQTT brokers, and EDC protocol endpoints.
 
 Companies are represented by Company Descriptors. Clients can retrieve a descriptor by its company domain or search descriptors by company name and asset ID.
@@ -116,3 +120,10 @@ Company Lookup uses the shared BaSyx Go infrastructure for configuration, Swagge
 - [General Configuration](../common/configuration)
 - [Swagger UI Docs](../common/swagger)
 - [Common / Shared Features](../common/shared_features)
+
+```{toctree}
+:hidden:
+:maxdepth: 1
+
+setup
+```
