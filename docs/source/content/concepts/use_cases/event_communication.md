@@ -39,6 +39,7 @@ BaSyx generates events for various operations across different components:
 - **AAS Deleted**: Generated when an AAS is removed from the repository
 - **Submodel Reference Created**: Triggered when Submodel references are added to an AAS
 - **Submodel Reference Deleted**: Generated when Submodel references are removed from an AAS
+- **Asset Information Updated**: Triggered when the AssetInformation of an individual AAS is replaced
 
 ### Submodel Repository Events (MQTT & Kafka)
 
@@ -46,11 +47,16 @@ BaSyx generates events for various operations across different components:
 - **Submodel Updated**: Triggered when Submodel structure or metadata changes
 - **Submodel Deleted**: Fired when Submodels are removed
 - **SubmodelElement Created**: Generated when new SubmodelElements are added
-- **SubmodelElement Updated**: Triggered for individual property value updates
+- **SubmodelElement Replaced**: Triggered when a complete element is replaced
+- **SubmodelElement Value Updated**: Triggered when an element is patched through its `$value` endpoint
 - **SubmodelElement Deleted**: Fired when SubmodelElements are removed
 - **SubmodelElements Patched**: Generated when multiple elements are updated in batch
 - **File Value Updated**: Triggered when file attachments are modified
 - **File Value Deleted**: Generated when file attachments are removed
+
+```{warning}
+Starting with BaSyx Java Server SDK Milestone 14, MQTT identifier encoding and several SubmodelElement topics change, and new Submodel Service events are available. Existing MQTT subscribers should follow the migration notes in the [AAS Repository MQTT documentation](../../user_documentation/basyx_components/v2/aas_repository/features/mqtt.md) and [Submodel Repository MQTT documentation](../../user_documentation/basyx_components/v2/submodel_repository/features/mqtt.md).
+```
 
 ### ConceptDescription Repository Events (MQTT & Kafka)
 

@@ -57,11 +57,13 @@ basyx.externalurl = {AAS-Repo-Base-Url}
 This section provides the configuration for enabling MQTT.
 
 ```properties
-basyx.aasrepository.feature.mqtt.enabled = true
-mqtt.clientId = TestClient
-mqtt.hostname = localhost
-mqtt.port = 1883
+basyx.aasrepository.feature.mqtt.enabled=true
+mqtt.clientId=aas-repository
+mqtt.hostname=localhost
+mqtt.port=1883
 ```
+
+See the [MQTT feature documentation](./features/mqtt.md) for authentication settings, SDK module switches, topics, and the Milestone 14 migration warning.
 
 ### CORS Configuration ![Default](https://img.shields.io/badge/default-false-blue) ![Default](https://img.shields.io/badge/required-false-red)
 Configure CORS settings to specify allowed origins and methods.

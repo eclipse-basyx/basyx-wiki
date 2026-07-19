@@ -86,11 +86,14 @@ basyx.externalurl = http://localhost:8081
 This section provides the configuration for enabling MQTT.
 
 ```properties
-basyx.submodelrepository.feature.mqtt.enabled = true
-mqtt.clientId=TestClient
-mqtt.hostname = localhost
-mqtt.port = 1883
+basyx.submodelrepository.feature.mqtt.enabled=true
+mqtt.clientId=submodel-repository
+mqtt.hostname=localhost
+mqtt.port=1883
 ```
+
+See the [MQTT feature documentation](./features/mqtt.md) for authentication settings, SDK module switches, topics, and the Milestone 14 migration warning.
+
 ---
 
 ### [Operation Delegation](./features/operation-delegation.md) ![Required](https://img.shields.io/badge/default-true-blue) ![Default](https://img.shields.io/badge/required-false-red)
