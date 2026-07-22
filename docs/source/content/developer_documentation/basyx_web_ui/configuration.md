@@ -105,8 +105,6 @@ These variables remain available to avoid breaking existing deployments but shou
 * `VITE_KEYCLOAK_URL` (**deprecated**; use `basyx-infra.yml` instead)
 * `VITE_KEYCLOAK_REALM` (**deprecated**; use `basyx-infra.yml` instead)
 * `VITE_KEYCLOAK_CLIENT_ID` (**deprecated**; use `basyx-infra.yml` instead)
-* `VITE_KEYCLOAK_FEATURE_CONTROL`
-* `VITE_KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX`
 * `VITE_OIDC_ACTIVE` (**deprecated**; automatically set in production if OIDC variables are present)
 * `VITE_OIDC_URL` (**deprecated**; use `basyx-infra.yml` instead)
 * `VITE_OIDC_SCOPE` (**deprecated**; use `basyx-infra.yml` instead)
@@ -135,6 +133,27 @@ Never commit OAuth client secrets or credentials into version control. Frontend 
 * `VITE_ALLOW_UPLOADING`
 * `VITE_ALLOW_LOGOUT`
 * `VITE_START_PAGE_ROUTE_NAME`
+* `VITE_KEYCLOAK_FEATURE_CONTROL`
+* `VITE_KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX`
+
+#### Feature Control based on OAuth2 roles
+To activate controlling features with the help of OAuth2 roles set `VITE_KEYCLOAK_FEATURE_CONTROL=true`
+Now `VITE_KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX` specifies the prefix of OAuth2 role names which controls de/activation of features.
+De/activation of features based on OAuth2 roles overwrites pre-~~configured~~ features!
+
+- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>endpoint-config-available` sets feature `VITE_ENDPOINT_CONFIG_AVAILABLE=true`
+- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>endpoint-config-unavailable` sets feature `VITE_ENDPOINT_CONFIG_AVAILABLE=false`
+- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>single-aas` sets feature `VITE_SINGLE_AAS=true`
+- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>multiple-aas` sets feature `VITE_SINGLE_AAS=false`
+- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>sm-viewer-editor` sets feature `VITE_SM_VIEWER_EDITOR=true`
+- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>single-sm` sets feature `VITE_SINGLE_SM=true`
+- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>multiple-sm` sets feature `VITE_SINGLE_SM=false`
+- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>allow-editing` sets feature `VITE_ALLOW_EDITING=true`
+- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>forbid-editing` sets feature `VITE_ALLOW_EDITING=false`
+- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>allow-uploading` sets feature `VITE_ALLOW_UPLOADING=true`
+- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>forbid-uploading` sets feature `VITE_ALLOW_UPLOADING=false`
+- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>allow-logout` sets feature `VITE_ALLOW_LOGOUT=true`
+- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>forbid-logout` sets feature `VITE_ALLOW_LOGOUT=false`
 
 ### Miscellaneous
 
