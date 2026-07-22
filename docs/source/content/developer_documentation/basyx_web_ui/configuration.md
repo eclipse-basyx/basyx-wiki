@@ -133,27 +133,76 @@ Never commit OAuth client secrets or credentials into version control. Frontend 
 * `VITE_ALLOW_UPLOADING`
 * `VITE_ALLOW_LOGOUT`
 * `VITE_START_PAGE_ROUTE_NAME`
-* `VITE_KEYCLOAK_FEATURE_CONTROL`
-* `VITE_KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX`
+* `VITE_FEATURE_CONTROL_CLAIM_MAPPINGS`
 
-#### Feature Control based on OAuth2 roles
-To activate controlling features with the help of OAuth2 roles set `VITE_KEYCLOAK_FEATURE_CONTROL=true`
-Now `VITE_KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX` specifies the prefix of OAuth2 role names which controls de/activation of features.
-De/activation of features based on OAuth2 roles overwrites pre-~~configured~~ features!
+#### Claim-based feature control
 
-- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>endpoint-config-available` sets feature `VITE_ENDPOINT_CONFIG_AVAILABLE=true`
-- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>endpoint-config-unavailable` sets feature `VITE_ENDPOINT_CONFIG_AVAILABLE=false`
-- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>single-aas` sets feature `VITE_SINGLE_AAS=true`
-- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>multiple-aas` sets feature `VITE_SINGLE_AAS=false`
-- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>sm-viewer-editor` sets feature `VITE_SM_VIEWER_EDITOR=true`
-- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>single-sm` sets feature `VITE_SINGLE_SM=true`
-- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>multiple-sm` sets feature `VITE_SINGLE_SM=false`
-- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>allow-editing` sets feature `VITE_ALLOW_EDITING=true`
-- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>forbid-editing` sets feature `VITE_ALLOW_EDITING=false`
-- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>allow-uploading` sets feature `VITE_ALLOW_UPLOADING=true`
-- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>forbid-uploading` sets feature `VITE_ALLOW_UPLOADING=false`
-- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>allow-logout` sets feature `VITE_ALLOW_LOGOUT=true`
-- Role `<KEYCLOAK_FEATURE_CONTROL_ROLE_PREFIX>forbid-logout` sets feature `VITE_ALLOW_LOGOUT=false`
+Feature control can map claims from an OIDC access token to temporary UI feature overrides. It is identity-provider agnostic: claim locations are configured explicitly as [RFC 6901 JSON Pointers](https://www.rfc-editor.org/rfc/rfc6901), so the UI does not assume Keycloak roles or any other provider-specific token shape.
+
+Use `FEATURE_CONTROL_CLAIM_MAPPINGS` in production or `VITE_FEATURE_CONTROL_CLAIM_MAPPINGS` in development. The value follows the BaSyx Go claim-mapping shape:
+
+```json
+[
+  {
+    "target": "features",
+    "mode": "list",
+    "sources": ["/basyx_features"]
+  }
+]
+```
+
+The mapping has the following rules:
+
+* `target` must be `features` and may occur only once.
+* `mode` must be `list`.
+* `sources` must contain at least one valid JSON Pointer.
+* A source may contain a string or an array of strings. Values from all sources are merged and deduplicated.
+* Missing sources contribute no values. A source that is present with another value type invalidates the feature set for that token.
+* Malformed JSON, duplicate targets, unsupported modes, and invalid pointers invalidate the configuration.
+* An invalid or empty feature set restores the deployment defaults. Feature decisions do not depend on mapping or value order.
+* If the setting is absent, claim-based overrides are disabled.
+
+Token-derived values are reevaluated when authentication is restored, a user logs in or out, an access token is refreshed or removed, or the selected infrastructure changes. The configured deployment values remain unchanged and are restored when an override is unavailable.
+
+| Feature value | Result |
+| --- | --- |
+| `endpoint-config-available` / `endpoint-config-unavailable` | Show or hide endpoint configuration |
+| `single-aas` / `multiple-aas` | Use the single- or multiple-AAS presentation |
+| `sm-viewer-editor` | Enable separate Submodel viewer and editor routes |
+| `single-sm` / `multiple-sm` | Use the single- or multiple-Submodel presentation |
+| `allow-editing` / `forbid-editing` | Show or hide editing controls |
+| `allow-uploading` / `forbid-uploading` | Show or hide upload controls |
+| `allow-logout` / `forbid-logout` | Show or hide logout controls |
+
+If a token contains both values from a pair, the restrictive value wins: `endpoint-config-unavailable`, `single-aas`, `single-sm`, `forbid-editing`, `forbid-uploading`, or `forbid-logout`.
+
+##### Keycloak
+
+Create a multivalued `basyx_features` user attribute and add an OIDC **User Attribute** protocol mapper to the UI client. Configure the mapper to include the attribute as a multivalued string claim named `basyx_features` in access tokens. The mapping above then reads it from `/basyx_features`.
+
+Keep backend authorization separate. For example, map a different user attribute or client role to the permission claims consumed by BaSyx Go. Feature values only control UI presentation and never grant API permissions.
+
+##### Microsoft Entra ID
+
+For Microsoft Entra ID, either expose a multivalued directory extension such as `extn.basyx_features` and use `/extn.basyx_features`, or use a custom claims provider that emits `basyx_features` and use `/basyx_features`. Configure the access-token claim on the resource application whose audience the UI requests.
+
+BaSyx Go can independently consume the same raw claim with the equivalent trust-list entry:
+
+```json
+{
+  "claimMappings": [
+    {
+      "target": "features",
+      "mode": "list",
+      "sources": ["/extn.basyx_features"]
+    }
+  ]
+}
+```
+
+BaSyx Go validates the token and creates the canonical `basyx.features` claim internally. The identity provider must not emit `basyx.features` directly because the `basyx.*` namespace is reserved and protected by BaSyx Go. Backend policies should use separately mapped permission attributes rather than treating UI feature values as authorization.
+
+A runnable Keycloak and BaSyx Go setup is available in the [ClaimBasedFeatureControl example](https://github.com/eclipse-basyx/basyx-aas-web-ui/tree/main/examples/ClaimBasedFeatureControl).
 
 ### Miscellaneous
 
