@@ -158,11 +158,12 @@ The mapping has the following rules:
 * `sources` must contain at least one valid JSON Pointer.
 * A source may contain a string or an array of strings. Values from all sources are merged and deduplicated.
 * Missing sources contribute no values. A source that is present with another value type invalidates the feature set for that token.
+* Unsupported feature values invalidate the feature set instead of being ignored. This makes misspelled restrictive values visible in the browser console and prevents a partially applied set.
 * Malformed JSON, duplicate targets, unsupported modes, and invalid pointers invalidate the configuration.
 * An invalid or empty feature set restores the deployment defaults. Feature decisions do not depend on mapping or value order.
 * If the setting is absent, claim-based overrides are disabled.
 
-Token-derived values are reevaluated when authentication is restored, a user logs in or out, an access token is refreshed or removed, or the selected infrastructure changes. The configured deployment values remain unchanged and are restored when an override is unavailable.
+Token-derived values are reevaluated when authentication is restored, a user logs in or out, an access token is refreshed or removed, or the selected infrastructure changes. Expired tokens and infrastructures marked unauthenticated no longer provide overrides. The configured deployment values remain unchanged and are restored when an override is unavailable.
 
 | Feature value | Result |
 | --- | --- |
@@ -184,12 +185,54 @@ Keep backend authorization separate. For example, map a different user attribute
 
 ##### Microsoft Entra ID
 
-For Microsoft Entra ID, either expose a multivalued directory extension such as `extn.basyx_features` and use `/extn.basyx_features`, or use a custom claims provider that emits `basyx_features` and use `/basyx_features`. Configure the access-token claim on the resource application whose audience the UI requests.
+For Microsoft Entra ID, create a multivalued string directory extension through Microsoft Graph. Use the object ID of the application which owns the extension definition:
 
-BaSyx Go can independently consume the same raw claim with the equivalent trust-list entry:
+```http
+POST https://graph.microsoft.com/v1.0/applications/{extension-owner-object-id}/extensionProperties
+Content-Type: application/json
+
+{
+  "name": "basyx_features",
+  "dataType": "String",
+  "isMultiValued": true,
+  "targetObjects": ["User"]
+}
+```
+
+The response contains the full property name `extension_<appid-without-dashes>_basyx_features`. Populate that property on each user through Microsoft Graph or provisioning. Add the full property name to the BaSyx resource application's access-token optional claims:
 
 ```json
 {
+  "optionalClaims": {
+    "accessToken": [
+      {
+        "name": "extension_<appid-without-dashes>_basyx_features",
+        "source": "user",
+        "essential": false
+      }
+    ]
+  }
+}
+```
+
+Entra emits the directory extension in the JWT as `extn.basyx_features`. Set the UI environment variable to the complete mapping array:
+
+```json
+[
+  {
+    "target": "features",
+    "mode": "list",
+    "sources": ["/extn.basyx_features"]
+  }
+]
+```
+
+BaSyx Go can independently consume the same raw claim with this provider entry in its trust list:
+
+```json
+{
+  "issuer": "https://login.microsoftonline.com/{tenant-id}/v2.0",
+  "audience": "{basyx-resource-application-id}",
   "claimMappings": [
     {
       "target": "features",
@@ -200,7 +243,9 @@ BaSyx Go can independently consume the same raw claim with the equivalent trust-
 }
 ```
 
-BaSyx Go validates the token and creates the canonical `basyx.features` claim internally. The identity provider must not emit `basyx.features` directly because the `basyx.*` namespace is reserved and protected by BaSyx Go. Backend policies should use separately mapped permission attributes rather than treating UI feature values as authorization.
+Alternatively, use a custom claims provider which emits a string array named `basyx_features` and change both source pointers to `/basyx_features`.
+
+Access-token optional claims belong to the resource application whose audience the UI requests, not only to the SPA registration. BaSyx Go validates the token and creates the canonical `basyx.features` claim internally. The identity provider must not emit `basyx.features` directly because the `basyx.*` namespace is reserved and protected by BaSyx Go. Backend policies should use separately mapped permission attributes rather than treating UI feature values as authorization.
 
 A runnable Keycloak and BaSyx Go setup is available in the [ClaimBasedFeatureControl example](https://github.com/eclipse-basyx/basyx-aas-web-ui/tree/main/examples/ClaimBasedFeatureControl).
 
