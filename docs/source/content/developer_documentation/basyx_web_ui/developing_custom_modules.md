@@ -115,13 +115,16 @@ Modules declare metadata using `defineOptions`:
 ```ts
 defineOptions({
   inheritAttrs: false,
-  moduleTitle: 'Title of the Module',  
+  moduleTitle: 'Title of the Module',
   isDesktopModule: true,
   isMobileModule: true,
   isVisibleModule: true,
   isOnlyVisibleWithSelectedAas: false,
   isOnlyVisibleWithSelectedNode: false,
   visibleOnRoutes: ['AASEditor', 'SMEditor'],
+  supportedInfrastructureTemplates: ['full', 'mono-repo'],
+  needsInfrastructureEndpoints: ['AASRepo', 'SubmodelRepo'],
+  needsEnvVariables: ['SINGLE_AAS_REDIRECT', 'SINGLE_SM_REDIRECT'],
   preserveRouteQuery: false,
 });
 ```
@@ -137,10 +140,15 @@ defineOptions({
 | `isOnlyVisibleWithSelectedAas` | Only visible when an AAS is selected (default: `false`) |
 | `isOnlyVisibleWithSelectedNode` | Only visible when a Submodel or SME is selected (default: `false`) |
 | `visibleOnRoutes` | Only visible when coming from specific  routes. This option is given as a string array and acts as a whitelist. `['AASEditor', 'SMEditor']` means that the module is visible only from the "AAS Editor" or "SM Editor" view. `[]` means that the module is visible from all routes. (default: `[]`) |
+| `supportedInfrastructureTemplates` | Only visible for a selected infrastructure whose template is included in this string array. Supported values are `full`, `identifiable`, `mono-repo`, `mono-all`, and `catena-x`. `[]` makes the module visible for all infrastructure templates. (default: `[]`) |
+| `needsInfrastructureEndpoints` | Only visible if every specified endpoint is configured and active for the selected infrastructure. Supported values are `AASDiscovery`, `AASRegistry`, `SubmodelRegistry`, `AASRepo`, `SubmodelRepo`, `ConceptDescriptionRepo`, and `CompanyLookup`. `[]` makes the module visible regardless of which endpoints are configured. (default: `[]`) |
+| `needsEnvVariables` | Only visible if every specified, supported environment value is considered set. Use names without the `VITE_` prefix. String values must be non-empty and must not contain an unresolved placeholder; boolean flags count as set regardless of whether their value is `true` or `false`. Unknown names make the module invisible. `[]` makes the module visible regardless of environment values. (default: `[]`) |
 | `preserveRouteQuery` | Preserve `aas`/`path` query parameters in the route (default: `false`) |
 
 ```{note}
 If `isOnlyVisibleWithSelectedAas` or `isOnlyVisibleWithSelectedNode` is set, `preserveRouteQuery` is enabled automatically.
+
+Visibility requirements declared by a module are also inherited by its child routes.
 ```
 
 ### Hotkeys
