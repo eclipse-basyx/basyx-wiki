@@ -35,6 +35,21 @@ All components using `internal/common` benefit from:
 - default values for common settings
 - startup configuration logging with sensitive values redacted
 
+## Logging and Request Correlation
+
+All commands use structured, severity-filtered logging on standard error. HTTP
+services also provide canonical request and correlation IDs and emit one
+access-log event per request. See [Observability](observability) for the logging
+contract and header behavior.
+
+## Optional OpenTelemetry Tracing
+
+HTTP services can create OpenTelemetry server spans and correlate contextual
+logs with trace and span IDs. Tracing is disabled by default and configured
+through standard OpenTelemetry environment variables. See
+[Observability](observability) for activation, propagation, sampling, and
+backend integration.
+
 ## Shared Security Building Blocks
 
 The common configuration and security packages provide reusable building blocks for:
