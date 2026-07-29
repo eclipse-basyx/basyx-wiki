@@ -153,7 +153,7 @@ If `isOnlyVisibleWithSelectedAas` or `isOnlyVisibleWithSelectedNode` is set, `pr
 Visibility requirements declared by a module are also inherited by its child routes.
 ```
 
-### **Hotkeys**
+### Hotkeys
 
 Modules can also define their own hotkeys. Hotkeys are a way to provide keyboard shortcuts for actions within the module.
 
