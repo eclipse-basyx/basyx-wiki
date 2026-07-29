@@ -47,6 +47,10 @@ All HTTP timeout values must be greater than `0`. When a service receives an int
 
 ### `postgres`
 
+```{note}
+The pool defaults, `connMaxIdleTimeMinutes`, zero-value handling, validation rules, and automatic service-name fallback described below require BaSyx Go 1.0.5 or later.
+```
+
 | Key | Default | Purpose |
 | --- | --- | --- |
 | `dsn` | `""` | Complete PostgreSQL connection string. When non-empty, it replaces the individual connection fields listed below. |
@@ -60,16 +64,31 @@ All HTTP timeout values must be greater than `0`. When a service receives an int
 | `sslkey` | `""` | Path to the private key belonging to `sslcert`. |
 | `sslrootcert` | `""` | Path to the root CA certificate used to verify the PostgreSQL server certificate. |
 | `connectTimeoutSeconds` | `0` | Connection timeout in seconds. Must not be negative; `0` leaves the timeout unspecified. |
-| `applicationName` | `""` | PostgreSQL `application_name` reported for the connection. |
+| `applicationName` | `""` | PostgreSQL `application_name` reported for the connection. When empty, the service name is used. |
 | `fallbackApplicationName` | `""` | Fallback application name used when no primary application name is supplied. |
 | `searchPath` | `""` | PostgreSQL schema search path for new sessions. |
 | `options` | `""` | Additional PostgreSQL server startup options. |
 | `timezone` | `""` | PostgreSQL session time zone. |
-| `maxOpenConnections` | `50` | Maximum number of open DB connections. |
-| `maxIdleConnections` | `50` | Maximum number of idle DB connections. |
-| `connMaxLifetimeMinutes` | `5` | Maximum DB connection lifetime in minutes. |
+| `maxOpenConnections` | `50` | Maximum number of open DB connections per service process or pod. `0` uses the default. |
+| `maxIdleConnections` | `25` | Maximum number of idle DB connections per service process or pod. `0` uses the default, capped at a smaller explicit open limit. |
+| `connMaxLifetimeMinutes` | `5` | Maximum DB connection lifetime in minutes. `0` uses the default. |
+| `connMaxIdleTimeMinutes` | `0` | Maximum time an idle connection is retained, in minutes. `0` disables idle-time recycling. |
 
 When `postgres.dsn` is non-empty, do not explicitly configure `host`, `port`, `user`, `password`, `dbname`, TLS, timeout, application-name, search-path, options, or time-zone fields in YAML or environment variables. The service rejects this ambiguous combination. Connection-pool settings can still be used with a DSN.
+
+If no primary `application_name` is supplied through `applicationName` or the DSN, the component sets it to its service name. An explicitly configured value is preserved. This identifies each BaSyx service in PostgreSQL views such as `pg_stat_activity`.
+
+The pool settings apply independently to every process or Kubernetes pod. Calculate the connection budget separately for each PostgreSQL primary, including only clients that connect to that primary:
+
+```text
+required application connections =
+  sum(maxOpenConnections per BaSyx service × maximum concurrent replica count)
+  + non-BaSyx application pools
+```
+
+Non-BaSyx clients include identity services such as Keycloak when they share the database. The maximum concurrent replica count must include temporary old and new pods during rolling updates. Keep the total below that primary's usable connection budget and reserve connections for administration, monitoring, migrations, and failover. The maximum is a limit rather than a guarantee that every pool always opens that many connections, but PostgreSQL must be able to handle the configured worst case. Idle connections are still open PostgreSQL sessions.
+
+All four pool values must be non-negative. An explicitly configured `maxIdleConnections` greater than the effective `maxOpenConnections` is rejected during startup. If `maxIdleConnections` is `0` and an explicit open limit is smaller than the default idle limit of `25`, the effective idle limit is capped at that smaller open limit.
 
 The DSN and database credentials are sensitive and should normally be supplied through a secret rather than committed to YAML.
 
@@ -247,8 +266,9 @@ postgres:
   options: ""
   timezone: ""
   maxOpenConnections: 50
-  maxIdleConnections: 50
+  maxIdleConnections: 25
   connMaxLifetimeMinutes: 5
+  connMaxIdleTimeMinutes: 0
 
 cors:
   allowedOrigins: []
@@ -353,6 +373,10 @@ POSTGRES_PASSWORD=admin123
 POSTGRES_DBNAME=basyxTestDB
 POSTGRES_SSLMODE=disable
 POSTGRES_CONNECTTIMEOUTSECONDS=10
+POSTGRES_MAXOPENCONNECTIONS=50
+POSTGRES_MAXIDLECONNECTIONS=25
+POSTGRES_CONNMAXLIFETIMEMINUTES=5
+POSTGRES_CONNMAXIDLETIMEMINUTES=0
 ABAC_ENABLED=false
 ABAC_POLICYFILEIMPORT=if_missing
 ABAC_POLICY_SCOPE=aasregistryservice
@@ -425,7 +449,9 @@ To use a complete PostgreSQL DSN, set only `POSTGRES_DSN` for the connection det
 ```bash
 POSTGRES_DSN=postgres://admin:secret@db:5432/basyx?sslmode=require
 POSTGRES_MAXOPENCONNECTIONS=50
-POSTGRES_MAXIDLECONNECTIONS=50
+POSTGRES_MAXIDLECONNECTIONS=25
+POSTGRES_CONNMAXLIFETIMEMINUTES=5
+POSTGRES_CONNMAXIDLETIMEMINUTES=0
 ```
 
 ## Security Files

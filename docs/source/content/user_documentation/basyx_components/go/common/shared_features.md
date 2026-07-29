@@ -67,6 +67,27 @@ Multiple components reuse the same PostgreSQL configuration structure and connec
 - `postgres.dbname`
 - `postgres.user`
 - `postgres.password`
+- `postgres.applicationName`
 - `postgres.maxOpenConnections`
 - `postgres.maxIdleConnections`
 - `postgres.connMaxLifetimeMinutes`
+- `postgres.connMaxIdleTimeMinutes`
+
+```{note}
+The pool behavior in this section requires BaSyx Go 1.0.5 or later.
+```
+
+Each service process or Kubernetes pod owns a separate pool. The common defaults are:
+
+| Setting | Default | Zero value |
+| --- | --- | --- |
+| `maxOpenConnections` | `50` | Uses the default. |
+| `maxIdleConnections` | `25` | Uses the default, capped at a smaller explicit open limit. |
+| `connMaxLifetimeMinutes` | `5` | Uses the default. |
+| `connMaxIdleTimeMinutes` | `0` | Disables idle-time recycling. |
+
+An explicitly configured idle limit greater than the effective open limit is rejected at startup. Size each PostgreSQL primary independently: add the open limits of every BaSyx pod and other application pool connected to that primary, using the maximum concurrent replica count during rolling updates. Reserve capacity for administration, monitoring, schema migration, and failover.
+
+If `applicationName` and the DSN do not define a PostgreSQL `application_name`, the service name is used automatically. Explicit values are preserved. This makes per-service connections visible in `pg_stat_activity`.
+
+See [General Configuration](configuration) for the full PostgreSQL configuration and budgeting guidance.

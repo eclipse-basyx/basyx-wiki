@@ -37,6 +37,7 @@ postgres:
   maxOpenConnections: 50
   maxIdleConnections: 25
   connMaxLifetimeMinutes: 5
+  connMaxIdleTimeMinutes: 0
 ```
 
 Environment variables can also be used in the same style as other BaSyx services, for example:
@@ -50,7 +51,10 @@ POSTGRES_DBNAME=basyxTestDB
 POSTGRES_MAXOPENCONNECTIONS=50
 POSTGRES_MAXIDLECONNECTIONS=25
 POSTGRES_CONNMAXLIFETIMEMINUTES=5
+POSTGRES_CONNMAXIDLETIMEMINUTES=0
 ```
+
+The Configuration Service owns its own pool while the job is running. Include it in the PostgreSQL connection budget during startup and upgrades. Runtime services create separate pools in their own processes or pods. See [General Configuration](../common/configuration) for zero-value semantics and pool sizing.
 
 ## Patch Execution
 
