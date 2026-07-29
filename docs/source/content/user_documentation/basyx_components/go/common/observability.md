@@ -177,7 +177,9 @@ Open connections are the sum of the `used` and `idle` points on
 `db.client.connection.count`. Every point has
 `db.system.name=postgresql` and
 `db.client.connection.pool.name=writer`. The `service.name` resource attribute
-identifies the service instance.
+identifies the BaSyx service, not an individual replica. For per-pod diagnosis
+in a horizontally scaled deployment, configure the Collector to attach bounded
+Kubernetes resource attributes such as `k8s.pod.name` or `k8s.pod.uid`.
 
 Use rates rather than raw totals for the cumulative wait and closure counters.
 A rising wait rate while the number of used connections approaches
@@ -251,12 +253,25 @@ telemetry:
   metricsExportTimeout: "30000"
 ```
 
+These metric values require BaSyx Helm chart `3.7.0` and BaSyx Go `1.0.6` or
+newer. `metricsExporter`, `metricsExportInterval`, and
+`metricsExportTimeout` render `OTEL_METRICS_EXPORTER`,
+`OTEL_METRIC_EXPORT_INTERVAL`, and `OTEL_METRIC_EXPORT_TIMEOUT` respectively.
+Their defaults are `none`, an empty interval, and an empty timeout. Empty
+timing values use the OpenTelemetry SDK defaults; configured values must be
+positive milliseconds.
+
 The generic endpoint and protocol apply to both signals. Signal-specific OTLP
-overrides and credentials can be supplied through `environment.common` or
-`telemetry.existingSecret`. Store OTLP authorization headers in a Secret rather
-than a values file. The chart intentionally does not install Grafana, Loki,
-Tempo, or Alloy because authentication, storage, retention, resource sizing,
-and tenancy should be designed for the target cluster.
+overrides and credentials can be supplied through `environment.common`, a
+service's `environment` map, or `telemetry.existingSecret`. Store OTLP
+authorization headers in a Secret rather than a values file. Changes to
+structured telemetry values update the backend pod template checksum. Changing
+only the contents of an existing Secret does not, so restart the backend pods
+after rotating those values.
+
+The chart intentionally does not install the Collector, Grafana, Loki, Tempo,
+or Alloy because authentication, storage, retention, resource sizing, and
+tenancy should be designed for the target cluster.
 
 The local Compose stack is a development example, not a production deployment
 reference. Production environments should use authenticated telemetry
