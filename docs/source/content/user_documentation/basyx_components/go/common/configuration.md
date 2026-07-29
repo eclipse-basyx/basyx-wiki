@@ -25,7 +25,9 @@ These sections are part of the shared configuration model. Components ignore set
 
 All diagnostic logs are written to standard error. See
 [Observability](observability) for request logging, correlation IDs,
-OpenTelemetry tracing, and log collection.
+OpenTelemetry tracing and metrics, and log collection. OpenTelemetry settings
+are standard `OTEL_*` environment variables rather than keys in this YAML
+configuration model.
 
 ### `server`
 

@@ -42,13 +42,14 @@ services also provide canonical request and correlation IDs and emit one
 access-log event per request. See [Observability](observability) for the logging
 contract and header behavior.
 
-## Optional OpenTelemetry Tracing
+## Optional OpenTelemetry Telemetry
 
 HTTP services can create OpenTelemetry server spans and correlate contextual
-logs with trace and span IDs. Tracing is disabled by default and configured
-through standard OpenTelemetry environment variables. See
-[Observability](observability) for activation, propagation, sampling, and
-backend integration.
+logs with trace and span IDs. They can also export shared PostgreSQL
+connection-pool metrics. Tracing and metrics are disabled independently by
+default and configured through standard OpenTelemetry environment variables.
+See [Observability](observability) for activation, propagation, sampling,
+metric interpretation, and backend integration.
 
 ## Shared Security Building Blocks
 
