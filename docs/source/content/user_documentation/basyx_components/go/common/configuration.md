@@ -16,6 +16,17 @@ Environment variables override YAML values. Nested keys use underscore notation,
 
 These sections are part of the shared configuration model. Components ignore settings that are not relevant to their feature set.
 
+### `logging`
+
+| Key | Default | Purpose |
+| --- | --- | --- |
+| `format` | `text` | Log output format: `text` or `json`. |
+| `level` | `info` | Minimum log severity: `debug`, `info`, `warn`, or `error`. |
+
+All diagnostic logs are written to standard error. See
+[Observability](observability) for request logging, correlation IDs,
+OpenTelemetry tracing, and log collection.
+
 ### `server`
 
 | Key | Default | Purpose |
@@ -201,6 +212,10 @@ Keep `enabled` and `outboxEnabled` set to `false` and `sinks` empty until eventi
 ## Example YAML
 
 ```yaml
+logging:
+  format: text
+  level: info
+
 server:
   host: 0.0.0.0
   port: 5004
@@ -321,6 +336,8 @@ eventing:
 For regular settings, use the uppercase YAML path with dots replaced by underscores:
 
 ```bash
+LOGGING_FORMAT=text
+LOGGING_LEVEL=info
 SERVER_PORT=5004
 SERVER_CONTEXTPATH=/api
 SERVER_STRICTVERIFICATION=permissive
@@ -363,6 +380,8 @@ The following explicit aliases are also supported:
 
 | YAML setting | Environment variable |
 | --- | --- |
+| `logging.format` | `LOGGING_FORMAT` |
+| `logging.level` | `LOGGING_LEVEL` |
 | `server.readHeaderTimeoutSeconds` | `SERVER_READ_HEADER_TIMEOUT_SECONDS` or `BASYX_SERVER_READ_HEADER_TIMEOUT_SECONDS` |
 | `server.readTimeoutSeconds` | `SERVER_READ_TIMEOUT_SECONDS` or `BASYX_SERVER_READ_TIMEOUT_SECONDS` |
 | `server.writeTimeoutSeconds` | `SERVER_WRITE_TIMEOUT_SECONDS` or `BASYX_SERVER_WRITE_TIMEOUT_SECONDS` |

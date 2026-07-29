@@ -8,6 +8,7 @@ This section documents features and configuration aspects that are implemented i
 * [Swagger UI Docs](swagger)
 * [General Configuration](configuration)
 * [Common / Shared Features](shared_features)
+* [Observability](observability)
 
 ```{toctree}
 :hidden:
@@ -16,4 +17,5 @@ This section documents features and configuration aspects that are implemented i
 swagger
 configuration
 shared_features
+observability
 ```
