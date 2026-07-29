@@ -47,6 +47,10 @@ All HTTP timeout values must be greater than `0`. When a service receives an int
 
 ### `postgres`
 
+```{note}
+The pool defaults, `connMaxIdleTimeMinutes`, zero-value handling, validation rules, and automatic service-name fallback described below require BaSyx Go 1.0.5 or later.
+```
+
 | Key | Default | Purpose |
 | --- | --- | --- |
 | `dsn` | `""` | Complete PostgreSQL connection string. When non-empty, it replaces the individual connection fields listed below. |
@@ -74,14 +78,15 @@ When `postgres.dsn` is non-empty, do not explicitly configure `host`, `port`, `u
 
 If no primary `application_name` is supplied through `applicationName` or the DSN, the component sets it to its service name. An explicitly configured value is preserved. This identifies each BaSyx service in PostgreSQL views such as `pg_stat_activity`.
 
-The pool settings apply independently to every process or Kubernetes pod. Plan the PostgreSQL connection budget across all database-backed services and replicas:
+The pool settings apply independently to every process or Kubernetes pod. Calculate the connection budget separately for each PostgreSQL primary, including only clients that connect to that primary:
 
 ```text
 required application connections =
-  sum(maxOpenConnections per service × replica count)
+  sum(maxOpenConnections per BaSyx service × maximum concurrent replica count)
+  + non-BaSyx application pools
 ```
 
-Keep that total below PostgreSQL's usable connection budget and reserve connections for administration, monitoring, migrations, and rolling updates. The maximum is a limit rather than a guarantee that every pool always opens that many connections, but PostgreSQL must be able to handle the configured worst case. Idle connections are still open PostgreSQL sessions.
+Non-BaSyx clients include identity services such as Keycloak when they share the database. The maximum concurrent replica count must include temporary old and new pods during rolling updates. Keep the total below that primary's usable connection budget and reserve connections for administration, monitoring, migrations, and failover. The maximum is a limit rather than a guarantee that every pool always opens that many connections, but PostgreSQL must be able to handle the configured worst case. Idle connections are still open PostgreSQL sessions.
 
 All four pool values must be non-negative. An explicitly configured `maxIdleConnections` greater than the effective `maxOpenConnections` is rejected during startup. If `maxIdleConnections` is `0` and an explicit open limit is smaller than the default idle limit of `25`, the effective idle limit is capped at that smaller open limit.
 
