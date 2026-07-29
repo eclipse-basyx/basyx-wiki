@@ -115,13 +115,16 @@ Modules declare metadata using `defineOptions`:
 ```ts
 defineOptions({
   inheritAttrs: false,
-  moduleTitle: 'Title of the Module',  
+  moduleTitle: 'Title of the Module',
   isDesktopModule: true,
   isMobileModule: true,
   isVisibleModule: true,
   isOnlyVisibleWithSelectedAas: false,
   isOnlyVisibleWithSelectedNode: false,
   visibleOnRoutes: ['AASEditor', 'SMEditor'],
+  needsEnvVariables: ['SINGLE_AAS_REDIRECT', 'SINGLE_SM_REDIRECT'],
+  needsInfrastructureEndpoints: ['AASRepo', 'SubmodelRepo'],
+  supportedInfrastructureTemplates: ['full', 'mono-repo'],
   preserveRouteQuery: false,
 });
 ```
@@ -137,13 +140,16 @@ defineOptions({
 | `isOnlyVisibleWithSelectedAas` | Only visible when an AAS is selected (default: `false`) |
 | `isOnlyVisibleWithSelectedNode` | Only visible when a Submodel or SME is selected (default: `false`) |
 | `visibleOnRoutes` | Only visible when coming from specific  routes. This option is given as a string array and acts as a whitelist. `['AASEditor', 'SMEditor']` means that the module is visible only from the "AAS Editor" or "SM Editor" view. `[]` means that the module is visible from all routes. (default: `[]`) |
+|`needsEnvVariables`||
+|`needsInfrastructureEndpoints`||
+|`supportedInfrastructureTemplates`||
 | `preserveRouteQuery` | Preserve `aas`/`path` query parameters in the route (default: `false`) |
 
 ```{note}
 If `isOnlyVisibleWithSelectedAas` or `isOnlyVisibleWithSelectedNode` is set, `preserveRouteQuery` is enabled automatically.
 ```
 
-### Hotkeys
+### **Hotkeys**
 
 Modules can also define their own hotkeys. Hotkeys are a way to provide keyboard shortcuts for actions within the module.
 
@@ -199,12 +205,14 @@ name: module_menu
 Modules tab in the main menu.
 ```
 
-Menu behavior:
+Modules are sorted alphabetically by name and their visibility depends on:
 
-* Modules are filtered based on mobile/desktop mode
-* Visibility depends on AAS / node selection
-* Visibility depends on active route
-* Modules are sorted alphabetically by name
+* mobile/desktop mode (`isDesktopModule`, `isMobileModule`)
+* AAS / node selection (`isOnlyVisibleWithSelectedAas`, `isOnlyVisibleWithSelectedNode`))
+* active route (`visibleOnRoutes`)
+* selected infrastructure template (`supportedInfrastructureTemplates`)
+* configured infrastrcuture endpoints (`needsInfrastructureEndpoints`)
+* configured ENV variables (`needsEnvVariables`)
 
 ## Mobile vs Desktop Modules
 
