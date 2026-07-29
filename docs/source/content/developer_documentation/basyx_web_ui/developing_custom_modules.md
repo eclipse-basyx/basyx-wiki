@@ -144,13 +144,17 @@ defineOptions({
 | `supportedInfrastructureTemplates` | Only visible for a selected infrastructure whose template is included in this string array. Supported values are `full`, `identifiable`, `mono-repo`, `mono-all`, and `catena-x`. `[]` makes the module visible for all infrastructure templates. (default: `[]`) |
 | `needsInfrastructureEndpoints` | Only visible if every specified endpoint is configured and active for the selected infrastructure. Supported values are `AASDiscovery`, `AASRegistry`, `SubmodelRegistry`, `AASRepo`, `SubmodelRepo`, `ConceptDescriptionRepo`, and `CompanyLookup`. `[]` makes the module visible regardless of which endpoints are configured. (default: `[]`) |
 | `needsEnvVariables` | Only visible if every specified, supported environment value is considered set. Use names without the `VITE_` prefix. String values must be non-empty and must not contain an unresolved placeholder; boolean flags count as set regardless of whether their value is `true` or `false`. Unknown names make the module invisible. `[]` makes the module visible regardless of environment values. (default: `[]`) |
-| `needsAuthentication` | Only visible for successful authentication (default: `false`) |
+| `needsAuthentication` | Only visible and accessible by route when authentication credentials are available for the selected infrastructure (default: `false`) |
 | `preserveRouteQuery` | Preserve `aas`/`path` query parameters in the route (default: `false`) |
 
 ```{note}
 If `isOnlyVisibleWithSelectedAas` or `isOnlyVisibleWithSelectedNode` is set, `preserveRouteQuery` is enabled automatically.
 
 Visibility requirements declared by a module are also inherited by its child routes.
+
+`needsAuthentication` checks whether requests can use credentials for the selected infrastructure's active authentication mode. Basic Authentication requires configured credentials, Bearer Token requires a non-empty static token, and OAuth2 requires an access token that has not been invalidated. If credentials are unavailable, direct navigation and a configured start route fall back to the AAS Viewer.
+
+This is a client-side UI guard and does not replace authentication or authorization enforcement by the backend.
 ```
 
 ### Hotkeys
@@ -200,7 +204,7 @@ The main menu contains three tabs:
 * **Submodels** - Submodel and SME related pages
 * **Modules** - Custom modules
 
-All registered modules appear in the Modules tab.
+All registered modules that meet their visibility requirements appear in the Modules tab.
 
 ```{figure} images/module_menu.png
 ---
@@ -212,12 +216,12 @@ Modules tab in the main menu.
 Modules are sorted alphabetically by name and their visibility depends on:
 
 * mobile/desktop mode (`isDesktopModule`, `isMobileModule`)
-* AAS / node selection (`isOnlyVisibleWithSelectedAas`, `isOnlyVisibleWithSelectedNode`))
+* AAS / node selection (`isOnlyVisibleWithSelectedAas`, `isOnlyVisibleWithSelectedNode`)
 * active route (`visibleOnRoutes`)
 * selected infrastructure template (`supportedInfrastructureTemplates`)
-* configured infrastrcuture endpoints (`needsInfrastructureEndpoints`)
+* configured infrastructure endpoints (`needsInfrastructureEndpoints`)
 * configured ENV variables (`needsEnvVariables`)
-* successful authentication (`needsAuthentication`)
+* available authentication credentials (`needsAuthentication`)
 
 ## Mobile vs Desktop Modules
 
