@@ -42,6 +42,8 @@ spec:
               value: "25"
             - name: POSTGRES_CONNMAXLIFETIMEMINUTES
               value: "5"
+            - name: POSTGRES_CONNMAXIDLETIMEMINUTES
+              value: "0"
 ```
 
 ## Secret Example
@@ -75,4 +77,5 @@ Common approaches include:
 - Avoid mutable image tags such as `latest` and `SNAPSHOT` for reproducible deployments. Pin exact image versions or image digests where possible.
 - If mutable-tag images are pulled fresh on restart, run the Configuration Service Job before DB-backed runtime workloads.
 - Ensure PostgreSQL is reachable and ready before the Job runs.
+- Include the Job's pool in the PostgreSQL connection budget while it overlaps with existing workloads during installation or upgrades. Each runtime pod has a separate pool.
 - Check Job logs when initialization fails; errors include BaSyx error codes for troubleshooting.

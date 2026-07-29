@@ -37,6 +37,7 @@ services:
       POSTGRES_MAXOPENCONNECTIONS: 50
       POSTGRES_MAXIDLECONNECTIONS: 25
       POSTGRES_CONNMAXLIFETIMEMINUTES: 5
+      POSTGRES_CONNMAXIDLETIMEMINUTES: 0
     depends_on:
       db:
         condition: service_healthy
@@ -49,6 +50,10 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin123
       POSTGRES_DBNAME: basyxTestDB
+      POSTGRES_MAXOPENCONNECTIONS: 50
+      POSTGRES_MAXIDLECONNECTIONS: 25
+      POSTGRES_CONNMAXLIFETIMEMINUTES: 5
+      POSTGRES_CONNMAXIDLETIMEMINUTES: 0
     depends_on:
       basyx_configuration:
         condition: service_completed_successfully
@@ -67,6 +72,8 @@ Recommended ordering:
 4. BaSyx services start.
 
 Use `condition: service_completed_successfully` for services that depend on the database schema being initialized.
+
+Each container process has its own PostgreSQL pool. In this example, the Configuration Service exits before the Submodel Repository starts, so their configured limits do not normally overlap. Account for both during manual restarts or upgrades where they may run at the same time, and add the limits of all concurrently running service replicas when sizing PostgreSQL.
 
 ```{warning}
 Mutable image tags such as `latest` and `SNAPSHOT` can change between restarts. If images are pulled fresh on restart, run `basyx_configuration` before DB-backed runtime services because schema requirements may have changed.

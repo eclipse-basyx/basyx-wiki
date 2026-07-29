@@ -38,9 +38,10 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin123
       - POSTGRES_DBNAME=basyxCompanyLookupDB
-      - POSTGRES_MAXOPENCONNECTIONS=500
-      - POSTGRES_MAXIDLECONNECTIONS=500
+      - POSTGRES_MAXOPENCONNECTIONS=50
+      - POSTGRES_MAXIDLECONNECTIONS=25
       - POSTGRES_CONNMAXLIFETIMEMINUTES=5
+      - POSTGRES_CONNMAXIDLETIMEMINUTES=0
     depends_on:
       postgres:
         condition: service_healthy
@@ -57,6 +58,10 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin123
       - POSTGRES_DBNAME=basyxCompanyLookupDB
+      - POSTGRES_MAXOPENCONNECTIONS=50
+      - POSTGRES_MAXIDLECONNECTIONS=25
+      - POSTGRES_CONNMAXLIFETIMEMINUTES=5
+      - POSTGRES_CONNMAXIDLETIMEMINUTES=0
     depends_on:
       basyx_configuration:
         condition: service_completed_successfully

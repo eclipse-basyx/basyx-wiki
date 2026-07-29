@@ -67,6 +67,23 @@ Multiple components reuse the same PostgreSQL configuration structure and connec
 - `postgres.dbname`
 - `postgres.user`
 - `postgres.password`
+- `postgres.applicationName`
 - `postgres.maxOpenConnections`
 - `postgres.maxIdleConnections`
 - `postgres.connMaxLifetimeMinutes`
+- `postgres.connMaxIdleTimeMinutes`
+
+Each service process or Kubernetes pod owns a separate pool. The common defaults are:
+
+| Setting | Default | Zero value |
+| --- | --- | --- |
+| `maxOpenConnections` | `50` | Uses the default. |
+| `maxIdleConnections` | `25` | Uses the default, capped at a smaller explicit open limit. |
+| `connMaxLifetimeMinutes` | `5` | Uses the default. |
+| `connMaxIdleTimeMinutes` | `0` | Disables idle-time recycling. |
+
+An explicitly configured idle limit greater than the effective open limit is rejected at startup. When sizing replicas, add the open limits of every database-backed service pod and keep the total below PostgreSQL's usable connection budget. Reserve capacity for administration, monitoring, schema migration, and temporary overlap during rolling updates.
+
+If `applicationName` and the DSN do not define a PostgreSQL `application_name`, the service name is used automatically. Explicit values are preserved. This makes per-service connections visible in `pg_stat_activity`.
+
+See [General Configuration](configuration) for the full PostgreSQL configuration and budgeting guidance.
