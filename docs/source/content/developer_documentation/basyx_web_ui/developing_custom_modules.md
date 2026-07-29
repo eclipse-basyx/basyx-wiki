@@ -125,6 +125,7 @@ defineOptions({
   supportedInfrastructureTemplates: ['full', 'mono-repo'],
   needsInfrastructureEndpoints: ['AASRepo', 'SubmodelRepo'],
   needsEnvVariables: ['SINGLE_AAS_REDIRECT', 'SINGLE_SM_REDIRECT'],
+  needsAuthentication: false,
   preserveRouteQuery: false,
 });
 ```
@@ -143,6 +144,7 @@ defineOptions({
 | `supportedInfrastructureTemplates` | Only visible for a selected infrastructure whose template is included in this string array. Supported values are `full`, `identifiable`, `mono-repo`, `mono-all`, and `catena-x`. `[]` makes the module visible for all infrastructure templates. (default: `[]`) |
 | `needsInfrastructureEndpoints` | Only visible if every specified endpoint is configured and active for the selected infrastructure. Supported values are `AASDiscovery`, `AASRegistry`, `SubmodelRegistry`, `AASRepo`, `SubmodelRepo`, `ConceptDescriptionRepo`, and `CompanyLookup`. `[]` makes the module visible regardless of which endpoints are configured. (default: `[]`) |
 | `needsEnvVariables` | Only visible if every specified, supported environment value is considered set. Use names without the `VITE_` prefix. String values must be non-empty and must not contain an unresolved placeholder; boolean flags count as set regardless of whether their value is `true` or `false`. Unknown names make the module invisible. `[]` makes the module visible regardless of environment values. (default: `[]`) |
+| `needsAuthentication` | Only visible for successful authentication (default: `false`) |
 | `preserveRouteQuery` | Preserve `aas`/`path` query parameters in the route (default: `false`) |
 
 ```{note}
@@ -215,6 +217,7 @@ Modules are sorted alphabetically by name and their visibility depends on:
 * selected infrastructure template (`supportedInfrastructureTemplates`)
 * configured infrastrcuture endpoints (`needsInfrastructureEndpoints`)
 * configured ENV variables (`needsEnvVariables`)
+* successful authentication (`needsAuthentication`)
 
 ## Mobile vs Desktop Modules
 
