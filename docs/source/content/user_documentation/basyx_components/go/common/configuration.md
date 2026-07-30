@@ -404,10 +404,10 @@ reader Secret. It must contain `host`, `port`, `dbname`, `user`, and `password`
 and can contain `sslmode`, `sslcert`, `sslkey`, `sslrootcert`,
 `connectTimeoutSeconds`, `applicationName`, `fallbackApplicationName`,
 `searchPath`, `options`, and `timezone`. Do not combine `existingSecret` with
-inline reader connection fields. Inline values are stored in a generated
-Secret. Any omitted inline field is deliberately sourced from the effective
-writer Secret. This makes a host-only override possible without duplicating
-credentials:
+inline reader connection fields. Inline reader connection values are stored in
+a generated Secret. Any omitted inline field is deliberately sourced from the
+effective writer Secret. This makes a host-only override possible without
+duplicating credentials:
 
 ```yaml
 database:
