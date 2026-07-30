@@ -185,6 +185,11 @@ immediate revocation or read-after-write consistency must omit the reader for
 the affected service or use replication guarantees that meet their required
 consistency window.
 
+Compound responses are assembled in one read-only repeatable-read transaction.
+This keeps all SQL queries for that response on one reader connection and one
+database snapshot, so a resource is not combined from different replica
+positions. Separate requests can still observe different replay positions.
+
 Both configured pools must be reachable during service startup. A reader
 outage after startup is not silently routed to the writer. In production:
 

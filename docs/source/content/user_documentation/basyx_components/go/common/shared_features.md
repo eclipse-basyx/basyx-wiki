@@ -103,7 +103,10 @@ served by a standby or other read endpoint.
 
 Reader routing is based on consistency requirements, not on how many database
 queries a request executes. Results from a replicated reader are eventually
-consistent, including authorization-relevant resource changes. See
+consistent between requests, including authorization-relevant resource changes.
+When one response requires multiple SQL queries, those queries use one
+read-only repeatable-read transaction so that the response is assembled from
+one reader snapshot. See
 [General Configuration](configuration#optional-postgresql-reader) for the
 supported components, routing guarantees, security considerations, connection
 variables, and independent pool-sizing guidance.
