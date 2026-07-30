@@ -352,7 +352,10 @@ For a database managed by the chart, enabling the global reader routes
 reader-eligible requests to the CloudNativePG read-only service
 `<database.clusterName>-ro`. Enabling its Pooler additionally creates a
 CloudNativePG `Pooler` of type `ro`, changes the reader endpoint to
-`<database.clusterName>-ro-pooler`, and leaves writer routing unchanged:
+`<database.clusterName>-ro-pooler`, and leaves writer routing unchanged. For
+long cluster names, the chart truncates the cluster-name portion of the Pooler
+service name to keep it within 63 characters and distinct from the
+CloudNativePG Cluster name:
 
 ```yaml
 database:
@@ -464,14 +467,17 @@ and monitoring values as the read-write Pooler:
 - `database.reader.pooler.topologySpreadConstraints`
 - `database.reader.pooler.monitoring.*`
 
-The schema rejects managed reader routing when `database.instances` is less
-than `2`, because there is no standby. It also rejects a read-only Pooler when
-the reader is disabled or when `database.type=external`. Its `PodMonitor`
-renders only when both the Pooler and its monitoring are enabled. It uses the
-`cnpg.io/poolerName` selector and supports the same labels, annotations,
-interval, timeout, namespace selector, relabelings, and metric relabelings as
-the read-write Pooler monitor. Prometheus Operator and its
-`monitoring.coreos.com/v1` CRDs must already be installed.
+The schema requires `database.instances` to be at least `2` when a managed
+reader implicitly targets the chart's native `<database.clusterName>-ro`
+service, because one instance provides no standby. A managed writer with one
+instance can still use an explicit reader `host` or `existingSecret`. The
+schema also rejects a read-only Pooler when the reader is disabled or when
+`database.type=external`. Its `PodMonitor` renders only when both the Pooler
+and its monitoring are enabled. It uses the `cnpg.io/poolerName` selector and
+supports the same labels, annotations, interval, timeout, namespace selector,
+relabelings, and metric relabelings as the read-write Pooler monitor.
+Prometheus Operator and its `monitoring.coreos.com/v1` CRDs must already be
+installed.
 
 Budget Pooler clients and PostgreSQL server connections separately. The sum of
 the reader pool limits across all BaSyx pods must fit within the surviving
