@@ -148,7 +148,10 @@ The complete value set and its defaults are:
 When enabled, eligible services connect to
 `<database.clusterName>-rw-pooler`. The chart replaces only `POSTGRES_HOST`;
 the port, database name, user, password, and other settings still come from the
-managed cluster's application Secret.
+managed cluster's application Secret. For long cluster names, the chart
+truncates the cluster-name portion of the Pooler service name to keep the
+generated name within 63 characters and distinct from the CloudNativePG
+Cluster name.
 
 The routing rules are intentionally narrower than a global host replacement:
 
