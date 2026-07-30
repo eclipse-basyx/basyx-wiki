@@ -192,7 +192,9 @@ outage after startup is not silently routed to the writer. In production:
   or managed service;
 - use TLS with server verification and Secret-backed credentials;
 - grant the reader role only the permissions needed by reader-routed
-  operations where feasible;
+  operations where feasible. For endpoints that are not inherently read-only,
+  consider setting `postgres.reader.options` to
+  `-c default_transaction_read_only=on` as an additional guard;
 - monitor replica health and replay lag;
 - test failover and recovery behavior for the selected PostgreSQL platform.
 
@@ -221,7 +223,7 @@ connections do not add CPU, storage I/O, or replication capacity.
 
 All four pool values must be non-negative. An explicitly configured `maxIdleConnections` greater than the effective `maxOpenConnections` is rejected during startup. If `maxIdleConnections` is `0` and an explicit open limit is smaller than the default idle limit of `25`, the effective idle limit is capped at that smaller open limit.
 
-#### Optional CloudNativePG connection pooler
+#### Optional CloudNativePG read-write connection pooler
 
 ```{note}
 The `database.pooler` values require BaSyx Helm chart `3.7.0` or newer. They
@@ -337,6 +339,147 @@ Before enabling transaction pooling in production, render the chart against
 the installed CloudNativePG CRDs and test the deployed BaSyx version through
 the Pooler. Include bulk endpoints, large-object operations, connection
 saturation, rolling updates, and a PostgreSQL switchover.
+
+#### Helm reader configuration and read-only Pooler
+
+```{note}
+The `database.reader` values require BaSyx Helm chart `3.9.0` and BaSyx Go
+`1.0.7` or newer. Both the reader and its read-only Pooler are disabled by
+default.
+```
+
+For a database managed by the chart, enabling the global reader routes
+reader-eligible requests to the CloudNativePG read-only service
+`<database.clusterName>-ro`. Enabling its Pooler additionally creates a
+CloudNativePG `Pooler` of type `ro`, changes the reader endpoint to
+`<database.clusterName>-ro-pooler`, and leaves writer routing unchanged:
+
+```yaml
+database:
+  instances: 3
+  reader:
+    enabled: true
+    maxOpenConnections: 50
+    maxIdleConnections: 25
+    pooler:
+      enabled: true
+      instances: 2
+      monitoring:
+        enabled: true
+        labels:
+          release: kube-prometheus-stack
+```
+
+The global reader connection values are:
+
+| Key | Default | Purpose |
+| --- | --- | --- |
+| `database.reader.enabled` | `false` | Injects the optional reader connection into supported BaSyx Go services. |
+| `database.reader.existingSecret` | `""` | Complete external reader Secret. |
+| `database.reader.host` | `""` | External reader host override. |
+| `database.reader.port` | `""` | External reader port override. |
+| `database.reader.dbname` | `""` | External reader database-name override. |
+| `database.reader.user` | `""` | External reader user override. |
+| `database.reader.password` | `""` | External reader password override. |
+| `database.reader.sslmode` | `""` | Reader TLS mode override. |
+| `database.reader.sslcert` | `""` | Reader client-certificate path override. |
+| `database.reader.sslkey` | `""` | Reader client-key path override. |
+| `database.reader.sslrootcert` | `""` | Reader root-CA path override. |
+| `database.reader.connectTimeoutSeconds` | `0` | Reader connection-timeout override. |
+| `database.reader.applicationName` | `""` | Reader application-name override. |
+| `database.reader.fallbackApplicationName` | `""` | Reader fallback application-name override. |
+| `database.reader.searchPath` | `""` | Reader search-path override. |
+| `database.reader.options` | `""` | Reader PostgreSQL startup-options override. |
+| `database.reader.timezone` | `""` | Reader session-time-zone override. |
+| `database.reader.maxOpenConnections` | `50` | Reader pool's maximum open connections per BaSyx pod. |
+| `database.reader.maxIdleConnections` | `25` | Reader pool's maximum idle connections per BaSyx pod. |
+| `database.reader.connMaxLifetimeMinutes` | `5` | Reader connection lifetime. |
+| `database.reader.connMaxIdleTimeMinutes` | `0` | Reader idle lifetime; `0` disables idle-time recycling. |
+
+For an external database, `database.reader.existingSecret` selects a complete
+reader Secret. It must contain `host`, `port`, `dbname`, `user`, and `password`
+and can contain `sslmode`, `sslcert`, `sslkey`, `sslrootcert`,
+`connectTimeoutSeconds`, `applicationName`, `fallbackApplicationName`,
+`searchPath`, `options`, and `timezone`. Do not combine `existingSecret` with
+inline reader connection fields. Inline values are stored in a generated
+Secret. Any omitted inline field is deliberately sourced from the effective
+writer Secret. This makes a host-only override possible without duplicating
+credentials:
+
+```yaml
+database:
+  type: external
+  existingSecret: basyx-postgres-writer
+  reader:
+    enabled: true
+    host: postgres-reader.example.internal
+    sslmode: verify-full
+```
+
+Setting only `database.reader.enabled: true` for an external database points
+both pools to the same endpoint. This is valid for migration and compatibility
+but does not add database capacity. Prefer a complete existing reader Secret,
+TLS with server verification, and a least-privilege read-only role where
+feasible in production.
+
+Each charted BaSyx Go service supports a local override at
+`<component>.database.reader`:
+
+| Component value | Service |
+| --- | --- |
+| `aasDiscovery` | Discovery Service |
+| `aasRegistry` | AAS Registry |
+| `aasRepository` | AAS Repository |
+| `aasEnvironment` | AAS Environment |
+| `dppApi` | DPP API |
+| `submodelRegistry` | Submodel Registry |
+| `submodelRepository` | Submodel Repository |
+| `cdRepository` | Concept Description Repository |
+| `companyLookup` | Company Lookup Service |
+| `digitalTwinRegistry` | Digital Twin Registry |
+
+A service-local reader object replaces the global reader configuration. A
+reader-only local override continues to use the global writer. A service-local
+writer override without a local reader disables inherited global reader
+routing so that the service cannot accidentally read from a different
+database. The Configuration Service and Keycloak never receive the reader
+environment. The Go AASX File Server supports reader routing, but this chart
+does not currently deploy it.
+
+The read-only Pooler accepts the same capacity, prepared-statement, placement,
+and monitoring values as the read-write Pooler:
+
+- `database.reader.pooler.enabled`
+- `database.reader.pooler.instances`
+- `database.reader.pooler.poolMode`
+- `database.reader.pooler.maxClientConn`
+- `database.reader.pooler.defaultPoolSize`
+- `database.reader.pooler.preparedStatements.enabled`
+- `database.reader.pooler.preparedStatements.maxPreparedStatements`
+- `database.reader.pooler.parameters`
+- `database.reader.pooler.resources`
+- `database.reader.pooler.nodeSelector`
+- `database.reader.pooler.affinity`
+- `database.reader.pooler.tolerations`
+- `database.reader.pooler.topologySpreadConstraints`
+- `database.reader.pooler.monitoring.*`
+
+The schema rejects managed reader routing when `database.instances` is less
+than `2`, because there is no standby. It also rejects a read-only Pooler when
+the reader is disabled or when `database.type=external`. Its `PodMonitor`
+renders only when both the Pooler and its monitoring are enabled. It uses the
+`cnpg.io/poolerName` selector and supports the same labels, annotations,
+interval, timeout, namespace selector, relabelings, and metric relabelings as
+the read-write Pooler monitor. Prometheus Operator and its
+`monitoring.coreos.com/v1` CRDs must already be installed.
+
+Budget Pooler clients and PostgreSQL server connections separately. The sum of
+the reader pool limits across all BaSyx pods must fit within the surviving
+read-only Pooler instances' client capacity. The Pooler server-pool sizes,
+including every active user/database pair, must fit within the destination
+standby's `max_connections` with operational headroom. Monitor BaSyx
+`db.client.connections.*` metrics, `cnpg_pgbouncer_*` metrics, and PostgreSQL
+replication lag before increasing either limit.
 
 The DSN and database credentials are sensitive and should normally be supplied through a secret rather than committed to YAML.
 
