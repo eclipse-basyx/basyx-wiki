@@ -25,7 +25,9 @@ These sections are part of the shared configuration model. Components ignore set
 
 All diagnostic logs are written to standard error. See
 [Observability](observability) for request logging, correlation IDs,
-OpenTelemetry tracing, and log collection.
+OpenTelemetry tracing and metrics, and log collection. OpenTelemetry settings
+are standard `OTEL_*` environment variables rather than keys in this YAML
+configuration model.
 
 ### `server`
 
@@ -89,6 +91,123 @@ required application connections =
 Non-BaSyx clients include identity services such as Keycloak when they share the database. The maximum concurrent replica count must include temporary old and new pods during rolling updates. Keep the total below that primary's usable connection budget and reserve connections for administration, monitoring, migrations, and failover. The maximum is a limit rather than a guarantee that every pool always opens that many connections, but PostgreSQL must be able to handle the configured worst case. Idle connections are still open PostgreSQL sessions.
 
 All four pool values must be non-negative. An explicitly configured `maxIdleConnections` greater than the effective `maxOpenConnections` is rejected during startup. If `maxIdleConnections` is `0` and an explicit open limit is smaller than the default idle limit of `25`, the effective idle limit is capped at that smaller open limit.
+
+#### Optional CloudNativePG connection pooler
+
+```{note}
+The `database.pooler` values require BaSyx Helm chart `3.7.0` or newer. They
+configure a CloudNativePG `Pooler` resource and are not BaSyx application YAML
+settings.
+```
+
+For a database managed by the chart, an optional read-write PgBouncer layer can
+decouple the number of client connections opened by horizontally scaled BaSyx
+pods from the number of PostgreSQL server processes:
+
+```yaml
+database:
+  pooler:
+    enabled: true
+    instances: 2
+    poolMode: transaction
+    maxClientConn: 1000
+    defaultPoolSize: 25
+    preparedStatements:
+      enabled: true
+      maxPreparedStatements: 100
+    parameters:
+      reserve_pool_size: "5"
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
+    nodeSelector: {}
+    affinity: {}
+    tolerations: []
+    topologySpreadConstraints: []
+```
+
+The complete value set and its defaults are:
+
+| Key | Default | Purpose |
+| --- | --- | --- |
+| `database.pooler.enabled` | `false` | Renders the managed read-write Pooler and routes eligible runtime services through it. |
+| `database.pooler.instances` | `2` | Number of PgBouncer pods. |
+| `database.pooler.poolMode` | `transaction` | PgBouncer pooling mode: `transaction` or `session`. |
+| `database.pooler.maxClientConn` | `1000` | Maximum client connections accepted by each PgBouncer pod. |
+| `database.pooler.defaultPoolSize` | `25` | Default PostgreSQL server connections per PgBouncer pod and user/database pair. |
+| `database.pooler.preparedStatements.enabled` | `true` | Enables PgBouncer protocol-level prepared-statement tracking. |
+| `database.pooler.preparedStatements.maxPreparedStatements` | `100` | Maximum tracked prepared statements when tracking is enabled. |
+| `database.pooler.parameters` | `{}` | Additional PgBouncer parameters as lowercase keys with string values. |
+| `database.pooler.resources` | `{}` | Requests and limits for the PgBouncer container. |
+| `database.pooler.nodeSelector` | `{}` | Node labels used to place Pooler pods. |
+| `database.pooler.affinity` | `{}` | Node, pod, and pod anti-affinity for Pooler pods. |
+| `database.pooler.tolerations` | `[]` | Tolerations for Pooler pods. |
+| `database.pooler.topologySpreadConstraints` | `[]` | Topology-spread constraints for Pooler pods. |
+
+When enabled, eligible services connect to
+`<database.clusterName>-rw-pooler`. The chart replaces only `POSTGRES_HOST`;
+the port, database name, user, password, and other settings still come from the
+managed cluster's application Secret. For long cluster names, the chart
+truncates the cluster-name portion of the Pooler service name to keep the
+generated name within 63 characters and distinct from the CloudNativePG
+Cluster name.
+
+The routing rules are intentionally narrower than a global host replacement:
+
+- BaSyx runtime services that use the global managed database connect through
+  the Pooler.
+- The Configuration Service wait and migration containers connect directly to
+  the CloudNativePG read-write service. Migrations use session-level advisory
+  locks and must not run through transaction pooling.
+- Keycloak keeps its direct JDBC connection to the read-write service.
+- A service with its own `database` override, whether inline or through
+  `existingSecret`, keeps the host from that override and is not redirected.
+- `database.type=external` never renders or uses this Pooler. If an external
+  database needs PgBouncer, operate it separately and put its endpoint in the
+  external database Secret.
+
+Transaction pooling requires prepared-statement tracking for clients that use
+protocol-level prepared statements. The chart therefore renders
+`max_prepared_statements=100` by default. Setting
+`preparedStatements.enabled=false` explicitly renders
+`max_prepared_statements=0` and should only be done after verifying that the
+complete workload does not need prepared statements. The first-class client
+limit, server pool size, and prepared-statement values take precedence if the
+same keys are also present under `parameters`. Additional parameters must be
+supported by the PgBouncer version bundled with the installed CloudNativePG
+operator.
+
+Size the client side and server side separately. The aggregate application
+pool limit should fit within the Pooler client capacity with headroom for
+uneven load, rolling updates, and a failed Pooler pod:
+
+```text
+sum(maxOpenConnections per BaSyx pod × maximum concurrent replica count)
+< surviving Pooler instances × maxClientConn
+```
+
+For one user/database pair and no additional server-pool parameters, a starting
+estimate for PostgreSQL connections is:
+
+```text
+Pooler instances × (defaultPoolSize + reserve_pool_size)
++ direct Keycloak connections
++ migrations, monitoring, administration, and failover reserve
+< PostgreSQL max_connections
+```
+
+Adjust the estimate for every active user/database pair and for additional
+PgBouncer limits. A Pooler queues excess client work; it does not add write
+capacity to the PostgreSQL primary. If latency remains high, compare the BaSyx
+[PostgreSQL pool metrics](observability)
+with `cnpg_pgbouncer_*` metrics and PostgreSQL query, lock, storage, and CPU
+data before increasing the server pool.
+
+Before enabling transaction pooling in production, render the chart against
+the installed CloudNativePG CRDs and test the deployed BaSyx version through
+the Pooler. Include bulk endpoints, large-object operations, connection
+saturation, rolling updates, and a PostgreSQL switchover.
 
 The DSN and database credentials are sensitive and should normally be supplied through a secret rather than committed to YAML.
 
