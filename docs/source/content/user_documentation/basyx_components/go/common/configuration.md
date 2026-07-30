@@ -80,6 +80,122 @@ When `postgres.dsn` is non-empty, do not explicitly configure `host`, `port`, `u
 
 If no primary `application_name` is supplied through `applicationName` or the DSN, the component sets it to its service name. An explicitly configured value is preserved. This identifies each BaSyx service in PostgreSQL views such as `pg_stat_activity`.
 
+#### Optional PostgreSQL reader
+
+```{note}
+The `postgres.reader` configuration requires BaSyx Go 1.0.7 or later.
+```
+
+PostgreSQL-backed BaSyx HTTP services can use a separate reader connection for
+eligible, eventually consistent reads. Configure it as a nested
+`postgres.reader` block:
+
+```yaml
+postgres:
+  host: postgres-primary
+  port: 5432
+  user: basyx
+  password: change-me
+  dbname: basyx
+  sslmode: verify-full
+  sslrootcert: /run/secrets/postgres/ca.crt
+  maxOpenConnections: 30
+  maxIdleConnections: 15
+  connMaxLifetimeMinutes: 5
+  connMaxIdleTimeMinutes: 1
+
+  reader:
+    host: postgres-reader
+    port: 5432
+    user: basyx_reader
+    password: change-me
+    dbname: basyx
+    sslmode: verify-full
+    sslrootcert: /run/secrets/postgres/ca.crt
+    maxOpenConnections: 60
+    maxIdleConnections: 30
+    connMaxLifetimeMinutes: 5
+    connMaxIdleTimeMinutes: 1
+```
+
+The reader supports the same connection and pool keys as the writer:
+
+| YAML key below `postgres.reader` | Environment variable | Default or requirement |
+| --- | --- | --- |
+| `dsn` | `POSTGRES_READER_DSN` | Optional complete reader connection string. |
+| `host` | `POSTGRES_READER_HOST` | Required when `dsn` is not set. |
+| `port` | `POSTGRES_READER_PORT` | `5432` |
+| `user` | `POSTGRES_READER_USER` | No writer-value inheritance. |
+| `password` | `POSTGRES_READER_PASSWORD` | No writer-value inheritance. |
+| `dbname` | `POSTGRES_READER_DBNAME` | Required when `dsn` is not set. |
+| `sslmode` | `POSTGRES_READER_SSLMODE` | Empty uses the PostgreSQL driver behavior. |
+| `sslcert` | `POSTGRES_READER_SSLCERT` | `""` |
+| `sslkey` | `POSTGRES_READER_SSLKEY` | `""` |
+| `sslrootcert` | `POSTGRES_READER_SSLROOTCERT` | `""` |
+| `connectTimeoutSeconds` | `POSTGRES_READER_CONNECTTIMEOUTSECONDS` | `0` leaves the timeout unspecified. |
+| `applicationName` | `POSTGRES_READER_APPLICATIONNAME` | Empty uses `<service-name>-reader`. |
+| `fallbackApplicationName` | `POSTGRES_READER_FALLBACKAPPLICATIONNAME` | `""` |
+| `searchPath` | `POSTGRES_READER_SEARCHPATH` | `""` |
+| `options` | `POSTGRES_READER_OPTIONS` | `""` |
+| `timezone` | `POSTGRES_READER_TIMEZONE` | `""` |
+| `maxOpenConnections` | `POSTGRES_READER_MAXOPENCONNECTIONS` | `50` when set to `0`. |
+| `maxIdleConnections` | `POSTGRES_READER_MAXIDLECONNECTIONS` | `25` when set to `0`, capped at a smaller open limit. |
+| `connMaxLifetimeMinutes` | `POSTGRES_READER_CONNMAXLIFETIMEMINUTES` | `5` when set to `0`. |
+| `connMaxIdleTimeMinutes` | `POSTGRES_READER_CONNMAXIDLETIMEMINUTES` | `0` disables idle-time recycling. |
+
+Use either `postgres.reader.dsn` or the individual reader connection fields,
+not both. Reader settings do not inherit connection fields or pool limits from
+the writer. Omitting the complete reader configuration reuses the writer pool
+and preserves the behavior of earlier releases. Pointing both configurations
+to the same PostgreSQL endpoint is also supported, but does not add database
+read capacity and both pools then consume the same server connection budget.
+A physical standby is a separate PostgreSQL instance that replicates the same
+database, not an independent database.
+
+Reader routing is supported by:
+
+- AAS Registry
+- Submodel Registry
+- Discovery Service
+- Digital Twin Registry
+- AAS Repository
+- Submodel Repository
+- Concept Description Repository
+- AAS Environment, including the repository, registry, and discovery APIs it
+  hosts
+- AASX File Server
+- Company Lookup Service
+- DPP API
+
+Eligible retrieval requests use the reader. This decision is based on the
+operation's consistency requirements, not on the number of SQL queries needed
+to complete a request. Mutations, mutation guards and prechecks, transactions,
+read-after-write paths, schema validation, asynchronous jobs, operation
+invocation, authorization policy storage, and upload or binary staging remain
+on the writer. The Configuration Service and History Evidence Verifier are
+writer-only.
+
+Configuring a reader opts the service into eventual consistency. PostgreSQL
+replication lag can make a successful write appear later through a
+reader-routed request. The same applies to deletions and
+authorization-relevant attribute changes: the current authorization middleware
+and filters are still applied, but a reader can briefly return the preceding
+resource state after access should have been revoked. Deployments that require
+immediate revocation or read-after-write consistency must omit the reader for
+the affected service or use replication guarantees that meet their required
+consistency window.
+
+Both configured pools must be reachable during service startup. A reader
+outage after startup is not silently routed to the writer. In production:
+
+- use distinct writer and reader endpoints provided by a PostgreSQL operator
+  or managed service;
+- use TLS with server verification and Secret-backed credentials;
+- grant the reader role only the permissions needed by reader-routed
+  operations where feasible;
+- monitor replica health and replay lag;
+- test failover and recovery behavior for the selected PostgreSQL platform.
+
 The pool settings apply independently to every process or Kubernetes pod. Calculate the connection budget separately for each PostgreSQL primary, including only clients that connect to that primary:
 
 ```text
@@ -89,6 +205,19 @@ required application connections =
 ```
 
 Non-BaSyx clients include identity services such as Keycloak when they share the database. The maximum concurrent replica count must include temporary old and new pods during rolling updates. Keep the total below that primary's usable connection budget and reserve connections for administration, monitoring, migrations, and failover. The maximum is a limit rather than a guarantee that every pool always opens that many connections, but PostgreSQL must be able to handle the configured worst case. Idle connections are still open PostgreSQL sessions.
+
+When a separate reader endpoint is configured, calculate its budget
+independently:
+
+```text
+required reader connections =
+  sum(reader.maxOpenConnections per BaSyx service × maximum concurrent replica count)
+  + non-BaSyx reader clients
+```
+
+Keep this total below the reader endpoint's usable connection budget and
+reserve capacity for monitoring, administration, and failover. More pools or
+connections do not add CPU, storage I/O, or replication capacity.
 
 All four pool values must be non-negative. An explicitly configured `maxIdleConnections` greater than the effective `maxOpenConnections` is rejected during startup. If `maxIdleConnections` is `0` and an explicit open limit is smaller than the default idle limit of `25`, the effective idle limit is capped at that smaller open limit.
 

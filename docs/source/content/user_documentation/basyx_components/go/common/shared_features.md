@@ -92,3 +92,18 @@ An explicitly configured idle limit greater than the effective open limit is rej
 If `applicationName` and the DSN do not define a PostgreSQL `application_name`, the service name is used automatically. Explicit values are preserved. This makes per-service connections visible in `pg_stat_activity`.
 
 See [General Configuration](configuration) for the full PostgreSQL configuration and budgeting guidance.
+
+## Optional PostgreSQL Reader Routing
+
+BaSyx Go 1.0.7 and later can open an independent PostgreSQL reader pool for
+eligible reads. Without reader configuration, the writer pool is reused and
+the behavior remains unchanged. With a reader configured, mutations and
+consistency-sensitive work stay on the writer while eligible reads can be
+served by a standby or other read endpoint.
+
+Reader routing is based on consistency requirements, not on how many database
+queries a request executes. Results from a replicated reader are eventually
+consistent, including authorization-relevant resource changes. See
+[General Configuration](configuration#optional-postgresql-reader) for the
+supported components, routing guarantees, security considerations, connection
+variables, and independent pool-sizing guidance.
