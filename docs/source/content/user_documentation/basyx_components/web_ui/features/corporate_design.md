@@ -20,7 +20,7 @@ When using **Docker run**, you can configure the following:
    * `LEGAL_NOTICE_URL` adds a **Legal notice** link ("Impressum").
    * `PRIVACY_POLICY_URL` adds a **Privacy policy** link ("Datenschutz").
 
-All three values are optional. If a value is empty or not configured, its footer entry is not shown. The BaSyx copyright remains unchanged, is displayed on the left side of the desktop footer, and is hidden on mobile devices.
+All three values are optional. If a value is empty or not configured, its footer entry is not shown. The company copyright is displayed in the center with the legal links in a compact row below it. The BaSyx copyright remains unchanged, is displayed on the left side of the desktop footer, and is hidden on mobile devices.
 
 ```{note}
 Please note, that the logo and primary color for the light and dark theme can be configured separately (starting with eclipsebasyx/aas-gui:v2-241114) using `PRIMARY_LIGHT_COLOR`, `PRIMARY_DARK_COLOR` respectively `LOGO_LIGHT_PATH` and `LOGO_DARK_PATH`.
