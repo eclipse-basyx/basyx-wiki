@@ -83,6 +83,11 @@ The same configuration keys are used in development and production. Only the pre
 * `VITE_LOGO_DARK_PATH`
 * `VITE_PRIMARY_LIGHT_COLOR`
 * `VITE_PRIMARY_DARK_COLOR`
+* `VITE_COPYRIGHT_NAME`
+* `VITE_LEGAL_NOTICE_URL`
+* `VITE_PRIVACY_POLICY_URL`
+
+The company copyright name and both legal links are optional. `VITE_COPYRIGHT_NAME` is shown with the current year in the center of the footer. The legal notice and privacy policy values must be HTTP(S) URLs. An entry is hidden when its value is empty or not configured. In production, use the same names without the `VITE_` prefix: `COPYRIGHT_NAME`, `LEGAL_NOTICE_URL`, and `PRIVACY_POLICY_URL`.
 
 ### Infrastructure (Legacy – Deprecated)
 

@@ -116,6 +116,7 @@ Beyond infrastructure connections, the Web UI can be configured through environm
 
 - **Logo customization**: Set custom logos for light and dark themes
 - **Color scheme**: Configure primary colors for your organization
+- **Footer customization**: Add an optional company copyright name (`COPYRIGHT_NAME`) and links to a legal notice (`LEGAL_NOTICE_URL`) and privacy policy (`PRIVACY_POLICY_URL`)
 - **Application theme**: Customize the overall look and feel
 
 ```{seealso}

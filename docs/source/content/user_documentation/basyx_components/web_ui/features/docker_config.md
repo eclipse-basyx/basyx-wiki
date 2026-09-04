@@ -83,6 +83,9 @@ The following environment variables can be used to configure the AAS Web UI:
 | LOGO_PATH | The path to the application logo inside the container `<your-logo.png>` | - |
 | LOGO_LIGHT_PATH | The path to the logo for the light theme | "Logo_light.svg" |
 | LOGO_DARK_PATH | The path to the logo for the dark theme | "Logo_dark.svg" |
+| COPYRIGHT_NAME | Optional company name shown with the current year in the center of the footer | - (entry hidden) |
+| LEGAL_NOTICE_URL | HTTP(S) URL for the optional Legal notice ("Impressum") footer link | - (link hidden) |
+| PRIVACY_POLICY_URL | HTTP(S) URL for the optional Privacy policy ("Datenschutz") footer link | - (link hidden) |
 
 ```{seealso}
 For more details on customizing branding, see the [Corporate Design](./corporate_design.md) page.
@@ -253,6 +256,9 @@ services:
       PRIMARY_DARK_COLOR: "#ff6600"
       LOGO_LIGHT_PATH: "company-logo-light.svg"
       LOGO_DARK_PATH: "company-logo-dark.svg"
+      COPYRIGHT_NAME: "Example Corp"
+      LEGAL_NOTICE_URL: "https://example.com/legal-notice"
+      PRIVACY_POLICY_URL: "https://example.com/privacy-policy"
       
       # Feature Flags
       ALLOW_EDITING: "true"
@@ -288,6 +294,9 @@ services:
       LOGO_DARK_PATH: "company-logo-dark.svg"
       PRIMARY_LIGHT_COLOR: "#0066cc"
       PRIMARY_DARK_COLOR: "#ff6600"
+      COPYRIGHT_NAME: "Example Corp"
+      LEGAL_NOTICE_URL: "https://example.com/legal-notice"
+      PRIVACY_POLICY_URL: "https://example.com/privacy-policy"
       
       # Feature control for production
       ALLOW_EDITING: "false"
