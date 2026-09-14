@@ -50,36 +50,41 @@ services:
     image: eclipsebasyx/aasdiscovery-go:1.0.11
     pull_policy: always
     environment:
-      - SERVER_PORT=5004
+      - SERVER_PORT=8086
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin123
       - POSTGRES_DBNAME=basyxTestDB
     ports:
-      - "5004:5004"
+      - "8086:8086"
     depends_on:
       basyx_configuration:
         condition: service_completed_successfully
 ```
 *docker-compose.yml including PostgreSQL 18, the BaSyx Configuration Service, and BaSyx Go Basic Discovery*
 
-Use the same BaSyx release for every service sharing this database, including the Configuration Service. These Compose examples select `1.0.11`; avoid mixing them with `SNAPSHOT` images. See [Version Scope](../common/registry_integration#version-scope) for the implementation revision used to check the usage guides.
+Use the same BaSyx release for every service sharing this database, including the Configuration Service, here `1.0.11`.
 
-### Start and Check the Service
+### Start and Check the Discovery Service
 
-Save the example as `docker-compose.yml`, then run these commands in the same directory:
+Save the example as `docker-compose.yml`, then run the following command in the same directory:
 
 ```bash
 docker compose up -d
-docker compose ps -a
-docker compose logs basyx_configuration aas_discovery
-curl -i http://localhost:5004/health
 ```
 
-The Configuration Service runs once and exits with code `0`. The HTTP service starts after successful initialization. Once it is listening, expect `200 OK` and `{"status":"UP"}` from the health endpoint; retry if startup is still in progress.
+The Configuration Service is a one-time initialization/migration job. An exit code of `0` is expected. The Discovery Service starts only after that job completes successfully.
 
-In Windows PowerShell, use `curl.exe` instead of `curl`. Open [Swagger UI](http://localhost:5004/swagger) to inspect the API. Include any configured `server.contextPath` in health, Swagger, and API URLs.
+Once the Discovery Service is ready, check its health:
+
+```bash
+curl -i http://localhost:8086/health
+```
+
+Expect HTTP `200` with `{"status":"UP"}`. In Windows PowerShell, use `curl.exe` instead of `curl`. Open [Swagger UI](http://localhost:8086/swagger) to explore the API. 
+
+The Compose example explicitly selects port `8086`. When using a context path, include it in health, Swagger, and API URLs; for example, `SERVER_CONTEXTPATH=/api/v3` makes the health URL `http://localhost:8086/api/v3/health`.
 
 ### Access Rules and Trustlist Files (Secured Setup)
 
@@ -102,7 +107,6 @@ We recommend using the Docker Images for production use-cases, as they are pre-c
 ### Cloning the Repository
 ```bash
 git clone https://github.com/eclipse-basyx/basyx-go-components
-git -C basyx-go-components checkout 20e102a9bccad077f6a1b0ff7897c8a06f1e34ee
 ```
 
 ### Building the Binary

@@ -21,14 +21,12 @@ services:
       POSTGRES_PASSWORD: admin123
       POSTGRES_DB: basyxTestDB
     command: ["postgres", "-c", "listen_addresses=*"]
-    # Uncomment the following lines to expose PostgreSQL on your host machine (not required for BaSyx to work)
-    # ports:
-    #  - "6432:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U admin -d basyxTestDB"]
       interval: 10s
       timeout: 5s
       retries: 5
+
   basyx_configuration:
     container_name: basyx_configuration
     image: eclipsebasyx/basyxconfigurationservice-go:1.0.11
@@ -66,24 +64,27 @@ services:
 ```
 *docker-compose.yml including PostgreSQL 18, the BaSyx Configuration Service, and BaSyx Go Submodel Repository*
 
-Use the same BaSyx release for every service sharing this database, including the Configuration Service. These Compose examples select `1.0.11`; avoid mixing them with `SNAPSHOT` images. See [Version Scope](../common/registry_integration#version-scope) for the implementation revision used to check the usage guides.
+Use the same BaSyx release for every service sharing this database, including the Configuration Service, here `1.0.11`.
 
 ### Start and Check the Repository
 
-Save the example as `docker-compose.yml`, then run:
+Save the example as `docker-compose.yml`, then run the following command in the same directory:
 
 ```bash
 docker compose up -d
-docker compose ps -a
-docker compose logs basyx_configuration submodel_repository
+```
+
+The Configuration Service is a one-time initialization/migration job. An exit code of `0` is expected. The Repository starts only after that job completes successfully.
+
+Once the Repository is ready, check its health:
+
+```bash
 curl -i http://localhost:8085/health
 ```
 
-The Configuration Service completes once with exit code `0`; the Repository starts after successful completion. Once ready, the health endpoint returns `200 OK` and `{"status":"UP"}`. If startup is still in progress, retry the health request after the Repository is listening.
+Expect HTTP `200` with `{"status":"UP"}`. In Windows PowerShell, use `curl.exe` instead of `curl`. Open [Swagger UI](http://localhost:8085/swagger) to explore the API, then follow [Using the Submodel Repository](usage) to create your first Submodel.
 
-In Windows PowerShell, use `curl.exe` rather than the `curl` alias. Open [Swagger UI](http://localhost:8085/swagger) and follow [Using the Submodel Repository](usage).
-
-Include any configured context path in every URL. For example, `SERVER_CONTEXTPATH=/api/v3` makes the health URL `http://localhost:8085/api/v3/health` and Swagger URL `http://localhost:8085/api/v3/swagger`.
+The Compose example explicitly selects port `8085`. When using a context path, include it in health, Swagger, and API URLs; for example, `SERVER_CONTEXTPATH=/api/v3` makes the health URL `http://localhost:8085/api/v3/health`.
 
 ### Access Rules and Trustlist Files (Secured Setup)
 
@@ -106,7 +107,6 @@ We recommend using the Docker Images for production use-cases, as they are pre-c
 ### Cloning the Repository
 ```bash
 git clone https://github.com/eclipse-basyx/basyx-go-components
-git -C basyx-go-components checkout 20e102a9bccad077f6a1b0ff7897c8a06f1e34ee
 ```
 
 ### Building the Binary

@@ -2,21 +2,6 @@
 
 Enable Registry integration when descriptors should follow Repository content automatically. Clients can then discover the Repository resources through a Registry without your application maintaining a separate descriptor for each supported change.
 
-## Version Scope
-
-The Docker walkthroughs target BaSyx Go `1.0.11`. Native build instructions select source revision `20e102a9bccad077f6a1b0ff7897c8a06f1e34ee`, which requires Go `1.27.1` or newer and PostgreSQL 16 or newer.
-
-Generated descriptor interface labels differ between these versions:
-
-| Deployment | AAS endpoint interface | Submodel endpoint interface |
-| --- | --- | --- |
-| Docker images `1.0.11` | `AAS-3.0` | `SUBMODEL-3.0` |
-| Pinned native source revision | `AAS-3.2` | `SUBMODEL-3.2` |
-
-These labels describe generated descriptors; they are separate from the API version declared in the service's OpenAPI document. Clients that select endpoints by interface identifier must account for the deployed version. Consult the installed service's Swagger UI for its operation contract.
-
-When building services from source, build the Configuration Service and every service sharing its database from the same revision. When deploying release images, use the same release tag throughout. Schema validation can reject incompatible combinations.
-
 ## Shared Database and Transactions
 
 Synchronization writes Registry tables in the Repository's PostgreSQL database. Configure the corresponding Registry service against that same database to expose the descriptors. Initialize the database using the [Configuration Service](../configuration_service/index) as described in the component setup.

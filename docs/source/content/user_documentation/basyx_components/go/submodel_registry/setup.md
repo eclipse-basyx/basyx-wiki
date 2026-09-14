@@ -64,7 +64,7 @@ services:
 ```
 *docker-compose.yml including PostgreSQL 18, the BaSyx Configuration Service, and BaSyx Go Submodel Registry*
 
-Use the same BaSyx release for every service sharing this database, including the Configuration Service. These Compose examples select `1.0.11`; avoid mixing them with `SNAPSHOT` images. See [Version Scope](../common/registry_integration#version-scope) for the implementation revision used to check the usage guides.
+Use the same BaSyx release for every service sharing this database, including the Configuration Service, here `1.0.11`.
 
 ### Start and Check the Registry
 
@@ -74,7 +74,7 @@ The services can be started by running the following command in the directory of
 docker compose up -d
 ```
 
-The Configuration Service is a one-time initialization/migration job. An exit code of `0` is expected; the Submodel Registry starts after that job completes successfully.
+The Configuration Service is a one-time initialization/migration job. An exit code of `0` is expected. The Submodel Registry starts only after that job completes successfully.
 
 Once the Registry is ready, check its health:
 
@@ -107,7 +107,6 @@ We recommend using the Docker Images for production use-cases, as they are pre-c
 ### Cloning the Repository
 ```bash
 git clone https://github.com/eclipse-basyx/basyx-go-components
-git -C basyx-go-components checkout 20e102a9bccad077f6a1b0ff7897c8a06f1e34ee
 ```
 
 ### Building the Binary
