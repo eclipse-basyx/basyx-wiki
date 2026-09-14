@@ -19,7 +19,7 @@ The BaSyx Digital Twin Registry combines Asset Administration Shell Registry and
 
 ### Query Endpoint for AAS Descriptors
 
-- `POST /query/shell-descriptors`: Queries AAS Descriptors using the query language and supports pagination (`limit`, `cursor`).
+- `POST /query/shell-descriptors`: Queries AAS Descriptors using the query language and supports [pagination](../common/pagination) (`limit`, `cursor`).
 
 ### Additional Filtering for Discovery Search
 
@@ -36,7 +36,7 @@ This component uses shared BaSyx Go infrastructure for Swagger/OpenAPI and confi
 
 - [General Configuration](../common/configuration)
 - [Swagger UI Docs](../common/swagger)
-- [Security Configuration Files (OIDC trustlist and ABAC access-rules)](../common/configuration#security-files-oidc-trustlist-and-abac-access-rules)
+- [Security Configuration Files (OIDC trustlist and ABAC access-rules)](../common/configuration#security-files)
 - [Common / Shared Features](../common/shared_features)
 
 ## Component-Specific Notes

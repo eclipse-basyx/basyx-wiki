@@ -1,15 +1,15 @@
-# Setting Up the Submodel Registry
+# Setting Up the AAS Repository
 We provide example setups to get you started with the BaSyx Go Components on our [GitHub Repository](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples).
 But if you need to configure the service yourself, this page will guide you through.
 
 ## Using Docker Compose
-The easiest way to use and set up the Submodel Registry is Docker Compose.
+The easiest way to use and set up the AAS Repository is Docker Compose.
 
 The minimal configuration includes three services:
 
 1. PostgreSQL
 2. BaSyx Configuration Service (Go), which initializes the database
-3. BaSyx Submodel Registry (Go)
+3. BaSyx AAS Repository (Go)
 
 ```yaml
 services:
@@ -45,46 +45,45 @@ services:
       postgres:
         condition: service_healthy
 
-  submodel_registry:
-    container_name: submodel_registry
-    image: eclipsebasyx/submodelregistry-go:1.0.11
+  aas_repository:
+    container_name: aas_repository
+    image: eclipsebasyx/aasrepository-go:1.0.11
     pull_policy: always
     environment:
-      - SERVER_PORT=8083
+      - SERVER_PORT=8084
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin123
       - POSTGRES_DBNAME=basyxTestDB
     ports:
-      - "8083:8083"
+      - "8084:8084"
     depends_on:
       basyx_configuration:
         condition: service_completed_successfully
 ```
-*docker-compose.yml including PostgreSQL 18, the BaSyx Configuration Service, and BaSyx Go Submodel Registry*
+*docker-compose.yml including PostgreSQL 18, the BaSyx Configuration Service, and BaSyx Go AAS Repository*
 
 Use the same BaSyx release for every service sharing this database, including the Configuration Service. These Compose examples select `1.0.11`; avoid mixing them with `SNAPSHOT` images. See [Version Scope](../common/registry_integration#version-scope) for the implementation revision used to check the usage guides.
 
-### Start and Check the Registry
+### Start and Check the Repository
 
-The services can be started by running the following command in the directory of the compose file:
+Save the example as `docker-compose.yml`, then run:
 
 ```bash
 docker compose up -d
 ```
 
-The Configuration Service is a one-time initialization/migration job. An exit code of `0` is expected; the Submodel Registry starts after that job completes successfully.
+The Configuration Service is a one-time initialization/migration job. An exit code of `0` is expected; the Repository starts only after that job completes successfully.
 
-Once the Registry is ready, check its health:
+Once the Repository is ready, check its health:
 
 ```bash
-curl -i http://localhost:8083/health
+curl -i http://localhost:8084/health
 ```
+Expect HTTP `200` with `{"status":"UP"}`. Open [Swagger UI](http://localhost:8084/swagger) to explore the API. To help you with the first steps using the repository, follow [Using the AAS Repository](usage).
 
-In Windows PowerShell, use `curl.exe` instead of `curl` to invoke curl rather than the PowerShell alias. Expect HTTP `200` with `{"status":"UP"}`. Open [Swagger UI](http://localhost:8083/swagger), then follow [Using the Submodel Registry](usage) to register your first descriptor.
-
-The example uses port `8083` and an empty context path. If `server.contextPath` is configured, include it in health, Swagger, and API URLs. For example, `SERVER_CONTEXTPATH=/api/v3` makes the health URL `http://localhost:8083/api/v3/health` and Swagger URL `http://localhost:8083/api/v3/swagger`.
+Include any configured context path in every URL. For example, `SERVER_CONTEXTPATH=/api/v3` makes the health URL `http://localhost:8084/api/v3/health` and Swagger URL `http://localhost:8084/api/v3/swagger`.
 
 ### Access Rules and Trustlist Files (Secured Setup)
 
@@ -93,7 +92,7 @@ For general handling of OIDC trustlist and ABAC access-rules files (config keys,
 For this component in Docker Compose, mount the security files into the container and configure `ABAC_ENABLED=true`, `ABAC_MODELPATH`, and `OIDC_TRUSTLISTPATH` if you enable ABAC.
 
 ## Using BaSyx Go Components without Docker
-If you need to run the Submodel Registry without Docker, build the binary from source for your target platform.
+If you need to run the AAS Repository without Docker, build the binary from source for your target platform.
 
 ```{warning}
 We recommend using the Docker Images for production use-cases, as they are pre-configured and optimized for production environments.
@@ -112,23 +111,23 @@ git -C basyx-go-components checkout 20e102a9bccad077f6a1b0ff7897c8a06f1e34ee
 
 ### Building the Binary
 
-Change to the Submodel Registry service directory:
+Change to the AAS Repository service directory:
 ```bash
-cd basyx-go-components/cmd/submodelregistryservice
+cd basyx-go-components/cmd/aasrepositoryservice
 ```
 
 #### Linux / macOS
 
 Build the executable with:
 ```bash
-go build -o submodelregistryservice
+go build -o aasrepositoryservice
 ```
 
 #### Windows
 
 Build the executable with the `.exe` extension:
 ```powershell
-go build -o submodelregistryservice.exe
+go build -o aasrepositoryservice.exe
 ```
 
 ### Running the Service
@@ -138,14 +137,16 @@ Before running the service, ensure PostgreSQL is available and that the BaSyx da
 
 Run the service with:
 ```bash
-./submodelregistryservice -config ./config.yaml
+./aasrepositoryservice -config ./config.yaml
 ```
 
 #### Windows PowerShell
 
 Run the service with:
 ```powershell
-.\submodelregistryservice.exe -config .\config.yaml
+.\aasrepositoryservice.exe -config .\config.yaml
 ```
 
-The Submodel Registry does not initialize the database schema itself. Database initialization and migrations are handled by the BaSyx Configuration Service.
+The AAS Repository does not initialize the database schema itself. Database initialization and migrations are handled by the BaSyx Configuration Service.
+
+The Compose example uses port `8084` so it can run alongside the Submodel Repository on `8085`. The two setup files describe independent Compose projects. If using both simultaneously, use distinct container names and host ports. For shared-database access through both Repository APIs, combine them into one Compose project with one PostgreSQL service and one Configuration Service, and configure both Repositories for that database.

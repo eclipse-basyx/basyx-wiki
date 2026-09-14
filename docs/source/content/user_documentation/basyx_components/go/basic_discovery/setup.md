@@ -1,13 +1,15 @@
 # Setting Up the Basic Discovery Component
-We provide example Set-Ups to get you started with the BaSyx Go Components on our [GitHub Repository](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples).
+We provide example setups to get you started with the BaSyx Go Components on our [GitHub Repository](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples).
 But if you need to configure the service yourself, this page will guide you through.
 
 ## Using Docker Compose
-The easiest way to use and set-up the Basic Discovery component is Docker Compose.
+The easiest way to use and set up the Basic Discovery component is Docker Compose.
 
-The minimal configuration includes two services:
-1. PostgreSQL (>=15)
-2. BaSyx Basic Discovery (Go)
+The minimal configuration includes three services:
+
+1. PostgreSQL
+2. BaSyx Configuration Service (Go), which initializes the database
+3. BaSyx Basic Discovery (Go)
 
 ```yaml
 services:
@@ -25,8 +27,28 @@ services:
       timeout: 5s
       retries: 5
 
+  basyx_configuration:
+    container_name: basyx_configuration
+    image: eclipsebasyx/basyxconfigurationservice-go:1.0.11
+    pull_policy: always
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin123
+      - POSTGRES_DBNAME=basyxTestDB
+      - POSTGRES_MAXOPENCONNECTIONS=50
+      - POSTGRES_MAXIDLECONNECTIONS=25
+      - POSTGRES_CONNMAXLIFETIMEMINUTES=5
+      - POSTGRES_CONNMAXIDLETIMEMINUTES=0
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   aas_discovery:
-    image: eclipsebasyx/aasdiscovery-go:SNAPSHOT
+    container_name: aas_discovery
+    image: eclipsebasyx/aasdiscovery-go:1.0.11
+    pull_policy: always
     environment:
       - SERVER_PORT=5004
       - POSTGRES_HOST=postgres
@@ -35,16 +57,33 @@ services:
       - POSTGRES_PASSWORD=admin123
       - POSTGRES_DBNAME=basyxTestDB
     ports:
-      - "YOURPORT:5004"
+      - "5004:5004"
     depends_on:
-      postgres:
-        condition: service_healthy
+      basyx_configuration:
+        condition: service_completed_successfully
 ```
-*docker-compose.yml including PostgreSQL 18 and BaSyx Go Basic Discovery*
+*docker-compose.yml including PostgreSQL 18, the BaSyx Configuration Service, and BaSyx Go Basic Discovery*
+
+Use the same BaSyx release for every service sharing this database, including the Configuration Service. These Compose examples select `1.0.11`; avoid mixing them with `SNAPSHOT` images. See [Version Scope](../common/registry_integration#version-scope) for the implementation revision used to check the usage guides.
+
+### Start and Check the Service
+
+Save the example as `docker-compose.yml`, then run these commands in the same directory:
+
+```bash
+docker compose up -d
+docker compose ps -a
+docker compose logs basyx_configuration aas_discovery
+curl -i http://localhost:5004/health
+```
+
+The Configuration Service runs once and exits with code `0`. The HTTP service starts after successful initialization. Once it is listening, expect `200 OK` and `{"status":"UP"}` from the health endpoint; retry if startup is still in progress.
+
+In Windows PowerShell, use `curl.exe` instead of `curl`. Open [Swagger UI](http://localhost:5004/swagger) to inspect the API. Include any configured `server.contextPath` in health, Swagger, and API URLs.
 
 ### Access Rules and Trustlist Files (Secured Setup)
 
-For general handling of OIDC trustlist and ABAC access-rules files (config keys, env vars, startup behavior), see [Security Configuration Files (Common)](../common/configuration#security-files-oidc-trustlist-and-abac-access-rules).
+For general handling of OIDC trustlist and ABAC access-rules files (config keys, env vars, startup behavior), see [Security Configuration Files (Common)](../common/configuration#security-files).
 
 For this component in Docker Compose, mount the security files into the container and configure `ABAC_ENABLED=true`, `ABAC_MODELPATH`, and `OIDC_TRUSTLISTPATH` if you enable ABAC.
 
@@ -56,23 +95,52 @@ We recommend using the Docker Images for production use-cases, as they are pre-c
 ```
 
 ### Prerequisites
-- [Go (>=1.20; 1.25 recommended)](https://golang.org/dl/)
+- [Go](https://go.dev/dl/) `1.27.1` or newer, as specified in the pinned revision's [`go.mod`](https://github.com/eclipse-basyx/basyx-go-components/blob/20e102a9bccad077f6a1b0ff7897c8a06f1e34ee/go.mod).
+- PostgreSQL 16 or newer, initialized by a Configuration Service built from the same source revision as the HTTP service.
 - [Git](https://git-scm.com/)
 
 ### Cloning the Repository
 ```bash
 git clone https://github.com/eclipse-basyx/basyx-go-components
+git -C basyx-go-components checkout 20e102a9bccad077f6a1b0ff7897c8a06f1e34ee
 ```
 
 ### Building the Binary
+
+Change to the Basic Discovery service directory:
 ```bash
 cd basyx-go-components/cmd/discoveryservice
+```
+
+#### Linux / macOS
+
+Build the executable with:
+```bash
 go build -o discoveryservice
 ```
 
-### Running the Service
-Before running the service, ensure PostgreSQL is available and configure the connection via environment variables or a `config.yaml`.
+#### Windows
 
-```bash
-./discoveryservice -config ./config.yaml -databaseSchema ../../basyxschema.sql
+Build the executable with the `.exe` extension:
+```powershell
+go build -o discoveryservice.exe
 ```
+
+### Running the Service
+Before running the service, ensure PostgreSQL is available and that the BaSyx database schema has already been initialized by the [BaSyx Configuration Service](../configuration_service/index). Configure the PostgreSQL connection through environment variables or the provided `config.yaml`.
+
+#### Linux / macOS
+
+Run the service with:
+```bash
+./discoveryservice -config ./config.yaml
+```
+
+#### Windows PowerShell
+
+Run the service with:
+```powershell
+.\discoveryservice.exe -config .\config.yaml
+```
+
+The Basic Discovery component does not initialize the database schema itself. Database initialization and migrations are handled by the BaSyx Configuration Service.

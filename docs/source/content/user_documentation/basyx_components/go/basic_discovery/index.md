@@ -13,8 +13,8 @@ The BaSyx Basic Discovery component implements the Asset Administration Shell Ba
 
 The component exposes the following Basic Discovery endpoints:
 
-- `GET /lookup/shells` (deprecated): Returns AAS IDs linked to asset identifiers or a global asset ID. Supports pagination (`limit`, `cursor`).
-- `POST /lookup/shellsByAssetLink`: Returns AAS IDs linked to the provided asset links in the request body. Supports pagination (`limit`, `cursor`).
+- `GET /lookup/shells` (deprecated): Returns AAS IDs linked to asset identifiers or a global asset ID. Supports [pagination](../common/pagination) (`limit`, `cursor`).
+- `POST /lookup/shellsByAssetLink`: Returns AAS IDs linked to the provided asset links in the request body. Supports [pagination](../common/pagination) (`limit`, `cursor`).
 - `GET /lookup/shells/{aasIdentifier}`: Returns the specific asset identifiers linked to an AAS.
 - `POST /lookup/shells/{aasIdentifier}`: Creates or replaces all asset links for an AAS.
 - `DELETE /lookup/shells/{aasIdentifier}`: Deletes all asset links for an AAS.
@@ -31,7 +31,7 @@ This component uses shared BaSyx Go infrastructure for Swagger/OpenAPI and confi
 
 - [General Configuration](../common/configuration)
 - [Swagger UI Docs](../common/swagger)
-- [Security Configuration Files (OIDC trustlist and ABAC access-rules)](../common/configuration#security-files-oidc-trustlist-and-abac-access-rules)
+- [Security Configuration Files (OIDC trustlist and ABAC access-rules)](../common/configuration#security-files)
 - [Common / Shared Features](../common/shared_features)
 
 ```{toctree}

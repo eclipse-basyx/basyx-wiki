@@ -14,6 +14,16 @@ It returns HTTP `200` with:
 {"status":"UP"}
 ```
 
+The basic health handler confirms that the HTTP process can respond; it does not probe PostgreSQL or guarantee that API operations will succeed. For example:
+
+```bash
+curl -i http://localhost:8084/health
+```
+
+Use the component's port and prefix `/health` with its configured context path. Use `curl.exe` in PowerShell.
+
+The shared helper also supports a component-provided probe. A failed probe returns `503 Service Unavailable` with `status: DOWN` and optional `details`. The composed AAS Environment uses this variant to report `DOWN` while AAS preconfiguration is in progress; this is not a continuous database probe. The standalone AAS/Submodel Repositories and Registries register the basic handler. Configure readiness checks according to the deployed component instead of interpreting every `200` health response as a database check.
+
 ## CORS Middleware
 
 Shared CORS middleware is configured from the `cors` config block:

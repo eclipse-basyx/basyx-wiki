@@ -570,7 +570,7 @@ When registry synchronization is enabled, `general.externalUrl` must be set to a
 
 | Key | Default | Purpose |
 | --- | --- | --- |
-| `jws.privateKeyPath` | `""` | RSA private key used by Submodel Repository and AAS Environment signing use cases. |
+| `jws.privateKeyPath` | `""` | RSA private key used by AAS Repository, Submodel Repository, and AAS Environment signed reads. |
 | `jws.certificateChainPath` | `""` | PEM-encoded X.509 certificate chain included as the JWS `x5c` certificate chain where signing supports it. |
 | `swagger.enabled` | `true` | Enables Swagger UI and OpenAPI specification endpoints. |
 | `swagger.contactName` | `Eclipse BaSyx` | Contact name injected into OpenAPI/Swagger docs. |
@@ -598,7 +598,7 @@ Evidence storage writes WORM-compatible history artifacts to object storage.
 
 | Key | Default | Purpose |
 | --- | --- | --- |
-| `enabled` | `false` | Enables external evidence artifact writing. Requires `history.mode` to be `api` or `audit`. |
+| `enabled` | `false` | Enables external evidence artifact writing. Independent of `history.mode`; also supported with `off`. Required evidence-write failures fail the mutation. |
 | `provider` | `none` | Evidence backend. Accepted values are `none` and `s3`; enabled evidence requires `s3`. |
 | `bucket` | `""` | S3 bucket that receives evidence artifacts. Required when evidence is enabled. |
 | `prefix` | `basyx-history-evidence` | Object-key prefix used inside the bucket. |
@@ -879,3 +879,7 @@ In containers, paths are resolved inside the container filesystem. Mount the fil
 - Services that process AASX packages use the `general.aasxMax*` settings for expanded package limits.
 - AAS Environment additionally supports `general.aasPreconfigPaths`.
 - AAS Repository, Submodel Repository, and AAS Environment use the registry synchronization settings when enabled.
+
+## Related Usage Guides
+
+See [Validation](validation), [Registry Integration](registry_integration), and [History, Timestamps, and Signed Reads](history_and_changes) for workflows using these settings.
