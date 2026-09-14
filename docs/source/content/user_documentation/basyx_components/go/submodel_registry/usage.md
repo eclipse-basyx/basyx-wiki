@@ -89,7 +89,7 @@ Find the example using the update timestamp set earlier:
 curl -i -G http://localhost:8083/submodel-descriptors --data-urlencode 'updatedFrom=2026-09-02T10:00:00Z' --data-urlencode 'limit=10'
 ```
 
-Expect `200 OK` with matching Submodel Descriptors in `result`. The single example descriptor normally fits on one page; for larger collections, follow the [next-cursor procedure](../common/pagination#follow-the-next-cursor) using the same filters.
+Expect `200 OK` with matching Submodel Descriptors in `result`. The single example descriptor normally fits on one page; for larger collections, follow the [next-cursor procedure](../common/pagination.md#follow-the-next-cursor) using the same filters.
 
 When both timestamp filters are supplied, a descriptor matches if either bound is satisfied:
 
@@ -139,7 +139,7 @@ To find descriptors whose semantic reference contains the example nameplate key 
 curl -i -X POST 'http://localhost:8083/query/submodel-descriptors?limit=10' -H 'Content-Type: application/json' --data-binary '@query-by-semantic-id.json'
 ```
 
-Expect `200 OK` with a paged descriptor result. This query matches a key value, rather than asserting equality of an entire multi-key reference. Query string values inside JSON are unencoded. For later pages, follow [pagination for query requests](../common/pagination#keep-the-same-search).
+Expect `200 OK` with a paged descriptor result. This query matches a key value, rather than asserting equality of an entire multi-key reference. Query string values inside JSON are unencoded. For later pages, follow [pagination for query requests](../common/pagination.md#keep-the-same-search)
 
 See the [query language examples](https://github.com/eclipse-basyx/basyx-go-components/blob/main/docu/query_language/examples.md) for combinations and supplemental semantic ID filters. Use the running Swagger UI for the installed version's operation contract.
 

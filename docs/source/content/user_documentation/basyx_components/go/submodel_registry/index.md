@@ -61,7 +61,7 @@ Submodel Descriptors in this component are managed independently of an AAS Descr
 
 Submodel identifiers used in request paths must be encoded as UTF-8 Base64 URL values. Encode the original identifier with the URL-safe Base64 alphabet before placing it in a path. Do not send an arbitrary Submodel identifier directly as a path segment, because identifiers can contain characters that have a special meaning in URLs.
 
-When an operation also has a request body, the body continues to contain the original, unencoded identifier. Query JSON and bulk-delete identifier arrays also use original identifiers. See [Identifier Encoding](../common/encoding#encode-your-own-identifier) for Bash and PowerShell examples.
+When an operation also has a request body, the body continues to contain the original, unencoded identifier. Query JSON and bulk-delete identifier arrays also use original identifiers.
 
 ### Pagination and Filters
 

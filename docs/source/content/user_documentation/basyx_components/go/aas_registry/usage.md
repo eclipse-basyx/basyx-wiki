@@ -121,7 +121,7 @@ curl -i -G http://localhost:8082/shell-descriptors --data-urlencode 'updatedFrom
 
 `createdFrom` and `updatedFrom` compare the payload's `administration.createdAt` and `administration.updatedAt` using inclusive lower bounds. When both are supplied, either timestamp condition can match. The Registry does not generate or overwrite those fields. A descriptor with no matching timestamp will not appear in a timestamp-filtered result, even if it was just written.
 
-Expect `200 OK` with matching AAS Descriptors in `result`. The single example descriptor normally fits on one page; for larger collections, follow the [next-cursor procedure](../common/pagination#follow-the-next-cursor) using the same filters.
+Expect `200 OK` with matching AAS Descriptors in `result`. The single example descriptor normally fits on one page; for larger collections, follow the [next-cursor procedure](../common/pagination.md#follow-the-next-cursor) using the same filters.
 
 ## Structured Queries
 
@@ -165,7 +165,7 @@ To try bulk creation without modifying the earlier example, save this as `bulk-d
 ]
 ```
 
-These minimal descriptors demonstrate job processing; add reachable endpoints before using them for routing. Submit the job:
+These minimal descriptors demonstrate job processing. Submit the job:
 
 ```bash
 curl -i -X POST http://localhost:8082/bulk/shell-descriptors -H 'Content-Type: application/json' --data-binary '@bulk-descriptors.json'
