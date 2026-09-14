@@ -15,7 +15,7 @@ There is no single page-size default or maximum documented here for every compon
 
 ## Read the First Page
 
-Choose the component's collection endpoint and send a request without a cursor. For example, after creating the two AASs in the [AAS Repository walkthrough](../aas_repository/usage#filtering-and-pagination):
+Choose the component's collection endpoint and send a request without a cursor. For example, after creating the two AASs in the [AAS Repository walkthrough](../aas_repository/usage.md#filtering-and-pagination):
 
 ```bash
 curl -i -G http://localhost:8084/shells --data-urlencode 'limit=1'
@@ -74,8 +74,8 @@ Pagination alone does not guarantee a snapshot across separate requests while ot
 
 ## Component Examples
 
-- [AAS Repository: two AASs, one per page](../aas_repository/usage#filtering-and-pagination)
-- [Submodel Repository: list filters](../submodel_repository/usage#filtering-and-pagination)
-- [AAS Registry: descriptor filters](../aas_registry/usage#filtering-and-pagination)
-- [Submodel Registry: descriptor filters](../submodel_registry/usage#filtering-and-pagination)
-- [Company Lookup: page-size default and company filters](../company_lookup/index#listing-and-pagination)
+- [AAS Repository: two AASs, one per page](../aas_repository/usage.md#filtering-and-pagination)
+- [Submodel Repository: list filters](../submodel_repository/usage.md#filtering-and-pagination)
+- [AAS Registry: descriptor filters](../aas_registry/usage.md#filtering-and-pagination)
+- [Submodel Registry: descriptor filters](../submodel_registry/usage.md#filtering-and-pagination)
+- [Company Lookup: page-size default and company filters](../company_lookup/index.md#listing-and-pagination)

@@ -31,7 +31,7 @@ This component uses shared BaSyx Go infrastructure for Swagger/OpenAPI and confi
 
 - [General Configuration](../common/configuration)
 - [Swagger UI Docs](../common/swagger)
-- [Security Configuration Files (OIDC trustlist and ABAC access-rules)](../common/configuration#security-files)
+- [Security Configuration Files (OIDC trustlist and ABAC access-rules)](../common/configuration.md#security-files)
 - [Common / Shared Features](../common/shared_features)
 
 ```{toctree}

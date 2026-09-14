@@ -83,7 +83,7 @@ See [Pagination](../common/pagination) for `limit`, cursor handling, and the sha
 curl -i -G http://localhost:8085/submodels --data-urlencode 'idShort=MotorNameplateUpdated' --data-urlencode 'limit=10'
 ```
 
-Expect `200 OK` with matching Submodels in `result`. The single example normally fits on one page; for larger collections, follow the [next-cursor procedure](../common/pagination#follow-the-next-cursor) with the same filters.
+Expect `200 OK` with matching Submodels in `result`. The single example normally fits on one page; for larger collections, follow the [next-cursor procedure](../common/pagination.md#follow-the-next-cursor) with the same filters.
 
 | Parameter | Meaning |
 | --- | --- |

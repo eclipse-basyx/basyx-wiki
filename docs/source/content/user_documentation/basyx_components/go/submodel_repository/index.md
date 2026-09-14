@@ -32,7 +32,7 @@ The Submodel identifier in a request path is Base64URL-encoded. A Submodel Eleme
 
 ### Replacement and Partial Updates
 
-PUT creates or replaces a complete resource, and its body identifier must agree with the path. Include all content that should remain. PATCH updates existing content according to the selected representation; it is not a generic JSON Patch endpoint. Use `$value` to change values while retaining metadata. See [Representations and Partial Updates](usage#representations-and-partial-updates).
+PUT creates or replaces a complete resource, and its body identifier must agree with the path. Include all content that should remain. PATCH updates existing content according to the selected representation; it is not a generic JSON Patch endpoint. Use `$value` to change values while retaining metadata. See [Representations and Partial Updates](usage.md#representations-and-partial-updates).
 
 ### Database Schema
 

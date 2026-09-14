@@ -69,7 +69,7 @@ Collection requests use [cursor-based pagination](../common/pagination). See the
 
 `createdFrom` and `updatedFrom` filter the descriptor's persisted `administration.createdAt` and `administration.updatedAt`. The Registry does not generate or update these values on writes; the registering application must maintain them. Bounds are inclusive, and when both timestamp filters are supplied, either condition can match.
 
-Use [Structured Queries](usage#structured-queries) to search descriptor fields such as semantic identification. The ordinary descriptor-list endpoint supports `limit`, `cursor`, `createdFrom`, and `updatedFrom`; it does not provide a `semanticId` filter parameter.
+Use [Structured Queries](usage.md#structured-queries) to search descriptor fields such as semantic identification. The ordinary descriptor-list endpoint supports `limit`, `cursor`, `createdFrom`, and `updatedFrom`; it does not provide a `semanticId` filter parameter.
 
 ### Updates
 
@@ -79,7 +79,7 @@ PUT creates a missing descriptor and replaces an existing descriptor. The body i
 
 Bulk descriptor creation, update, and deletion are asynchronous. Submit the request to the bulk endpoint, then use the returned handle to poll the bulk status and result endpoints. Bulk processing is atomic: if one descriptor operation fails, the complete transaction is rolled back.
 
-Retrieving a completed result consumes the handle, including for failed jobs. See [Bulk Operations](usage#bulk-operations) for submission, polling, result retrieval, expiry, and failure behavior.
+Retrieving a completed result consumes the handle, including for failed jobs. See [Bulk Operations](usage.md#bulk-operations) for submission, polling, result retrieval, expiry, and failure behavior.
 
 ### Database Schema
 

@@ -172,7 +172,7 @@ curl -i http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/submodels/dXJuOmV4Y
 
 Expect `200 OK` with a Property containing `idShort: "SerialNumber"`, `valueType: "xs:string"`, and `value: "SN-002"`. `Nameplate.SerialNumber` is a dot-separated `idShortPath` and is not Base64URL-encoded.
 
-See the [Submodel Element walkthrough](../submodel_repository/usage#submodel-element-paths) when you need additional element operations. Replace its `/submodels/{submodelIdentifier}` prefix with the AAS-scoped prefix when using these routes.
+See the [Submodel Element walkthrough](../submodel_repository/usage.md#submodel-element-paths) when you need additional element operations. Replace its `/submodels/{submodelIdentifier}` prefix with the AAS-scoped prefix when using these routes.
 
 Unlike removing a reference, DELETE on `/shells/{aasIdentifier}/submodels/{submodelIdentifier}` removes the reference and the Submodel content. Be careful because other AASs may use that same content.
 
@@ -258,7 +258,7 @@ curl -i -G http://localhost:8084/shells --data-urlencode 'limit=1' --data-urlenc
 
 Replace `RETURNED_CURSOR` with the value from the first response, without the surrounding JSON quotes. The second response contains the other AAS. In a database containing only these two AASs, it has no next cursor: you have reached the end of the collection. If your database has additional AASs, keep following each returned cursor until none is supplied.
 
-See [Limit and Cursor](../common/pagination#limit-and-cursor) for the general rules when adapting this example.
+See [Limit and Cursor](../common/pagination.md#limit-and-cursor) for the general rules when adapting this example.
 
 ### Filter the Collection
 

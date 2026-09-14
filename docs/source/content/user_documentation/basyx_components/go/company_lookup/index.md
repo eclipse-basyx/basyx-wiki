@@ -67,7 +67,7 @@ The following values must be base64url encoded:
 
 The encoding uses UTF-8 and URL-safe Base64 without padding. For example, `iese.fraunhofer.de` is encoded as `aWVzZS5mcmF1bmhvZmVyLmRl`.
 
-For `limit` and cursor encoding, see [Pagination](../common/pagination#limit-and-cursor).
+For `limit` and cursor encoding, see [Pagination](../common/pagination.md#limit-and-cursor).
 
 ### Listing and Pagination
 
@@ -78,7 +78,7 @@ For `limit` and cursor encoding, see [Pagination](../common/pagination#limit-and
 - `name`: Base64url-encoded company name.
 - `assetId`: Base64url-encoded asset ID.
 
-Results use the shared [paged response structure](../common/pagination#read-the-first-page). Follow the [next-cursor procedure](../common/pagination#follow-the-next-cursor) with the same company filters.
+Results use the shared [paged response structure](../common/pagination.md#read-the-first-page). Follow the [next-cursor procedure](../common/pagination.md#follow-the-next-cursor) with the same company filters.
 
 ### Filtering by Name
 

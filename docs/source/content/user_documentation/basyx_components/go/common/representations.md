@@ -42,6 +42,6 @@ These modifiers change the response, not the stored resource. They do not downlo
 
 Use the request schema of the specific write endpoint. A `$value` response is not a complete resource body for a normal PUT. Submodel PATCH routes expect their corresponding normal, metadata, or value representation, rather than an RFC 6902 JSON Patch array. Keep resource-specific PATCH examples in [Submodel Repository Usage](../submodel_repository/usage).
 
-For Submodel Element `$metadata` PATCH requests, this implementation accepts common metadata fields such as `description`, but rejects `valueType`. The existing Property datatype is retained. See the [metadata PATCH example](../submodel_repository/usage#representations-and-partial-updates).
+For Submodel Element `$metadata` PATCH requests, this implementation accepts common metadata fields such as `description`, but rejects `valueType`. The existing Property datatype is retained. See the [metadata PATCH example](../submodel_repository/usage.md#representations-and-partial-updates).
 
 Full Environment import/export is a separate capability; representation suffixes do not imply support for `/serialization` in a standalone service.

@@ -29,7 +29,7 @@ Path identifiers use UTF-8 Base64URL encoding; identifiers in JSON bodies remain
 
 ### References and Submodel Content
 
-Removing a Submodel reference unlinks it from the AAS. Deleting through an AAS-scoped Submodel route removes the reference and the stored Submodel content. These are different operations, especially when several AASs refer to the same Submodel. See [AAS-scoped Submodel Access](usage#aas-scoped-submodel-access).
+Removing a Submodel reference unlinks it from the AAS. Deleting through an AAS-scoped Submodel route removes the reference and the stored Submodel content. These are different operations, especially when several AASs refer to the same Submodel. See [AAS-scoped Submodel Access](usage.md#aas-scoped-submodel-access).
 
 ### Database Schema
 

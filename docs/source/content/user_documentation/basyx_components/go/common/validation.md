@@ -50,6 +50,6 @@ On a write route using semantic verification, the same invalid `idShort` is reje
 
 ## Other Failures
 
-Malformed or unsupported input produces an error response, commonly `400`. Requests exceeding the configured upload limit return `413`. AASX verification also applies package-expansion limits. See [General Configuration](configuration#general) for limits and [API Errors](api_errors) for interpreting failures.
+Malformed or unsupported input produces an error response, commonly `400`. Requests exceeding the configured upload limit return `413`. AASX verification also applies package-expansion limits. See [General Configuration](configuration.md#general) for limits and [API Errors](api_errors) for interpreting failures.
 
 Source: [shared verification endpoint](https://github.com/eclipse-basyx/basyx-go-components/blob/main/internal/common/endpoints.go).

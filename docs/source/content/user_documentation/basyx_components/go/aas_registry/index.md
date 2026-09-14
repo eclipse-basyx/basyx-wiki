@@ -82,7 +82,7 @@ PUT creates a descriptor when its identifier does not exist and replaces it when
 
 ### Bulk Operations
 
-Bulk creation, update, and deletion are asynchronous and atomic: if a descriptor operation fails, the complete transaction is rolled back. Submit a bulk request, poll its status, and retrieve the completed result once. Retrieving the completed result consumes the handle. See [Bulk Operations](usage#bulk-operations) for the response sequence, retention, and failure handling.
+Bulk creation, update, and deletion are asynchronous and atomic: if a descriptor operation fails, the complete transaction is rolled back. Submit a bulk request, poll its status, and retrieve the completed result once. Retrieving the completed result consumes the handle. See [Bulk Operations](usage.md#bulk-operations) for the response sequence, retention, and failure handling.
 
 ### Database Schema
 

@@ -105,7 +105,7 @@ Find the example descriptor by asset kind and type:
 curl -i -G http://localhost:8082/shell-descriptors --data-urlencode 'assetKind=Instance' --data-urlencode 'assetType=TW90b3I' --data-urlencode 'limit=10'
 ```
 
-To search by serial number, encode the complete JSON value `{"name":"serialNumber","value":"SN-001"}` using the [shared encoding commands](../common/encoding#encode-your-own-identifier), then replace `ENCODED_SPECIFIC_ASSET_ID`:
+To search by serial number, encode the complete JSON value `{"name":"serialNumber","value":"SN-001"}` using the [shared encoding commands](../common/encoding.md#encode-your-own-identifier), then replace `ENCODED_SPECIFIC_ASSET_ID`:
 
 ```bash
 curl -i -G http://localhost:8082/shell-descriptors --data-urlencode 'assetIds=ENCODED_SPECIFIC_ASSET_ID'
@@ -142,7 +142,7 @@ Use `POST /query/shell-descriptors` for structured searches. Save this query as 
 curl -i -X POST 'http://localhost:8082/query/shell-descriptors?limit=10' -H 'Content-Type: application/json' --data-binary '@query.json'
 ```
 
-Expect `200 OK` with a paged descriptor result. String values in the query JSON are unencoded. For subsequent pages, follow [pagination for query requests](../common/pagination#keep-the-same-search). See the [query language examples](https://github.com/eclipse-basyx/basyx-go-components/blob/main/docu/query_language/examples.md) for combinations and nested descriptor filters, and the running Swagger UI for the installed version's contract.
+Expect `200 OK` with a paged descriptor result. String values in the query JSON are unencoded. For subsequent pages, follow [pagination for query requests](../common/pagination.md#keep-the-same-search). See the [query language examples](https://github.com/eclipse-basyx/basyx-go-components/blob/main/docu/query_language/examples.md) for combinations and nested descriptor filters, and the running Swagger UI for the installed version's contract.
 
 ## Bulk Operations
 

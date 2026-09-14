@@ -179,10 +179,10 @@ curl -i http://localhost:8080/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ
 
 Expect `200 OK` for all three requests. Confirm that the descriptor's AAS and embedded Submodel endpoint URLs match the two proxy URLs above. This verifies that discovery leads to readable content. Creating the Submodel through the AAS Repository maintains its embedded descriptor; it does not create a standalone Submodel Registry entry under the AAS integration flag.
 
-To check standalone Submodel registration, use the [Submodel Repository walkthrough](../submodel_repository/usage) with a different identifier, then follow its [integration check](../submodel_repository/registry_integration#check-the-integration). Both walkthroughs otherwise use `urn:example:submodel:1`, so running their creation steps unchanged against this shared database would conflict.
+To check standalone Submodel registration, use the [Submodel Repository walkthrough](../submodel_repository/usage) with a different identifier, then follow its [integration check](../submodel_repository/registry_integration.md#check-the-integration). Both walkthroughs otherwise use `urn:example:submodel:1`, so running their creation steps unchanged against this shared database would conflict.
 
 ## Try It
 
-Use the [AAS Repository integration walkthrough](../aas_repository/registry_integration#check-the-integration) or [Submodel Repository integration walkthrough](../submodel_repository/registry_integration#check-the-integration) to enable the flag, create a resource, retrieve its descriptor, and verify deletion. These pages retain the resource-specific configuration and lifecycle tables.
+Use the [AAS Repository integration walkthrough](../aas_repository/registry_integration.md#check-the-integration) or [Submodel Repository integration walkthrough](../submodel_repository/registry_integration.md#check-the-integration) to enable the flag, create a resource, retrieve its descriptor, and verify deletion. These pages retain the resource-specific configuration and lifecycle tables.
 
 Source: [synchronization behavior](https://github.com/eclipse-basyx/basyx-go-components/blob/main/docu/user/aas_api_v3_2.md#repository-to-registry-synchronization).

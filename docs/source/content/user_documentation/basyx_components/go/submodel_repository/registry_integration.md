@@ -30,7 +30,7 @@ For the [Compose setup](setup), append these entries to the Submodel Repository'
 
 The default is disabled. The standalone Submodel Repository rejects `general.aasRegistryIntegration=true` at startup. Its embedded descriptor synchronization is already enabled by `submodelRegistryIntegration`; enabling the AAS flag is not required for that behavior.
 
-Set `externalUrl` to the client-facing Repository base URL, following [Advertise a Reachable Repository URL](../common/registry_integration#advertise-a-reachable-repository-url).
+Set `externalUrl` to the client-facing Repository base URL, following [Advertise a Reachable Repository URL](../common/registry_integration.md#advertise-a-reachable-repository-url).
 
 ## Generated Descriptors and Lifecycle
 
@@ -44,16 +44,16 @@ Set `externalUrl` to the client-facing Repository base URL, following [Advertise
 
 The generated descriptor includes the Submodel identifier, short name, semantic references, administrative information, and descriptive metadata. It does not contain `submodelElements` or their values.
 
-Each endpoint address appends `/submodels/{encodedSubmodelId}` to the configured external base URL. For the usage example it is `http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ`. The `1.0.11` Docker images used by the Compose setup label generated endpoints `SUBMODEL-3.0`; the pinned native source revision uses `SUBMODEL-3.2`. See [Version Scope](../common/registry_integration#version-scope).
+Each endpoint address appends `/submodels/{encodedSubmodelId}` to the configured external base URL. For the usage example it is `http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ`. The `1.0.11` Docker images used by the Compose setup label generated endpoints `SUBMODEL-3.0`; the pinned native source revision uses `SUBMODEL-3.2`. See [Version Scope](../common/registry_integration.md#version-scope).
 
 If refreshing an existing AAS Descriptor with no AAS endpoint, the implementation can also generate an AAS endpoint from the same external base URL. Ensure such URLs are reachable through your public routing; a standalone Submodel Repository does not expose an AAS `/shells` API.
 
-For existing resources and manually edited descriptors, follow [Existing Resources and Manual Changes](../common/registry_integration#existing-resources-and-manual-changes).
+For existing resources and manually edited descriptors, follow [Existing Resources and Manual Changes](../common/registry_integration.md#existing-resources-and-manual-changes).
 
 ## Check the Integration
 
 1. Enable integration and restart the Repository. Configure a Submodel Registry for the same database and a different HTTP port, for example `8083`.
-2. Create a new Submodel using the [usage example](usage#create-a-submodel).
+2. Create a new Submodel using the [usage example](usage.md#create-a-submodel).
 3. Retrieve its descriptor:
 
 ```bash
@@ -64,4 +64,4 @@ Expect `200 OK`. Check the advertised endpoint, change the Submodel short name t
 
 For embedded descriptors, also create an AAS reference and an AAS Descriptor in the same database, then verify the corresponding entry through the [AAS Registry API](../aas_registry/usage). Keep each generated endpoint reachable from the clients that use it.
 
-See [General Configuration](../common/configuration#general) and [Submodel Registry Usage](../submodel_registry/usage) for further configuration and descriptor requests.
+See [General Configuration](../common/configuration.md#general) and [Submodel Registry Usage](../submodel_registry/usage) for further configuration and descriptor requests.
