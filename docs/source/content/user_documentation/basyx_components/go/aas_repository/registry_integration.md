@@ -35,10 +35,14 @@ Set `externalUrl` to the client-facing Repository base URL, following [Advertise
 | Repository change | Registry effect |
 | --- | --- |
 | Create an AAS | Create its AAS Descriptor from AAS and asset information. |
-| Replace an AAS or asset information | Update descriptor-relevant metadata when it changes. |
-| Add/remove Submodel references | Update the embedded Submodel Descriptor registrations in the AAS Descriptor. |
-| Mutate Submodels through the AAS-scoped API | Synchronize embedded descriptor information for supported descriptor-relevant mutations. |
-| Delete an AAS | Remove its AAS Descriptor. |
+| Replace an AAS | Regenerate the AAS Descriptor and update it when descriptor-relevant data has changed. |
+| Replace Asset Information | Update the corresponding asset-related fields of the AAS Descriptor. |
+| Add a Submodel reference | Add or update the corresponding AAS-scoped Submodel Descriptor. If the referenced Submodel exists, descriptor metadata is derived from it; otherwise a minimal descriptor containing the Submodel ID and endpoint is generated. |
+| Remove a Submodel reference | Remove the corresponding AAS-scoped Submodel Descriptor. |
+| Create or replace a Submodel through the AAS-scoped API | Create or update its AAS-scoped Submodel Descriptor and ensure that the AAS contains the corresponding Submodel reference. |
+| Patch a Submodel or its metadata through the AAS-scoped API | Regenerate and update its AAS-scoped Submodel Descriptor from the resulting Submodel. |
+| Delete a Submodel through the AAS-scoped API | Delete the Submodel and its reference from the AAS and remove the corresponding AAS-scoped Submodel Descriptor. |
+| Delete an AAS | Remove its AAS Descriptor and all AAS-scoped Submodel Descriptors embedded in that descriptor. Standalone Submodel Registry entries are unaffected. |
 
 Descriptors derive identifiers, names, descriptive metadata, administrative information, and asset identifiers from the Repository resource. Submodel references can produce embedded Submodel Descriptors; they do not create standalone Submodel Registry entries under this flag.
 

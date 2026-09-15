@@ -43,16 +43,6 @@ Save this as `aas.json`:
 }
 ```
 
-| Field | Purpose |
-| --- | --- |
-| `id` | Globally unique AAS identifier, used to address the AAS. |
-| `idShort` | Optional short name, useful for recognition and filtering. |
-| `assetInformation` | Required information about the represented asset. |
-| `assetKind` | Kind of asset, here a particular `Instance`. |
-| `globalAssetId` | Global identifier of the asset; distinct from the AAS identifier. |
-| `specificAssetIds` | Additional asset identifiers, such as a serial number. |
-| `submodels` | Optional array of model references to Submodels, added later in this walkthrough. |
-
 ```bash
 curl -i -X POST http://localhost:8084/shells -H 'Content-Type: application/json' --data-binary '@aas.json'
 ```
@@ -88,9 +78,9 @@ Expect `204 No Content` for replacement. Verify it:
 curl -i http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE
 ```
 
-The response should now contain `"idShort": "MotorAASUpdated"` and the original asset information. PUT creates a missing AAS with `201 Created`; the body `id` must match the decoded path identifier.
+The response should now contain `"idShort": "MotorAASUpdated"` and the original asset information. PUT creates a missing AAS with `201 Created`. The body `id` must match the decoded path identifier.
 
-PUT replaces the complete AAS. Later in this walkthrough you will add a Submodel reference through a separate API call; that call does not update your local `aas.json`. Before replacing the AAS again, retrieve its current state and preserve the references and metadata you want to keep. Reusing the initial file would omit the new reference.
+PUT replaces the complete AAS. Later in this walkthrough you will add a Submodel reference through a separate API call. This call does not update your local `aas.json`. Before replacing the AAS again, retrieve its current state and preserve the references and metadata you want to keep. Reusing the initial file would omit the new reference.
 
 ## Asset Information
 
@@ -289,7 +279,7 @@ Timestamp filters use administrative timestamps supplied in the AAS payload. Wri
 
 ## Asset Thumbnail
 
-This section is optional. If you want to try it, place an existing PNG image named `thumbnail.png` in your working directory. Upload it using multipart form fields `fileName` and `file`:
+Place an existing PNG image named `thumbnail.png` in your working directory. Upload it using multipart form fields `fileName` and `file`:
 
 ```bash
 curl -i -X PUT http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/asset-information/thumbnail -F 'fileName=thumbnail.png' -F 'file=@thumbnail.png;type=image/png'
