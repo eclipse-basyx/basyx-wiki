@@ -44,15 +44,9 @@ Set `externalUrl` to the client-facing Repository base URL, following [Advertise
 | Delete a Submodel through the AAS-scoped API | Delete the Submodel and its reference from the AAS and remove the corresponding AAS-scoped Submodel Descriptor. |
 | Delete an AAS | Remove its AAS Descriptor and all AAS-scoped Submodel Descriptors embedded in that descriptor. Standalone Submodel Registry entries are unaffected. |
 
-Descriptors derive identifiers, names, descriptive metadata, administrative information, and asset identifiers from the Repository resource. Submodel references can produce embedded Submodel Descriptors; they do not create standalone Submodel Registry entries under this flag.
+Descriptors derive identifiers, names, descriptive metadata, administrative information, and asset identifiers from the Repository resource. Submodel references can produce embedded Submodel Descriptors. They do not create standalone Submodel Registry entries under this flag.
 
-Endpoint addresses are constructed by appending `/shells/{encodedAasId}` or `/submodels/{encodedSubmodelId}` to each external base URL. For the example AAS this gives `http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE`. Generated interface labels are `AAS-3.0` and `SUBMODEL-3.0` in the `1.0.11` Docker images, and `AAS-3.2` and `SUBMODEL-3.2` in the pinned native source revision. See [Version Scope](../common/registry_integration.md#version-scope).
-
-The standalone AAS Repository serves Submodels only below `/shells/{aasIdentifier}/submodels/{submodelIdentifier}`. It does not expose the generated root `/submodels/{submodelIdentifier}` URL. With embedded Submodel Descriptors, the advertised base URL must therefore route `/shells` to the AAS Repository and `/submodels` to a Submodel Repository sharing the database. The [combined Compose example](../common/registry_integration.md#combined-compose-example) provides this routing. Alternatively, use the composed AAS Environment, which exposes both paths.
-
-The direct `http://localhost:8084` configuration above is sufficient for AAS endpoints only. For the combined example, both Repositories advertise the proxy at `http://localhost:8080`.
-
-For existing resources and manually edited descriptors, follow [Existing Resources and Manual Changes](../common/registry_integration.md#existing-resources-and-manual-changes).
+Endpoint addresses are constructed by appending `/shells/{encodedAasId}` or `/submodels/{encodedSubmodelId}` to each external base URL. For the example AAS this gives `http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE`.
 
 ## Check the Integration
 

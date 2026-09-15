@@ -62,7 +62,7 @@ When `server.contextPath` is configured, these locations are served below that c
 
 ### Availability Notes
 
-The standalone `/serialization` route currently returns `501 Not Implemented`. Reading a Submodel as JSON or in a different representation is separate from environment import/export. For full environment import/export, use the AAS Environment's implemented `/serialization` and `/upload` APIs. See the [Go API availability guide](https://github.com/eclipse-basyx/basyx-go-components/blob/main/docu/user/aas_api_v3_2.md).
+The standalone `/serialization` route is not provided by this component. For full environment import/export, use the AAS Environment's implemented `/serialization` and `/upload` APIs. See the [Go API availability guide](https://github.com/eclipse-basyx/basyx-go-components/blob/main/docu/user/aas_api_v3_2.md).
 
 ## Related Documentation
 

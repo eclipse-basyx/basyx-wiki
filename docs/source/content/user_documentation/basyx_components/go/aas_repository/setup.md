@@ -104,6 +104,8 @@ We recommend using the Docker Images for production use-cases, as they are pre-c
 - [Git](https://git-scm.com/)
 
 ### Cloning the Repository
+
+Download the source code:
 ```bash
 git clone https://github.com/eclipse-basyx/basyx-go-components
 ```

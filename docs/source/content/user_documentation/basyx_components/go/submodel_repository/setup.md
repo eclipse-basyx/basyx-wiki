@@ -105,6 +105,8 @@ We recommend using the Docker Images for production use-cases, as they are pre-c
 - [Git](https://git-scm.com/)
 
 ### Cloning the Repository
+
+Download the source code:
 ```bash
 git clone https://github.com/eclipse-basyx/basyx-go-components
 ```
@@ -148,5 +150,3 @@ Run the service with:
 ```
 
 The Submodel Repository does not initialize the database schema itself. Database initialization and migrations are handled by the BaSyx Configuration Service.
-
-The native `config.yaml` defaults to port `5004`. Set `server.port: 8085` to use the [usage walkthrough](usage) unchanged, or adjust its URLs to your configured port and context path.
