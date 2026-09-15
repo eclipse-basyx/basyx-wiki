@@ -41,9 +41,23 @@ See [General Configuration](../common/configuration) for server, database, and s
 
 ## API Documentation and Availability
 
-With an empty context path, Swagger UI is available at `/swagger`, the OpenAPI document at `/api-docs/openapi.yaml`, and service self-description at `/description`. A configured `server.contextPath` prefixes these paths. See [Swagger UI Docs](../common/swagger).
+Use the following API documentation depending on whether you need the behavior of a running BaSyx component or the standardized API definition:
 
-The component ships an API v3.2 OpenAPI document. Use the running Swagger UI together with the behavior documented here to determine the installed service's capabilities. The [IDTA API specification v3.2](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/index.html) defines standardized operations and the [metamodel specification](https://industrialdigitaltwin.io/aas-specifications/IDTA-01001/v3.2/index.html) defines AAS payloads.
+- **BaSyx Go Swagger UI** describes the running component's API, including its configured base path and runtime OpenAPI adjustments. It provides operation parameters, request and response schemas, status codes, and interactive requests. Consult the availability notes below alongside the runtime contract.
+- **[IDTA AAS Repository Swagger UI v3.2.0](https://industrialdigitaltwin.io/aas-specs-api/docs/swagger-ui.html?url=..%2FAssetAdministrationShellRepositoryServiceSpecification%2FV3.2_SSP-001.yaml&version=v3.2.0)** presents the standardized AAS Repository Full Profile interactively.
+- **[IDTA Specification of the Asset Administration Shell, Part 2: Application Programming Interfaces v3.2.0](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/index.html)** defines the standardized operations, service specifications, profiles, and serialization behavior. The [metamodel specification v3.2](https://industrialdigitaltwin.io/aas-specifications/IDTA-01001/v3.2/index.html) defines AAS payloads.
+
+The OpenAPI document shipped with the current BaSyx Go AAS Repository identifies API version `V3.2.0` and declares profiles `SSP-001`, `SSP-003`, `SSP-004`, `SSP-005`, and `SSP-006`. These declarations describe the shipped specification; use the running component's Swagger UI and the availability notes below to determine the installed service's supported operations.
+
+With the default empty context path, the service exposes:
+
+- Swagger UI at `/swagger`;
+- the OpenAPI document at `/api-docs/openapi.yaml`;
+- service self-description at `/description`.
+
+When `server.contextPath` is configured, these locations are served below that context path. Swagger can also be disabled through configuration. See [Swagger UI Docs](../common/swagger) for details.
+
+### Availability Notes
 
 The standalone AAS Repository does not support the `/serialization` endpoint. For full environment import/export, use the AAS Environment's implemented `/serialization` and `/upload` APIs.
 
