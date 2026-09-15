@@ -14,7 +14,7 @@ curl -i http://localhost:8084/health
 
 Continue when the response is HTTP `200` with `{"status":"UP"}`. The examples use port `8084` and an empty context path. If your configuration differs, replace `http://localhost:8084` throughout. Include any context path, for example `http://localhost:8084/api/v3`. You can also inspect requests in [Swagger UI](http://localhost:8084/swagger).
 
-Run commands from one working directory and save each JSON file there before the command that uses it. Use the filenames shown, including the `.json` extension, and save as UTF-8. No additional scripts or JSON command-line tools are needed.
+Run commands from one working directory and save each JSON file there before the command that uses it. Use the filenames shown, including the `.json` extension. No additional scripts or JSON command-line tools are needed.
 
 - **Bash:** copy the commands as shown.
 - **Windows PowerShell:** replace `curl` with `curl.exe`; this avoids the PowerShell alias.
@@ -60,7 +60,7 @@ The request URL uses the encoded **AAS identifier**, not the asset identifier or
 | `urn:example:aas:1` | `dXJuOmV4YW1wbGU6YWFzOjE` |
 | `urn:example:submodel:1` | `dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ` |
 
-These values are already substituted into every example URL. Keep identifiers in JSON bodies unencoded. For your own identifiers, use UTF-8 and the URL-safe Base64 alphabet; see [Encoding Your Own Identifiers](#encoding-your-own-identifiers).
+These values are already substituted into every example URL. Keep identifiers in JSON bodies unencoded.
 
 ```bash
 curl -i http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE

@@ -28,7 +28,7 @@ See [Using the Submodel Repository](usage) for a walkthrough with Properties and
 
 ### Identifiers and Element Paths
 
-The Submodel identifier in a request path is Base64URL-encoded. A Submodel Element is addressed by its `idShortPath`, such as `Nameplate.SerialNumber`; this path is not Base64URL-encoded. List members use zero-based indices. Identifiers in JSON bodies remain unencoded.
+The Submodel identifier in a request path is Base64URL-encoded. A Submodel Element is addressed by its `idShortPath`, such as `Nameplate.SerialNumber`. This path is not Base64URL-encoded. List members use zero-based indices. Identifiers in JSON bodies remain unencoded.
 
 ### Replacement and Partial Updates
 

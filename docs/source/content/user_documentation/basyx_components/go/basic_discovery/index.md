@@ -52,7 +52,7 @@ See [API Documentation](#api-documentation) for operation parameters, schemas, a
 
 ### Identifier Encoding
 
-Encode the AAS identifier in `/lookup/shells/{aasIdentifier}` as UTF-8 Base64URL. Asset-link names and values in JSON bodies remain unencoded. See [Identifiers and Encoding](../common/encoding).
+The AAS identifier in `/lookup/shells/{aasIdentifier}` is Base64URL-encoded. Asset-link names and values in JSON request bodies remain unencoded.
 
 ### Lookup and Pagination
 

@@ -14,7 +14,7 @@ curl -i http://localhost:8085/health
 
 Continue when the response is HTTP `200` with `{"status":"UP"}`. The examples use port `8085` and an empty context path. If your configuration differs, replace `http://localhost:8085` throughout. Include any context path, for example `http://localhost:8085/api/v3`. You can also inspect requests in [Swagger UI](http://localhost:8085/swagger).
 
-Run commands from one working directory and save each JSON file there before the command that uses it. Use the filenames shown, including the `.json` extension, and save as UTF-8. No additional scripts or JSON command-line tools are needed.
+Run commands from one working directory and save each JSON file there before the command that uses it. Use the filenames shown, including the `.json` extension. No additional scripts or JSON command-line tools are needed.
 
 - **Bash:** copy the commands as shown.
 - **Windows PowerShell:** replace `curl` with `curl.exe`; this avoids the PowerShell alias.

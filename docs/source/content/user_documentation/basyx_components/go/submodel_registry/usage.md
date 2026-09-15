@@ -1,6 +1,6 @@
 # Using the Submodel Registry
 
-This walkthrough uses the unsecured [Docker Compose setup](setup) at `http://localhost:8083` with an empty context path. Run the examples in order against an example database. Save JSON files as UTF-8 in your working directory. The curl commands work in Bash; in Windows PowerShell, invoke `curl.exe` instead of `curl`.
+This walkthrough uses the unsecured [Docker Compose setup](setup) at `http://localhost:8083` with an empty context path. Run the examples in order against an example database. Save JSON files in your working directory. The curl commands work in Bash; in Windows PowerShell, invoke `curl.exe` instead of `curl`.
 
 If you configure `server.contextPath`, prefix each API path with that value. The descriptor endpoints below use `example.com` as placeholders. Replace them with Submodel URLs reachable by the clients that will use the descriptors.
 

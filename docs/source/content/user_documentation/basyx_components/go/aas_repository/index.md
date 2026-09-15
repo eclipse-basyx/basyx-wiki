@@ -25,7 +25,7 @@ An AAS contains Submodel references, not inline Submodel content. This Go compon
 
 ### Identifiers and Updates
 
-Path identifiers use UTF-8 Base64URL encoding; identifiers in JSON bodies remain unencoded. PUT creates a missing AAS or replaces an existing one. The body identifier must match the decoded path identifier. Submit the complete AAS, including the references and metadata that should remain.
+The AAS identifier in the request path is Base64URL-encoded. Identifiers in JSON request bodies remain unencoded. PUT creates the AAS if it does not exist or replaces the existing AAS. The identifier in the request body must match the decoded path identifier. The request body must contain the complete AAS, including all references and metadata that should be retained.
 
 ### References and Submodel Content
 

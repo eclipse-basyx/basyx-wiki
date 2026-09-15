@@ -1,6 +1,6 @@
 # Using the AAS Registry
 
-This walkthrough uses the unsecured [Docker Compose setup](setup) at `http://localhost:8082` with an empty context path. Run the examples in order against an example database. Save the JSON files as UTF-8 in your working directory. The curl commands are single-line commands usable in Bash; in Windows PowerShell, invoke `curl.exe` instead of `curl`.
+This walkthrough uses the unsecured [Docker Compose setup](setup) at `http://localhost:8082` with an empty context path. Run the examples in order against an example database. Save the JSON files in your working directory. The curl commands are single-line commands usable in Bash; in Windows PowerShell, invoke `curl.exe` instead of `curl`.
 
 The descriptor endpoints below use `example.com` as placeholders. Replace them with Repository URLs reachable by the clients that will use the descriptors.
 

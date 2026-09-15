@@ -1,6 +1,6 @@
 # Using Basic Discovery
 
-This walkthrough uses the unsecured [Compose setup](setup) at `http://localhost:8086`, with an empty context path. Save the JSON files as UTF-8 in your working directory and run the commands in order against an example database. In Windows PowerShell, use `curl.exe` instead of `curl`. Include any configured context path in each URL.
+This walkthrough uses the unsecured [Compose setup](setup) at `http://localhost:8086`, with an empty context path. Save the JSON files in your working directory and run the commands in order against an example database. In Windows PowerShell, use `curl.exe` instead of `curl`. Include any configured context path in each URL.
 
 Only the Discovery Service, PostgreSQL, and the Configuration Service are required. A Registry or Repository is needed only when continuing from the discovered identifier to a descriptor or AAS content.
 

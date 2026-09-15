@@ -59,9 +59,7 @@ Submodel Descriptors in this component belong to an AAS Descriptor. Clients ther
 
 ### Identifier Encoding
 
-Identifiers used in request paths must be encoded as UTF-8 Base64 URL values. Encode the original identifier with the URL-safe Base64 alphabet before placing it in a path. Do not send an arbitrary AAS or Submodel identifier directly as a path segment, because identifiers can contain characters that have a special meaning in URLs.
-
-When an operation also has a request body, the body continues to contain the original, unencoded identifier. Some query parameters also require encoding: `assetType` is a Base64URL-encoded string, and each `assetIds` value is a Base64URL-encoded JSON `SpecificAssetId`.
+AAS and Submodel identifiers in request paths are Base64URL-encoded. Identifiers in JSON request bodies remain unencoded.
 
 ### Pagination and Filters
 
