@@ -324,10 +324,6 @@ curl -i http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE
 
 The expected `404` confirms the AAS is no longer available. The example identifiers can now be used for a fresh walkthrough.
 
-## Encoding Your Own Identifiers
-
-Use the shared [Identifiers and Encoding](../common/encoding) guide for Bash and PowerShell commands. For this walkthrough, encode the AAS `id`, not its asset identifier. For `assetIds`, encode the complete JSON object, such as `{"name":"serialNumber","value":"SN-002"}`. Keep identifiers in request bodies and reference key values unencoded.
-
 ## Shared API Guidance
 
 See [Identifiers and Encoding](../common/encoding), [Validation](../common/validation), [API Errors](../common/api_errors), and [History, Timestamps, and Signed Reads](../common/history_and_changes). For available model views, see [Response Representations](../common/representations). Component-specific requests and lifecycle behavior are documented above.

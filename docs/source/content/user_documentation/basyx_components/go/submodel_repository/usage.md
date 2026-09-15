@@ -295,10 +295,6 @@ curl -i http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ
 
 The expected `404 Not Found` confirms deletion. The example identifiers can now be used for a fresh walkthrough.
 
-## Encoding Your Own Identifiers
-
-Use the shared [Identifiers and Encoding](../common/encoding) guide for Bash and PowerShell commands. For resource URLs, encode the Submodel's `id`; keep element `idShortPath` values unencoded. For this implementation's `semanticId` filter, encode the semantic key-value string, such as `urn:example:semantic:nameplate`, rather than the complete reference JSON. Keep identifiers and reference key values in JSON bodies unencoded.
-
 ## Shared API Guidance
 
 See [Identifiers and Encoding](../common/encoding), [Validation](../common/validation), [API Errors](../common/api_errors), and [History, Timestamps, and Signed Reads](../common/history_and_changes). For available model views, see [Response Representations](../common/representations). Component-specific requests and lifecycle behavior are documented above.
