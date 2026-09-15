@@ -1,6 +1,27 @@
 # Using the Submodel Repository
 
-This walkthrough uses the unsecured [Compose setup](setup) at `http://localhost:8085`, with an empty context path. Run the examples in order against an example database. Save the JSON files as UTF-8 in your working directory. In PowerShell, use `curl.exe` instead of `curl`. Prefix API paths with `server.contextPath` when configured.
+This walkthrough creates a motor nameplate Submodel, changes its metadata and element values, and lists Submodels with filters and pagination. You will then remove the example data.
+
+You need only the Submodel Repository and the database services from [Setup](setup). A separate AAS Repository or Registry is not required for these examples.
+
+## Before You Start
+
+Start the [Compose setup](setup), then check the connection:
+
+```bash
+curl -i http://localhost:8085/health
+```
+
+Continue when the response is HTTP `200` with `{"status":"UP"}`. The examples use port `8085` and an empty context path. If your configuration differs, replace `http://localhost:8085` throughout; include any context path, for example `http://localhost:8085/api/v3`. You can also inspect requests in [Swagger UI](http://localhost:8085/swagger).
+
+Run commands from one working directory and save each JSON file there before the command that uses it. Use the filenames shown, including the `.json` extension, and save as UTF-8. No additional scripts or JSON command-line tools are needed.
+
+- **Bash:** copy the commands as shown.
+- **Windows PowerShell:** replace `curl` with `curl.exe`; this avoids the PowerShell alias.
+- **Request files:** `--data-binary '@submodel.json'` reads the file from the current directory and sends it as the request body.
+- **Responses:** `-i` displays HTTP headers and the body. A successful `204 No Content` response intentionally has no JSON body; use GET to check the new state.
+
+The commands assume the unsecured example setup. For an existing secured deployment, use credentials and permissions appropriate to that deployment. Run the walkthrough on example data: it creates and later deletes `urn:example:submodel:1` and `urn:example:submodel:2`.
 
 ## Create a Submodel
 
@@ -40,28 +61,24 @@ Save this as `submodel.json`:
 }
 ```
 
-| Field | Purpose |
-| --- | --- |
-| `id` | Globally unique Submodel identifier used for resource addressing. |
-| `idShort` | Short name used for recognition and list filtering. |
-| `semanticId` | Reference to the definition of the Submodel's meaning; the example uses an illustrative identifier. |
-| `submodelElements` | The actual content: Properties, collections, lists, and other element types. |
-| `modelType` | Identifies the concrete type in normal JSON serialization. |
-| Property `valueType` | XML Schema datatype of the Property's value. |
-
 ```bash
 curl -i -X POST http://localhost:8085/submodels -H 'Content-Type: application/json' --data-binary '@submodel.json'
 ```
 
-Expect `201 Created` and the created Submodel. Repeating POST with the same visible identifier returns `409 Conflict`. This stores Submodel content; [Registry Integration](registry_integration) is a separate, optional feature for generating its descriptor.
+Expect `201 Created` and a JSON body containing `id: "urn:example:submodel:1"` and `idShort: "MotorNameplate"`. The Submodel is now stored in the Repository. Generating a Registry descriptor requires [Registry Integration](registry_integration) or explicit registration; neither is needed to continue here.
 
-## Identifier Encoding
-
-The identifier `urn:example:submodel:1` becomes `dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ` when encoded as unpadded UTF-8 Base64URL. Keep the original identifier in JSON bodies.
-
-Use [Identifiers and Encoding](../common/encoding) for Bash and PowerShell commands.
+If you repeat this step, `409 Conflict` means the visible identifier already exists. Continue with that resource only if it is your earlier example, or use different identifiers consistently throughout the walkthrough. The AAS Repository walkthrough uses the same Submodel identifier, so its content may already exist if both services share a database.
 
 ## Retrieve and Replace the Submodel
+
+The request URL uses the encoded **Submodel identifier**, not its `idShort` or semantic identifier:
+
+| Original identifier | Base64URL path value |
+| --- | --- |
+| `urn:example:submodel:1` | `dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ` |
+| `urn:example:submodel:2` | `dXJuOmV4YW1wbGU6c3VibW9kZWw6Mg` |
+
+These values are already substituted into every example URL. Keep identifiers in JSON bodies unencoded. For your own identifiers, see [Encoding Your Own Identifiers](#encoding-your-own-identifiers).
 
 ```bash
 curl -i http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ
@@ -73,37 +90,15 @@ Expect `200 OK` and the Submodel. Change `idShort` in `submodel.json` to `MotorN
 curl -i -X PUT http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ -H 'Content-Type: application/json' --data-binary '@submodel.json'
 ```
 
-Expect `204 No Content` for replacement. PUT creates a missing Submodel with `201 Created`. The body's `id` must match the decoded path identifier; a mismatch returns `400 Bad Request`. Include every element and metadata field that should remain. GET again to inspect the result.
-
-## Filtering and Pagination
-
-See [Pagination](../common/pagination) for `limit`, cursor handling, and the shared response structure. The examples below show this component's requests and filters.
+Expect `204 No Content` for replacement. Verify it:
 
 ```bash
-curl -i -G http://localhost:8085/submodels --data-urlencode 'idShort=MotorNameplateUpdated' --data-urlencode 'limit=10'
+curl -i http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ
 ```
 
-Expect `200 OK` with matching Submodels in `result`. The single example normally fits on one page; for larger collections, follow the [next-cursor procedure](../common/pagination.md#follow-the-next-cursor) with the same filters.
+The response should now contain `"idShort": "MotorNameplateUpdated"` and the original elements. PUT creates a missing Submodel with `201 Created`. The body's `id` must match the decoded path identifier; a mismatch returns `400 Bad Request`.
 
-| Parameter | Meaning |
-| --- | --- |
-| `idShort` | Plain short-name filter. |
-| `semanticId` | Base64URL-encoded semantic key-value string matched against `semanticId.keys[].value` by this implementation. |
-| `limit`, `cursor` | Page size and continuation cursor. |
-| `createdFrom`, `updatedFrom` | RFC 3339 lower bounds on administrative creation/update timestamps. |
-| `level`, `extent` | Representation controls described below. |
-
-For the example's semantic identifier, encode the string `urn:example:semantic:nameplate`, not the complete reference JSON:
-
-```bash
-curl -i -G http://localhost:8085/submodels --data-urlencode 'semanticId=dXJuOmV4YW1wbGU6c2VtYW50aWM6bmFtZXBsYXRl'
-```
-
-The decoded value is compared with semantic reference key values; this is not an equality comparison of an entire multi-key reference. This describes the current Go implementation; use the runtime contract when comparing it with the standardized semantic-reference parameter.
-
-Timestamp filters use `administration.createdAt` and `administration.updatedAt` supplied in the resource payload, rather than automatically recording each write. The example does not supply them. Maintain those fields if using timestamp-filtered lists; current-resource lists do not provide deletion notifications.
-
-Ordinary filters select resources by these defined parameters. Structured queries can express combinations and conditions on element values; see the running API documentation for `/query/submodels`. Adding arbitrary field names as list query parameters does not create a structured query.
+PUT replaces the complete Submodel. Later in this walkthrough you will change elements through separate API calls. Those calls do not update your local `submodel.json`. Before replacing the Submodel again, retrieve its current state and preserve the elements, values, and metadata you want to keep. Reusing the initial file would undo those later changes.
 
 ## Submodel Element Paths
 
@@ -213,15 +208,96 @@ curl -i -G http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ --data
 
 Keep URLs containing `$value`, `$metadata`, `$reference`, or `$path` in single quotes so the shell does not expand the dollar sign.
 
-## Delete the Example Submodel
+## Filtering and Pagination
 
-If continuing with the [AAS Repository walkthrough](../aas_repository/usage), postpone this cleanup until you finish using the Submodel.
+See [Pagination](../common/pagination) for `limit`, cursor handling, and the shared response structure. The examples below show this component's requests and filters.
+
+### Create a Second Submodel
+
+Add a second Submodel so you can try pagination with two resources. Save this as `second-submodel.json`:
+
+```json
+{
+  "modelType": "Submodel",
+  "id": "urn:example:submodel:2",
+  "idShort": "PumpNameplate"
+}
+```
+
+```bash
+curl -i -X POST http://localhost:8085/submodels -H 'Content-Type: application/json' --data-binary '@second-submodel.json'
+```
+
+Expect `201 Created`. Your example database now contains `MotorNameplateUpdated` and `PumpNameplate`.
+
+### Read One Submodel per Page
+
+Request the collection without filters so both Submodels are eligible. Set `limit=1` to return at most one Submodel in each response:
+
+```bash
+curl -i -G http://localhost:8085/submodels --data-urlencode 'limit=1'
+```
+
+Expect `200 OK`. The body contains one Submodel in `result` and a non-empty `paging_metadata.cursor` indicating that another page is available. Copy that cursor string into the next request:
+
+```bash
+curl -i -G http://localhost:8085/submodels --data-urlencode 'limit=1' --data-urlencode 'cursor=RETURNED_CURSOR'
+```
+
+Replace `RETURNED_CURSOR` with the value from the first response, without its surrounding JSON quotes. In a database containing only these two Submodels, the second response contains the other Submodel and has no next cursor. If additional Submodels exist, keep following the returned cursor until none is supplied.
+
+See [Limit and Cursor](../common/pagination.md#limit-and-cursor) for the general rules when adapting this example.
+
+### Filter the Collection
+
+Now select only the motor nameplate Submodel by its short name:
+
+```bash
+curl -i -G http://localhost:8085/submodels --data-urlencode 'idShort=MotorNameplateUpdated'
+```
+
+Expect `200 OK` with only `MotorNameplateUpdated` in `result`. `PumpNameplate` does not match the filter. There is no need to force pagination for this single match.
+
+| Parameter | Meaning |
+| --- | --- |
+| `idShort` | Plain short-name filter. |
+| `semanticId` | Base64URL-encoded semantic key-value string matched against `semanticId.keys[].value` by this implementation. |
+| `limit`, `cursor` | Page size and continuation cursor. |
+| `createdFrom`, `updatedFrom` | RFC 3339 lower bounds on administrative creation/update timestamps. |
+| `level`, `extent` | Representation controls described below. |
+
+For the example's semantic identifier, encode the string `urn:example:semantic:nameplate`, not the complete reference JSON:
+
+```bash
+curl -i -G http://localhost:8085/submodels --data-urlencode 'semanticId=dXJuOmV4YW1wbGU6c2VtYW50aWM6bmFtZXBsYXRl'
+```
+
+The decoded value is compared with semantic reference key values; this is not an equality comparison of an entire multi-key reference. This describes the current Go implementation; use the runtime contract when comparing it with the standardized semantic-reference parameter.
+
+Timestamp filters use `administration.createdAt` and `administration.updatedAt` supplied in the resource payload, rather than automatically recording each write. The example does not supply them. Maintain those fields if using timestamp-filtered lists; current-resource lists do not provide deletion notifications.
+
+Ordinary filters select resources by these defined parameters. Structured queries can express combinations and conditions on element values; see the running API documentation for `/query/submodels`. Adding arbitrary field names as list query parameters does not create a structured query.
+
+## Delete the Example Content
+
+Once you have finished, delete both example Submodels. If continuing with the [AAS Repository walkthrough](../aas_repository/usage), postpone deleting the motor nameplate until you finish using it. Consider every AAS/client that uses the same identifier before deleting shared content.
 
 ```bash
 curl -i -X DELETE http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ
+curl -i -X DELETE http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6Mg
 ```
 
-Expect `204 No Content`; the Submodel and its contained elements are deleted. Subsequent retrieval returns `404`. Consider every AAS/client that uses the same identifier before deleting shared content.
+Expect `204 No Content` for each existing Submodel. Deleting a Submodel also deletes its contained elements. Verify the motor nameplate is no longer available:
+
+```bash
+curl -i http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ
+```
+
+The expected `404 Not Found` confirms deletion. The example identifiers can now be used for a fresh walkthrough.
+
+## Encoding Your Own Identifiers
+
+Use the shared [Identifiers and Encoding](../common/encoding) guide for Bash and PowerShell commands. For resource URLs, encode the Submodel's `id`; keep element `idShortPath` values unencoded. For this implementation's `semanticId` filter, encode the semantic key-value string, such as `urn:example:semantic:nameplate`, rather than the complete reference JSON. Keep identifiers and reference key values in JSON bodies unencoded.
 
 ## Shared API Guidance
 
