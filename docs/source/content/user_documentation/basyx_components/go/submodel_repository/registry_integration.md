@@ -44,12 +44,6 @@ Set `externalUrl` to the client-facing Repository base URL, following [Advertise
 
 The generated descriptor includes the Submodel identifier, short name, semantic references, administrative information, and descriptive metadata. It does not contain `submodelElements` or their values.
 
-Each endpoint address appends `/submodels/{encodedSubmodelId}` to the configured external base URL. For the usage example it is `http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ`. The `1.0.11` Docker images used by the Compose setup label generated endpoints `SUBMODEL-3.0`; the pinned native source revision uses `SUBMODEL-3.2`. See [Version Scope](../common/registry_integration.md#version-scope).
-
-If refreshing an existing AAS Descriptor with no AAS endpoint, the implementation can also generate an AAS endpoint from the same external base URL. Ensure such URLs are reachable through your public routing; a standalone Submodel Repository does not expose an AAS `/shells` API.
-
-For existing resources and manually edited descriptors, follow [Existing Resources and Manual Changes](../common/registry_integration.md#existing-resources-and-manual-changes).
-
 ## Check the Integration
 
 1. Enable integration and restart the Repository. Configure a Submodel Registry for the same database and a different HTTP port, for example `8083`.
