@@ -12,7 +12,7 @@ Start the [Compose setup](setup), then check the connection:
 curl -i http://localhost:8085/health
 ```
 
-Continue when the response is HTTP `200` with `{"status":"UP"}`. The examples use port `8085` and an empty context path. If your configuration differs, replace `http://localhost:8085` throughout; include any context path, for example `http://localhost:8085/api/v3`. You can also inspect requests in [Swagger UI](http://localhost:8085/swagger).
+Continue when the response is HTTP `200` with `{"status":"UP"}`. The examples use port `8085` and an empty context path. If your configuration differs, replace `http://localhost:8085` throughout. Include any context path, for example `http://localhost:8085/api/v3`. You can also inspect requests in [Swagger UI](http://localhost:8085/swagger).
 
 Run commands from one working directory and save each JSON file there before the command that uses it. Use the filenames shown, including the `.json` extension, and save as UTF-8. No additional scripts or JSON command-line tools are needed.
 
@@ -67,7 +67,7 @@ curl -i -X POST http://localhost:8085/submodels -H 'Content-Type: application/js
 
 Expect `201 Created` and a JSON body containing `id: "urn:example:submodel:1"` and `idShort: "MotorNameplate"`. The Submodel is now stored in the Repository. Generating a Registry descriptor requires [Registry Integration](registry_integration) or explicit registration; neither is needed to continue here.
 
-If you repeat this step, `409 Conflict` means the visible identifier already exists. Continue with that resource only if it is your earlier example, or use different identifiers consistently throughout the walkthrough. The AAS Repository walkthrough uses the same Submodel identifier, so its content may already exist if both services share a database.
+If you repeat this step, `409 Conflict` means the visible identifier already exists. Continue with that resource only if it is your earlier example, or use different identifiers consistently throughout the walkthrough.
 
 ## Retrieve and Replace the Submodel
 

@@ -12,7 +12,7 @@ Start the [Compose setup](setup), then check the connection:
 curl -i http://localhost:8084/health
 ```
 
-Continue when the response is HTTP `200` with `{"status":"UP"}`. The examples use port `8084` and an empty context path. If your configuration differs, replace `http://localhost:8084` throughout; include any context path, for example `http://localhost:8084/api/v3`. You can also inspect requests in [Swagger UI](http://localhost:8084/swagger).
+Continue when the response is HTTP `200` with `{"status":"UP"}`. The examples use port `8084` and an empty context path. If your configuration differs, replace `http://localhost:8084` throughout. Include any context path, for example `http://localhost:8084/api/v3`. You can also inspect requests in [Swagger UI](http://localhost:8084/swagger).
 
 Run commands from one working directory and save each JSON file there before the command that uses it. Use the filenames shown, including the `.json` extension, and save as UTF-8. No additional scripts or JSON command-line tools are needed.
 
