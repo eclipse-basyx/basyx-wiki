@@ -41,6 +41,14 @@ Every endpoint requires `interface` and `protocolInformation`. Supported endpoin
 
 A descriptor must contain at least one of the AAS, Submodel, or AASX interfaces listed above. `MQTT-BROKER-3.1.1` and `EDC-PROTOCOL` may be added, but neither satisfies this requirement by itself.
 
+## Security Limitations in 1.0.11
+
+```{warning}
+The Company Lookup entry point in BaSyx Go 1.0.11 does not install the shared OIDC/ABAC runtime middleware. Supplying common `oidc.*` or `abac.*` settings therefore does not authenticate callers or authorize requests to this executable.
+```
+
+If access control is required for this release, enforce it at a trusted deployment boundary such as an authenticated API gateway or reverse proxy, and prevent clients from bypassing that boundary. This statement is scoped to the verified 1.0.11 entry point; check the implementation and release documentation again before assuming the same limitation for a later version. The [Runtime Security capability matrix](../common/security.md#supported-components-and-default-posture) distinguishes shared configuration from executable enforcement.
+
 ## API Endpoints
 
 The Company Lookup provides these main API endpoints:

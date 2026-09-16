@@ -1,6 +1,8 @@
 # Using Basic Discovery
 
-This walkthrough uses the unsecured [Compose setup](setup) at `http://localhost:8086`, with an empty context path. Save the JSON files in your working directory and run the commands in order against an example database. In Windows PowerShell, use `curl.exe` instead of `curl`. Include any configured context path in each URL.
+This walkthrough uses the unsecured, standalone [Compose setup](setup) at `http://localhost:8086`, with an empty context path. Save the JSON files in your working directory and run the commands in order against an example database. In Windows PowerShell, use `curl.exe` instead of `curl`. Include any configured context path in each URL.
+
+The requests below demonstrate standalone Discovery replacement and deletion. DTR changes the asset-link POST to append semantics and requires an existing descriptor; compare [Standalone and DTR Behavior](../digital_twin_registry/index.md#standalone-and-dtr-behavior). If Discovery is integrated with an AAS Registry, also read [Shared Registry Asset Identifiers](index.md#shared-registry-asset-identifiers) before changing mappings.
 
 Only the Discovery Service, PostgreSQL, and the Configuration Service are required. A Registry or Repository is needed only when continuing from the discovered identifier to a descriptor or AAS content.
 
@@ -98,6 +100,10 @@ The encoded value represents `{"name":"serialNumber","value":"SN-001"}`. Expect 
 
 ## Replace the Asset Links
 
+```{warning}
+This standalone POST removes the current linked asset-identifier rows before inserting standalone Discovery mapping rows. With Registry Discovery integration, removing previously shared rows can also remove entries from the AAS descriptor's visible `specificAssetIds`. It does not delete the descriptor or Repository content. See [Shared Registry Asset Identifiers](index.md#shared-registry-asset-identifiers).
+```
+
 Change the serial number in `asset-links.json` to `SN-002`, retaining the global asset identifier:
 
 ```json
@@ -117,6 +123,10 @@ curl -i http://localhost:8086/lookup/shells/dXJuOmV4YW1wbGU6YWFzOjE
 Expect `201 Created` for the replacement and `200 OK` for the read. A lookup by `SN-001` now returns an empty result; a lookup by `SN-002` finds the AAS. Global asset identifier lookup still finds it because that link was retained. Omitting a link from the replacement removes it from the registered set.
 
 ## Delete the Discovery Registration
+
+```{warning}
+In a Registry-integrated deployment, this deletion can remove linked specific-asset-ID rows that are also visible through the descriptor. It does not delete the descriptor or any Repository AAS/Submodel content. See [Shared Registry Asset Identifiers](index.md#shared-registry-asset-identifiers).
+```
 
 ```bash
 curl -i -X DELETE http://localhost:8086/lookup/shells/dXJuOmV4YW1wbGU6YWFzOjE

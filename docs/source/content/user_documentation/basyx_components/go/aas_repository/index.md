@@ -37,7 +37,7 @@ The Repository uses PostgreSQL. The BaSyx Configuration Service must initialize 
 
 ## Configuration
 
-See [General Configuration](../common/configuration) for server, database, and security settings. [Registry Integration](registry_integration) explains the component-specific integration flag and public endpoint generation.
+See [General Configuration](../common/configuration) for server and database settings. For authentication, authorization, supported executables, and policy persistence, see [Runtime Security](../common/security). [Registry Integration](registry_integration) explains the component-specific integration flag and public endpoint generation.
 
 ## API Documentation and Availability
 
@@ -59,13 +59,15 @@ When `server.contextPath` is configured, these locations are served below that c
 
 ### Availability Notes
 
-The standalone AAS Repository does not support the `/serialization` endpoint. For full environment import/export, use the AAS Environment's implemented `/serialization` and `/upload` APIs.
+The standalone AAS Repository does not support the `/serialization` endpoint. For full environment import/export, use the combined [AAS Environment](../aas_environment/index), which implements `/serialization` and `/upload`. Its Repository-to-Registry synchronization still depends on explicit integration flags; merely using the combined executable does not make every Repository write synchronize automatically.
 
 ## Related Documentation
 
 - [Setting Up the AAS Repository](setup)
 - [Using the AAS Repository](usage)
 - [Registry Integration](registry_integration)
+- [AAS Environment](../aas_environment/index)
+- [Runtime Security](../common/security)
 - [Submodel Repository](../submodel_repository/index)
 - [Common / Shared Features](../common/shared_features)
 

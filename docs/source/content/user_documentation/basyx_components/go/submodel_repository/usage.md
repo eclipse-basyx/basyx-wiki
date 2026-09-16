@@ -78,7 +78,7 @@ The request URL uses the encoded **Submodel identifier**, not its `idShort` or s
 | `urn:example:submodel:1` | `dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ` |
 | `urn:example:submodel:2` | `dXJuOmV4YW1wbGU6c3VibW9kZWw6Mg` |
 
-These values are already substituted into every example URL. Keep identifiers in JSON bodies unencoded. For your own identifiers, see [Encoding Your Own Identifiers](#encoding-your-own-identifiers).
+These values are already substituted into every example URL. Keep identifiers in JSON bodies unencoded. For your own identifiers, see [Encode Your Own Identifier](../common/encoding.md#encode-your-own-identifier).
 
 ```bash
 curl -i http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ
@@ -277,6 +277,12 @@ The decoded value is compared with semantic reference key values; this is not an
 Timestamp filters use `administration.createdAt` and `administration.updatedAt` supplied in the resource payload, rather than automatically recording each write. The example does not supply them. Maintain those fields if using timestamp-filtered lists; current-resource lists do not provide deletion notifications.
 
 Ordinary filters select resources by these defined parameters. Structured queries can express combinations and conditions on element values; see the running API documentation for `/query/submodels`. Adding arbitrary field names as list query parameters does not create a structured query.
+
+## Invoke an Operation
+
+Storing a Submodel Element with `modelType: Operation` defines the operation and its variables; it does not supply executable behavior. BaSyx Go 1.0.11 invokes an operation only when its `invocationDelegation` qualifier identifies a reachable delegation endpoint and that destination is explicitly trusted.
+
+Use `/invoke` for a synchronous response or `/invoke-async` to receive a status location and later retrieve the result. The [Operation Invocation and Delegation](operations) guide configures the trust boundary and demonstrates both routes with `5 + 3 = 8`.
 
 ## Delete the Example Content
 

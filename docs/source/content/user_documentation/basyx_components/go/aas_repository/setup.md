@@ -1,6 +1,8 @@
 # Setting Up the AAS Repository
-We provide example setups to get you started with the BaSyx Go Components on our [GitHub Repository](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples).
+We provide example setups to get you started with the BaSyx Go Components in the release-pinned [example directory](https://github.com/eclipse-basyx/basyx-go-components/tree/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/examples).
 But if you need to configure the service yourself, this page will guide you through.
+
+The Docker and native instructions on this page both target BaSyx Go **1.0.11**. Keep the Repository, Configuration Service, source checkout, and database schema aligned as described in [Version Scope](../common/deployment.md#version-scope).
 
 ## Using Docker Compose
 The easiest way to use and set up the AAS Repository is Docker Compose.
@@ -68,6 +70,10 @@ Use the same BaSyx release for every service sharing this database, including th
 
 ### Start and Check the Repository
 
+```{warning}
+This minimal local Compose file does not declare a named PostgreSQL volume. Do not rely on removing and recreating its containers to preserve data: an image-created anonymous volume is not automatically reused after `docker compose down`. Add a correctly mounted named volume before storing data that must survive, and migrate existing data explicitly rather than expecting a new volume declaration to copy it. See [Persistent State](../common/deployment.md#persistent-state).
+```
+
 Save the example as `docker-compose.yml`, then run:
 
 ```bash
@@ -87,9 +93,7 @@ Include any configured context path in every URL. For example, `SERVER_CONTEXTPA
 
 ### Access Rules and Trustlist Files (Secured Setup)
 
-For general handling of OIDC trustlist and ABAC access-rules files (config keys, env vars, startup behavior), see [Security Configuration Files (Common)](../common/configuration.md#security-files).
-
-For this component in Docker Compose, mount the security files into the container and configure `ABAC_ENABLED=true`, `ABAC_MODELPATH`, and `OIDC_TRUSTLISTPATH` if you enable ABAC.
+The local Compose example does not enable ABAC and is not a secured deployment. For this component, enable the supported middleware with `ABAC_ENABLED=true`, mount the access-rule and OIDC trust-list files, and configure their container paths. When `ABAC_POLICY_FILE_IMPORT` is omitted, the effective import mode is `if_missing`, so editing a mounted policy file and restarting does not replace an active policy already stored in PostgreSQL. Follow [Runtime Security](../common/security), especially [Policy Persistence and Restart Behavior](../common/security.md#policy-persistence-and-restart-behavior), before exposing the service.
 
 ## Using BaSyx Go Components without Docker
 If you need to run the AAS Repository without Docker, build the binary from source for your target platform.
@@ -99,7 +103,7 @@ We recommend using the Docker Images for production use-cases, as they are pre-c
 ```
 
 ### Prerequisites
-- [Go](https://go.dev/dl/) `1.27.1` or newer, as specified in the pinned revision's [`go.mod`](https://github.com/eclipse-basyx/basyx-go-components/blob/20e102a9bccad077f6a1b0ff7897c8a06f1e34ee/go.mod).
+- [Go](https://go.dev/dl/) `1.27.0` or a compatible newer toolchain, as specified by release 1.0.11's [`go.mod`](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/go.mod).
 - PostgreSQL 16 or newer, initialized by a Configuration Service built from the same source revision as the HTTP service.
 - [Git](https://git-scm.com/)
 
@@ -108,7 +112,10 @@ We recommend using the Docker Images for production use-cases, as they are pre-c
 Download the source code:
 ```bash
 git clone https://github.com/eclipse-basyx/basyx-go-components
+git -C basyx-go-components checkout v1.0.11
 ```
+
+Tag `v1.0.11` resolves to commit `81324eb3aad9d63baea93d3385bc9ca7e6a6a05a`. Initialize PostgreSQL with the Configuration Service and SQL assets from this same checkout.
 
 ### Building the Binary
 

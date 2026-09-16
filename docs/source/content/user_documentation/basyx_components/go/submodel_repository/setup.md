@@ -1,5 +1,8 @@
 # Setting Up the Submodel Repository
-We provide example setups to get you started with the BaSyx Go Components on our [GitHub Repository](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples).
+
+The Docker and native examples on this page target BaSyx Go Components `1.0.11`. Keep all BaSyx services that share a database on that release; [Version Scope](../common/deployment.md#version-scope) explains the separate application, source, database-schema, API, and metamodel versions.
+
+We provide example setups to get you started with the BaSyx Go Components in the [release-pinned examples directory](https://github.com/eclipse-basyx/basyx-go-components/tree/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/examples).
 But if you need to configure the service yourself, this page will guide you through.
 
 ## Using Docker Compose
@@ -66,6 +69,12 @@ services:
 
 Use the same BaSyx release for every service sharing this database, including the Configuration Service, here `1.0.11`.
 
+### Before the First Start
+
+This minimal Compose file does not declare a named PostgreSQL volume. Do not rely on container removal or recreation to preserve data. For durable local state, add the release-appropriate named-volume mount before creating data; adding one later does not migrate an existing anonymous volume. See [Persistent State](../common/deployment.md#persistent-state) for the PostgreSQL 18 mount path, lifecycle table, and safe cleanup guidance.
+
+The local example is unsecured: ABAC remains at its default `false` value. If you enable it, follow the [Runtime Security](../common/security) workflow for the trust list, access rules, and verification. The Submodel Repository's default policy import mode is `if_missing`: after an active policy exists in PostgreSQL, editing the mounted file and restarting does not replace that policy. Review [Policy Persistence and Restart Behavior](../common/security.md#policy-persistence-and-restart-behavior) before changing policy files.
+
 ### Start and Check the Repository
 
 Save the example as `docker-compose.yml`, then run the following command in the same directory:
@@ -88,7 +97,7 @@ The Compose example explicitly selects port `8085`. When using a context path, i
 
 ### Access Rules and Trustlist Files (Secured Setup)
 
-For general handling of OIDC trustlist and ABAC access-rules files (config keys, env vars, startup behavior), see [Security Configuration Files (Common)](../common/configuration.md#security-files).
+For the complete OIDC/ABAC workflow and policy lifecycle, see [Runtime Security](../common/security). For the configuration keys and file mounts, see [Security Configuration Files (Common)](../common/configuration.md#security-files).
 
 For this component in Docker Compose, mount the security files into the container and configure `ABAC_ENABLED=true`, `ABAC_MODELPATH`, and `OIDC_TRUSTLISTPATH` if you enable ABAC.
 
@@ -100,7 +109,7 @@ We recommend using the Docker Images for production use-cases, as they are pre-c
 ```
 
 ### Prerequisites
-- [Go](https://go.dev/dl/) `1.27.1` or newer, as specified in the pinned revision's [`go.mod`](https://github.com/eclipse-basyx/basyx-go-components/blob/20e102a9bccad077f6a1b0ff7897c8a06f1e34ee/go.mod).
+- [Go](https://go.dev/dl/) `1.27.0` or a compatible newer toolchain, as declared by release 1.0.11's [`go.mod`](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/go.mod).
 - PostgreSQL 16 or newer, initialized by a Configuration Service built from the same source revision as the HTTP service.
 - [Git](https://git-scm.com/)
 
@@ -109,13 +118,17 @@ We recommend using the Docker Images for production use-cases, as they are pre-c
 Download the source code:
 ```bash
 git clone https://github.com/eclipse-basyx/basyx-go-components
+cd basyx-go-components
+git checkout v1.0.11
 ```
+
+The `v1.0.11` tag selects commit [`81324eb3aad9d63baea93d3385bc9ca7e6a6a05a`](https://github.com/eclipse-basyx/basyx-go-components/commit/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a), matching the Docker images above.
 
 ### Building the Binary
 
-Change to the Submodel Repository service directory:
+From the repository root, change to the Submodel Repository service directory:
 ```bash
-cd basyx-go-components/cmd/submodelrepositoryservice
+cd cmd/submodelrepositoryservice
 ```
 
 #### Linux / macOS

@@ -49,6 +49,8 @@ curl -i -X POST http://localhost:8084/shells -H 'Content-Type: application/json'
 
 Expect `201 Created` and a JSON body containing `id: "urn:example:aas:1"` and `idShort: "MotorAAS"`. The AAS is now stored in the Repository. Generating a Registry descriptor requires [Registry Integration](registry_integration) or explicit registration; neither is needed to continue here.
 
+If you need to import an AAS together with referenced Submodels and Concept Descriptions from JSON, XML, or AASX instead of creating resources individually, use the combined [AAS Environment import workflow](../aas_environment/usage.md#import-an-environment).
+
 If you repeat this step, `409 Conflict` means the visible identifier already exists. Continue with that resource only if it is your earlier example, or use different identifiers consistently throughout the walkthrough.
 
 ## Retrieve and Replace the AAS
@@ -273,7 +275,7 @@ After the asset-information step above, the serial number is `SN-002`. The follo
 curl -i -G http://localhost:8084/shells --data-urlencode 'assetIds=eyJuYW1lIjoic2VyaWFsTnVtYmVyIiwidmFsdWUiOiJTTi0wMDIifQ'
 ```
 
-Expect your AAS in `result`. Searching for `SN-001` after changing it to `SN-002` would return no match. For your own asset filters, encode the complete JSON object using the [encoding commands](#encoding-your-own-identifiers). Use `{"name":"globalAssetId","value":"urn:example:asset:1"}` for the global asset identifier. Normal URL escaping is separate from Base64URL encoding; `--data-urlencode` handles it here.
+Expect your AAS in `result`. Searching for `SN-001` after changing it to `SN-002` would return no match. For your own asset filters, encode the complete JSON object using the [shared encoding commands](../common/encoding.md#encode-your-own-identifier). Use `{"name":"globalAssetId","value":"urn:example:asset:1"}` for the global asset identifier. Normal URL escaping is separate from Base64URL encoding; `--data-urlencode` handles it here.
 
 Timestamp filters use administrative timestamps supplied in the AAS payload. Writes do not automatically generate or overwrite `administration.createdAt` and `administration.updatedAt`; the example does not supply them. Current-resource lists do not report deletions. Ordinary list parameters select supported attributes; structured query expressions belong to `POST /query/shells` and are not arbitrary additional list parameters. Consult the running Swagger UI for the query schema in your component version.
 

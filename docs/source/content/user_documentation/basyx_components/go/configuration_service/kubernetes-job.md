@@ -21,7 +21,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: basyx-configuration
-          image: eclipsebasyx/basyxconfigurationservice-go:latest
+          image: eclipsebasyx/basyxconfigurationservice-go:1.0.11
           env:
             - name: POSTGRES_HOST
               value: postgres
@@ -62,6 +62,10 @@ stringData:
 
 Regular BaSyx workloads should start only after the Configuration Service Job completed successfully.
 
+```{warning}
+Job or hook completion orders new workloads; it is not proof that old workloads have stopped accessing the database. Before migrating an existing database, explicitly establish any required quiescence, make the required backup, and follow [Upgrading an existing database](operations.md#upgrading-an-existing-database).
+```
+
 Common approaches include:
 
 - Running the Job as part of a deployment pipeline before applying BaSyx service manifests.
@@ -74,8 +78,9 @@ Common approaches include:
 - Use `backoffLimit` to control how many retries Kubernetes should attempt.
 - Store database credentials in a Kubernetes `Secret` instead of plain environment variables.
 - Use the same BaSyx version or build for `basyxconfigurationservice` and the runtime services.
-- Avoid mutable image tags such as `latest` and `SNAPSHOT` for reproducible deployments. Pin exact image versions or image digests where possible.
-- If mutable-tag images are pulled fresh on restart, run the Configuration Service Job before DB-backed runtime workloads.
+- The example pins application release 1.0.11. Pin exact image versions or image digests for reproducible deployments.
 - Ensure PostgreSQL is reachable and ready before the Job runs.
 - Include the Job's pool in the PostgreSQL connection budget while it overlaps with existing workloads during installation or upgrades. Each runtime pod has a separate pool.
 - Check Job logs when initialization fails; errors include BaSyx error codes for troubleshooting.
+
+For the shared release, image, and persistent-state contract, see [Deployment, Versions, and Persistent State](../common/deployment.md).

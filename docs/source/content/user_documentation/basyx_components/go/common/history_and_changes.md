@@ -63,9 +63,39 @@ The response reconstructs the version valid at that time. At an exact update bou
 
 Submodel Element changes belong to the owning Submodel's history. Adding or deleting an element produces an `Updated` Submodel snapshot, not an independent element history stream. An element-only change through an AAS-scoped route does not itself change the AAS history.
 
-Historical reads are authorized at the route level. They do not apply current-resource ABAC filters or field redaction to stored snapshots. Grant access to `$history` only to callers permitted to read the complete retained snapshots; current-resource filtering does not restrict their contents. See the [implementation authorization notes](https://github.com/eclipse-basyx/basyx-go-components/blob/20e102a9bccad077f6a1b0ff7897c8a06f1e34ee/docu/user/aas_api_v3_2.md#security).
+Historical reads are authorized at the route level. They do not apply current-resource ABAC filters or field redaction to stored snapshots. Grant access to `$history` only to callers permitted to read the complete retained snapshots; current-resource filtering does not restrict their contents. See the [implementation authorization notes](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/docu/user/aas_api_v3_2.md#security).
 
 History increases storage use. `fullSnapshotInterval: 1` stores complete snapshots; larger intervals allow checkpoints and diffs while reads still reconstruct complete resources. Automatic history cleanup is not implemented, so `retentionDays` must remain `0`. See [General Configuration](configuration.md#history) for supported settings.
+
+## Database-wide History Guard
+
+`history.immutability: postgres_guarded` is a database compatibility decision,
+not a process-local switch. A service establishes the guard only when history
+is active (`api` or `audit`) and immutability is `postgres_guarded`. Setting
+that immutability value while `history.mode` is `off` does not enable it.
+
+The enabled state is stored in PostgreSQL and affects every participating
+process that uses the same BaSyx database. It is intentionally sticky: a later
+startup configured with `history.mode: off` or `history.immutability: none`
+does not downgrade an enabled database guard. Instead, the incompatible
+process can fail at startup. This remains true after restarting or replacing a
+container because the state belongs to the database.
+
+When diagnosing a guard conflict, inspect both sides:
+
+- the process's effective `history.mode` and `history.immutability`, including
+  environment-variable overrides; and
+- the guard state already persisted in the target PostgreSQL database, along
+  with which other services share that database.
+
+Align all processes with the intended guarded mode and take a verified backup
+before maintenance or upgrade work. Do not delete guard rows, disable database
+triggers, or reset the database as routine recovery; those actions can defeat
+the immutability guarantee or destroy retained history. See the
+[configuration caveat](configuration.md#history), [version scope](deployment.md#version-scope),
+and [upgrading an existing database](../configuration_service/operations.md#upgrading-an-existing-database).
+
+Implementation reference: [database history guard](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/internal/common/history/guard.go).
 
 ## Mutation Evidence
 
@@ -73,7 +103,7 @@ External evidence is independent of PostgreSQL history. With `history.evidence.e
 
 Enabling evidence requires a configured backend, bucket, and retention settings; setting the enable flag alone is insufficient. Evidence may contain snapshots or diffs and is intended for verification and recovery workflows. It does not enable the PostgreSQL historical-read API by itself. Preserve the receipt catalog as part of backup and recovery.
 
-Use the [evidence configuration reference](configuration.md#historyevidence) and the upstream [history and evidence guide](https://github.com/eclipse-basyx/basyx-go-components/blob/main/docu/user/aas_api_v3_2.md) for backend setup, verification, and recovery commands.
+Use the [evidence configuration reference](configuration.md#historyevidence) and the upstream [history and evidence guide](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/docu/user/aas_api_v3_2.md) for backend setup, verification, and recovery commands.
 
 ## Signed Reads
 
@@ -93,4 +123,4 @@ curl --fail-with-body -sS 'http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/
 
 Missing signing configuration produces an error rather than an unsigned fallback. Use a JWS verification library with a trusted public key or validated certificate chain to verify the signature before using the payload. Decoding the JWS alone does not verify it. A signed read attests the returned payload; mutation evidence records changes over time and is configured separately.
 
-Source: [AAS API v3.2 user guide](https://github.com/eclipse-basyx/basyx-go-components/blob/main/docu/user/aas_api_v3_2.md).
+Source: [AAS API v3.2 user guide](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/docu/user/aas_api_v3_2.md).

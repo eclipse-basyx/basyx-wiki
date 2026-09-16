@@ -12,6 +12,8 @@ Use the Repository to create, retrieve, and modify Submodel content. The [Submod
 
 A Submodel can exist independently of an AAS and can be referenced by multiple AASs. The [AAS Repository](../aas_repository/index) manages those references and supports AAS-scoped Submodel access. The standalone Submodel Repository addresses content directly by Submodel identifier.
 
+For one runtime that combines AAS, Submodel, Registry, and Discovery APIs, see the [AAS Environment](../aas_environment/index). Its Repository-to-Registry synchronization still depends on explicit integration settings; co-locating the APIs does not by itself enable synchronization.
+
 ## Main Capabilities
 
 - Create, retrieve, replace, and delete complete Submodels.
@@ -19,10 +21,13 @@ A Submodel can exist independently of an AAS and can be referenced by multiple A
 - Create, read, update, and delete individual Submodel Elements.
 - Read normal, value-only, metadata, reference, and path representations.
 - Update existing values or metadata through the corresponding PATCH operations.
+- Invoke modeled Operations synchronously or asynchronously when they have a configured delegation target; see [Operation Invocation and Delegation](operations).
 - Optionally synchronize descriptors through [Registry Integration](registry_integration).
 - Expose service self-description and runtime API documentation.
 
 See [Using the Submodel Repository](usage) for a walkthrough with Properties and a nested collection.
+
+A stored `Operation` describes its variables and other model metadata. It does not contain executable code. In BaSyx Go 1.0.11, execution requires an `invocationDelegation` qualifier and a trusted reachable delegation endpoint; the [operation guide](operations) demonstrates both invocation modes.
 
 ## Important Behavior
 
@@ -62,13 +67,15 @@ When `server.contextPath` is configured, these locations are served below that c
 
 ### Availability Notes
 
-The standalone `/serialization` route is not provided by this component. For full environment import/export, use the AAS Environment's implemented `/serialization` and `/upload` APIs. See the [Go API availability guide](https://github.com/eclipse-basyx/basyx-go-components/blob/main/docu/user/aas_api_v3_2.md).
+The standalone `/serialization` route is not provided by this component. For full environment import/export, use the AAS Environment's implemented `/serialization` and `/upload` APIs. See the release-pinned [Go API availability guide](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/docu/user/aas_api_v3_2.md).
 
 ## Related Documentation
 
 - [Setting Up the Submodel Repository](setup)
 - [Using the Submodel Repository](usage)
+- [Operation Invocation and Delegation](operations)
 - [Registry Integration](registry_integration)
+- [AAS Environment](../aas_environment/index)
 - [AAS Repository](../aas_repository/index)
 - [Common / Shared Features](../common/shared_features)
 
@@ -78,5 +85,6 @@ The standalone `/serialization` route is not provided by this component. For ful
 
 setup
 usage
+operations
 registry_integration
 ```

@@ -505,6 +505,19 @@ The DSN and database credentials are sensitive and should normally be supplied t
 
 ### `oidc` and `abac`
 
+These fields are shared configuration; their presence does not mean every
+executable installs runtime security middleware. The supported path is
+activated through `abac.enabled`. See the complete [Runtime Security capability
+matrix](security.md#supported-components-and-default-posture), including the
+[Company Lookup 1.0.11 exception](../company_lookup/index.md#security-limitations-in-1011).
+
+| Executable group | Shared middleware in 1.0.11 | Omitted `policyFileImport` |
+| --- | --- | --- |
+| Participating Repositories, Registries, Discovery, AAS Environment, and AASX File Server | Yes, when ABAC is enabled | `if_missing` |
+| Digital Twin Registry | Yes, when ABAC is enabled | `always` |
+| Company Lookup Service | No | Not applicable |
+| Configuration Service | Not applicable; one-shot database initializer | Not applicable |
+
 | Key | Default | Purpose |
 | --- | --- | --- |
 | `oidc.trustlistPath` | `config/trustlist.json` | JSON trustlist of accepted OIDC providers. |
@@ -515,6 +528,20 @@ The DSN and database credentials are sensitive and should normally be supplied t
 | `abac.managementApi.enabled` | `false` | Enables the protected API for managing the active ABAC policy at runtime. |
 
 If `abac.enabled` is `false`, the shared security setup is skipped. If it is `true`, the trustlist is required. `policyFileImport` determines whether the policy file is loaded on every start, only if the database has no active policy, or never. `policyScope` controls the database-backed ABAC policy namespace; use different scopes to isolate deployments that share a database, and share a scope only when services should intentionally use the same active policy.
+
+The startup modes have these exact effects:
+
+| Mode | Startup import and persisted-policy behavior |
+| --- | --- |
+| `always` | Import and activate `modelPath` on every startup, superseding the preceding active version after a successful import. |
+| `if_missing` | Import only when the effective scope has no active policy; otherwise continue using the active PostgreSQL policy. A file edit plus restart is therefore not sufficient once a policy exists. |
+| `never` | Never import `modelPath`; an existing active policy is required or startup fails closed. |
+
+An empty mode is service-specific: Digital Twin Registry resolves it to
+`always`; the other participating services resolve it to `if_missing`. See
+[Policy Persistence and Restart Behavior](security.md#policy-persistence-and-restart-behavior)
+for active/staged versions, management API conditions, and file-change
+behavior.
 
 When set, `policyScope` is trimmed, must not exceed 255 characters, and may contain ASCII letters, digits, `_`, `-`, `.`, and `:`.
 
@@ -591,6 +618,16 @@ History settings control API history, audit metadata, and optional external evid
 | `integrityAnchor.provider` | `none` | External integrity-anchor backend. Only `none` is currently implemented. |
 
 `external_anchor` cannot currently be used: it requires a non-`none` integrity-anchor provider, while no such provider is implemented yet.
+
+```{warning}
+`postgres_guarded` is not a process-local toggle. When history is active, a
+service using it establishes a database-wide guard in PostgreSQL. That guard is
+persistent and a later process configured without guarded immutability cannot
+simply reset it; an incompatible startup can fail. Merely setting
+`immutability: postgres_guarded` while `history.mode` is `off` does not
+establish the guard. Diagnose both the effective process configuration and the
+existing database state. See [Database-wide history guard](history_and_changes.md#database-wide-history-guard).
+```
 
 #### `history.evidence`
 
@@ -872,6 +909,10 @@ The shared configuration may reference these security-sensitive files:
 
 In containers, paths are resolved inside the container filesystem. Mount the files or their parent directory and point the YAML value or environment variable to the mounted path.
 
+For ABAC, mounting or editing `abac.modelPath` does not by itself replace an
+active database-backed policy. The effective `abac.policyFileImport` mode and
+policy scope decide whether startup imports that file. See the [policy lifecycle](security.md#policy-persistence-and-restart-behavior).
+
 ## Notes
 
 - The BaSyx Configuration Service mainly uses the `postgres` section.
@@ -882,4 +923,4 @@ In containers, paths are resolved inside the container filesystem. Mount the fil
 
 ## Related Usage Guides
 
-See [Validation](validation), [Registry Integration](registry_integration), and [History, Timestamps, and Signed Reads](history_and_changes) for workflows using these settings.
+See [Runtime Security](security), [Validation](validation), [Registry Integration](registry_integration), and [History, Timestamps, and Signed Reads](history_and_changes) for workflows using these settings.

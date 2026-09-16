@@ -63,11 +63,22 @@ metric interpretation, and backend integration.
 
 ## Shared Security Building Blocks
 
-The common configuration and security packages provide reusable building blocks for:
+The common packages provide reusable OIDC trust-list handling, ABAC policy
+configuration, claims mapping, and authorization/query filtering. Actual
+enforcement depends on the executable installing that middleware; accepting
+the common configuration fields does not prove support. In particular,
+Company Lookup does not install it in 1.0.11, while the Configuration Service
+is a one-shot initializer rather than a protected runtime API.
 
-- OIDC trustlist-based issuer configuration (`oidc.trustlistPath`)
-- ABAC enablement and model configuration (`abac.*`)
-- startup security middleware setup that reads trustlist / access-rules files when ABAC is enabled
+When ABAC is enabled in a participating service, the trust list controls token
+validation and the active database-backed policy controls authorization. A
+mounted access-rule file is only an import source: with the usual
+`if_missing` mode, editing it and restarting does not replace an already active
+policy.
+
+See [Runtime Security](security) for the capability matrix, complete request
+flow, policy lifecycle, and a verified local example. Keep the canonical field
+definitions in [General Configuration](configuration.md#oidc-and-abac).
 
 ## Shared PostgreSQL Configuration Pattern
 

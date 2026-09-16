@@ -232,7 +232,7 @@ path segments.
 ## Examples and Helm
 
 The [BaSyx Go observability
-example](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxObservabilityExample)
+example](https://github.com/eclipse-basyx/basyx-go-components/tree/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/examples/BaSyxObservabilityExample)
 provides a local development stack with an AAS Environment, BaSyx Web UI,
 OpenTelemetry Collector, Tempo, Loki, Alloy, and Grafana. It verifies trace
 and metric export, structured-log ingestion, trace-to-log correlation, and

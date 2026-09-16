@@ -1,6 +1,8 @@
 # Setting Up the Digital Twin Registry
-We provide example setups to get you started with the BaSyx Go Components on our [GitHub Repository](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples).
+We provide example setups to get you started with the BaSyx Go Components in the [release 1.0.11 examples](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.0.11/examples).
 But if you need to configure the service yourself, this page will guide you through.
+
+The Docker and native examples on this page target BaSyx Go application release `1.0.11`. Keep all BaSyx services, source assets, and database initialization at that release; see [Version Scope](../common/deployment.md#version-scope).
 
 ## Using Docker Compose
 The easiest way to use and set up the Digital Twin Registry is Docker Compose.
@@ -57,6 +59,7 @@ services:
       - POSTGRES_PASSWORD=admin123
       - POSTGRES_DBNAME=basyxTestDB
       - ABAC_ENABLED=false
+      - GENERAL_ENABLECUSTOMMIDDLEWAREHEADERINJECTION=false
     ports:
       - "5004:5004"
     depends_on:
@@ -65,9 +68,11 @@ services:
 ```
 *docker-compose.yml including PostgreSQL 18, the BaSyx Configuration Service, and BaSyx Go Digital Twin Registry*
 
-Use the same BaSyx release for every service sharing this database, including the Configuration Service. These Compose examples select `1.0.11`; avoid mixing them with `SNAPSHOT` images. See [Version Scope](../common/registry_integration.md#version-scope) for the implementation revision used to check the usage guides.
+Use the same BaSyx release for every service sharing this database, including the Configuration Service. These Compose examples select `1.0.11`; avoid mixing them with `SNAPSHOT` images.
 
 ### Start and Check the Service
+
+This minimal example does not declare a named PostgreSQL volume. Container recreation can therefore leave a new database container attached to different storage and make existing data appear lost. Add the [version-correct named volume](../common/deployment.md#persistent-state) before creating data when persistence is required; adding one later does not migrate data from an existing anonymous volume.
 
 Save the example as `docker-compose.yml`, then run these commands in the same directory:
 
@@ -82,11 +87,13 @@ The Configuration Service runs once and exits with code `0`. The HTTP service st
 
 In Windows PowerShell, use `curl.exe` instead of `curl`. Open [Swagger UI](http://localhost:5004/swagger) to inspect the API. Include any configured `server.contextPath` in health, Swagger, and API URLs.
 
-For a secured setup example (including Keycloak), see `examples/BaSyxDigitalTwinRegistryExample`.
+For a secured setup example (including Keycloak), see [`examples/BaSyxDigitalTwinRegistryExample`](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.0.11/examples/BaSyxDigitalTwinRegistryExample). Before enabling custom `Edc-Bpn` header injection, read the [Edc-Bpn Trust Boundary](index.md#edc-bpn-trust-boundary); an ordinary deployment must not trust a caller-supplied identity header.
 
 ### Access Rules and Trustlist Files (Secured Setup)
 
-For general handling of OIDC trustlist and ABAC access-rules files (config keys, env vars, startup behavior), see [Security Configuration Files (Common)](../common/configuration.md#security-files).
+The local Compose example is unsecured: `ABAC_ENABLED=false`, and custom header injection is explicitly disabled. Security-related settings or mounted files do not secure the service unless the OIDC/ABAC middleware is enabled and configured with a matching policy. Follow [Runtime Security](../common/security) for the complete workflow and [Security Configuration Files](../common/configuration.md#security-files) for the field reference.
+
+For DTR, an omitted `abac.policyFileImport` defaults to `always`: the access-rules file is imported on every startup and supersedes the active database policy. Read [Policy Persistence and Restart Behavior](../common/security.md#policy-persistence-and-restart-behavior) before editing the file or restarting the service.
 
 For the Digital Twin Registry specifically, these paths are resolved inside the container. In Docker Compose, mount the files (or a folder containing them) into the container and point the environment variables to the mounted paths.
 
@@ -112,15 +119,18 @@ We recommend using the Docker Images for production use-cases, as they are pre-c
 ```
 
 ### Prerequisites
-- [Go](https://go.dev/dl/) `1.27.1` or newer, as specified in the pinned revision's [`go.mod`](https://github.com/eclipse-basyx/basyx-go-components/blob/20e102a9bccad077f6a1b0ff7897c8a06f1e34ee/go.mod).
+- [Go](https://go.dev/dl/) `1.27.0` or a compatible newer toolchain, as specified in release 1.0.11's [`go.mod`](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/go.mod).
 - PostgreSQL 16 or newer, initialized by a Configuration Service built from the same source revision as the HTTP service.
 - [Git](https://git-scm.com/)
 
 ### Cloning the Repository
 ```bash
-git clone https://github.com/eclipse-basyx/basyx-go-components
-git -C basyx-go-components checkout 20e102a9bccad077f6a1b0ff7897c8a06f1e34ee
+git clone https://github.com/eclipse-basyx/basyx-go-components.git
+git -C basyx-go-components checkout v1.0.11
+git -C basyx-go-components rev-parse HEAD
 ```
+
+The final command must print `81324eb3aad9d63baea93d3385bc9ca7e6a6a05a`. The tag is [release `v1.0.11`](https://github.com/eclipse-basyx/basyx-go-components/releases/tag/v1.0.11), and the expected revision is the [pinned commit](https://github.com/eclipse-basyx/basyx-go-components/tree/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a).
 
 ### Building the Binary
 

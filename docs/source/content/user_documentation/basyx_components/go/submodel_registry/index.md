@@ -32,7 +32,7 @@ A typical deployment uses both components:
 
 The Registry and Repository do not have to run in the same process or at the same network location. This separation allows one Registry to advertise Submodels provided by multiple services or organizations.
 
-Alternatively, the BaSyx AAS Environment combines the Submodel Registry and Submodel Repository capabilities in a single component.
+Alternatively, the [BaSyx AAS Environment](../aas_environment/index) combines the Submodel Registry and Submodel Repository capabilities in a single component.
 
 See [Using the Submodel Registry](usage) for a walkthrough from descriptor registration to lookup, update, and deletion.
 
@@ -85,7 +85,7 @@ The Registry uses PostgreSQL and expects the shared BaSyx database schema to be 
 
 ## Configuration
 
-See [General Configuration](../common/configuration) for the configuration parameters supported by BaSyx Go components.
+See [General Configuration](../common/configuration) for server and database settings. For supported authentication, authorization, and policy persistence, see [Runtime Security](../common/security).
 
 ## API Documentation
 
@@ -108,6 +108,8 @@ When `server.contextPath` is configured, both locations are served below that co
 
 - [Setting Up the Submodel Registry](setup)
 - [Using the Submodel Registry](usage)
+- [AAS Environment](../aas_environment/index)
+- [Runtime Security](../common/security)
 - [General Configuration](../common/configuration)
 - [Common / Shared Features](../common/shared_features)
 - [Swagger UI Docs](../common/swagger)

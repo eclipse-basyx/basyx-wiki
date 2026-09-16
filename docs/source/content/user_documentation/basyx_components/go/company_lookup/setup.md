@@ -1,6 +1,8 @@
 # Setting Up the Company Lookup
-We provide example setups to get you started with the BaSyx Go Components in our [GitHub repository](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxCompanyLookup).
+We provide example setups to get you started with the BaSyx Go Components in the release-pinned [Company Lookup example](https://github.com/eclipse-basyx/basyx-go-components/tree/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/examples/BaSyxCompanyLookup).
 If you need to configure the service yourself, this page will guide you through the process.
+
+The Docker and native instructions on this page both target BaSyx Go **1.0.11**. Keep the Company Lookup, Configuration Service, source checkout, and database schema aligned as described in [Version Scope](../common/deployment.md#version-scope).
 
 ## Using Docker Compose
 The easiest way to set up the Company Lookup is with Docker Compose.
@@ -72,6 +74,12 @@ Use the same BaSyx release for every service sharing this database, including th
 
 ### Start and Check the Service
 
+```{warning}
+The 1.0.11 Company Lookup executable does not install the shared OIDC/ABAC middleware. Common `oidc.*` or `abac.*` settings do not secure it. Put required access control at a trusted deployment boundary and prevent direct bypass; read [Security Limitations in 1.0.11](index.md#security-limitations-in-1011) before exposing this service.
+```
+
+This minimal local Compose file also does not declare a named PostgreSQL volume. An image-created anonymous volume is not automatically reused after `docker compose down`; container recreation can therefore make the database appear empty. Add a correctly mounted named volume before storing persistent data, and explicitly migrate any existing database rather than expecting a new volume declaration to copy it. See [Persistent State](../common/deployment.md#persistent-state).
+
 Save the example as `docker-compose.yml`, then run these commands in the same directory:
 
 ```bash
@@ -95,15 +103,17 @@ We recommend using the Docker Images for production use-cases, as they are pre-c
 ```
 
 ### Prerequisites
-- [Go](https://go.dev/dl/) `1.27.1` or newer, as specified in the pinned revision's [`go.mod`](https://github.com/eclipse-basyx/basyx-go-components/blob/20e102a9bccad077f6a1b0ff7897c8a06f1e34ee/go.mod).
+- [Go](https://go.dev/dl/) `1.27.0` or a compatible newer toolchain, as specified by release 1.0.11's [`go.mod`](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/go.mod).
 - PostgreSQL 16 or newer, initialized by a Configuration Service built from the same source revision as the HTTP service.
 - [Git](https://git-scm.com/)
 
 ### Cloning the Repository
 ```bash
 git clone https://github.com/eclipse-basyx/basyx-go-components
-git -C basyx-go-components checkout 20e102a9bccad077f6a1b0ff7897c8a06f1e34ee
+git -C basyx-go-components checkout v1.0.11
 ```
+
+Tag `v1.0.11` resolves to commit `81324eb3aad9d63baea93d3385bc9ca7e6a6a05a`. Initialize PostgreSQL with the Configuration Service and SQL assets from this same checkout.
 
 ### Building the Binary
 

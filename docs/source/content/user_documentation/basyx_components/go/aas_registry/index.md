@@ -33,7 +33,7 @@ A typical deployment uses both components:
 
 The Registry and Repository do not have to run in the same process or at the same network location. This separation allows one Registry to advertise AASs provided by multiple services or organizations.
 
-Alternatively, the BaSyx AAS Environment combines the AAS Registry and AAS Repository capabilities in a single component.
+Alternatively, the [BaSyx AAS Environment](../aas_environment/index) combines the AAS Registry and AAS Repository capabilities in a single component.
 
 See [Using the AAS Registry](usage) for a walkthrough from descriptor registration to lookup, update, and deletion.
 
@@ -86,9 +86,13 @@ Bulk creation, update, and deletion are asynchronous and atomic: if a descriptor
 
 The Registry uses PostgreSQL and expects the shared BaSyx database schema to be initialized and migrated by the BaSyx Configuration Service. The Registry validates the schema during startup and does not initialize it itself. See [Setting Up the AAS Registry](setup) for the required startup order.
 
+### Shared Specific Asset Identifiers
+
+When AAS Registry writes participate in configured Discovery integration, or when the combined Digital Twin Registry is used, descriptor `specificAssetIds` and Discovery can refer to shared mapping rows. Discovery replacement or deletion can then change the specific asset identifiers visible through a descriptor. This is conditional behavior, not a consequence of merely putting independent services on the same PostgreSQL server. See [Shared Registry Asset Identifiers](../basic_discovery/index.md#shared-registry-asset-identifiers) for the affected rows and resources that are not deleted.
+
 ## Configuration
 
-See [General Configuration](../common/configuration) for the configuration parameters supported by BaSyx Go components.
+See [General Configuration](../common/configuration) for server and database settings. For supported authentication, authorization, and policy persistence, see [Runtime Security](../common/security).
 
 ## API Documentation
 
@@ -111,6 +115,8 @@ When `server.contextPath` is configured, both locations are served below that co
 
 - [Setting Up the AAS Registry](setup)
 - [Using the AAS Registry](usage)
+- [AAS Environment](../aas_environment/index)
+- [Runtime Security](../common/security)
 - [General Configuration](../common/configuration)
 - [Common / Shared Features](../common/shared_features)
 - [Swagger UI Docs](../common/swagger)

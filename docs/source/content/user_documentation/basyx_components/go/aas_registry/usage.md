@@ -2,6 +2,10 @@
 
 This walkthrough uses the unsecured [Docker Compose setup](setup) at `http://localhost:8082` with an empty context path. Run the examples in order against an example database. Save the JSON files in your working directory. The curl commands are single-line commands usable in Bash; in Windows PowerShell, invoke `curl.exe` instead of `curl`.
 
+```{note}
+In a Registry deployment with Discovery integration enabled, writes to a descriptor's `specificAssetIds` can share mapping rows with Discovery. Later Discovery replacement or deletion can therefore affect the values visible in that descriptor. Review [Shared Registry Asset Identifiers](../basic_discovery/index.md#shared-registry-asset-identifiers) before maintaining these fields. This warning does not apply merely because unrelated Registry and Discovery processes use the same PostgreSQL server.
+```
+
 The descriptor endpoints below use `example.com` as placeholders. Replace them with Repository URLs reachable by the clients that will use the descriptors.
 
 ## Register an AAS Descriptor
@@ -142,7 +146,7 @@ Use `POST /query/shell-descriptors` for structured searches. Save this query as 
 curl -i -X POST 'http://localhost:8082/query/shell-descriptors?limit=10' -H 'Content-Type: application/json' --data-binary '@query.json'
 ```
 
-Expect `200 OK` with a paged descriptor result. String values in the query JSON are unencoded. For subsequent pages, follow [pagination for query requests](../common/pagination.md#keep-the-same-search). See the [query language examples](https://github.com/eclipse-basyx/basyx-go-components/blob/main/docu/query_language/examples.md) for combinations and nested descriptor filters, and the running Swagger UI for the installed version's contract.
+Expect `200 OK` with a paged descriptor result. String values in the query JSON are unencoded. For subsequent pages, follow [pagination for query requests](../common/pagination.md#keep-the-same-search). See the release-pinned [query language examples](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/docu/query_language/examples.md) for combinations and nested descriptor filters, and the running Swagger UI for the installed version's contract.
 
 ## Bulk Operations
 

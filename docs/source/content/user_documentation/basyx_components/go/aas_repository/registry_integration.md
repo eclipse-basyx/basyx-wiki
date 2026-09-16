@@ -2,6 +2,8 @@
 
 The standalone AAS Repository can synchronize AAS Descriptors when Repository resources change. Enable this when clients should discover Repository content through the [AAS Registry](../aas_registry/index) without maintaining every descriptor manually.
 
+For a single runtime that exposes both Repository and Registry APIs, see the [AAS Environment](../aas_environment/index). The same integration flags remain explicit there; co-locating the APIs does not by itself enable descriptor synchronization.
+
 ## Shared Behavior
 
 See [Repository-to-Registry Integration](../common/registry_integration) for database prerequisites, transaction behavior, public URL configuration, and handling existing data.
@@ -61,3 +63,5 @@ curl -i http://localhost:8082/shell-descriptors/dXJuOmV4YW1wbGU6YWFzOjE
 Expect `200 OK` with the generated descriptor. Check `endpoints[].protocolInformation.href` from the client's network location. After adding a Submodel through the [AAS-scoped usage example](usage.md#aas-scoped-submodel-access), retrieve the AAS Descriptor again and follow each `submodelDescriptors[].endpoints[].protocolInformation.href`. Expect `200 OK` with the Submodel content, not merely a successful descriptor lookup. Then delete the example content and confirm the descriptor is absent.
 
 See [General Configuration](../common/configuration.md#general) and [AAS Registry Usage](../aas_registry/usage) for configuration keys and descriptor requests.
+
+Release-specific behavior in this guide follows the pinned 1.0.11 [Repository-to-Registry synchronization reference](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/docu/user/aas_api_v3_2.md#repository-to-registry-synchronization).

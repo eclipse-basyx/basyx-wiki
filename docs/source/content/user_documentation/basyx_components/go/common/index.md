@@ -5,8 +5,10 @@
 This section documents features and configuration aspects that are implemented in shared BaSyx Go code and reused by multiple components (for example Swagger/OpenAPI exposure, common configuration handling, and shared runtime helpers).
 
 ## Contents
+* [Deployment, Versions, and Persistent State](deployment) — choose matching application, source, schema, and toolchain versions; then preserve database state across container lifecycles.
+* [Runtime Security](security) — follow the OIDC and ABAC workflow, policy lifecycle, and security troubleshooting path.
+* [General Configuration](configuration) — look up the canonical YAML settings and environment-variable mappings.
 * [Swagger UI Docs](swagger)
-* [General Configuration](configuration)
 * [Common / Shared Features](shared_features)
 * [Observability](observability)
 * [Pagination](pagination)
@@ -22,6 +24,8 @@ This section documents features and configuration aspects that are implemented i
 :hidden:
 :maxdepth: 1
 
+deployment
+security
 swagger
 configuration
 shared_features

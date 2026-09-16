@@ -14,7 +14,7 @@ The Repository does not POST descriptors to a remote Registry URL. The Registry 
 | --- | --- | --- |
 | Standalone AAS Repository | `general.aasRegistryIntegration: true` | Maintains AAS Descriptors and applicable embedded Submodel Descriptors. It does not create standalone Submodel Registry entries under this flag. |
 | Standalone Submodel Repository | `general.submodelRegistryIntegration: true` | Maintains standalone Submodel Descriptors and applicable embedded descriptors in existing AAS Descriptors. |
-| Composed AAS Environment | AAS and/or Submodel integration flags | Enables the corresponding integration within the composed service. |
+| [Composed AAS Environment](../aas_environment/index) | AAS and/or Submodel integration flags | Enables the corresponding integration within the composed service. |
 
 Integration is disabled by default. The standalone AAS Repository rejects the Submodel flag; the standalone Submodel Repository rejects the AAS flag. Follow the component guide for the exact lifecycle effects.
 
@@ -34,7 +34,7 @@ general:
 
 Creating `urn:example:aas:1` then advertises an endpoint such as `http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE`. Use `localhost` only when clients reach the Repository on their own machine. Behind a reverse proxy, advertise the public URL and path.
 
-Generated Submodel endpoints append `/submodels/{id}` to the same base URL. A standalone AAS Repository does not serve that root route. When synchronizing embedded Submodel Descriptors, provide public routing to a Submodel Repository sharing the database, as in the combined example below, or use an AAS Environment.
+Generated Submodel endpoints append `/submodels/{id}` to the same base URL. A standalone AAS Repository does not serve that root route. When synchronizing embedded Submodel Descriptors, provide public routing to a Submodel Repository sharing the database, as in the combined example below, or use the [AAS Environment setup](../aas_environment/setup).
 
 ## Existing Resources and Manual Changes
 
@@ -45,6 +45,8 @@ Plan explicit registration or reconciliation for existing data. Generated update
 ## Combined Compose Example
 
 This local example runs both Repositories and both Registries against one database. A reverse proxy exposes both Repository APIs at `http://localhost:8080`, which both Repositories advertise in generated descriptors. The direct Repository ports remain available for the usage walkthroughs.
+
+The example pins every BaSyx image to release `1.0.11`, matching the shared [Version Scope](deployment.md#version-scope). Its PostgreSQL 18 service intentionally remains a minimal local example without a declared volume. Before storing data that must survive container replacement, add a named volume mounted at `/var/lib/postgresql`; adding one later does not migrate an existing anonymous volume. Review [Persistent State](deployment.md#persistent-state) before the first startup.
 
 Save this as `docker-compose.yml` in a new directory. Run it as one Compose project; do not also start the separate setup examples on the same host ports. Docker with the Compose plugin and curl are required.
 
@@ -185,4 +187,4 @@ To check standalone Submodel registration, use the [Submodel Repository walkthro
 
 Use the [AAS Repository integration walkthrough](../aas_repository/registry_integration.md#check-the-integration) or [Submodel Repository integration walkthrough](../submodel_repository/registry_integration.md#check-the-integration) to enable the flag, create a resource, retrieve its descriptor, and verify deletion. These pages retain the resource-specific configuration and lifecycle tables.
 
-Source: [synchronization behavior](https://github.com/eclipse-basyx/basyx-go-components/blob/main/docu/user/aas_api_v3_2.md#repository-to-registry-synchronization).
+Source: release-pinned [synchronization behavior](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/docu/user/aas_api_v3_2.md#repository-to-registry-synchronization).
