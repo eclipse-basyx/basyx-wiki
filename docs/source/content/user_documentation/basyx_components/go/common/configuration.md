@@ -584,7 +584,7 @@ Each `claimMappings` entry contains:
 | `aasxMaxPartCount` | `10000` | Maximum number of non-directory entries in an AASX package. |
 | `aasxMaxOPCMetadataSizeBytes` | `16777216` | Maximum combined expanded size of AASX OPC metadata. |
 | `aasxMaxPartExpandedSizeBytes` | `134217728` | Maximum expanded size of one AASX payload part. |
-| `aasxMaxTotalExpandedSizeBytes` | `134217728` | Maximum combined expanded size of all AASX payload parts. |
+| `aasxMaxTotalExpandedSizeBytes` | `536870912` | Maximum combined expanded size of all AASX payload parts. |
 | `aasxMaxThumbnailSizeBytes` | `16777216` | Maximum expanded size of an AASX thumbnail. |
 | `aasPreconfigPaths` | `[]` | AAS Environment startup import sources. Supports files or folders with `.aasx`, `.json`, or `.xml` files. |
 | `bulkBatchLimit` | `1000` | Maximum row count per generated bulk SQL statement. Must be greater than `0`. |
@@ -741,7 +741,7 @@ general:
   aasxMaxPartCount: 10000
   aasxMaxOPCMetadataSizeBytes: 16777216
   aasxMaxPartExpandedSizeBytes: 134217728
-  aasxMaxTotalExpandedSizeBytes: 134217728
+  aasxMaxTotalExpandedSizeBytes: 536870912
   aasxMaxThumbnailSizeBytes: 16777216
   aasPreconfigPaths: []
   bulkBatchLimit: 1000
@@ -827,7 +827,7 @@ GENERAL_UPLOADMAXSIZEBYTES=134217728
 GENERAL_AASXMAXPARTCOUNT=10000
 GENERAL_AASXMAXOPCMETADATASIZEBYTES=16777216
 GENERAL_AASXMAXPARTEXPANDEDSIZEBYTES=134217728
-GENERAL_AASXMAXTOTALEXPANDEDSIZEBYTES=134217728
+GENERAL_AASXMAXTOTALEXPANDEDSIZEBYTES=536870912
 GENERAL_AASXMAXTHUMBNAILSIZEBYTES=16777216
 GENERAL_BULK_BATCH_LIMIT=1000
 SWAGGER_ENABLED=true

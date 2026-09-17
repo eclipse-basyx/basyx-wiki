@@ -13,12 +13,14 @@ One AAS Environment process provides:
 
 - an [AAS Repository](../aas_repository/index) for AAS content;
 - a [Submodel Repository](../submodel_repository/index) for Submodels and Submodel Elements;
-- a Concept Description Repository for Concept Description content;
+- a [Concept Description Repository](../concept_description_repository/index) for Concept Description content;
 - an [AAS Registry](../aas_registry/index) and [Submodel Registry](../submodel_registry/index) for endpoint descriptors;
 - [Basic Discovery](../basic_discovery/index) for asset-identifier-to-AAS-identifier mappings;
 - `/upload` and `/serialization` for whole-environment import and export.
 
 All of these API areas are routes of the same runtime and use shared PostgreSQL persistence. Registry descriptors remain different resources from Repository content, and Discovery mappings remain different from both. Use the linked standalone component pages for detailed CRUD and query semantics; the routes behave as composed API areas here rather than as network calls between internal services.
+
+Environment upload parses an AASX package into model content and supplementary files; serialization creates an environment representation from stored content. It does not expose the package-oriented `/packages` API. Use the standalone [AASX File Server](../aasx_file_server/index) when clients must store, list, download, replace, or delete complete AASX package files by package identifier.
 
 ```{mermaid}
 flowchart LR

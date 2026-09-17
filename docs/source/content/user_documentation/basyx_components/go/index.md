@@ -14,6 +14,8 @@ Repositories store the AAS model content that clients read and change. Registrie
 | Use AAS, Submodel, Concept Description, Registry, Discovery, upload, and serialization APIs in one runtime | AAS Environment | AAS, Submodel, and Concept Description content; AAS and Submodel descriptors; asset-identifier mappings | PostgreSQL initialized by the matching Configuration Service | Repository-to-Registry synchronization is controlled by explicit flags; Discovery is included | [AAS Environment](aas_environment/index) |
 | Store and modify AAS content | AAS Repository | AAS content and its references to Submodels | PostgreSQL initialized by the matching Configuration Service | Can maintain AAS Registry descriptors in a shared database when Registry integration is enabled | [AAS Repository](aas_repository/index) |
 | Store and modify Submodel content | Submodel Repository | Submodels and Submodel Elements | PostgreSQL initialized by the matching Configuration Service | Can maintain Submodel Registry descriptors in a shared database when Registry integration is enabled | [Submodel Repository](submodel_repository/index) |
+| Store and expose Concept Descriptions independently | Concept Description Repository | Concept Description content | PostgreSQL initialized by the matching Configuration Service | The AAS Environment provides the same API area when a combined runtime is preferred | [Concept Description Repository](concept_description_repository/index) |
+| Store, list, download, replace, and delete AASX packages | AASX File Server | Complete AASX package files and package metadata | PostgreSQL initialized by the matching Configuration Service | Package AAS identifiers can be used for list filtering; package contents are not imported into Repositories | [AASX File Server](aasx_file_server/index) |
 | Advertise where AAS content is available | AAS Registry | AAS Descriptors and AAS-scoped Submodel Descriptors, not Repository content | PostgreSQL initialized by the matching Configuration Service | Can expose descriptors maintained by an integrated AAS Repository; Discovery coupling is configuration-dependent | [AAS Registry](aas_registry/index) |
 | Advertise independently managed Submodels | Submodel Registry | Standalone Submodel Descriptors, not Submodel content | PostgreSQL initialized by the matching Configuration Service | Can expose descriptors maintained by an integrated Submodel Repository | [Submodel Registry](submodel_registry/index) |
 | Find AAS identifiers from global or specific asset identifiers | Basic Discovery | Asset-identifier-to-AAS-identifier mappings, not descriptors or Repository content | PostgreSQL initialized by the matching Configuration Service | Can share mapping data with an AAS Registry or Digital Twin Registry configured for Discovery integration | [Basic Discovery](basic_discovery/index) |
@@ -23,16 +25,14 @@ Repositories store the AAS model content that clients read and change. Registrie
 
 For separate Repository and Registry processes, read [Repository-to-Registry Integration](common/registry_integration) before enabling synchronization. The integration writes descriptor tables in their shared database; merely starting both HTTP services does not connect them.
 
-## Additional Components
+## Additional Component
 
-The following components are part of the 1.0.11 source release but do not yet have complete walkthroughs in this wiki:
+The following component is part of the 1.0.11 source release but does not yet have a complete walkthrough in this wiki:
 
-- **Concept Description Repository** stores and serves Concept Description content. Inspect its release-pinned [source and configuration](https://github.com/eclipse-basyx/basyx-go-components/tree/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/cmd/conceptdescriptionrepositoryservice) and [OpenAPI definition](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/cmd/conceptdescriptionrepositoryservice/openapi.yaml). The [AAS Environment](aas_environment/index) provides Concept Description access together with the other AAS APIs; see its release-pinned [minimal example](https://github.com/eclipse-basyx/basyx-go-components/tree/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/examples/BaSyxMinimalExample).
-- **AASX File Server** stores and serves AASX packages. Use the release-pinned [service source](https://github.com/eclipse-basyx/basyx-go-components/tree/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/cmd/aasxfileserverservice), [OpenAPI definition](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/cmd/aasxfileserverservice/openapi.yaml), and [example](https://github.com/eclipse-basyx/basyx-go-components/tree/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/examples/BaSyxAASXFileServerExample).
 - **DPP API** creates, retrieves, searches, updates, and deletes Digital Product Passport documents and their data elements. Use the release-pinned [service source](https://github.com/eclipse-basyx/basyx-go-components/tree/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/cmd/dppapiservice), [OpenAPI definition](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/cmd/dppapiservice/openapi.yaml), and [example](https://github.com/eclipse-basyx/basyx-go-components/tree/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/examples/BaSyxDPPAPIExample).
 
 ```{note}
-The pinned links above make the source and example contents reproducible. The linked Minimal, AASX File Server, and DPP API example Compose files at that revision still use mutable `SNAPSHOT` image tags. Replace the BaSyx Go component tags with `1.0.11` (or pin image digests) before treating an example as a release-pinned deployment.
+The pinned links above make the source and example contents reproducible. The linked DPP API example Compose file at that revision still uses mutable `SNAPSHOT` image tags. Replace the BaSyx Go component tags with `1.0.11` (or pin image digests) before treating it as a release-pinned deployment.
 ```
 
 ## Shared Guidance
@@ -54,6 +54,8 @@ submodel_registry/index
 digital_twin_registry/index
 submodel_repository/index
 aas_repository/index
+concept_description_repository/index
+aasx_file_server/index
 company_lookup/index
 configuration_service/index
 supply_chain_security
