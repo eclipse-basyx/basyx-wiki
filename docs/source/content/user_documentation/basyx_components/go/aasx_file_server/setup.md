@@ -1,6 +1,6 @@
 # Setting Up the AASX File Server
 
-The Docker and native instructions on this page target BaSyx Go **1.0.11**. Keep the File Server, Configuration Service, source checkout, and database schema aligned as described in [Version Scope](../common/deployment.md#version-scope).
+The Docker example uses `latest` for both BaSyx Go images. For native builds, use one stable source release and its matching database assets as described in [Version Scope](../common/deployment.md#version-scope).
 
 ## Using Docker Compose
 
@@ -24,7 +24,7 @@ services:
 
   basyx_configuration:
     container_name: basyx_configuration_aasx
-    image: eclipsebasyx/basyxconfigurationservice-go:1.0.11
+    image: eclipsebasyx/basyxconfigurationservice-go:latest
     pull_policy: always
     environment:
       - POSTGRES_HOST=postgres
@@ -38,7 +38,7 @@ services:
 
   aasx_file_server:
     container_name: aasx_file_server
-    image: eclipsebasyx/aasxfileserver-go:1.0.11
+    image: eclipsebasyx/aasxfileserver-go:latest
     pull_policy: always
     environment:
       - SERVER_PORT=8087
@@ -54,7 +54,7 @@ services:
         condition: service_completed_successfully
 ```
 
-Use the same BaSyx release for every service sharing this database.
+Use the same image tag for every BaSyx Go service sharing this database.
 
 ```{warning}
 This minimal example has no named PostgreSQL volume. Add and correctly mount one before storing packages that must survive container recreation. Backups and migrations must include PostgreSQL Large Objects because that is where the package bytes are stored. See [Persistent State](../common/deployment.md#persistent-state).
@@ -131,10 +131,12 @@ Use PostgreSQL initialized by a Configuration Service from the same release, the
 
 ```bash
 git clone https://github.com/eclipse-basyx/basyx-go-components
-git -C basyx-go-components checkout v1.0.11
+git -C basyx-go-components checkout RELEASE_TAG
 cd basyx-go-components/cmd/aasxfileserverservice
 go build -o aasxfileserver
 ./aasxfileserver -config ./config.yaml
 ```
+
+Replace `RELEASE_TAG` with the stable release you intend to build, and use the Configuration Service and SQL assets from that same checkout.
 
 On Windows, build `aasxfileserver.exe` and run `./aasxfileserver.exe -config ./config.yaml` in PowerShell. The File Server validates the initialized database schema and does not create it itself.

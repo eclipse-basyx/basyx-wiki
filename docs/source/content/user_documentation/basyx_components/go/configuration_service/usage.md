@@ -25,10 +25,9 @@ The service binary supports these options:
 
 The `/app` defaults match the Configuration Service container image, which copies the release's `database/base.sql` and `database/patches` assets into that directory. They generally do not exist in an arbitrary host working directory.
 
-For native execution, use the source and Go toolchain from the same application release as the runtime services. From the root of a BaSyx Go Components **v1.0.11** checkout (whose `go.mod` declares Go 1.27.0), pass the matching repository assets explicitly:
+For native execution, use the source and Go toolchain from the same application release as the runtime services. From the root of that BaSyx Go Components checkout, pass the repository's matching database assets explicitly:
 
 ```bash
-git checkout v1.0.11
 go run ./cmd/basyxconfigurationservice/main.go \
   -config ./cmd/basyxconfigurationservice/config.yaml \
   -databaseSchema ./database/base.sql \
@@ -72,7 +71,7 @@ The Configuration Service owns its own pool while the job is running. Include it
 
 ## Patch Execution
 
-Patches are registered by the service implementation. Filenames encode the schema version with underscores; for example, `1_0_1.sql` targets schema `v1.0.1`. Application release 1.0.11 registers that patch and later migrations through `1_1_17.sql`, producing schema `v1.1.17`. This schema version is not the application release number. See the release-pinned [migration registration list](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/cmd/basyxconfigurationservice/main.go) for the authoritative inventory.
+Patches are registered by the service implementation. Filenames encode their target schema version with underscores; for example, `1_0_1.sql` targets schema `v1.0.1`. The selected Configuration Service release determines which patches are registered. Its source and packaged patch directory are the authoritative inventory.
 
 A patch is executed only if the current value in `basyxsystem.schema_version` is lower than the registered target version. Successful initialization and patching leaves `basyxsystem.state` as `clean`.
 

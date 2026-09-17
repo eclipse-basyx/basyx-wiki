@@ -1,8 +1,8 @@
 # Setting Up the Submodel Repository
 
-The Docker and native examples on this page target BaSyx Go Components `1.0.11`. Keep all BaSyx services that share a database on that release; [Version Scope](../common/deployment.md#version-scope) explains the separate application, source, database-schema, API, and metamodel versions.
+The Docker example uses `latest` for both BaSyx Go images. For native builds, use one stable source release and its matching database assets as described in [Version Scope](../common/deployment.md#version-scope).
 
-We provide example setups to get you started with the BaSyx Go Components in the [release-pinned examples directory](https://github.com/eclipse-basyx/basyx-go-components/tree/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/examples).
+We provide example setups to get you started with the BaSyx Go Components in the [examples directory](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples).
 But if you need to configure the service yourself, this page will guide you through.
 
 ## Using Docker Compose
@@ -32,7 +32,7 @@ services:
 
   basyx_configuration:
     container_name: basyx_configuration
-    image: eclipsebasyx/basyxconfigurationservice-go:1.0.11
+    image: eclipsebasyx/basyxconfigurationservice-go:latest
     pull_policy: always
     environment:
       - POSTGRES_HOST=postgres
@@ -50,7 +50,7 @@ services:
 
   submodel_repository:
     container_name: submodel_repository
-    image: eclipsebasyx/submodelrepository-go:1.0.11
+    image: eclipsebasyx/submodelrepository-go:latest
     pull_policy: always
     environment:
       - SERVER_PORT=8085
@@ -67,7 +67,7 @@ services:
 ```
 *docker-compose.yml including PostgreSQL 18, the BaSyx Configuration Service, and BaSyx Go Submodel Repository*
 
-Use the same BaSyx release for every service sharing this database, including the Configuration Service, here `1.0.11`.
+Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service.
 
 ### Before the First Start
 
@@ -109,7 +109,7 @@ We recommend using the Docker Images for production use-cases, as they are pre-c
 ```
 
 ### Prerequisites
-- [Go](https://go.dev/dl/) `1.27.0` or a compatible newer toolchain, as declared by release 1.0.11's [`go.mod`](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/go.mod).
+- [Go](https://go.dev/dl/) at the version declared by the selected release's `go.mod`.
 - PostgreSQL 16 or newer, initialized by a Configuration Service built from the same source revision as the HTTP service.
 - [Git](https://git-scm.com/)
 
@@ -119,10 +119,10 @@ Download the source code:
 ```bash
 git clone https://github.com/eclipse-basyx/basyx-go-components
 cd basyx-go-components
-git checkout v1.0.11
+git checkout RELEASE_TAG
 ```
 
-The `v1.0.11` tag selects commit [`81324eb3aad9d63baea93d3385bc9ca7e6a6a05a`](https://github.com/eclipse-basyx/basyx-go-components/commit/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a), matching the Docker images above.
+Replace `RELEASE_TAG` with the stable release you intend to build. Use the Configuration Service and SQL assets from this same checkout.
 
 ### Building the Binary
 

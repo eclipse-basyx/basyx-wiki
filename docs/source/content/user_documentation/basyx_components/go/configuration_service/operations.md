@@ -47,10 +47,10 @@ The database schema version is stored in `basyxsystem.schema_version`. The schem
 Regular BaSyx services validate both values during startup. If the schema version does not match the expected service version, or if the state is `dirty`, the service fails fast instead of running against an unsafe schema.
 
 ```{warning}
-Use the same BaSyx version or build for `basyxconfigurationservice` and the DB-backed runtime services. A newer runtime service may require schema changes that an older Configuration Service image cannot apply.
+Use the same image tag for `basyxconfigurationservice` and the DB-backed runtime services. For native builds, use one source release for the Configuration Service and runtime services. A newer runtime service may require schema changes that an older Configuration Service cannot apply.
 ```
 
-Application and schema versions are related but not interchangeable. Application release 1.0.11, for example, registers migrations through database schema v1.1.17. The release-pinned [Configuration Service registration list](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/cmd/basyxconfigurationservice/main.go) and [runtime schema constant](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/internal/common/database.go) define that relationship.
+Application and schema versions are related but not interchangeable. The Configuration Service included in a release contains the registered migrations, and that release's runtime services define the schema they accept.
 
 ## Upgrading an existing database
 

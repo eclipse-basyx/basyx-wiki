@@ -7,7 +7,7 @@
 ## Contents
 * [Creating your own Set-Up](setup)
 
-The BaSyx Digital Twin Registry combines Asset Administration Shell Registry and Basic Discovery capabilities in one component. In this repository, it exposes a combined API and adds Digital Twin Registry-specific query/filter extensions on top of the standard endpoints. The API badge describes the OpenAPI document shipped with BaSyx Go release `1.0.11`; see [Version Scope](../common/deployment.md#version-scope).
+The BaSyx Digital Twin Registry combines Asset Administration Shell Registry and Basic Discovery capabilities in one component. In this repository, it exposes a combined API and adds Digital Twin Registry-specific query/filter extensions on top of the standard endpoints. The API badge describes the OpenAPI document shipped with the component; see [Version Scope](../common/deployment.md#version-scope).
 
 ## Included API Areas
 

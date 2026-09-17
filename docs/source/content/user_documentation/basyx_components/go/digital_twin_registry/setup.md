@@ -1,8 +1,8 @@
 # Setting Up the Digital Twin Registry
-We provide example setups to get you started with the BaSyx Go Components in the [release 1.0.11 examples](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.0.11/examples).
+We provide example setups to get you started with the BaSyx Go Components in the [examples directory](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples).
 But if you need to configure the service yourself, this page will guide you through.
 
-The Docker and native examples on this page target BaSyx Go application release `1.0.11`. Keep all BaSyx services, source assets, and database initialization at that release; see [Version Scope](../common/deployment.md#version-scope).
+The Docker example uses `latest` for both BaSyx Go images. For native builds, use one stable source release and its matching database assets as described in [Version Scope](../common/deployment.md#version-scope).
 
 ## Using Docker Compose
 The easiest way to use and set up the Digital Twin Registry is Docker Compose.
@@ -31,7 +31,7 @@ services:
 
   basyx_configuration:
     container_name: basyx_configuration
-    image: eclipsebasyx/basyxconfigurationservice-go:1.0.11
+    image: eclipsebasyx/basyxconfigurationservice-go:latest
     pull_policy: always
     environment:
       - POSTGRES_HOST=postgres
@@ -49,7 +49,7 @@ services:
 
   digital_twin_registry:
     container_name: digital_twin_registry
-    image: eclipsebasyx/digitaltwinregistry-go:1.0.11
+    image: eclipsebasyx/digitaltwinregistry-go:latest
     pull_policy: always
     environment:
       - SERVER_PORT=5004
@@ -68,7 +68,7 @@ services:
 ```
 *docker-compose.yml including PostgreSQL 18, the BaSyx Configuration Service, and BaSyx Go Digital Twin Registry*
 
-Use the same BaSyx release for every service sharing this database, including the Configuration Service. These Compose examples select `1.0.11`; avoid mixing them with `SNAPSHOT` images.
+Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service. Do not mix these stable images with `SNAPSHOT` images.
 
 ### Start and Check the Service
 
@@ -87,7 +87,7 @@ The Configuration Service runs once and exits with code `0`. The HTTP service st
 
 In Windows PowerShell, use `curl.exe` instead of `curl`. Open [Swagger UI](http://localhost:5004/swagger) to inspect the API. Include any configured `server.contextPath` in health, Swagger, and API URLs.
 
-For a secured setup example (including Keycloak), see [`examples/BaSyxDigitalTwinRegistryExample`](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.0.11/examples/BaSyxDigitalTwinRegistryExample). Before enabling custom `Edc-Bpn` header injection, read the [Edc-Bpn Trust Boundary](index.md#edc-bpn-trust-boundary); an ordinary deployment must not trust a caller-supplied identity header.
+For a secured setup example (including Keycloak), see [`examples/BaSyxDigitalTwinRegistryExample`](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxDigitalTwinRegistryExample). Before enabling custom `Edc-Bpn` header injection, read the [Edc-Bpn Trust Boundary](index.md#edc-bpn-trust-boundary); an ordinary deployment must not trust a caller-supplied identity header.
 
 ### Access Rules and Trustlist Files (Secured Setup)
 
@@ -119,18 +119,17 @@ We recommend using the Docker Images for production use-cases, as they are pre-c
 ```
 
 ### Prerequisites
-- [Go](https://go.dev/dl/) `1.27.0` or a compatible newer toolchain, as specified in release 1.0.11's [`go.mod`](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/go.mod).
+- [Go](https://go.dev/dl/) at the version declared by the selected release's `go.mod`.
 - PostgreSQL 16 or newer, initialized by a Configuration Service built from the same source revision as the HTTP service.
 - [Git](https://git-scm.com/)
 
 ### Cloning the Repository
 ```bash
 git clone https://github.com/eclipse-basyx/basyx-go-components.git
-git -C basyx-go-components checkout v1.0.11
-git -C basyx-go-components rev-parse HEAD
+git -C basyx-go-components checkout RELEASE_TAG
 ```
 
-The final command must print `81324eb3aad9d63baea93d3385bc9ca7e6a6a05a`. The tag is [release `v1.0.11`](https://github.com/eclipse-basyx/basyx-go-components/releases/tag/v1.0.11), and the expected revision is the [pinned commit](https://github.com/eclipse-basyx/basyx-go-components/tree/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a).
+Replace `RELEASE_TAG` with the stable release you intend to build. Use the Configuration Service and SQL assets from this same checkout.
 
 ### Building the Binary
 

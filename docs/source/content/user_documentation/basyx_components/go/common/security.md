@@ -3,7 +3,7 @@
 BaSyx Go runtime security combines OIDC token validation with attribute-based
 access control (ABAC). The configuration keys are shared, but runtime
 enforcement exists only where an executable installs the shared middleware.
-This page describes the behavior of the [1.0.11 release baseline](deployment.md#version-scope).
+Use the [shared image-tag convention](deployment.md#version-scope) when applying these settings to a multi-component deployment.
 
 ## Supported Components and Default Posture
 
@@ -128,11 +128,11 @@ and to make the tutorial policy file authoritative on every Registry start:
 ```yaml
 services:
   aas-registry:
-    image: eclipsebasyx/aasregistry-go:1.0.11
+    image: eclipsebasyx/aasregistry-go:latest
     environment:
       ABAC_POLICY_FILE_IMPORT: always
   basyx_configuration:
-    image: eclipsebasyx/basyxconfigurationservice-go:1.0.11
+    image: eclipsebasyx/basyxconfigurationservice-go:latest
 ```
 
 `ABAC_POLICY_FILE_IMPORT=always` is deliberate for this isolated tutorial; it

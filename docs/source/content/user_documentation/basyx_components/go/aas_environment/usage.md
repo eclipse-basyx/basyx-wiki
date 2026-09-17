@@ -2,7 +2,7 @@
 
 This walkthrough imports one AAS, its linked Submodel, one Concept Description, and one specific asset identifier. It then verifies Repository, Registry, Discovery, and serialization behavior through the single AAS Environment URL.
 
-Start the release-pinned [Compose setup](setup) and wait for `http://localhost:8090/health` to return HTTP `200`. Run the commands from one working directory. In Windows PowerShell, use `curl.exe` instead of `curl`.
+Start the [Compose setup](setup) and wait for `http://localhost:8090/health` to return HTTP `200`. Run the commands from one working directory. In Windows PowerShell, use `curl.exe` instead of `curl`.
 
 ## Sample Identifiers
 

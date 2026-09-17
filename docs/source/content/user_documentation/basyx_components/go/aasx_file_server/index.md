@@ -34,7 +34,7 @@ See [General Configuration](../common/configuration) for database, upload-limit,
 
 With the default empty context path, the running service exposes Swagger UI at `/swagger`, its OpenAPI document at `/api-docs/openapi.yaml`, and its self-description at `/description`.
 
-These pages target the synchronous Package File Server API in BaSyx Go 1.0.11. The pinned [service source](https://github.com/eclipse-basyx/basyx-go-components/tree/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/cmd/aasxfileserverservice) and [OpenAPI document](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/cmd/aasxfileserverservice/openapi.yaml) are the reference. Use the Swagger UI of the running component for the exact contract of another installed release.
+These pages cover the core synchronous Package File Server operations. The current [service source](https://github.com/eclipse-basyx/basyx-go-components/tree/main/cmd/aasxfileserverservice) and [OpenAPI document](https://github.com/eclipse-basyx/basyx-go-components/blob/main/cmd/aasxfileserverservice/openapi.yaml) are the reference. Use the Swagger UI of the running component for the exact contract of the installed release.
 
 ## Related Documentation
 

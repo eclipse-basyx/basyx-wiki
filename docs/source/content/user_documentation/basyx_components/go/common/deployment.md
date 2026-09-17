@@ -1,30 +1,25 @@
 # Deployment, Versions, and Persistent State
 
-Use this page to keep BaSyx binaries, database initialization assets, and persistent PostgreSQL data aligned. Component setup pages contain runnable examples; this page defines the shared deployment contract behind them.
+Use this page to keep BaSyx images, database initialization assets, and persistent PostgreSQL data aligned. Component setup pages contain runnable examples; this page defines the shared deployment contract behind them.
 
 (version-scope)=
 ## Version Scope
 
-The examples in this documentation use BaSyx Go application and image release **1.0.11**. A release number, source revision, toolchain version, database schema version, and API version are separate compatibility dimensions:
+Normal container examples in this documentation use the `latest` image tag. For BaSyx Go images, `latest` points to the latest stable BaSyx Go release. All component images published as part of that stable release, including the Configuration Service, receive the corresponding `latest` tag.
 
-| Dimension | Value for these examples | What it controls | Source |
-| --- | --- | --- | --- |
-| Application and Docker image release | `1.0.11` | The BaSyx executable behavior and the version tag used for every BaSyx image sharing a database | [Release `v1.0.11`](https://github.com/eclipse-basyx/basyx-go-components/releases/tag/v1.0.11) |
-| Git source | tag `v1.0.11`; commit `81324eb3aad9d63baea93d3385bc9ca7e6a6a05a` | The immutable source, configuration, SQL assets, and examples used for native builds | [Pinned commit](https://github.com/eclipse-basyx/basyx-go-components/tree/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a) |
-| Go toolchain | `1.27.0` | The Go language and toolchain requirement declared by this source revision | [Pinned `go.mod`](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/go.mod) |
-| Database schema | `v1.1.17` | The schema version that the 1.0.11 runtimes validate and the matching Configuration Service prepares | [Pinned schema check](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/internal/common/database.go) |
+Use the same image tag for the Configuration Service and every database-backed BaSyx Go component that shares its database. The examples achieve this by using `latest` consistently. If a deployment instead selects a concrete release tag, use that tag consistently across those images. Deployments that require immutable inputs can pin a concrete release tag or image digest.
 
-Do not substitute one dimension for another: schema `v1.1.17` is not an application release, and Go `1.27.0` is not an API version. API versions belong to individual component contracts; consult each component overview and its release-pinned OpenAPI definition rather than assuming one universal API or metamodel version.
+The Configuration Service image contains the database schema and patch assets for its release. It initializes or migrates the database, and runtime services validate that the resulting schema is compatible and clean before accepting requests. Normal setup does not require selecting an internal schema version separately.
 
-Use the same BaSyx application release for the Configuration Service and all runtime images that share a database. For a native build, use the matching tag or immutable commit and its database assets. Mutable `latest` and `SNAPSHOT` tags can move independently and are not equivalent to this baseline.
+Application releases, source revisions, Go toolchain requirements, database schema versions, and API or metamodel versions remain separate concepts. API and metamodel versions belong to individual component contracts; consult the component page and the running service's OpenAPI document rather than assuming one universal version.
 
 ## First Startup
 
 A database-backed BaSyx deployment starts in this order:
 
 1. Start PostgreSQL and wait until it is healthy.
-2. Run the matching BaSyx Configuration Service and require successful completion.
-3. Start the release-matched runtime services.
+2. Run the BaSyx Configuration Service using the same image tag as the runtime services and require successful completion.
+3. Start the runtime services.
 
 The Configuration Service is a one-shot job, so exit code `0` is the expected successful state. In Docker Compose, runtime services can express this ordering with `condition: service_completed_successfully`.
 
@@ -32,16 +27,16 @@ On an empty database, the Configuration Service creates the BaSyx base schema an
 
 ## Native Builds and Database Preparation
 
-Check out the same release used by the Docker examples before building:
+For a native build, select a stable BaSyx Go source release and use its declared Go toolchain and database assets together:
 
 ```bash
 git clone https://github.com/eclipse-basyx/basyx-go-components.git
 cd basyx-go-components
-git checkout v1.0.11
-git rev-parse HEAD
+git tag --list
+git checkout RELEASE_TAG
 ```
 
-The final command must print `81324eb3aad9d63baea93d3385bc9ca7e6a6a05a`. Use Go `1.27.0`, as declared in that checkout's `go.mod`.
+Replace `RELEASE_TAG` with the stable source tag you intend to build. Use the Go version declared by that checkout's `go.mod`.
 
 Run the Configuration Service from the repository root so its source-matched schema and patch paths are unambiguous:
 
@@ -103,4 +98,4 @@ Switching from anonymous storage to `postgres_data`, renaming a volume, or chang
 
 Do not treat an existing database like an empty first-start database. Before changing BaSyx releases or applying a newer schema, use the canonical [upgrading an existing database](../configuration_service/operations.md#upgrading-an-existing-database) procedure. It covers migration prerequisites, backup scope, workload quiescence, success checks, and restore-based rollback.
 
-Use [Configuration Service usage](../configuration_service/usage) for the initializer's flags and registered-patch behavior. Keep application release, Configuration Service, source SQL assets, and target schema aligned; this page intentionally does not duplicate the migration checklist.
+Use [Configuration Service usage](../configuration_service/usage) for the initializer's flags and registered-patch behavior. Keep the selected runtime release, Configuration Service, and source SQL assets aligned; this page intentionally does not duplicate the migration checklist.

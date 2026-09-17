@@ -32,7 +32,7 @@ See [General Configuration](../common/configuration) for server, database, envir
 
 With the default empty context path, the running service exposes Swagger UI at `/swagger`, its OpenAPI document at `/api-docs/openapi.yaml`, and its self-description at `/description`. A configured `server.contextPath` prefixes all of these paths and the API routes.
 
-The BaSyx Go 1.0.11 [service source](https://github.com/eclipse-basyx/basyx-go-components/tree/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/cmd/conceptdescriptionrepositoryservice) and [OpenAPI document](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/cmd/conceptdescriptionrepositoryservice/openapi.yaml) are the reference for these pages.
+The current [service source](https://github.com/eclipse-basyx/basyx-go-components/tree/main/cmd/conceptdescriptionrepositoryservice) and [OpenAPI document](https://github.com/eclipse-basyx/basyx-go-components/blob/main/cmd/conceptdescriptionrepositoryservice/openapi.yaml) are the reference for these pages. Use the running service's Swagger UI for the exact contract of the installed release.
 
 ## Related Documentation
 

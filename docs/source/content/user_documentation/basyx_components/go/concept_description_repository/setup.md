@@ -1,6 +1,6 @@
 # Setting Up the Concept Description Repository
 
-The Docker and native instructions on this page target BaSyx Go **1.0.11**. Keep the Repository, Configuration Service, source checkout, and database schema aligned as described in [Version Scope](../common/deployment.md#version-scope).
+The Docker example uses `latest` for both BaSyx Go images. For native builds, use one stable source release and its matching database assets as described in [Version Scope](../common/deployment.md#version-scope).
 
 ## Using Docker Compose
 
@@ -24,7 +24,7 @@ services:
 
   basyx_configuration:
     container_name: basyx_configuration_cd
-    image: eclipsebasyx/basyxconfigurationservice-go:1.0.11
+    image: eclipsebasyx/basyxconfigurationservice-go:latest
     pull_policy: always
     environment:
       - POSTGRES_HOST=postgres
@@ -38,7 +38,7 @@ services:
 
   concept_description_repository:
     container_name: concept_description_repository
-    image: eclipsebasyx/conceptdescriptionrepository-go:1.0.11
+    image: eclipsebasyx/conceptdescriptionrepository-go:latest
     pull_policy: always
     environment:
       - SERVER_PORT=8086
@@ -54,10 +54,10 @@ services:
         condition: service_completed_successfully
 ```
 
-Use the same BaSyx release for every service sharing this database.
+Use the same image tag for every BaSyx Go service sharing this database.
 
 ```{note}
-BaSyx Go 1.0.11's checked-in Concept Description configuration uses port `5004`, while the image declares `SERVER_PORT=5000`. Set `SERVER_PORT` explicitly, as the example does, rather than relying on either default.
+The checked-in Concept Description configuration and container image declare different default ports. Set `SERVER_PORT` explicitly, as the example does, rather than relying on either default.
 ```
 
 ```{warning}
@@ -134,10 +134,12 @@ Use PostgreSQL initialized by a Configuration Service from the same release, the
 
 ```bash
 git clone https://github.com/eclipse-basyx/basyx-go-components
-git -C basyx-go-components checkout v1.0.11
+git -C basyx-go-components checkout RELEASE_TAG
 cd basyx-go-components/cmd/conceptdescriptionrepositoryservice
 go build -o conceptdescriptionrepositoryservice
 ./conceptdescriptionrepositoryservice -config ./config.yaml
 ```
+
+Replace `RELEASE_TAG` with the stable release you intend to build, and use the Configuration Service and SQL assets from that same checkout.
 
 On Windows, build `conceptdescriptionrepositoryservice.exe` and run `./conceptdescriptionrepositoryservice.exe -config ./config.yaml` in PowerShell. The service validates the existing database schema; it does not initialize that schema itself.

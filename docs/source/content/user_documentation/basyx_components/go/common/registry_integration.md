@@ -46,7 +46,7 @@ Plan explicit registration or reconciliation for existing data. Generated update
 
 This local example runs both Repositories and both Registries against one database. A reverse proxy exposes both Repository APIs at `http://localhost:8080`, which both Repositories advertise in generated descriptors. The direct Repository ports remain available for the usage walkthroughs.
 
-The example pins every BaSyx image to release `1.0.11`, matching the shared [Version Scope](deployment.md#version-scope). Its PostgreSQL 18 service intentionally remains a minimal local example without a declared volume. Before storing data that must survive container replacement, add a named volume mounted at `/var/lib/postgresql`; adding one later does not migrate an existing anonymous volume. Review [Persistent State](deployment.md#persistent-state) before the first startup.
+The example uses `latest` for every BaSyx Go image, following the shared [Version Scope](deployment.md#version-scope). Its PostgreSQL 18 service intentionally remains a minimal local example without a declared volume. Before storing data that must survive container replacement, add a named volume mounted at `/var/lib/postgresql`; adding one later does not migrate an existing anonymous volume. Review [Persistent State](deployment.md#persistent-state) before the first startup.
 
 Save this as `docker-compose.yml` in a new directory. Run it as one Compose project; do not also start the separate setup examples on the same host ports. Docker with the Compose plugin and curl are required.
 
@@ -78,7 +78,7 @@ services:
       retries: 5
 
   basyx_configuration:
-    image: eclipsebasyx/basyxconfigurationservice-go:1.0.11
+    image: eclipsebasyx/basyxconfigurationservice-go:latest
     pull_policy: always
     environment: *database
     depends_on:
@@ -87,7 +87,7 @@ services:
 
   aas_repository:
     <<: *basyx
-    image: eclipsebasyx/aasrepository-go:1.0.11
+    image: eclipsebasyx/aasrepository-go:latest
     environment:
       <<: *database
       SERVER_PORT: "8084"
@@ -98,7 +98,7 @@ services:
 
   submodel_repository:
     <<: *basyx
-    image: eclipsebasyx/submodelrepository-go:1.0.11
+    image: eclipsebasyx/submodelrepository-go:latest
     environment:
       <<: *database
       SERVER_PORT: "8085"
@@ -109,7 +109,7 @@ services:
 
   aas_registry:
     <<: *basyx
-    image: eclipsebasyx/aasregistry-go:1.0.11
+    image: eclipsebasyx/aasregistry-go:latest
     environment:
       <<: *database
       SERVER_PORT: "8082"
@@ -118,7 +118,7 @@ services:
 
   submodel_registry:
     <<: *basyx
-    image: eclipsebasyx/submodelregistry-go:1.0.11
+    image: eclipsebasyx/submodelregistry-go:latest
     environment:
       <<: *database
       SERVER_PORT: "8083"

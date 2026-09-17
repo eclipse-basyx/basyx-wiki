@@ -1,6 +1,6 @@
 # Setting Up the AAS Environment
 
-This setup runs the `1.0.11` AAS Environment with PostgreSQL 18 and the matching `1.0.11` Configuration Service. It exposes one application URL, `http://localhost:8090`, and is sufficient for the complete [first-use walkthrough](usage). No separate Registry, Discovery, or UI container is required.
+This setup runs the `latest` AAS Environment and Configuration Service images with PostgreSQL 18. It exposes one application URL, `http://localhost:8090`, and is sufficient for the complete [first-use walkthrough](usage). No separate Registry, Discovery, or UI container is required.
 
 Review the [version distinctions](../common/deployment.md#version-scope) before mixing images or source builds. For an existing database, do not treat startup as an upgrade procedure: follow [Upgrading an Existing Database](../configuration_service/operations.md#upgrading-an-existing-database) first.
 
@@ -35,7 +35,7 @@ services:
       - aas_environment_postgres:/var/lib/postgresql
 
   basyx_configuration:
-    image: eclipsebasyx/basyxconfigurationservice-go:1.0.11
+    image: eclipsebasyx/basyxconfigurationservice-go:latest
     environment:
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
@@ -47,7 +47,7 @@ services:
         condition: service_healthy
 
   aas_environment:
-    image: eclipsebasyx/aasenvironment-go:1.0.11
+    image: eclipsebasyx/aasenvironment-go:latest
     environment:
       SERVER_PORT: 5004
       POSTGRES_HOST: postgres
@@ -99,4 +99,4 @@ The named volume `aas_environment_postgres` stores PostgreSQL 18 data at `/var/l
 Do not run `docker compose down -v` when the data must be retained. Adding or renaming a volume later does not migrate the old database. See [Persistent State](../common/deployment.md#persistent-state) for lifecycle and backup considerations.
 ```
 
-For a larger topology with automatic AASX preconfiguration and a Web UI, see the release-pinned [BaSyx Minimal Example](https://github.com/eclipse-basyx/basyx-go-components/tree/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/examples/BaSyxMinimalExample). Its Compose file at that revision uses mutable `SNAPSHOT` BaSyx image tags; replace those tags with `1.0.11` or pin image digests before using it as a release-matched deployment.
+For a larger topology with automatic AASX preconfiguration and a Web UI, see the [BaSyx Minimal Example](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxMinimalExample). If that example uses `SNAPSHOT` BaSyx image tags, replace them with `latest` for a stable deployment or pin the required release tags or image digests.

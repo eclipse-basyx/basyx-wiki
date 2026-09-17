@@ -511,7 +511,7 @@ activated through `abac.enabled`. See the complete [Runtime Security capability
 matrix](security.md#supported-components-and-default-posture), including the
 [Company Lookup 1.0.11 exception](../company_lookup/index.md#security-limitations-in-1011).
 
-| Executable group | Shared middleware in 1.0.11 | Omitted `policyFileImport` |
+| Executable group | Shared middleware | Omitted `policyFileImport` |
 | --- | --- | --- |
 | Participating Repositories, Registries, Discovery, AAS Environment, and AASX File Server | Yes, when ABAC is enabled | `if_missing` |
 | Digital Twin Registry | Yes, when ABAC is enabled | `always` |

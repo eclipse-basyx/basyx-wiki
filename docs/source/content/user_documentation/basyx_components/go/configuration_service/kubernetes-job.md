@@ -21,7 +21,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: basyx-configuration
-          image: eclipsebasyx/basyxconfigurationservice-go:1.0.11
+          image: eclipsebasyx/basyxconfigurationservice-go:latest
           env:
             - name: POSTGRES_HOST
               value: postgres
@@ -77,8 +77,8 @@ Common approaches include:
 - Use `restartPolicy: OnFailure` so Kubernetes retries the pod if initialization fails.
 - Use `backoffLimit` to control how many retries Kubernetes should attempt.
 - Store database credentials in a Kubernetes `Secret` instead of plain environment variables.
-- Use the same BaSyx version or build for `basyxconfigurationservice` and the runtime services.
-- The example pins application release 1.0.11. Pin exact image versions or image digests for reproducible deployments.
+- Use the same image tag for `basyxconfigurationservice` and the runtime services that share its database. The example uses `latest`.
+- Pin a concrete release tag or image digest when an immutable deployment is required.
 - Ensure PostgreSQL is reachable and ready before the Job runs.
 - Include the Job's pool in the PostgreSQL connection budget while it overlaps with existing workloads during installation or upgrades. Each runtime pod has a separate pool.
 - Check Job logs when initialization fails; errors include BaSyx error codes for troubleshooting.
