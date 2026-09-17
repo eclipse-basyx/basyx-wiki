@@ -1,6 +1,6 @@
 # General Configuration
 
-BaSyx Go components use a shared configuration model from `internal/common`. Configuration can be provided through a YAML file and overridden with environment variables.
+BaSyx Go components use a shared application configuration model. Configuration can be provided through a YAML file and overridden with environment variables. This reference describes the stable configuration represented by the component images tagged `latest`.
 
 ## Configuration Source Precedence
 
@@ -12,9 +12,11 @@ The shared configuration loader applies the following precedence:
 
 Environment variables override YAML values. Nested keys use underscore notation, for example `server.port` becomes `SERVER_PORT`.
 
-## Common Configuration Sections
+## Application Configuration: Core and Database
 
 These sections are part of the shared configuration model. Components ignore settings that are not relevant to their feature set.
+
+The defaults below are built into the shared configuration loader. A component's bundled `config.yaml` can override them; for example, the DPP API image configures port `8080` while the shared `server.port` default is `5004`.
 
 ### `logging`
 
@@ -36,7 +38,7 @@ configuration model.
 | `host` | `0.0.0.0` | Host used for the HTTP server and generated Swagger server URL. |
 | `port` | `5004` | HTTP server port. |
 | `contextPath` | `""` | Base path for API, Swagger, and health endpoints. |
-| `cacheEnabled` | `false` | Enables descriptor persistence caches where supported. |
+| `cacheEnabled` | `false` | Reserved cache switch passed to AAS Descriptor and Company Lookup persistence backends. The current stable release does not implement cache behavior for this setting. |
 | `strictVerification` | `permissive` | Semantic verification mode: `off`, `permissive`, or `strict`. |
 | `verificationEndpointAvailable` | `true` | Enables the `/verify` endpoint and Swagger entry where supported. |
 | `readHeaderTimeoutSeconds` | `15` | Maximum time in seconds to read HTTP request headers. |
@@ -49,13 +51,9 @@ All HTTP timeout values must be greater than `0`. When a service receives an int
 
 ### `postgres`
 
-```{note}
-The pool defaults, `connMaxIdleTimeMinutes`, zero-value handling, validation rules, and automatic service-name fallback described below require BaSyx Go 1.0.5 or later.
-```
-
 | Key | Default | Purpose |
 | --- | --- | --- |
-| `dsn` | `""` | Complete PostgreSQL connection string. When non-empty, it replaces the individual connection fields listed below. |
+| `dsn` | `""` | Complete PostgreSQL connection string. It is mutually exclusive with the individual connection fields listed below; mixing both forms causes startup to fail. |
 | `host` | `db` | PostgreSQL host. |
 | `port` | `5432` | PostgreSQL port. |
 | `user` | `admin` | Database user. |
@@ -81,10 +79,6 @@ When `postgres.dsn` is non-empty, do not explicitly configure `host`, `port`, `u
 If no primary `application_name` is supplied through `applicationName` or the DSN, the component sets it to its service name. An explicitly configured value is preserved. This identifies each BaSyx service in PostgreSQL views such as `pg_stat_activity`.
 
 #### Optional PostgreSQL reader
-
-```{note}
-The `postgres.reader` configuration requires BaSyx Go 1.0.7 or later.
-```
 
 PostgreSQL-backed BaSyx HTTP services can use a separate reader connection for
 eligible, eventually consistent reads. Configure it as a nested
@@ -228,13 +222,17 @@ connections do not add CPU, storage I/O, or replication capacity.
 
 All four pool values must be non-negative. An explicitly configured `maxIdleConnections` greater than the effective `maxOpenConnections` is rejected during startup. If `maxIdleConnections` is `0` and an explicit open limit is smaller than the default idle limit of `25`, the effective idle limit is capped at that smaller open limit.
 
-#### Optional CloudNativePG read-write connection pooler
+## Helm Chart Configuration
 
 ```{note}
-The `database.pooler` values require BaSyx Helm chart `3.7.0` or newer. They
-configure a CloudNativePG `Pooler` resource and are not BaSyx application YAML
-settings.
+The `database.*` values in this section are BaSyx Helm chart values. They are
+not keys in the Go application's `config.yaml` and do not follow the
+application environment-variable rules described later on this page.
+The chart's [`values.yaml`](https://github.com/eclipse-basyx/charts/blob/main/charts/basyx/values.yaml)
+is the authoritative reference for the complete set of deployment values.
 ```
+
+### Optional CloudNativePG read-write connection pooler
 
 For a database managed by the chart, an optional read-write PgBouncer layer can
 decouple the number of client connections opened by horizontally scaled BaSyx
@@ -263,7 +261,7 @@ database:
     topologySpreadConstraints: []
 ```
 
-The complete value set and its defaults are:
+The core pooler values and their defaults are:
 
 | Key | Default | Purpose |
 | --- | --- | --- |
@@ -345,12 +343,12 @@ the installed CloudNativePG CRDs and test the deployed BaSyx version through
 the Pooler. Include bulk endpoints, large-object operations, connection
 saturation, rolling updates, and a PostgreSQL switchover.
 
-#### Helm reader configuration and read-only Pooler
+### Reader configuration and read-only Pooler
 
 ```{note}
-The `database.reader` values require BaSyx Helm chart `3.9.0` and BaSyx Go
-`1.0.7` or newer. Both the reader and its read-only Pooler are disabled by
-default.
+Both the chart-managed reader and its read-only Pooler are disabled by default.
+These `database.reader.*` values are Helm chart values, not the application's
+`postgres.reader.*` YAML settings.
 ```
 
 For a database managed by the chart, enabling the global reader routes
@@ -494,6 +492,8 @@ replication lag before increasing either limit.
 
 The DSN and database credentials are sensitive and should normally be supplied through a secret rather than committed to YAML.
 
+## Application Configuration: HTTP and Features
+
 ### `cors`
 
 | Key | Default | Purpose |
@@ -508,8 +508,7 @@ The DSN and database credentials are sensitive and should normally be supplied t
 These fields are shared configuration; their presence does not mean every
 executable installs runtime security middleware. The supported path is
 activated through `abac.enabled`. See the complete [Runtime Security capability
-matrix](security.md#supported-components-and-default-posture), including the
-[Company Lookup 1.0.11 exception](../company_lookup/index.md#security-limitations-in-1011).
+matrix](security.md#supported-components-and-default-posture).
 
 | Executable group | Shared middleware | Omitted `policyFileImport` |
 | --- | --- | --- |
@@ -520,9 +519,9 @@ matrix](security.md#supported-components-and-default-posture), including the
 
 | Key | Default | Purpose |
 | --- | --- | --- |
-| `oidc.trustlistPath` | `config/trustlist.json` | JSON trustlist of accepted OIDC providers. |
+| `oidc.trustlistPath` | `config/trustlist.json` | Path to the JSON trustlist of accepted OIDC providers. Required by participating services when ABAC is enabled. |
 | `abac.enabled` | `false` | Enables OIDC authentication and ABAC authorization middleware. |
-| `abac.modelPath` | `config/access_rules/access-rules.json` | ABAC access-rules model. |
+| `abac.modelPath` | `config/access_rules/access-rules.json` | Path to the ABAC access-rules file used when `policyFileImport` imports a policy at startup. |
 | `abac.policyFileImport` | `""` | Controls startup import of `modelPath`: `always`, `if_missing`, or `never`. An empty value lets the service choose its default behavior. |
 | `abac.policyScope` | `""` | Optional database namespace for stored ABAC policies. An empty value uses the service's built-in scope. |
 | `abac.managementApi.enabled` | `false` | Enables the protected API for managing the active ABAC policy at runtime. |
@@ -572,15 +571,15 @@ Each `claimMappings` entry contains:
 | --- | --- | --- |
 | `enableImplicitCasts` | `true` | Allows implicit casts in ABAC/query expression evaluation. |
 | `enableDescriptorDebug` | `false` | Enables descriptor query debug output. |
-| `discoveryIntegration` | `false` | Enables discovery-specific descriptor behavior; some services set this internally. |
-| `enableCustomMiddlewareHeaderInjection` | `false` | Enables custom claim/header middleware where supported. |
-| `supportsSingularSupplementalSemanticId` | `false` | Accepts singular `supplementalSemanticId` compatibility format. |
-| `aasRegistryIntegration` | `false` | Enables AAS repository to AAS registry synchronization. |
-| `submodelRegistryIntegration` | `false` | Enables Submodel repository to Submodel registry synchronization. |
-| `externalUrl` | `""` | Public base URL used to generate synchronized registry endpoint descriptors. Multiple URLs can be comma-separated. |
-| `trustProxyHeaders` | `false` | Allows trusted reverse proxies to supply the public request scheme, host, and client information through `Forwarded` or `X-Forwarded-*` headers. |
-| `trustedProxyCIDRs` | `[]` | CIDR allowlist of proxy source addresses whose forwarded headers may be trusted. |
-| `uploadMaxSizeBytes` | `134217728` | Maximum compressed HTTP request size, including multipart overhead, for binary upload endpoints. |
+| `discoveryIntegration` | `false` | When AAS Descriptors are written, also maintains the asset-identifier-to-AAS-identifier records used by Discovery lookups. |
+| `enableCustomMiddlewareHeaderInjection` | `false` | Enables the EDC BPN header-to-claim middleware in the standalone Submodel Repository and Digital Twin Registry. |
+| `supportsSingularSupplementalSemanticId` | `false` | For Submodel Descriptors, accepts the compatibility field name `supplementalSemanticId` on input and emits that name on output. Its value remains a list; the standard `supplementalSemanticIds` name is used when disabled. |
+| `aasRegistryIntegration` | `false` | Makes AAS Repository changes maintain matching AAS Descriptor records in PostgreSQL so an AAS Registry using the same database can expose them. This is not an HTTP connection to the Registry. |
+| `submodelRegistryIntegration` | `false` | Makes Submodel Repository changes maintain matching Submodel Descriptor records in PostgreSQL so a Submodel Registry using the same database can expose them. This is not an HTTP connection to the Registry. |
+| `externalUrl` | `""` | Comma-separated public base URL(s). All entries generate endpoints in synchronized Registry descriptors; the first entry is also used for externally reachable resource and `Location` URLs, including DPP managed-attachment URLs. |
+| `trustProxyHeaders` | `false` | Allows `Forwarded` or `X-Forwarded-*` values to determine public scheme, host, and client IP, but only for requests received from an address in `trustedProxyCIDRs`. |
+| `trustedProxyCIDRs` | `[]` | CIDR allowlist for proxies whose forwarded headers may be trusted. An empty list means forwarded headers are never trusted, even when `trustProxyHeaders` is enabled. |
+| `uploadMaxSizeBytes` | `134217728` | Maximum uploaded file-content size in bytes for binary upload endpoints. Multipart metadata and framing overhead are allowed separately. |
 | `aasxMaxPartCount` | `10000` | Maximum number of non-directory entries in an AASX package. |
 | `aasxMaxOPCMetadataSizeBytes` | `16777216` | Maximum combined expanded size of AASX OPC metadata. |
 | `aasxMaxPartExpandedSizeBytes` | `134217728` | Maximum expanded size of one AASX payload part. |
@@ -589,9 +588,9 @@ Each `claimMappings` entry contains:
 | `aasPreconfigPaths` | `[]` | AAS Environment startup import sources. Supports files or folders with `.aasx`, `.json`, or `.xml` files. |
 | `bulkBatchLimit` | `1000` | Maximum row count per generated bulk SQL statement. Must be greater than `0`. |
 
-`uploadMaxSizeBytes` limits the compressed HTTP request, including multipart overhead. The AASX settings independently limit expanded package content to protect against packages whose contents are much larger than the uploaded file. All six values must be greater than `0`. In addition, `aasxMaxTotalExpandedSizeBytes` must be greater than or equal to `aasxMaxPartExpandedSizeBytes`, which must be greater than or equal to `aasxMaxThumbnailSizeBytes`.
+`uploadMaxSizeBytes` limits the transmitted file part, not the complete multipart HTTP request. The request parser separately allows bounded space for multipart metadata and framing. The AASX settings independently limit expanded package content to protect against packages whose contents are much larger than the uploaded file. All six size/count values must be greater than `0`. In addition, `aasxMaxTotalExpandedSizeBytes` must be greater than or equal to `aasxMaxPartExpandedSizeBytes`, which must be greater than or equal to `aasxMaxThumbnailSizeBytes`.
 
-When registry synchronization is enabled, `general.externalUrl` must be set to at least one absolute URL with scheme and host.
+When registry synchronization is enabled, `general.externalUrl` must contain at least one absolute HTTP(S) URL with a scheme and host; query strings and fragments are rejected. DPP serialization of a managed attachment also requires a valid first URL. AAS Descriptor writes use `discoveryIntegration` when performed directly by an AAS Registry or through repository-to-registry synchronization. AAS Environment and Digital Twin Registry enable discovery integration internally.
 
 ### `jws` and `swagger`
 
@@ -839,6 +838,13 @@ SWAGGER_ENABLED=true
 GENERAL_AAS_PRECONFIG_PATHS=file:/data/example.aasx,/data/preconfigured-aas
 ```
 
+Automatically derived environment variables for other string-list fields are
+also comma-separated. This applies, for example, to `CORS_ALLOWEDORIGINS`,
+`CORS_ALLOWEDMETHODS`, `CORS_ALLOWEDHEADERS`, and
+`GENERAL_TRUSTEDPROXYCIDRS`. The dedicated parsers for
+`GENERAL_AAS_PRECONFIG_PATHS` and `BASYX_EVENTING_SINKS` additionally trim
+surrounding whitespace and discard empty entries.
+
 The following explicit aliases are also supported:
 
 | YAML setting | Environment variable |
@@ -916,7 +922,7 @@ policy scope decide whether startup imports that file. See the [policy lifecycle
 ## Notes
 
 - The BaSyx Configuration Service mainly uses the `postgres` section.
-- Repository, environment, and AASX File Server endpoints use `general.uploadMaxSizeBytes` for compressed request limits.
+- Repository, environment, and AASX File Server endpoints use `general.uploadMaxSizeBytes` for uploaded file-content limits.
 - Services that process AASX packages use the `general.aasxMax*` settings for expanded package limits.
 - AAS Environment additionally supports `general.aasPreconfigPaths`.
 - AAS Repository, Submodel Repository, and AAS Environment use the registry synchronization settings when enabled.
