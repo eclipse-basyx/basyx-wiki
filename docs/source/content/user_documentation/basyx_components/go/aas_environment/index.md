@@ -3,7 +3,7 @@
 ![GitHub](https://img.shields.io/github/license/eclipse-basyx/basyx-go-components)
 ![API](https://img.shields.io/badge/API-AAS%203.2-yellow)
 
-The BaSyx Go AAS Environment is a **single runtime** that exposes the main APIs needed to store, register, discover, import, and export an AAS environment. Choose it when those API areas should share one deployment and one PostgreSQL database. Choose the [standalone components](../index.md#choose-a-component) when they need separate lifecycles, scaling, or trust boundaries.
+The BaSyx Go AAS Environment is a **single runtime** that exposes the main APIs needed to store, register, discover, import, and export an AAS environment. Choose it when those API areas should share one deployment and one PostgreSQL database. Choose the [standalone components](../index.md#component-overview) when they need separate lifecycles, scaling, or trust boundaries.
 
 The service is not just the serialized AAS metamodel `Environment` object. That object is the import/export document containing AASs, Submodels, and Concept Descriptions; the AAS Environment service is the running HTTP application that persists the objects and exposes multiple APIs. It also does not start a collection of separate Repository, Registry, or Discovery containers.
 

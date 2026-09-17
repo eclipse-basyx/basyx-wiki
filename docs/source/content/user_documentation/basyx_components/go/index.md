@@ -5,9 +5,9 @@ BaSyx Go provides Go-based BaSyx backend components and shared libraries for run
 - [GitHub Repository (basyx-go-components)](https://github.com/eclipse-basyx/basyx-go-components)
 - [DockerHub (Eclipse BaSyx images)](https://hub.docker.com/u/eclipsebasyx)
 
-Repositories store the AAS model content that clients read and change. Registries store descriptors that advertise where content can be reached, while Discovery stores mappings from asset identifiers to AAS identifiers. Choose a deployment from the table below; using a Repository and Registry together does not by itself enable synchronization.
+Repositories store the AAS model content that clients read and change. Registries store descriptors that advertise where content can be reached, while Discovery stores mappings from asset identifiers to AAS identifiers. The following table provides an overview of the available BaSyx Go components and their roles, dependencies, and integrations. Using a Repository and Registry together does not by itself enable synchronization.
 
-## Choose a Component
+## Component Overview
 
 | User goal | Component | Manages or stores | Required dependencies | Optional integration | Next page |
 | --- | --- | --- | --- | --- | --- |
@@ -47,15 +47,15 @@ The pinned links above make the source and example contents reproducible. The li
 :maxdepth: 1
 
 common/index
-aas_environment/index
 basic_discovery/index
 aas_registry/index
 submodel_registry/index
 digital_twin_registry/index
-submodel_repository/index
 aas_repository/index
+submodel_repository/index
 concept_description_repository/index
 aasx_file_server/index
+aas_environment/index
 company_lookup/index
 configuration_service/index
 supply_chain_security
