@@ -45,7 +45,7 @@ Set `${BASE_URL}` to the root URL of a Submodel Repository or AAS Environment th
 
 ### Normal Representation
 
-```http
+```text
 GET ${BASE_URL}/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ/submodel-elements/Nameplate.SerialNumber
 ```
 
@@ -62,7 +62,7 @@ The normal response is the complete Property model:
 
 ### `$value`
 
-```http
+```text
 GET ${BASE_URL}/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ/submodel-elements/Nameplate.SerialNumber/$value
 ```
 
@@ -76,7 +76,7 @@ For this Property, the ValueOnly response is a JSON string:
 
 ### `$metadata`
 
-```http
+```text
 GET ${BASE_URL}/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ/submodel-elements/Nameplate.SerialNumber/$metadata
 ```
 
@@ -94,7 +94,7 @@ For structured elements, the metadata representation retains the nested model hi
 
 ### `$reference`
 
-```http
+```text
 GET ${BASE_URL}/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ/submodel-elements/Nameplate.SerialNumber/$reference
 ```
 
@@ -124,7 +124,7 @@ The response is a ModelReference to the Property, including the containing Submo
 
 Use `level=deep` on the collection to include its descendants:
 
-```http
+```text
 GET ${BASE_URL}/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ/submodel-elements/Nameplate/$path?level=deep
 ```
 
@@ -138,9 +138,7 @@ The response is an array of addressable `idShort` paths. It includes the request
 ]
 ```
 
-These entries identify elements; they are not AAS model objects or References.
-
-When using curl, quote URLs containing a dollar-sign suffix so the shell does not expand it. In PowerShell, use `curl.exe` when following curl examples.
+These entries identify elements. They are not AAS model objects or References.
 
 ## Depth and Blob Content
 
@@ -153,14 +151,30 @@ Where the read operation exposes them:
 | `extent=withoutBlobValue` | Omit Blob payload values. |
 | `extent=withBlobValue` | Include Blob payload values. |
 
-These modifiers change the response, not the stored resource. They do not download a File element's attachment. Use the component's attachment endpoint for that.
+These modifiers change the response, not the stored resource. `extent` only controls inline `Blob` values. It does not include the binary content referenced by a `File` element. Retrieve that content through the corresponding `/attachment` endpoint.
 
-## Writing a Representation
+## Writing Representations
 
-Use the request schema of the specific write endpoint. A `$value` response is not a complete resource body for a normal PUT. Submodel PATCH routes expect their corresponding normal, metadata, or value representation, rather than an RFC 6902 JSON Patch array. Keep resource-specific PATCH examples in [Submodel Repository Usage](../submodel_repository/usage).
+For Submodel and Submodel Element operations, body-bearing writes use the representation defined by the specific endpoint.
 
-For Submodel Element `$metadata` PATCH requests, this implementation accepts common metadata fields such as `description`, but rejects `valueType`. The existing Property datatype is retained. See the [metadata PATCH example](../submodel_repository/usage.md#representations-and-partial-updates).
+| Representation | Write operations | Request body |
+| --- | --- | --- |
+| Normal | `POST`, `PUT`, `PATCH` | Normal Submodel or Submodel Element representation |
+| `$metadata` | `PATCH` | Submodel or Submodel Element metadata representation |
+| `$value` | `PATCH` | Submodel or Submodel Element ValueOnly representation |
+| `$reference` | None | Read-only |
+| `$path` | None | Read-only |
 
-Operation invocation has separate normal and `$value` endpoints. In the stable release, delegated asynchronous Operation invocation through the `$value` endpoint is not supported; see [Asynchronous Operation Invocation](asynchronous_requests.md#asynchronous-operation-invocation).
+Normal `POST` endpoints create resources. On the Submodel and Submodel Element by-identifier or by-path endpoints, `PUT` uses the complete normal representation and creates a missing resource or replaces an existing one. A `$value` or `$metadata` response is not a complete request body for a normal `PUT`.
 
-Full Environment import/export is a separate capability; representation suffixes do not imply support for `/serialization` in a standalone service.
+`PATCH` performs a partial update using the representation of its endpoint. The normal endpoint accepts fields from the normal model representation, `/$metadata` accepts the metadata representation, and `/$value` accepts ValueOnly content. For example, these Submodel Element routes have different request schemas:
+
+```text
+PATCH .../submodel-elements/{idShortPath}
+PATCH .../submodel-elements/{idShortPath}/$metadata
+PATCH .../submodel-elements/{idShortPath}/$value
+```
+
+BaSyx Submodel PATCH endpoints do not accept RFC 6902 JSON Patch documents. Do not send an array of `op`, `path`, and `value` instructions; send the partial representation defined by the specific PATCH endpoint instead.
+
+Write support and field-level restrictions are operation-specific. Check the running [Swagger UI](swagger) for the exact request schema and see [Submodel Repository Usage](../submodel_repository/usage.md#representations-and-partial-updates) for concrete PATCH examples.
