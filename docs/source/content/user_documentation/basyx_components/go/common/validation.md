@@ -42,14 +42,8 @@ Using the AAS Repository at port `8084`:
 curl -i -X POST http://localhost:8084/verify -H 'Content-Type: application/json' --data-binary '@verify-submodel.json'
 ```
 
-Use `curl.exe` in PowerShell and add the service context path if configured. Expect `200 OK`, `valid: true`, and an empty `messages` array. The response also identifies the format and counts the contained AAS, Submodels, and Concept Descriptions.
+Add the service context path if configured. Expect `200 OK`, `valid: true`, and an empty `messages` array. The response also identifies the format and counts the contained AAS, Submodels, and Concept Descriptions.
 
 Change `idShort` to `1Invalid` and submit again. A parsed payload with semantic violations returns `200 OK` with `valid: false` and diagnostic `messages`. Inspect `valid`; HTTP success alone does not mean the model passed verification. This explicit verification reports violations independently of the write-verification mode.
 
 On a write route using semantic verification, the same invalid `idShort` is rejected in `strict` mode, logged in `permissive` mode, and not checked by the semantic verifier in `off` mode. Other write checks may still reject the request in any mode.
-
-## Other Failures
-
-Malformed or unsupported input produces an error response, commonly `400`. Requests exceeding the configured upload limit return `413`. AASX verification also applies package-expansion limits. See [General Configuration](configuration.md#general) for limits and [API Errors](api_errors) for interpreting failures.
-
-Source: release-pinned [shared verification endpoint](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/internal/common/endpoints.go).

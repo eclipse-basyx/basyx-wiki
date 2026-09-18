@@ -16,8 +16,7 @@ Environment variables override YAML values. Nested keys use underscore notation,
 
 These sections are part of the shared configuration model. Components ignore settings that are not relevant to their feature set.
 
-The defaults below are built into the shared configuration loader. A component's bundled `config.yaml` can override them; for example, the DPP API image configures port `8080` while the shared `server.port` default is `5004`.
-
+The defaults below are built into the shared configuration loader. A component's bundled `config.yaml` can override them.
 ### `logging`
 
 | Key | Default | Purpose |
@@ -51,6 +50,10 @@ All HTTP timeout values must be greater than `0`. When a service receives an int
 
 ### `postgres`
 
+```{note}
+The pool defaults, `connMaxIdleTimeMinutes`, zero-value handling, validation rules, and automatic service-name fallback described below require BaSyx Go 1.0.5 or later.
+```
+
 | Key | Default | Purpose |
 | --- | --- | --- |
 | `dsn` | `""` | Complete PostgreSQL connection string. It is mutually exclusive with the individual connection fields listed below; mixing both forms causes startup to fail. |
@@ -79,6 +82,10 @@ When `postgres.dsn` is non-empty, do not explicitly configure `host`, `port`, `u
 If no primary `application_name` is supplied through `applicationName` or the DSN, the component sets it to its service name. An explicitly configured value is preserved. This identifies each BaSyx service in PostgreSQL views such as `pg_stat_activity`.
 
 #### Optional PostgreSQL reader
+
+```{note}
+The `postgres.reader` configuration requires BaSyx Go 1.0.7 or later.
+```
 
 PostgreSQL-backed BaSyx HTTP services can use a separate reader connection for
 eligible, eventually consistent reads. Configure it as a nested
@@ -234,6 +241,12 @@ is the authoritative reference for the complete set of deployment values.
 
 ### Optional CloudNativePG read-write connection pooler
 
+```{note}
+The `database.pooler` values require BaSyx Helm chart `3.7.0` or newer. They
+configure a CloudNativePG `Pooler` resource and are not BaSyx application YAML
+settings.
+```
+
 For a database managed by the chart, an optional read-write PgBouncer layer can
 decouple the number of client connections opened by horizontally scaled BaSyx
 pods from the number of PostgreSQL server processes:
@@ -348,7 +361,8 @@ saturation, rolling updates, and a PostgreSQL switchover.
 ```{note}
 Both the chart-managed reader and its read-only Pooler are disabled by default.
 These `database.reader.*` values are Helm chart values, not the application's
-`postgres.reader.*` YAML settings.
+`postgres.reader.*` YAML settings. The `database.reader.*` values require BaSyx Helm chart `3.9.0` and BaSyx Go
+`1.0.7` or newer.
 ```
 
 For a database managed by the chart, enabling the global reader routes
@@ -507,15 +521,7 @@ The DSN and database credentials are sensitive and should normally be supplied t
 
 These fields are shared configuration; their presence does not mean every
 executable installs runtime security middleware. The supported path is
-activated through `abac.enabled`. See the complete [Runtime Security capability
-matrix](security.md#supported-components-and-default-posture).
-
-| Executable group | Shared middleware | Omitted `policyFileImport` |
-| --- | --- | --- |
-| Participating Repositories, Registries, Discovery, AAS Environment, and AASX File Server | Yes, when ABAC is enabled | `if_missing` |
-| Digital Twin Registry | Yes, when ABAC is enabled | `always` |
-| Company Lookup Service | No | Not applicable |
-| Configuration Service | Not applicable; one-shot database initializer | Not applicable |
+activated through `abac.enabled`.
 
 | Key | Default | Purpose |
 | --- | --- | --- |
@@ -537,9 +543,7 @@ The startup modes have these exact effects:
 | `never` | Never import `modelPath`; an existing active policy is required or startup fails closed. |
 
 An empty mode is service-specific: Digital Twin Registry resolves it to
-`always`; the other participating services resolve it to `if_missing`. See
-[Policy Persistence and Restart Behavior](security.md#policy-persistence-and-restart-behavior)
-for active/staged versions, management API conditions, and file-change
+`always`. The other participating services resolve it to `if_missing`.
 behavior.
 
 When set, `policyScope` is trimmed, must not exceed 255 characters, and may contain ASCII letters, digits, `_`, `-`, `.`, and `:`.
@@ -579,7 +583,7 @@ Each `claimMappings` entry contains:
 | `externalUrl` | `""` | Comma-separated public base URL(s). All entries generate endpoints in synchronized Registry descriptors; the first entry is also used for externally reachable resource and `Location` URLs, including DPP managed-attachment URLs. |
 | `trustProxyHeaders` | `false` | Allows `Forwarded` or `X-Forwarded-*` values to determine public scheme, host, and client IP, but only for requests received from an address in `trustedProxyCIDRs`. |
 | `trustedProxyCIDRs` | `[]` | CIDR allowlist for proxies whose forwarded headers may be trusted. An empty list means forwarded headers are never trusted, even when `trustProxyHeaders` is enabled. |
-| `uploadMaxSizeBytes` | `134217728` | Maximum uploaded file-content size in bytes for binary upload endpoints. Multipart metadata and framing overhead are allowed separately. |
+| `uploadMaxSizeBytes` | `134217728` | Maximum uploaded file-content size in bytes for binary upload endpoints. Multipart requests additionally allow up to 2 MiB of form metadata and 1 MiB of framing overhead. |
 | `aasxMaxPartCount` | `10000` | Maximum number of non-directory entries in an AASX package. |
 | `aasxMaxOPCMetadataSizeBytes` | `16777216` | Maximum combined expanded size of AASX OPC metadata. |
 | `aasxMaxPartExpandedSizeBytes` | `134217728` | Maximum expanded size of one AASX payload part. |
@@ -915,10 +919,6 @@ The shared configuration may reference these security-sensitive files:
 
 In containers, paths are resolved inside the container filesystem. Mount the files or their parent directory and point the YAML value or environment variable to the mounted path.
 
-For ABAC, mounting or editing `abac.modelPath` does not by itself replace an
-active database-backed policy. The effective `abac.policyFileImport` mode and
-policy scope decide whether startup imports that file. See the [policy lifecycle](security.md#policy-persistence-and-restart-behavior).
-
 ## Notes
 
 - The BaSyx Configuration Service mainly uses the `postgres` section.
@@ -929,4 +929,4 @@ policy scope decide whether startup imports that file. See the [policy lifecycle
 
 ## Related Usage Guides
 
-See [Runtime Security](security), [Validation](validation), [Registry Integration](registry_integration), and [History, Timestamps, and Signed Reads](history_and_changes) for workflows using these settings.
+See [Validation](validation), [Registry Integration](registry_integration), and [History, Timestamps, and Signed Reads](history_and_changes) for workflows using these settings.

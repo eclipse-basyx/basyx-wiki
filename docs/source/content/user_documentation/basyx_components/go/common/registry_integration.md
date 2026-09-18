@@ -14,7 +14,7 @@ The Repository does not POST descriptors to a remote Registry URL. The Registry 
 | --- | --- | --- |
 | Standalone AAS Repository | `general.aasRegistryIntegration: true` | Maintains AAS Descriptors and applicable embedded Submodel Descriptors. It does not create standalone Submodel Registry entries under this flag. |
 | Standalone Submodel Repository | `general.submodelRegistryIntegration: true` | Maintains standalone Submodel Descriptors and applicable embedded descriptors in existing AAS Descriptors. |
-| [Composed AAS Environment](../aas_environment/index) | AAS and/or Submodel integration flags | Enables the corresponding integration within the composed service. |
+| Composed AAS Environment | AAS and/or Submodel integration flags | Enables the corresponding integration within the composed service. |
 
 Integration is disabled by default. The standalone AAS Repository rejects the Submodel flag; the standalone Submodel Repository rejects the AAS flag. Follow the component guide for the exact lifecycle effects.
 
@@ -46,9 +46,7 @@ Plan explicit registration or reconciliation for existing data. Generated update
 
 This local example runs both Repositories and both Registries against one database. A reverse proxy exposes both Repository APIs at `http://localhost:8080`, which both Repositories advertise in generated descriptors. The direct Repository ports remain available for the usage walkthroughs.
 
-The example uses `latest` for every BaSyx Go image, following the shared [Version Scope](deployment.md#version-scope). Its PostgreSQL 18 service intentionally remains a minimal local example without a declared volume. Before storing data that must survive container replacement, add a named volume mounted at `/var/lib/postgresql`; adding one later does not migrate an existing anonymous volume. Review [Persistent State](deployment.md#persistent-state) before the first startup.
-
-Save this as `docker-compose.yml` in a new directory. Run it as one Compose project; do not also start the separate setup examples on the same host ports. Docker with the Compose plugin and curl are required.
+Save this as `docker-compose.yml` in a new directory and run it.
 
 ```yaml
 x-database: &database
@@ -160,18 +158,68 @@ The proxy preserves the request path. It routes the generated resource URLs; use
 Start and check the services:
 
 ```bash
-docker compose config --quiet
 docker compose up -d
-docker compose ps -a
 curl -i http://localhost:8084/health
 curl -i http://localhost:8085/health
 curl -i http://localhost:8082/health
 curl -i http://localhost:8083/health
 ```
 
-Expect the Configuration Service to exit with code `0`, and each health request to return `200 OK` with `{"status":"UP"}` once startup finishes. Use `curl.exe` in PowerShell. For startup failures, inspect `docker compose logs basyx_configuration aas_repository submodel_repository aas_registry submodel_registry`.
+Expect the Configuration Service to exit with code `0`, and each health request to return `200 OK` with `{"status":"UP"}` once startup finishes. For startup failures, inspect `docker compose logs basyx_configuration aas_repository submodel_repository aas_registry submodel_registry`.
 
-Follow the [AAS Repository walkthrough](../aas_repository/usage) through **AAS-scoped Submodel Access**, starting with unused example identifiers. Before deleting the content, read the generated descriptor:
+First, save the following as
+`integration-aas.json`:
+
+```json
+{
+  "modelType": "AssetAdministrationShell",
+  "id": "urn:example:aas:1",
+  "idShort": "RegistryIntegrationAAS",
+  "assetInformation": {
+    "assetKind": "Instance",
+    "globalAssetId": "urn:example:asset:1",
+    "assetType": "Motor",
+    "specificAssetIds": [
+      { "name": "serialNumber", "value": "SN-001" }
+    ]
+  }
+}
+```
+
+Create it through the AAS Repository:
+
+```bash
+curl -i -X POST http://localhost:8084/shells -H 'Content-Type: application/json' --data-binary '@integration-aas.json'
+```
+
+Expect `201 Created`. Save this AAS-scoped Submodel as
+`integration-embedded-submodel.json`:
+
+```json
+{
+  "modelType": "Submodel",
+  "id": "urn:example:submodel:1",
+  "idShort": "EmbeddedNameplate",
+  "submodelElements": [
+    {
+      "modelType": "Property",
+      "idShort": "SerialNumber",
+      "valueType": "xs:string",
+      "value": "SN-001"
+    }
+  ]
+}
+```
+
+Store it through the AAS-scoped API. This also adds its reference to the AAS:
+
+```bash
+curl -i -X PUT http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ -H 'Content-Type: application/json' --data-binary '@integration-embedded-submodel.json'
+```
+
+Expect `201 Created` for unused identifiers. Now read the generated AAS
+Descriptor and follow its advertised AAS and embedded Submodel endpoints
+through the proxy:
 
 ```bash
 curl -i http://localhost:8082/shell-descriptors/dXJuOmV4YW1wbGU6YWFzOjE
@@ -181,10 +229,60 @@ curl -i http://localhost:8080/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ
 
 Expect `200 OK` for all three requests. Confirm that the descriptor's AAS and embedded Submodel endpoint URLs match the two proxy URLs above. This verifies that discovery leads to readable content. Creating the Submodel through the AAS Repository maintains its embedded descriptor; it does not create a standalone Submodel Registry entry under the AAS integration flag.
 
-To check standalone Submodel registration, use the [Submodel Repository walkthrough](../submodel_repository/usage) with a different identifier, then follow its [integration check](../submodel_repository/registry_integration.md#check-the-integration). Both walkthroughs otherwise use `urn:example:submodel:1`, so running their creation steps unchanged against this shared database would conflict.
+To verify the standalone Submodel integration independently, save the following
+as `integration-standalone-submodel.json`. It deliberately uses a different
+identifier from the embedded example:
 
-## Try It
+```json
+{
+  "modelType": "Submodel",
+  "id": "urn:example:submodel:standalone:1",
+  "idShort": "StandaloneNameplate",
+  "semanticId": {
+    "type": "ExternalReference",
+    "keys": [
+      { "type": "GlobalReference", "value": "urn:example:semantic:nameplate" }
+    ]
+  },
+  "submodelElements": [
+    {
+      "modelType": "Property",
+      "idShort": "ManufacturerName",
+      "valueType": "xs:string",
+      "value": "Example Motors"
+    }
+  ]
+}
+```
 
-Use the [AAS Repository integration walkthrough](../aas_repository/registry_integration.md#check-the-integration) or [Submodel Repository integration walkthrough](../submodel_repository/registry_integration.md#check-the-integration) to enable the flag, create a resource, retrieve its descriptor, and verify deletion. These pages retain the resource-specific configuration and lifecycle tables.
+Create the Submodel through the standalone Submodel Repository, retrieve its
+generated standalone descriptor, and follow its advertised endpoint:
 
-Source: release-pinned [synchronization behavior](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/docu/user/aas_api_v3_2.md#repository-to-registry-synchronization).
+```bash
+curl -i -X POST http://localhost:8085/submodels -H 'Content-Type: application/json' --data-binary '@integration-standalone-submodel.json'
+curl -i http://localhost:8083/submodel-descriptors/dXJuOmV4YW1wbGU6c3VibW9kZWw6c3RhbmRhbG9uZTox
+curl -i http://localhost:8080/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6c3RhbmRhbG9uZTox
+```
+
+Expect `201 Created` for the POST and `200 OK` for both GET requests. The
+descriptor's endpoint URL must match the proxy URL above. This confirms that
+`submodelRegistryIntegration` created a standalone Submodel Descriptor and
+that clients can follow it to the stored Submodel.
+
+Remove the example resources and verify that synchronization also removes the
+descriptors:
+
+```bash
+curl -i -X DELETE http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6c3RhbmRhbG9uZTox
+curl -i http://localhost:8083/submodel-descriptors/dXJuOmV4YW1wbGU6c3VibW9kZWw6c3RhbmRhbG9uZTox
+curl -i -X DELETE http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ
+curl -i http://localhost:8082/shell-descriptors/dXJuOmV4YW1wbGU6YWFzOjE
+curl -i -X DELETE http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE
+curl -i http://localhost:8082/shell-descriptors/dXJuOmV4YW1wbGU6YWFzOjE
+```
+
+Each DELETE returns `204 No Content`. The standalone descriptor GET returns
+`404 Not Found`. After the AAS-scoped Submodel deletion, the AAS Descriptor
+still returns `200 OK` but no longer contains that embedded Submodel
+Descriptor. After deleting the AAS, its descriptor GET returns `404 Not
+Found`.
