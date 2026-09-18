@@ -80,7 +80,7 @@ Result retrieval does not delete the handle. Completed and failed records are re
 
 ### Asynchronous AASX Upload
 
-`POST /packages-async` durably accepts the uploaded AASX package before processing it. The multipart request requires `file` and may include `aasIds`; the source filename is taken from the file part. A successful or failed result is represented by a `BaseOperationResult`, and reading it does not delete the handle.
+`POST /packages-async` durably accepts the uploaded AASX package before processing it. The multipart request requires `file` and may include `aasIds`. The source filename is taken from the file part. A successful or failed result is represented by a `BaseOperationResult`, and reading it does not delete the handle.
 
 When AASX File Server security is enabled, submission, status, and result requests require a verified bearer token. Use the same authenticated caller for all three steps. The SSP-002 routes are enabled only when the PostgreSQL writer pool has enough capacity for asynchronous processing; the service omits that profile and logs a startup warning if no execution capacity can be reserved.
 
