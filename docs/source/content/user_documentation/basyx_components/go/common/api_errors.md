@@ -33,7 +33,7 @@ secured list or query can return `200` while policy filtering omits inaccessible
 rows. A validation endpoint can return `200` with `valid: false`; an
 asynchronous submission can return `202` before execution fails. See [Runtime
 Security troubleshooting](security.md#troubleshooting), [Validation](validation),
-and [Asynchronous Requests](asynchronous_requests).
+and [Asynchronous API Operations](asynchronous_requests).
 
 ## Find the Matching Log Entry
 

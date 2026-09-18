@@ -106,7 +106,7 @@ curl --include 'http://localhost:8090/<returned operation-results path>'
 
 Expect `200 OK`. The completed `OperationResult` again has `executionState: "Completed"`, `success: true`, and output `sum` equal to `"8"`.
 
-These are operation-specific resources. Do not apply Registry bulk assumptions about `204` results, consuming a result on retrieval, or bulk retention to delegated-operation results. See [Asynchronous Requests](../common/asynchronous_requests) for the cross-component comparison.
+These are operation-specific resources. Do not apply Registry bulk assumptions about `204` results, consuming a result on retrieval, or bulk retention to delegated-operation results. See [Asynchronous API Operations](../common/asynchronous_requests) for the cross-component comparison.
 
 ## Failure Diagnosis
 
@@ -124,5 +124,5 @@ For general response diagnosis, see [API Errors](../common/api_errors).
 ## API and Shared Asynchronous References
 
 - The running service exposes its exact contract at `/swagger` and `/api-docs/openapi.yaml`.
-- [Asynchronous Requests](../common/asynchronous_requests) compares operation resources with Registry bulk jobs.
+- [Asynchronous API Operations](../common/asynchronous_requests) compares operation resources with Registry bulk jobs.
 - The release-pinned [delegation implementation](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/internal/submodelrepository/api/operation_delegation.go), [destination guard](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/internal/submodelrepository/api/operation_delegation_security.go), and [integration test](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/internal/submodelrepository/integration_tests/delegation_operation_integration_test.go) define the 1.0.11 behavior documented here.

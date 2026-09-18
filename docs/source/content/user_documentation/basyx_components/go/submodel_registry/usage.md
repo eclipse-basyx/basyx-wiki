@@ -147,7 +147,7 @@ See the release-pinned [query language examples](https://github.com/eclipse-basy
 
 The bulk routes accept non-empty JSON arrays:
 
-See [Asynchronous Requests](../common/asynchronous_requests) for the shared polling workflow, temporary handles, and retry considerations. The examples below use this Registry's endpoints.
+See [Asynchronous API Operations](../common/asynchronous_requests) for the shared polling workflow, temporary handles, and retry considerations. The examples below use this Registry's endpoints.
 
 | Method and path | Body |
 | --- | --- |
@@ -240,4 +240,4 @@ Follow the same status/result sequence with the new handle and expect `204 No Co
 
 ## Shared API Guidance
 
-See [Identifiers and Encoding](../common/encoding), [Validation](../common/validation), [API Errors](../common/api_errors), and [History, Timestamps, and Signed Reads](../common/history_and_changes). For bulk status polling and result handling, see [Asynchronous Requests](../common/asynchronous_requests). Component-specific requests and lifecycle behavior are documented above.
+See [Identifiers and Encoding](../common/encoding), [Validation](../common/validation), [API Errors](../common/api_errors), and [History, Timestamps, and Signed Reads](../common/history_and_changes). For bulk status polling and result handling, see [Asynchronous API Operations](../common/asynchronous_requests). Component-specific requests and lifecycle behavior are documented above.

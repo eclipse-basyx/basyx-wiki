@@ -15,7 +15,7 @@ This section documents features and configuration aspects that are implemented i
 * [Identifiers and Encoding](encoding)
 * [Validation](validation)
 * [Repository-to-Registry Integration](registry_integration)
-* [Asynchronous Requests](asynchronous_requests)
+* [Asynchronous API Operations](asynchronous_requests)
 * [Response Representations](representations)
 * [History, Timestamps, and Signed Reads](history_and_changes)
 * [Understanding API Errors](api_errors)

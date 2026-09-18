@@ -152,7 +152,7 @@ Expect `200 OK` with a paged descriptor result. String values in the query JSON 
 
 The bulk routes accept non-empty JSON arrays:
 
-See [Asynchronous Requests](../common/asynchronous_requests) for the shared polling workflow, temporary handles, and retry considerations. The examples below use this Registry's endpoints.
+See [Asynchronous API Operations](../common/asynchronous_requests) for the shared polling workflow, temporary handles, and retry considerations. The examples below use this Registry's endpoints.
 
 | Method and path | Body |
 | --- | --- |
@@ -210,4 +210,4 @@ curl -i -X DELETE http://localhost:8082/bulk/shell-descriptors -H 'Content-Type:
 
 ## Shared API Guidance
 
-See [Identifiers and Encoding](../common/encoding), [Validation](../common/validation), [API Errors](../common/api_errors), and [History, Timestamps, and Signed Reads](../common/history_and_changes). For bulk status polling and result handling, see [Asynchronous Requests](../common/asynchronous_requests). Component-specific requests and lifecycle behavior are documented above.
+See [Identifiers and Encoding](../common/encoding), [Validation](../common/validation), [API Errors](../common/api_errors), and [History, Timestamps, and Signed Reads](../common/history_and_changes). For bulk status polling and result handling, see [Asynchronous API Operations](../common/asynchronous_requests). Component-specific requests and lifecycle behavior are documented above.
