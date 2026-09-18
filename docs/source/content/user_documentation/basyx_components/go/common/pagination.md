@@ -21,7 +21,7 @@ Choose the component's collection endpoint and send a request without a cursor. 
 curl -i -G http://localhost:8084/shells --data-urlencode 'limit=1'
 ```
 
-Use `curl.exe` in PowerShell. Adjust the base URL and context path for your service.
+Adjust the base URL and context path for your service.
 
 Successful collection responses contain:
 
@@ -51,7 +51,7 @@ curl -i -G http://localhost:8084/shells --data-urlencode 'limit=1' --data-urlenc
 
 Replace `RETURNED_CURSOR` with the real value from the preceding response. `--data-urlencode` performs URL escaping without changing the logical cursor value.
 
-Process that page's `result`, then use its next cursor. Stop when `paging_metadata.cursor` is absent or empty. Do not decide whether to continue solely from the number of entries: a full page can be the last page, and a short page is not a substitute for inspecting the cursor.
+Process that page's `result`, then use its next cursor. Stop when `paging_metadata.cursor` is absent or empty.
 
 An empty collection response can look like this:
 
@@ -63,14 +63,6 @@ An empty collection response can look like this:
 ```
 
 This is a successful result with no matches, not a missing-resource error.
-
-## Keep the Same Search
-
-While following a cursor, retain the endpoint, filters, representation parameters, and caller identity used for the first request. Keep the page size unchanged for a predictable sequence. To change the search, start again without a cursor; do not reuse a cursor from another endpoint or filter combination.
-
-For paginated POST query operations, submit the same query body on each page and pass the returned cursor through the operation's cursor parameter. A pagination cursor is separate from an asynchronous operation handle.
-
-Pagination alone does not guarantee a snapshot across separate requests while other clients modify data. Consult the component's consistency guarantees when using paginated reads for synchronization.
 
 ## Component Examples
 
