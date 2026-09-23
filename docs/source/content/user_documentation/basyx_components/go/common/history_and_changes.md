@@ -101,7 +101,7 @@ Historical reads are authorized at the route level. They do not apply current-re
 
 The recorded fields depend on the information available for the request. For example, an anonymous request does not gain an authenticated identity simply because audit context recording is enabled.
 
-Audit identity capture, PostgreSQL guarding, and external mutation evidence are separate controls; selecting `history.mode: audit` does not enable them automatically.See [General Configuration](configuration.md#history) for the audit identity settings.
+Audit identity capture, PostgreSQL guarding, and external mutation evidence are separate controls. Selecting `history.mode: audit` does not enable them automatically. See [General Configuration](configuration.md#history) for the audit identity settings.
 
 ### Integrity Checks During Historical Reads
 
