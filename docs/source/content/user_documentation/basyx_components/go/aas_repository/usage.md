@@ -21,7 +21,7 @@ Run commands from one working directory and save each JSON file there before the
 - **Request files:** `--data-binary '@aas.json'` reads the file from the current directory and sends it as the request body.
 - **Responses:** `-i` displays HTTP headers and the body. A successful `204 No Content` response intentionally has no JSON body; use GET to check the new state.
 
-The commands assume the unsecured example setup. For an existing secured deployment, use credentials and permissions appropriate to that deployment. Run the walkthrough on example data: it creates and later deletes `urn:example:aas:1`, `urn:example:aas:2`, and `urn:example:submodel:1`.
+The commands assume the unsecured example setup. For an existing secured deployment, use credentials and permissions appropriate to that deployment. Run the walkthrough on example data: it creates and later deletes `urn:example:aas:1`, `urn:example:aas:2`, `urn:example:aas:history`, and `urn:example:submodel:1`.
 
 ## Create an AAS
 
@@ -64,6 +64,7 @@ The request URL uses the encoded **AAS identifier**, not the asset identifier or
 | Original identifier | Base64URL path value |
 | --- | --- |
 | `urn:example:aas:1` | `dXJuOmV4YW1wbGU6YWFzOjE` |
+| `urn:example:aas:history` | `dXJuOmV4YW1wbGU6YWFzOmhpc3Rvcnk` |
 | `urn:example:submodel:1` | `dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ` |
 
 These values are already substituted into every example URL. Keep identifiers in JSON bodies unencoded.
@@ -318,6 +319,101 @@ Expect your AAS in `result`. Searching for `SN-001` after changing it to `SN-002
 
 Timestamp filters use administrative timestamps supplied in the AAS payload. Writes do not automatically generate or overwrite `administration.createdAt` and `administration.updatedAt`; see [Find Recently Changed AASs](#find-recently-changed-aass) for a complete example. Current-resource lists do not report deletions. Ordinary list parameters select supported attributes; structured query expressions belong to `POST /query/shells` and are not arbitrary additional list parameters. Consult the running Swagger UI for the query schema in your component version.
 
+## Read a Historical AAS State
+
+History recording must be enabled before the mutations you want to retrieve are performed. For the Compose setup, add `BASYX_HISTORY_MODE=api` to the `aas_repository` service environment and recreate that service:
+
+```yaml
+environment:
+  - BASYX_HISTORY_MODE=api
+```
+
+```bash
+docker compose up -d --force-recreate aas_repository
+```
+
+For native deployments, set `history.mode: api` in `config.yaml` and restart the Repository. See [History, Timestamps, and Signed Reads](../common/history_and_changes.md#enable-history-recording) for the available modes. Enabling history does not backfill states created before it was active.
+
+Save the initial state as `historical-aas.json`. It deliberately has no administrative timestamps: historical lookup uses the recorded mutation time instead.
+
+```json
+{
+  "modelType": "AssetAdministrationShell",
+  "id": "urn:example:aas:history",
+  "idShort": "HistoricalMotorV1",
+  "assetInformation": {
+    "assetKind": "Instance",
+    "globalAssetId": "urn:example:asset:history",
+    "assetType": "Motor"
+  }
+}
+```
+
+Create the AAS:
+
+```bash
+curl -i -X POST http://localhost:8084/shells -H 'Content-Type: application/json' --data-binary '@historical-aas.json'
+```
+
+Expect `201 Created`. Next, record a UTC timestamp after creation. The one-second delay ensures that the whole-second timestamp is later than the recorded creation time.
+
+```bash
+# Bash
+sleep 1
+RECORDED_UTC_TIME=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+```
+
+```powershell
+# Windows PowerShell
+Start-Sleep -Seconds 1
+$RECORDED_UTC_TIME = (Get-Date).ToUniversalTime().ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")
+```
+
+Save the replacement as `historical-aas-updated.json`:
+
+```json
+{
+  "modelType": "AssetAdministrationShell",
+  "id": "urn:example:aas:history",
+  "idShort": "HistoricalMotorV2",
+  "assetInformation": {
+    "assetKind": "Instance",
+    "globalAssetId": "urn:example:asset:history",
+    "assetType": "UpdatedMotor"
+  }
+}
+```
+
+Replace the current AAS:
+
+```bash
+curl -i -X PUT http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOmhpc3Rvcnk -H 'Content-Type: application/json' --data-binary '@historical-aas-updated.json'
+```
+
+Expect `204 No Content`. Request the state that was valid at the recorded time:
+
+```bash
+curl -i -G 'http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOmhpc3Rvcnk/$history' \
+  --data-urlencode "date=$RECORDED_UTC_TIME"
+```
+
+Expect `200 OK` and the earlier AAS state:
+
+```json
+{
+  "idShort": "HistoricalMotorV1",
+  "assetInformation": {
+    "assetKind": "Instance",
+    "globalAssetId": "urn:example:asset:history",
+    "assetType": "Motor"
+  },
+  "id": "urn:example:aas:history",
+  "modelType": "AssetAdministrationShell"
+}
+```
+
+The current AAS remains `HistoricalMotorV2`; `$history` returns the complete AAS representation recorded for the requested time. At an exact update boundary the newer state is selected. A timestamp before the first recorded state or after a recorded deletion returns `404 Not Found`; a timestamp before deletion can still retrieve the earlier state.
+
 ## Asset Thumbnail
 
 Place an existing PNG image named `thumbnail.png` in your working directory. Upload it using multipart form fields `fileName` and `file`:
@@ -342,7 +438,7 @@ Expect `204 No Content`. Deleting the thumbnail does not delete the AAS.
 
 ## Delete the Example Content
 
-Once you have finished, delete the example Submodel through the motor AAS, then delete both AASs. The reference must still be present, so restore it first if you stopped partway through the reference-management section. The pump AAS added for pagination has no Submodel to clean up.
+Once you have finished, delete the example Submodel through the motor AAS, then delete all three AASs. The reference must still be present, so restore it first if you stopped partway through the reference-management section. The pump and historical AASs have no Submodels to clean up.
 
 | Request | What it removes |
 | --- | --- |
@@ -355,6 +451,7 @@ The commands below intentionally use the second operation:
 curl -i -X DELETE http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ
 curl -i -X DELETE http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE
 curl -i -X DELETE http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjI
+curl -i -X DELETE http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOmhpc3Rvcnk
 ```
 
 Expect `204 No Content` for each existing resource. Subsequent GET requests return `404`. Perform this cleanup after completing any Submodel Repository examples that share the same database and identifier.

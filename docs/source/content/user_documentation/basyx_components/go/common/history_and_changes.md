@@ -33,7 +33,7 @@ curl -i -G 'http://localhost:8084/shells/$recent-changes' \
   --data-urlencode 'updatedFrom=2026-09-02T00:00:00Z'
 ```
 
-The response is paged and contains the matching resource identifiers together with their creation and update timestamps. See [AAS Repository Usage](../aas_repository/usage.md#find-recently-changed-aass) for a complete request and response example, and [Pagination](pagination) for handling additional pages.
+The response is paged and contains the matching resource identifiers together with their creation and update timestamps, as defined by the [IDTA Recent Changes specification](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/specification/interfaces-payload.html#RecentChanges). See [AAS Repository Usage](../aas_repository/usage.md#find-recently-changed-aass) for a complete request and response example, and [Pagination](pagination) for handling additional pages.
 
 Resources without valid administrative timestamps are excluded. Deleted resources are absent. This is a view of current rows, not a complete mutation log or a deletion feed.
 
@@ -54,13 +54,11 @@ Restart the service after changing the configuration. Enable history before perf
 | --- | --- |
 | `off` (default) | Do not record new PostgreSQL history. Existing history remains readable. |
 | `api` | Record supported mutations so earlier resource states can be reconstructed through `$history`. |
-| `audit` | Record the same historical states as `api`, intended for audit-oriented deployments. Audit identity, database guarding, and external mutation evidence are configured separately. |
+| `audit` | Record the same history as `api`. The mode designates an audit-oriented deployment. Audit identity, database guarding, and external mutation evidence are configured separately. |
 
 History is not backfilled when it is enabled. Existing resources do not automatically receive historical versions, so states from before activation cannot be retrieved through `$history`.
 
-For an existing resource without history, the first supported mutation creates its first recorded state or deletion marker. It does not preserve the resource's earlier state from before history recording was enabled.
-
-History increases storage use. Automatic history cleanup is not implemented, so `history.retentionDays` must remain `0`. See [General Configuration](configuration.md#history) for the storage settings.
+History increases storage use. `history.fullSnapshotInterval` controls how often a complete resource snapshot is stored. Between full snapshots, history entries can be stored as diffs from the preceding state. The default value of `1` stores every history entry as a full snapshot. `history.retentionDays` controls database-history retention, but automatic cleanup is not currently implemented, so only `0` (keep history indefinitely) is supported. See [General Configuration](configuration.md#history) for all history settings and their defaults.
 
 ### What History Records
 
@@ -85,7 +83,9 @@ curl -i -G 'http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/$history' \
   --data-urlencode 'date=RECORDED_UTC_TIME'
 ```
 
-The response reconstructs the version valid at that time. The requested time follows the recorded mutation timeline, not `administration.createdAt` or `administration.updatedAt`. At an exact update boundary, the newer version is selected. A time before a recorded deletion can resolve the earlier version; a time after the deletion returns not found.
+The response reconstructs the version valid at that time. The requested time follows the recorded mutation timeline, not `administration.createdAt` or `administration.updatedAt`. At an exact update boundary, the newer version is selected. A time before the first recorded state or after a recorded deletion returns not found; a time before that deletion can still resolve the earlier version.
+
+For a complete AAS-specific example that creates, updates, and retrieves an earlier state, see [AAS Repository Usage](../aas_repository/usage.md#read-a-historical-aas-state). Submodel historical reads use the same general time-selection behavior through the Submodel `$history` endpoint.
 
 Historical reads are authorized at the route level. They do not apply current-resource ABAC filters or field redaction to stored snapshots. Grant access to `$history` only to callers permitted to read the complete retained snapshots; current-resource filtering does not restrict their contents.
 
