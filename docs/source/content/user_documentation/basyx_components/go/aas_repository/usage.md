@@ -32,6 +32,10 @@ Save this as `aas.json`:
   "modelType": "AssetAdministrationShell",
   "id": "urn:example:aas:1",
   "idShort": "MotorAAS",
+  "administration": {
+    "createdAt": "2026-09-01T10:00:00Z",
+    "updatedAt": "2026-09-02T10:00:00Z"
+  },
   "assetInformation": {
     "assetKind": "Instance",
     "globalAssetId": "urn:example:asset:1",
@@ -211,6 +215,41 @@ Read the Submodel again using the AAS-scoped GET from the previous section. It i
 
 See [Pagination](../common/pagination) for `limit`, cursor handling, and the shared response structure. The examples below show this component's requests and filters.
 
+### Find Recently Changed AASs
+
+The motor AAS created earlier contains client-supplied `administration.createdAt` and `administration.updatedAt` values. Query the dedicated recent-changes endpoint for AASs updated at or after the given RFC 3339 time:
+
+```bash
+curl -i -G 'http://localhost:8084/shells/$recent-changes' \
+  --data-urlencode 'updatedFrom=2026-09-02T00:00:00Z'
+```
+
+Expect `200 OK`. On a database containing only the walkthrough resources, the response is:
+
+```json
+{
+  "paging_metadata": {},
+  "result": [
+    {
+      "createdAt": "2026-09-01T10:00:00Z",
+      "updatedAt": "2026-09-02T10:00:00Z",
+      "id": "urn:example:aas:1",
+      "globalAssetId": "urn:example:asset:1",
+      "specificAssetIds": [
+        {
+          "name": "serialNumber",
+          "value": "SN-002"
+        }
+      ]
+    }
+  ]
+}
+```
+
+The response contains summary entries, not complete AAS resources. `id`, `createdAt`, and `updatedAt` are required in each entry; asset identifiers are included when present on the AAS. An empty `paging_metadata` object means there is no next page. When another page is available, it contains a `cursor` to pass in the next request.
+
+Resources without valid administrative timestamps are excluded, and deleted resources are not returned. This endpoint is a timestamp-filtered view of current resources, not a mutation history or deletion feed.
+
 ### Create a Second AAS
 
 Pagination is useful when a collection contains more entries than one response should return. Add a second AAS so you can try this with two resources. Save the following as `second-aas.json`:
@@ -277,7 +316,7 @@ curl -i -G http://localhost:8084/shells --data-urlencode 'assetIds=eyJuYW1lIjoic
 
 Expect your AAS in `result`. Searching for `SN-001` after changing it to `SN-002` would return no match. For your own asset filters, encode the complete JSON object using the [shared encoding commands](../common/encoding.md#encode-your-own-identifier). Use `{"name":"globalAssetId","value":"urn:example:asset:1"}` for the global asset identifier. Normal URL escaping is separate from Base64URL encoding; `--data-urlencode` handles it here.
 
-Timestamp filters use administrative timestamps supplied in the AAS payload. Writes do not automatically generate or overwrite `administration.createdAt` and `administration.updatedAt`; the example does not supply them. Current-resource lists do not report deletions. Ordinary list parameters select supported attributes; structured query expressions belong to `POST /query/shells` and are not arbitrary additional list parameters. Consult the running Swagger UI for the query schema in your component version.
+Timestamp filters use administrative timestamps supplied in the AAS payload. Writes do not automatically generate or overwrite `administration.createdAt` and `administration.updatedAt`; see [Find Recently Changed AASs](#find-recently-changed-aass) for a complete example. Current-resource lists do not report deletions. Ordinary list parameters select supported attributes; structured query expressions belong to `POST /query/shells` and are not arbitrary additional list parameters. Consult the running Swagger UI for the query schema in your component version.
 
 ## Asset Thumbnail
 

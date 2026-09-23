@@ -1,6 +1,6 @@
 # History, Timestamps, and Signed Reads
 
-These features answer different questions: which current resources carry recent timestamps, what a resource looked like at an earlier time, and whether a returned payload or retained mutation artifact can be verified.
+The features on this page serve different purposes. Recent-change APIs find current resources by their stored timestamps, history reconstructs earlier recorded states, and signed reads and mutation evidence support verification of returned or retained data.
 
 ## Availability
 
@@ -17,7 +17,7 @@ Paths are relative to the service base URL, including any configured context pat
 
 ## Current Changes and Client Timestamps
 
-Recent-change endpoints read current resources with valid `administration.createdAt` and `administration.updatedAt` timestamps. BaSyx does not generate or overwrite those fields. Your producer must supply and maintain them, for example:
+Recent-change endpoints read current resources with valid `administration.createdAt` and `administration.updatedAt` timestamps. BaSyx does not generate or update these fields automatically. The client that creates or updates the resource must supply and maintain them, for example:
 
 ```json
 {
@@ -29,10 +29,11 @@ Recent-change endpoints read current resources with valid `administration.create
 Include these fields in the resource's `administration` object. After creating or updating timestamped AAS resources:
 
 ```bash
-curl -i -G 'http://localhost:8084/shells/$recent-changes' --data-urlencode 'updatedFrom=2026-09-02T00:00:00Z'
+curl -i -G 'http://localhost:8084/shells/$recent-changes' \
+  --data-urlencode 'updatedFrom=2026-09-02T00:00:00Z'
 ```
 
-Expect a paged result with identifiers and timestamps, plus resource-specific identifying fields. Follow [Pagination](pagination) for additional pages.
+The response is paged and contains the matching resource identifiers together with their creation and update timestamps. See [AAS Repository Usage](../aas_repository/usage.md#find-recently-changed-aass) for a complete request and response example, and [Pagination](pagination) for handling additional pages.
 
 Resources without valid administrative timestamps are excluded. Deleted resources are absent. This is a view of current rows, not a complete mutation log or a deletion feed.
 
