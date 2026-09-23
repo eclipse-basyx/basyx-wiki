@@ -11,7 +11,7 @@ These features answer different questions: which current resources carry recent 
 | Concept Description Repository | `/concept-descriptions/$recent-changes` | None | None |
 | AAS Registry / Digital Twin Registry | `createdFrom` and `updatedFrom` on `/shell-descriptors` | None | None |
 | Submodel Registry | `createdFrom` and `updatedFrom` on `/submodel-descriptors` | None | None |
-| AAS Environment | Corresponding AAS, Submodel, Concept Description, and descriptor routes | `/shells/{aasIdentifier}/$history`; `/submodels/{submodelIdentifier}/$history` | Corresponding AAS and Submodel signed reads |
+| AAS Environment | `/shells/$recent-changes`; `/submodels/$recent-changes`; `/concept-descriptions/$recent-changes`; descriptor collections use `createdFrom` and `updatedFrom` | `/shells/{aasIdentifier}/$history`; `/submodels/{submodelIdentifier}/$history` | Corresponding AAS and Submodel signed reads |
 
 Paths are relative to the service base URL, including any context path. Check the installed version's [Swagger contract](swagger).
 
@@ -36,7 +36,9 @@ curl -i -G 'http://localhost:8084/shells/$recent-changes' --data-urlencode 'upda
 
 Expect a paged result with identifiers and timestamps, plus resource-specific identifying fields. Follow [Pagination](pagination) for additional pages.
 
-Resources without valid administrative timestamps are excluded. Deleted resources are absent. This is a view of current rows, not a complete mutation log or a deletion feed. Registry timestamp filters likewise use the timestamps persisted in descriptor payloads.
+Resources without valid administrative timestamps are excluded. Deleted resources are absent. This is a view of current rows, not a complete mutation log or a deletion feed.
+
+Repositories and registries expose recent changes differently. The AAS, Submodel, and Concept Description Repository APIs provide dedicated `/$recent-changes` operations. Registry APIs do not define a `/$recent-changes` route. Instead, filter the normal descriptor collection with `createdFrom` and/or `updatedFrom`, for example `GET /shell-descriptors?updatedFrom=...` or `GET /submodel-descriptors?updatedFrom=...`. This distinction follows the IDTA V3.2 API design and is not a missing BaSyx endpoint. Registry timestamp filters use the timestamps persisted in descriptor payloads.
 
 ## Enable Historical Reads
 
