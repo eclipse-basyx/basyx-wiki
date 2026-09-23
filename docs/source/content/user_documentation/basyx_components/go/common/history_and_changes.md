@@ -40,24 +40,26 @@ Resources without valid administrative timestamps are excluded. Deleted resource
 
 Repositories and registries expose recent changes differently. The AAS, Submodel, and Concept Description Repository APIs provide dedicated `/$recent-changes` operations. Registry APIs do not define a `/$recent-changes` route. Instead, filter the normal descriptor collection with `createdFrom` and/or `updatedFrom`, for example `GET /shell-descriptors?updatedFrom=...` or `GET /submodel-descriptors?updatedFrom=...`. This distinction follows the IDTA V3.2 API design and is not a missing BaSyx endpoint. Registry timestamp filters use the timestamps persisted in descriptor payloads.
 
-## Enable Historical Reads
+## Enable History Recording
 
-Merge this into the Repository configuration before making changes, then restart:
+History recording is disabled by default. To record new AAS and Submodel versions for historical reads, configure:
 
 ```yaml
 history:
   mode: api
-  retentionDays: 0
-  fullSnapshotInterval: 1
 ```
+
+Restart the service after changing the configuration. Enable history before performing changes that you want to retain historically.
 
 | Mode | Behavior |
 | --- | --- |
-| `off` (default) | Skip new PostgreSQL history writes; existing history remains readable. |
-| `api` | Record supported mutations for historical reconstruction. |
-| `audit` | Use the same snapshot and diff recording mechanism as `api`, for deployments that configure audit controls explicitly. |
+| `off` (default) | Do not record new PostgreSQL history. Existing history remains readable. |
+| `api` | Record supported mutations so earlier resource states can be reconstructed through `$history`. |
+| `audit` | Record the same historical states as `api`, intended for audit-oriented deployments. Audit identity, database guarding, and external mutation evidence are configured separately. |
 
-History is not backfilled for resources that already exist when it is enabled. Only supported mutations performed while history recording is active create new entries, so resource state from before activation cannot be retrieved through `$history`. For an existing resource without history, the first supported mutation establishes its first recorded post-mutation state or deletion marker; it does not preserve the earlier state.
+History is not backfilled when it is enabled. Existing resources do not automatically receive historical versions, so states from before activation cannot be retrieved through `$history`.
+
+For an existing resource without history, the first supported mutation creates its first recorded state or deletion marker. It does not preserve the resource's earlier state from before history recording was enabled.
 
 ### What History Records
 
