@@ -14,6 +14,14 @@ It returns HTTP `200` with:
 {"status":"UP"}
 ```
 
+The basic health handler confirms that the HTTP process can respond; it does not probe PostgreSQL or guarantee that API operations will succeed. For example:
+
+```bash
+curl -i http://localhost:8084/health
+```
+
+Use the component's port and prefix `/health` with its configured context path. Use `curl.exe` in PowerShell.
+
 ## CORS Middleware
 
 Shared CORS middleware is configured from the `cors` config block:
@@ -107,6 +115,6 @@ consistent between requests, including authorization-relevant resource changes.
 When one response requires multiple SQL queries, those queries use one
 read-only repeatable-read transaction so that the response is assembled from
 one reader snapshot. See
-[General Configuration](configuration#optional-postgresql-reader) for the
+[General Configuration](configuration.md#optional-postgresql-reader) for the
 supported components, routing guarantees, security considerations, connection
 variables, and independent pool-sizing guidance.

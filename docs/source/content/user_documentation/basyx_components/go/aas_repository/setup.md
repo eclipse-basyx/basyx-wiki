@@ -1,17 +1,17 @@
-# Setting Up the AAS Registry
+# Setting Up the AAS Repository
 We provide example setups to get you started with the BaSyx Go Components in the [example directory](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples).
 But if you need to configure the service yourself, this page will guide you through.
 
 The Docker example uses `latest` for both BaSyx Go images. For native builds, use one stable source release and its matching database assets as described in [Version Scope](../common/deployment.md#version-scope).
 
 ## Using Docker Compose
-The easiest way to use and set up the AAS Registry is Docker Compose.
+The easiest way to use and set up the AAS Repository is Docker Compose.
 
 The minimal configuration includes three services:
 
 1. PostgreSQL
-2. BaSyx Configuration (Go)
-3. BaSyx AAS Registry (Go)
+2. BaSyx Configuration Service (Go), which initializes the database
+3. BaSyx AAS Repository (Go)
 
 ```yaml
 services:
@@ -47,56 +47,56 @@ services:
       postgres:
         condition: service_healthy
 
-  aas_registry:
-    image: eclipsebasyx/aasregistry-go:latest
+  aas_repository:
+    container_name: aas_repository
+    image: eclipsebasyx/aasrepository-go:latest
     pull_policy: always
-    container_name: aas_registry
     environment:
-      - SERVER_PORT=8082
+      - SERVER_PORT=8084
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin123
       - POSTGRES_DBNAME=basyxTestDB
     ports:
-      - "8082:8082"
+      - "8084:8084"
     depends_on:
       basyx_configuration:
         condition: service_completed_successfully
 ```
-*docker-compose.yml including PostgreSQL 18, the BaSyx Go Configuration Service, and BaSyx Go AAS Registry*
+*docker-compose.yml including PostgreSQL 18, the BaSyx Configuration Service, and BaSyx Go AAS Repository*
 
 Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service.
 
-### Start and Check the Registry
+### Start and Check the Repository
 
 ```{warning}
-This minimal local Compose file does not declare a named PostgreSQL volume. An image-created anonymous volume is not automatically reused after `docker compose down`; container recreation can therefore make the Registry appear empty. Add a correctly mounted named volume before storing persistent descriptors, and explicitly migrate existing data rather than expecting a new declaration to copy it. See [Persistent State](../common/deployment.md#persistent-state).
+This minimal local Compose file does not declare a named PostgreSQL volume. Do not rely on removing and recreating its containers to preserve data: an image-created anonymous volume is not automatically reused after `docker compose down`. Add a correctly mounted named volume before storing data that must survive, and migrate existing data explicitly rather than expecting a new volume declaration to copy it. See [Persistent State](../common/deployment.md#persistent-state).
 ```
 
-The services can be started by running the following command in the directory of the compose file:
+Save the example as `docker-compose.yml`, then run:
 
 ```bash
 docker compose up -d
 ```
 
-The Configuration Service is a one-time initialization/migration job. An exit code of `0` is expected. The Registry starts only after that job completes successfully.
+The Configuration Service is a one-time initialization/migration job. An exit code of `0` is expected. The Repository starts only after that job completes successfully.
 
-Once the Registry is ready, check its health:
+Once the Repository is ready, check its health:
 
 ```bash
-curl -i http://localhost:8082/health
+curl -i http://localhost:8084/health
 ```
-Expect HTTP `200` with `{"status":"UP"}`. Open [Swagger UI](http://localhost:8082/swagger) to explore the API. To help you with the first steps using the registry, follow [Using the AAS Registry](usage) to register your first descriptor.
+Expect HTTP `200` with `{"status":"UP"}`. Open [Swagger UI](http://localhost:8084/swagger) to explore the API. To help you with the first steps using the repository, follow [Using the AAS Repository](usage).
 
-The Compose example explicitly selects port `8082`. When using a context path, include it in health, Swagger, and API URLs; for example, `SERVER_CONTEXTPATH=/api/v3` makes the health URL `http://localhost:8082/api/v3/health`.
+Include any configured context path in every URL. For example, `SERVER_CONTEXTPATH=/api/v3` makes the health URL `http://localhost:8084/api/v3/health` and Swagger URL `http://localhost:8084/api/v3/swagger`.
 
 ### Access Rules and Trustlist Files (Secured Setup)
 
-The local Compose example does not enable ABAC and is not a secured deployment. For this component, enable the supported middleware with `ABAC_ENABLED=true`, mount the access-rule and OIDC trust-list files, and configure their container paths. When `ABAC_POLICY_FILE_IMPORT` is omitted, the effective import mode is `if_missing`; editing a mounted policy and restarting does not replace an active policy already stored in PostgreSQL. Follow [Runtime Security](../common/security), especially [Policy Persistence and Restart Behavior](../common/security.md#policy-persistence-and-restart-behavior), before exposing the service.
+The local Compose example does not enable ABAC and is not a secured deployment. For this component, enable the supported middleware with `ABAC_ENABLED=true`, mount the access-rule and OIDC trust-list files, and configure their container paths. When `ABAC_POLICY_FILE_IMPORT` is omitted, the effective import mode is `if_missing`, so editing a mounted policy file and restarting does not replace an active policy already stored in PostgreSQL. Follow [Runtime Security](../common/security), especially [Policy Persistence and Restart Behavior](../common/security.md#policy-persistence-and-restart-behavior), before exposing the service.
 
 ## Using BaSyx Go Components without Docker
-If you need to run the AAS Registry without Docker, build the binary from source for your target platform.
+If you need to run the AAS Repository without Docker, build the binary from source for your target platform.
 
 ```{warning}
 We recommend using the Docker Images for production use-cases, as they are pre-configured and optimized for production environments.
@@ -119,23 +119,23 @@ Replace `RELEASE_TAG` with the stable release you intend to build. Initialize Po
 
 ### Building the Binary
 
-Change to the AAS Registry service directory:
+Change to the AAS Repository service directory:
 ```bash
-cd basyx-go-components/cmd/aasregistryservice
+cd basyx-go-components/cmd/aasrepositoryservice
 ```
 
 #### Linux / macOS
 
 Build the executable with:
 ```bash
-go build -o aasregistryservice
+go build -o aasrepositoryservice
 ```
 
 #### Windows
 
 Build the executable with the `.exe` extension:
 ```powershell
-go build -o aasregistryservice.exe
+go build -o aasrepositoryservice.exe
 ```
 
 ### Running the Service
@@ -145,14 +145,16 @@ Before running the service, ensure PostgreSQL is available and that the BaSyx da
 
 Run the service with:
 ```bash
-./aasregistryservice -config ./config.yaml
+./aasrepositoryservice -config ./config.yaml
 ```
 
 #### Windows PowerShell
 
 Run the service with:
 ```powershell
-.\aasregistryservice.exe -config .\config.yaml
+.\aasrepositoryservice.exe -config .\config.yaml
 ```
 
-The AAS Registry does not initialize the database schema itself. Database initialization and migrations are handled by the BaSyx Configuration Service.
+The AAS Repository does not initialize the database schema itself. Database initialization and migrations are handled by the BaSyx Configuration Service.
+
+The Compose example uses port `8084` so it can run alongside the Submodel Repository on `8085`. The two setup files describe independent Compose projects. If using both simultaneously, use distinct container names and host ports. For shared-database access through both Repository APIs, combine them into one Compose project with one PostgreSQL service and one Configuration Service, and configure both Repositories for that database.

@@ -4,6 +4,12 @@ The BaSyx Configuration Service is a one-shot startup component for preparing th
 
 It is intended to run before the BaSyx services that use the same database. After all registered initialization sequences finish successfully, the process exits.
 
+Preparing a new, empty database and migrating an existing database are different operational procedures. Startup ordering is sufficient for a fresh database, but it does not by itself make an upgrade safe: old processes might still be using the database, and migration-specific backup or quiescence requirements can apply. Before updating a database that contains data, follow [Upgrading an existing database](operations.md#upgrading-an-existing-database).
+
+## Version Compatibility
+
+Use the same image tag for the Configuration Service and the database-backed BaSyx Go components that share a database. The examples use `latest`; see [Version Scope](../common/deployment.md#version-scope) for the stable-tag convention and guidance for explicitly pinned deployments.
+
 ## Purpose
 
 Multiple BaSyx containers can share one PostgreSQL database. If each service tried to create or migrate the schema independently, startup races and conflicting schema changes could occur. The Configuration Service centralizes that responsibility in one component.
@@ -39,6 +45,7 @@ Key benefits include:
 - [Docker Compose Integration](docker-compose.md)
 - [Kubernetes Job Integration](kubernetes-job.md)
 - [Operational Considerations](operations.md)
+- [Deployment, Versions, and Persistent State](../common/deployment.md)
 
 ```{warning}
 This note is only relevant for users with BaSyx Go deployments created before v1.0.0. If you already operate such a setup, read the [Docker Compose Integration](docker-compose.md) guide before updating your deployment.

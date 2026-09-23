@@ -1,13 +1,17 @@
 # Setting Up the Submodel Registry
-We provide example Set-Ups to get you started with the BaSyx Go Components on our [GitHub Repository](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples).
+We provide example setups to get you started with the BaSyx Go Components in the [example directory](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples).
 But if you need to configure the service yourself, this page will guide you through.
 
-## Using Docker Compose
-The easiest way to use and set-up the Submodel Registry is Docker Compose.
+The Docker example uses `latest` for both BaSyx Go images. For native builds, use one stable source release and its matching database assets as described in [Version Scope](../common/deployment.md#version-scope).
 
-The minimal configuration includes two services:
-1. PostgreSQL (>=15)
-2. BaSyx Submodel Registry (Go)
+## Using Docker Compose
+The easiest way to use and set up the Submodel Registry is Docker Compose.
+
+The minimal configuration includes three services:
+
+1. PostgreSQL
+2. BaSyx Configuration Service (Go), which initializes the database
+3. BaSyx Submodel Registry (Go)
 
 ```yaml
 services:
@@ -25,28 +29,72 @@ services:
       timeout: 5s
       retries: 5
 
-  submodel_registry:
-    image: eclipsebasyx/submodelregistry-go:SNAPSHOT
+  basyx_configuration:
+    container_name: basyx_configuration
+    image: eclipsebasyx/basyxconfigurationservice-go:latest
+    pull_policy: always
     environment:
-      - SERVER_PORT=5004
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin123
+      - POSTGRES_DBNAME=basyxTestDB
+      - POSTGRES_MAXOPENCONNECTIONS=50
+      - POSTGRES_MAXIDLECONNECTIONS=25
+      - POSTGRES_CONNMAXLIFETIMEMINUTES=5
+      - POSTGRES_CONNMAXIDLETIMEMINUTES=0
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  submodel_registry:
+    container_name: submodel_registry
+    image: eclipsebasyx/submodelregistry-go:latest
+    pull_policy: always
+    environment:
+      - SERVER_PORT=8083
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin123
       - POSTGRES_DBNAME=basyxTestDB
     ports:
-      - "YOURPORT:5004"
+      - "8083:8083"
     depends_on:
-      postgres:
-        condition: service_healthy
+      basyx_configuration:
+        condition: service_completed_successfully
 ```
-*docker-compose.yml including PostgreSQL 18 and BaSyx Go Submodel Registry*
+*docker-compose.yml including PostgreSQL 18, the BaSyx Configuration Service, and BaSyx Go Submodel Registry*
+
+Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service.
+
+### Start and Check the Registry
+
+```{warning}
+This minimal local Compose file does not declare a named PostgreSQL volume. An image-created anonymous volume is not automatically reused after `docker compose down`; container recreation can therefore make the Registry appear empty. Add a correctly mounted named volume before storing persistent descriptors, and explicitly migrate existing data rather than expecting a new declaration to copy it. See [Persistent State](../common/deployment.md#persistent-state).
+```
+
+The services can be started by running the following command in the directory of the compose file:
+
+```bash
+docker compose up -d
+```
+
+The Configuration Service is a one-time initialization/migration job. An exit code of `0` is expected. The Submodel Registry starts only after that job completes successfully.
+
+Once the Registry is ready, check its health:
+
+```bash
+curl -i http://localhost:8083/health
+```
+
+In Windows PowerShell, use `curl.exe` instead of `curl` to invoke curl rather than the PowerShell alias. Expect HTTP `200` with `{"status":"UP"}`. Open [Swagger UI](http://localhost:8083/swagger), then follow [Using the Submodel Registry](usage) to register your first descriptor.
+
+The example uses port `8083` and an empty context path. If `server.contextPath` is configured, include it in health, Swagger, and API URLs. For example, `SERVER_CONTEXTPATH=/api/v3` makes the health URL `http://localhost:8083/api/v3/health` and Swagger URL `http://localhost:8083/api/v3/swagger`.
 
 ### Access Rules and Trustlist Files (Secured Setup)
 
-For general handling of OIDC trustlist and ABAC access-rules files (config keys, env vars, startup behavior), see [Security Configuration Files (Common)](../common/configuration#security-files-oidc-trustlist-and-abac-access-rules).
-
-For this component in Docker Compose, mount the security files into the container and configure `ABAC_ENABLED=true`, `ABAC_MODELPATH`, and `OIDC_TRUSTLISTPATH` if you enable ABAC.
+The local Compose example does not enable ABAC and is not a secured deployment. For this component, enable the supported middleware with `ABAC_ENABLED=true`, mount the access-rule and OIDC trust-list files, and configure their container paths. When `ABAC_POLICY_FILE_IMPORT` is omitted, the effective import mode is `if_missing`; editing a mounted policy and restarting does not replace an active policy already stored in PostgreSQL. Follow [Runtime Security](../common/security), especially [Policy Persistence and Restart Behavior](../common/security.md#policy-persistence-and-restart-behavior), before exposing the service.
 
 ## Using BaSyx Go Components without Docker
 If you need to run the Submodel Registry without Docker, build the binary from source for your target platform.
@@ -56,23 +104,56 @@ We recommend using the Docker Images for production use-cases, as they are pre-c
 ```
 
 ### Prerequisites
-- [Go (>=1.20; 1.25 recommended)](https://golang.org/dl/)
+- [Go](https://go.dev/dl/) at the version declared by the selected release's `go.mod`.
+- PostgreSQL 16 or newer, initialized by a Configuration Service built from the same source revision as the HTTP service.
 - [Git](https://git-scm.com/)
 
 ### Cloning the Repository
+
+Download the source code:
 ```bash
 git clone https://github.com/eclipse-basyx/basyx-go-components
+git -C basyx-go-components checkout RELEASE_TAG
 ```
 
+Replace `RELEASE_TAG` with the stable release you intend to build. Initialize PostgreSQL with the Configuration Service and SQL assets from this same checkout.
+
 ### Building the Binary
+
+Change to the Submodel Registry service directory:
 ```bash
 cd basyx-go-components/cmd/submodelregistryservice
+```
+
+#### Linux / macOS
+
+Build the executable with:
+```bash
 go build -o submodelregistryservice
 ```
 
-### Running the Service
-Before running the service, ensure PostgreSQL is available and configure the connection via environment variables or a `config.yaml`.
+#### Windows
 
-```bash
-./submodelregistryservice -config ./config.yaml -databaseSchema ../../basyxschema.sql
+Build the executable with the `.exe` extension:
+```powershell
+go build -o submodelregistryservice.exe
 ```
+
+### Running the Service
+Before running the service, ensure PostgreSQL is available and that the BaSyx database schema has already been initialized by the [BaSyx Configuration Service](../configuration_service/index). Configure the PostgreSQL connection through environment variables or the provided `config.yaml`.
+
+#### Linux / macOS
+
+Run the service with:
+```bash
+./submodelregistryservice -config ./config.yaml
+```
+
+#### Windows PowerShell
+
+Run the service with:
+```powershell
+.\submodelregistryservice.exe -config .\config.yaml
+```
+
+The Submodel Registry does not initialize the database schema itself. Database initialization and migrations are handled by the BaSyx Configuration Service.

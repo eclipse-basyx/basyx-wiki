@@ -23,6 +23,19 @@ The service binary supports these options:
 | `-databaseSchema` | Path to the base schema SQL file or a directory containing `base.sql`. | `/app/base.sql` |
 | `-customPatchPath` | Directory containing registered patch files. | `/app/patches` |
 
+The `/app` defaults match the Configuration Service container image, which copies the release's `database/base.sql` and `database/patches` assets into that directory. They generally do not exist in an arbitrary host working directory.
+
+For native execution, use the source and Go toolchain from the same application release as the runtime services. From the root of that BaSyx Go Components checkout, pass the repository's matching database assets explicitly:
+
+```bash
+go run ./cmd/basyxconfigurationservice/main.go \
+  -config ./cmd/basyxconfigurationservice/config.yaml \
+  -databaseSchema ./database/base.sql \
+  -customPatchPath ./database/patches
+```
+
+If the binary and SQL assets are packaged elsewhere, replace these paths together; do not mix a Configuration Service binary with the patch directory from another release. See [Deployment, Versions, and Persistent State](../common/deployment.md) for the shared version contract.
+
 ## Configuration Example
 
 The service uses the common BaSyx `postgres` configuration section.
@@ -58,7 +71,7 @@ The Configuration Service owns its own pool while the job is running. Include it
 
 ## Patch Execution
 
-Patches are registered by the service implementation. The current service registers `101.sql` with target schema version `v1.0.1`.
+Patches are registered by the service implementation. Filenames encode their target schema version with underscores; for example, `1_0_1.sql` targets schema `v1.0.1`. The selected Configuration Service release determines which patches are registered. Its source and packaged patch directory are the authoritative inventory.
 
 A patch is executed only if the current value in `basyxsystem.schema_version` is lower than the registered target version. Successful initialization and patching leaves `basyxsystem.state` as `clean`.
 
