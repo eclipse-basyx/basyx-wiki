@@ -91,8 +91,6 @@ Historical reads are authorized at the route level. They do not apply current-re
 
 ### Audit Context
 
-### Audit Context
-
 `history.mode: audit` records the same historical resource states as `api`. Additional request and caller context can be recorded separately with `history.auditIdentityMode`.
 
 | Audit identity mode | Additional context recorded |
