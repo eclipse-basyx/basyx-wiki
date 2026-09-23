@@ -8,12 +8,14 @@ These features answer different questions: which current resources carry recent 
 | --- | --- | --- | --- |
 | AAS Repository | `/shells/$recent-changes` | `/shells/{aasIdentifier}/$history` | `/shells/{aasIdentifier}/$signed` |
 | Submodel Repository | `/submodels/$recent-changes` | `/submodels/{submodelIdentifier}/$history` | `/submodels/{submodelIdentifier}/$signed`; also `$value/$signed` |
-| Concept Description Repository | `/concept-descriptions/$recent-changes` | Not included in this guide's supported history routes. | Not included in this guide's supported signing routes. |
-| AAS Registry / Digital Twin Registry | `createdFrom` and `updatedFrom` on `/shell-descriptors` | No corresponding descriptor history route documented here. | No corresponding descriptor signing route documented here. |
-| Submodel Registry | `createdFrom` and `updatedFrom` on `/submodel-descriptors` | No corresponding descriptor history route documented here. | No corresponding descriptor signing route documented here. |
-| AAS Environment | Corresponding composed-service routes | AAS and Submodel history | AAS and Submodel signed reads |
+| Concept Description Repository | `/concept-descriptions/$recent-changes` | None | None |
+| AAS Registry / Digital Twin Registry | `createdFrom` and `updatedFrom` on `/shell-descriptors` | None | None |
+| Submodel Registry | `createdFrom` and `updatedFrom` on `/submodel-descriptors` | None | None |
+| AAS Environment | Corresponding AAS, Submodel, Concept Description, and descriptor routes | `/shells/{aasIdentifier}/$history`; `/submodels/{submodelIdentifier}/$history` | Corresponding AAS and Submodel signed reads |
 
 Paths are relative to the service base URL, including any context path. Check the installed version's [Swagger contract](swagger).
+
+Only the AAS and Submodel routes shown above are public `$history` APIs in the stable release. Concept Description and descriptor mutations can still be recorded internally when history is active, but that does not create a public history-read route for those resource types.
 
 ## Current Changes and Client Timestamps
 
@@ -32,7 +34,7 @@ Include these fields in the resource's `administration` object. After creating o
 curl -i -G 'http://localhost:8084/shells/$recent-changes' --data-urlencode 'updatedFrom=2026-09-02T00:00:00Z'
 ```
 
-Expect a paged result with identifiers and timestamps, plus resource-specific identifying fields. Follow [Pagination](pagination) for additional pages. Keep dollar-sign paths in single quotes and use `curl.exe` in PowerShell.
+Expect a paged result with identifiers and timestamps, plus resource-specific identifying fields. Follow [Pagination](pagination) for additional pages.
 
 Resources without valid administrative timestamps are excluded. Deleted resources are absent. This is a view of current rows, not a complete mutation log or a deletion feed. Registry timestamp filters likewise use the timestamps persisted in descriptor payloads.
 
@@ -51,7 +53,34 @@ history:
 | --- | --- |
 | `off` (default) | Skip new PostgreSQL history writes; existing history remains readable. |
 | `api` | Record supported mutations for historical reconstruction. |
-| `audit` | The same runtime snapshot writes, intended for deployments that configure additional audit controls explicitly. |
+| `audit` | Use the same snapshot and diff recording mechanism as `api`, for deployments that configure audit controls explicitly. |
+
+History is not backfilled for resources that already exist when it is enabled. Only supported mutations performed while history recording is active create new entries, so resource state from before activation cannot be retrieved through `$history`. For an existing resource without history, the first supported mutation establishes its first recorded post-mutation state or deletion marker; it does not preserve the earlier state.
+
+### What History Records
+
+History is associated with the identifiable resource that owns the changed content:
+
+- AAS create, update, delete, asset-information, thumbnail, and Submodel-reference mutations update the AAS history.
+- Submodel create, update, and delete mutations update the Submodel history.
+- Submodel Element and File attachment mutations update the history of their owning Submodel; they do not create independent element or attachment timelines.
+- Concept Description mutations update Concept Description history.
+- AAS Descriptor mutations, including changes to embedded Submodel Descriptors, update the owning AAS Descriptor history.
+- Standalone Submodel Descriptor mutations update Submodel Descriptor history.
+
+Recording a resource type internally does not imply that the component exposes a public `$history` route for it. The stable public IDTA history-read API is limited to AAS and Submodels as shown in [Availability](#availability).
+
+### Audit Context and Separate Integrity Controls
+
+`history.mode: audit` does not automatically enable `history.immutability: postgres_guarded` or WORM mutation evidence. Both `api` and `audit` use the same PostgreSQL history mechanism. Audit identity capture is selected separately with `history.auditIdentityMode` and is stored when a history or evidence record is written:
+
+| Audit identity mode | Recorded request context |
+| --- | --- |
+| `none` (default) | No request or caller identity metadata. |
+| `minimal` | Request and correlation identifiers, method and route, available OIDC subject/issuer/client identity, and the authorization result. |
+| `extended` | The minimal fields plus available source IP, user agent, policy identifier or hash, and matched rule identifiers. |
+
+These modes record available context; they do not turn anonymous requests into authenticated identities and do not store bearer tokens.
 
 Create an AAS using [AAS Repository Usage](../aas_repository/usage). Record a UTC time after its creation and before a later update. Replace `RECORDED_UTC_TIME` with that actual RFC 3339 timestamp:
 
@@ -67,6 +96,12 @@ Historical reads are authorized at the route level. They do not apply current-re
 
 History increases storage use. `fullSnapshotInterval: 1` stores complete snapshots; larger intervals allow checkpoints and diffs while reads still reconstruct complete resources. Automatic history cleanup is not implemented, so `retentionDays` must remain `0`. See [General Configuration](configuration.md#history) for supported settings.
 
+### Integrity Checks During Historical Reads
+
+PostgreSQL history entries are hash-chained per identifiable resource. When reconstructing a historical AAS or Submodel, BaSyx verifies the stored snapshot or diff payload hash, the reconstructed content hash, each loaded row hash, and the links between the loaded rows. If a required payload is missing or an integrity check fails, the `$history` request fails instead of returning an unverified reconstruction.
+
+These checks detect inconsistent or altered stored history, but the hashes and their chain are held in the same PostgreSQL trust boundary. They do not by themselves prevent a sufficiently privileged database operator from rewriting the data and its integrity metadata. Use the database guard and independent mutation evidence according to the threat model described below.
+
 ## Database-wide History Guard
 
 `history.immutability: postgres_guarded` is a database compatibility decision,
@@ -80,6 +115,13 @@ startup configured with `history.mode: off` or `history.immutability: none`
 does not downgrade an enabled database guard. Instead, the incompatible
 process can fail at startup. This remains true after restarting or replacing a
 container because the state belongs to the database.
+
+`postgres_guarded` blocks normal application-level and database-user updates,
+deletes, and truncation of the history data, but it is not an absolute WORM
+boundary. A PostgreSQL superuser or another sufficiently privileged operator
+can alter or remove the trigger and function mechanisms that enforce the
+guard. Use independent WORM mutation evidence when protection from
+database-level modification is required.
 
 When diagnosing a guard conflict, inspect both sides:
 
@@ -102,6 +144,8 @@ Implementation reference: [database history guard](https://github.com/eclipse-ba
 External evidence is independent of PostgreSQL history. With `history.evidence.enabled: true`, it can record mutation artifacts in S3-compatible WORM storage even when `history.mode: off`. Required evidence writes are synchronous: if evidence cannot be stored, the mutation fails.
 
 Enabling evidence requires a configured backend, bucket, and retention settings; setting the enable flag alone is insufficient. Evidence may contain snapshots or diffs and is intended for verification and recovery workflows. It does not enable the PostgreSQL historical-read API by itself. Preserve the receipt catalog as part of backup and recovery.
+
+Independent verification uses the evidence sequence and hash chain. To detect removal of the same tail from both PostgreSQL catalog records and object listings, retain the last verified sequence and event hash outside the BaSyx database and supply that expected head to later verification runs. The first externally retained value is a trust-on-first-use baseline.
 
 Use the [evidence configuration reference](configuration.md#historyevidence) and the upstream [history and evidence guide](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/docu/user/aas_api_v3_2.md) for backend setup, verification, and recovery commands.
 

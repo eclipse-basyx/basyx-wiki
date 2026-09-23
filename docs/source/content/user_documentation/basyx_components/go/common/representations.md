@@ -1,6 +1,6 @@
 # Response Representations
 
-BaSyx Go Repository APIs expose different views of the same model content through distinct endpoints. A normal read uses the resource endpoint without a representation suffix; the other representations append `/$value`, `/$metadata`, `/$reference`, or `/$path`. Query parameters such as `level` and `extent` modify supported responses but do not select a representation.
+BaSyx Go Repository APIs expose different views of the same model content through distinct endpoints. A normal read uses the resource endpoint without a representation suffix. The other representations append `/$value`, `/$metadata`, `/$reference`, or `/$path`. Query parameters such as `level` and `extent` modify supported responses but do not select a representation.
 
 ## Representation Overview
 
@@ -155,7 +155,7 @@ These modifiers change the response, not the stored resource. `extent` only cont
 
 ## Writing Representations
 
-For Submodel and Submodel Element operations, body-bearing writes use the representation defined by the specific endpoint.
+For Submodel and Submodel Element operations, the request body format depends on the endpoint you call.
 
 | Representation | Write operations | Request body |
 | --- | --- | --- |
@@ -175,6 +175,6 @@ PATCH .../submodel-elements/{idShortPath}/$metadata
 PATCH .../submodel-elements/{idShortPath}/$value
 ```
 
-BaSyx Submodel PATCH endpoints do not accept RFC 6902 JSON Patch documents. Do not send an array of `op`, `path`, and `value` instructions; send the partial representation defined by the specific PATCH endpoint instead.
+BaSyx Submodel `PATCH` endpoints use partial AAS representations, not RFC 6902 JSON Patch documents. Send the fields to update in the representation expected by the endpoint instead of an array of `op`, `path`, and `value` operations.
 
 Write support and field-level restrictions are operation-specific. Check the running [Swagger UI](swagger) for the exact request schema and see [Submodel Repository Usage](../submodel_repository/usage.md#representations-and-partial-updates) for concrete PATCH examples.
