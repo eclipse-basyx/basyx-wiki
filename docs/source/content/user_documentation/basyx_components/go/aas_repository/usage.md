@@ -412,7 +412,7 @@ Expect `200 OK` and the earlier AAS state:
 }
 ```
 
-The current AAS remains `HistoricalMotorV2`; `$history` returns the complete AAS representation recorded for the requested time. At an exact update boundary the newer state is selected. A timestamp before the first recorded state or after a recorded deletion returns `404 Not Found`; a timestamp before deletion can still retrieve the earlier state.
+The current AAS remains `HistoricalMotorV2`. `$history` returns the complete AAS representation recorded for the requested time. At an exact update boundary the newer state is selected. A timestamp before the first recorded state or after a recorded deletion returns `404 Not Found`. A timestamp before deletion can still retrieve the earlier state.
 
 ## Asset Thumbnail
 

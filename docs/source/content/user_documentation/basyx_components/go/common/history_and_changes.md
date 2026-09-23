@@ -83,7 +83,7 @@ curl -i -G 'http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/$history' \
   --data-urlencode 'date=RECORDED_UTC_TIME'
 ```
 
-The response reconstructs the version valid at that time. The requested time follows the recorded mutation timeline, not `administration.createdAt` or `administration.updatedAt`. At an exact update boundary, the newer version is selected. A time before the first recorded state or after a recorded deletion returns not found; a time before that deletion can still resolve the earlier version.
+The response reconstructs the version valid at that time. The requested time follows the recorded mutation timeline, not `administration.createdAt` or `administration.updatedAt`. At an exact update boundary, the newer version is selected. A time before the first recorded state or after a recorded deletion returns not found. A time before that deletion can still resolve the earlier version.
 
 For a complete AAS-specific example that creates, updates, and retrieves an earlier state, see [AAS Repository Usage](../aas_repository/usage.md#read-a-historical-aas-state). Submodel historical reads use the same general time-selection behavior through the Submodel `$history` endpoint.
 
@@ -91,9 +91,19 @@ Historical reads are authorized at the route level. They do not apply current-re
 
 ### Audit Context
 
-`history.mode: audit` records the same historical resource states as `api`. Additional request and caller context can be recorded with `history.auditIdentityMode`, which supports `none`, `minimal`, and `extended`.
+### Audit Context
 
-Audit identity capture, PostgreSQL guarding, and external mutation evidence are separate controls; selecting `audit` does not enable them automatically. See [General Configuration](configuration.md#history) for the audit identity settings.
+`history.mode: audit` records the same historical resource states as `api`. Additional request and caller context can be recorded separately with `history.auditIdentityMode`.
+
+| Audit identity mode | Additional context recorded |
+| --- | --- |
+| `none` (default) | No audit identity or request context. |
+| `minimal` | Request and correlation identifiers, available authenticated caller identity, authorization result, operation, endpoint, and HTTP method. |
+| `extended` | Everything in `minimal`, plus available source IP, user agent, policy information, and matched rule information. |
+
+The recorded fields depend on the information available for the request. For example, an anonymous request does not gain an authenticated identity simply because audit context recording is enabled.
+
+Audit identity capture, PostgreSQL guarding, and external mutation evidence are separate controls; selecting `history.mode: audit` does not enable them automatically.See [General Configuration](configuration.md#history) for the audit identity settings.
 
 ### Integrity Checks During Historical Reads
 
