@@ -5,18 +5,19 @@
 This section documents features and configuration aspects that are implemented in shared BaSyx Go code and reused by multiple components (for example Swagger/OpenAPI exposure, common configuration handling, and shared runtime helpers).
 
 ## Contents
-* [Deployment, Versions, and Persistent State](deployment) — choose matching application, source, schema, and toolchain versions; then preserve database state across container lifecycles.
-* [Swagger UI Docs](swagger)
-* [General Configuration](configuration) — look up the canonical YAML settings and environment-variable mappings.
-* [Common / Shared Features](shared_features)
-* [Observability](observability)
-* [Pagination](pagination)
-* [Identifiers and Encoding](encoding)
-* [Validation](validation)
-* [Repository-to-Registry Integration](registry_integration)
-* [Asynchronous API Operations](asynchronous_requests)
-* [Response Representations](representations)
-* [History, Timestamps, and Signed Reads](history_and_changes)
+
+- [Deployment and Versions](deployment) — Covers version alignment, database initialization, persistent state, and deployment considerations shared across BaSyx Go components.
+- [Swagger UI and OpenAPI](swagger) — Describes the Swagger UI and OpenAPI documents exposed by BaSyx Go components.
+- [General Configuration](configuration) — Provides the common YAML configuration options and their environment-variable mappings.
+- [Shared Runtime Features](shared_features) — Describes runtime functionality implemented in shared BaSyx Go code and identifies where those features are available.
+- [Observability](observability) — Covers the common logging, metrics, tracing, and health-related capabilities provided by BaSyx Go components.
+- [Pagination](pagination) — Describes paged API responses, pagination parameters, and continuation cursors.
+- [Identifiers and Encoding](identifiers) — Explains identifier handling and the encoding of identifiers used in API paths.
+- [Validation and Verification](validation) — Describes model validation, verification behavior, and the handling of invalid resources.
+- [Repository-to-Registry Integration](registry_integration) — Describes how repositories can create, update, and remove corresponding descriptors in registries.
+- [Asynchronous API Operations](asynchronous_requests) — Describes the API operations that BaSyx Go provides asynchronously and how their results are retrieved.
+- [Response Representations](representations) — Explains the supported AAS response representations, including normal, `$value`, `$metadata`, `$reference`, and `$path`.
+- [Recent Changes, History, and Signed Reads](history_and_changes) — Covers recent-change queries, historical states, integrity and mutation evidence, and cryptographically signed reads.
 
 ```{toctree}
 :hidden:
