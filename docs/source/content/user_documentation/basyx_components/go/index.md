@@ -27,10 +27,17 @@ For separate Repository and Registry processes, read [Repository-to-Registry Int
 
 ## Shared Guidance
 
-- [Deployment, Versions, and Persistent State](common/deployment) explains image-tag alignment, required startup order, native database preparation, and PostgreSQL volume lifecycle.
-- [Runtime Security](common/security) explains which services enforce OIDC/ABAC and how authentication, policies, and troubleshooting fit together.
-- [Common Documentation](common/index) collects configuration and shared API conventions.
-- [Supply Chain Security](supply_chain_security) covers image signing, provenance, SBOMs, and release verification.
+- [Deployment and Versions](common/deployment) — Covers version alignment, database initialization, persistent state, and deployment considerations shared across BaSyx Go components.
+- [Swagger UI and OpenAPI](common/swagger) — Describes the Swagger UI and OpenAPI documents exposed by BaSyx Go components.
+- [General Configuration](common/configuration) — Provides the common YAML configuration options and their environment-variable mappings.
+- [Shared Runtime Features](common/shared_features) — Describes runtime functionality implemented in shared BaSyx Go code and identifies where those features are available.
+- [Observability](common/observability) — Covers the common logging, metrics, tracing, and health-related capabilities provided by BaSyx Go components.
+- [Pagination](common/pagination) — Describes paged API responses, pagination parameters, and continuation cursors.
+- [Validation and Verification](common/validation) — Describes model validation, verification behavior, and the handling of invalid resources.
+- [Repository-to-Registry Integration](common/registry_integration) — Describes how repositories can create, update, and remove corresponding descriptors in registries.
+- [Asynchronous API Operations](common/asynchronous_requests) — Describes the API operations that BaSyx Go provides asynchronously and how their results are retrieved.
+- [Response Representations](common/representations) — Explains the supported AAS response representations, including normal, `$value`, `$metadata`, `$reference`, and `$path`.
+- [Recent Changes, History, and Signed Reads](common/history_and_changes) — Covers recent-change queries, historical states, integrity and mutation evidence, and cryptographically signed reads.
 
 ```{toctree}
 :hidden:

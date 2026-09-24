@@ -1,4 +1,4 @@
-# Validation
+# Validation and Verification
 
 Validation helps distinguish malformed requests from AAS model content that can be parsed but violates model constraints. Successfully validating a payload does not store it or guarantee that a later write will succeed: resource conflicts and endpoint-specific requirements are checked by the write operation.
 

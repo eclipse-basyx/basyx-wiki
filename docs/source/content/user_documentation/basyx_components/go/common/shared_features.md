@@ -1,4 +1,4 @@
-# Common / Shared Features
+# Shared Runtime Features
 
 This page summarizes runtime features that are implemented in shared code and reused by multiple BaSyx Go components.
 

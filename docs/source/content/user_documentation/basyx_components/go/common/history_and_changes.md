@@ -1,4 +1,4 @@
-# History, Timestamps, and Signed Reads
+# Recent Changes, History, and Signed Reads
 
 The features on this page serve different purposes. Recent-change APIs find current resources by their stored timestamps, history reconstructs earlier recorded states, and signed reads and mutation evidence support verification of returned or retained data.
 

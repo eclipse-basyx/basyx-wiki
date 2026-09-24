@@ -1,4 +1,4 @@
-# Swagger UI Docs
+# Swagger UI and OpenAPI 
 
 All BaSyx Go components can expose a Swagger UI and the corresponding OpenAPI specification via shared infrastructure in `internal/common`.
 
