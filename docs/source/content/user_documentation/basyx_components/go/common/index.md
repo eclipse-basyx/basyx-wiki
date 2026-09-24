@@ -2,7 +2,7 @@
 
 ![GitHub](https://img.shields.io/github/license/eclipse-basyx/basyx-go-components)
 
-This section documents features and configuration aspects that are implemented in shared BaSyx Go code and reused by multiple components (for example Swagger/OpenAPI exposure, common configuration handling, and shared runtime helpers).
+This section covers features and configuration that are shared across multiple BaSyx Go components, including Swagger/OpenAPI, common configuration, observability, pagination, validation, and other common API behavior.
 
 ## Contents
 
