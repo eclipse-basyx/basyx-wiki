@@ -131,9 +131,9 @@ See the [evidence configuration reference](configuration.md#history-evidence) an
 
 ## Signed Reads
 
-Signed reads let a client verify that the returned AAS or Submodel payload was signed by the BaSyx service and has not been altered since it was signed. Instead of returning the resource directly as JSON, the signed endpoint returns a JSON Web Signature (JWS) containing the signed payload.
+Signed reads let a client verify that the returned AAS or Submodel representation was signed by the BaSyx service and has not been altered since it was signed. Instead of returning the resource directly as JSON, the signed endpoint returns it as a compact RS256 JSON Web Signature (JWS).
 
-A signed read does not make the data confidential. Its purpose is to provide integrity and authenticity for the returned representation.
+A signed read does not make the data confidential. Its purpose is to provide integrity and authenticity for the returned representation. Signed reads use the same read authorization rules as the corresponding normal read endpoints.
 
 A signed read returns the requested AAS or Submodel as a compact RS256 JWS. Signed reads use the same read authorization rules as the corresponding normal read endpoints.
 
@@ -153,4 +153,4 @@ curl --fail-with-body -sS 'http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/
 
 Missing signing configuration produces an error rather than an unsigned fallback. Use a JWS verification library with a trusted public key or validated certificate chain to verify the signature before using the payload. Decoding the JWS alone does not verify it.
 
-A signed read signs the payload returned by the current read request. It does not create history or sign the sequence of historical mutations; mutation evidence is a separate feature.
+A signed read signs the current AAS or Submodel representation. It does not create history or sign the sequence of historical mutations. Mutation evidence is a separate feature.
