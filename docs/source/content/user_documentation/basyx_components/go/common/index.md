@@ -6,9 +6,8 @@ This section documents features and configuration aspects that are implemented i
 
 ## Contents
 * [Deployment, Versions, and Persistent State](deployment) — choose matching application, source, schema, and toolchain versions; then preserve database state across container lifecycles.
-* [Runtime Security](security) — follow the OIDC and ABAC workflow, policy lifecycle, and security troubleshooting path.
-* [General Configuration](configuration) — look up the canonical YAML settings and environment-variable mappings.
 * [Swagger UI Docs](swagger)
+* [General Configuration](configuration) — look up the canonical YAML settings and environment-variable mappings.
 * [Common / Shared Features](shared_features)
 * [Observability](observability)
 * [Pagination](pagination)
@@ -18,7 +17,6 @@ This section documents features and configuration aspects that are implemented i
 * [Asynchronous API Operations](asynchronous_requests)
 * [Response Representations](representations)
 * [History, Timestamps, and Signed Reads](history_and_changes)
-* [Understanding API Errors](api_errors)
 
 ```{toctree}
 :hidden:
@@ -37,5 +35,4 @@ registry_integration
 asynchronous_requests
 representations
 history_and_changes
-api_errors
 ```
