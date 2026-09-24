@@ -105,15 +105,15 @@ Audit identity capture, PostgreSQL guarding, and external mutation evidence are 
 
 ### Integrity Checks During Historical Reads
 
-BaSyx verifies the integrity of stored PostgreSQL history while reconstructing a historical state. If the required history is incomplete or its integrity checks fail, the `$history` request fails instead of returning an unverified result.
+BaSyx verifies stored PostgreSQL history while reconstructing a historical state. If the required state cannot be reconstructed or an integrity check fails, the `$history` request fails instead of returning an unverified result.
 
-These checks detect inconsistent or modified history, but the history and its integrity metadata share the same PostgreSQL trust boundary. Use `postgres_guarded` or independent mutation evidence when stronger protection is required.
+These checks can detect inconsistent or modified history, but the history data and the integrity metadata used to verify it are stored in the same PostgreSQL database. `postgres_guarded` can protect this history against normal database modifications. Use independent mutation evidence when verification must extend beyond the PostgreSQL trust boundary.
 
 ## Database-wide History Guard
 
-`history.immutability: postgres_guarded` protects PostgreSQL history against normal modification and deletion. The guard is established only while history recording is active (`api` or `audit`); selecting it while `history.mode` is `off` does not establish the guard.
+`history.immutability: postgres_guarded` protects PostgreSQL history against normal modification and deletion. The guard is established only while history recording is active (`api` or `audit`). Selecting it while `history.mode` is `off` does not establish the guard.
 
-The guard belongs to the PostgreSQL database, not to an individual BaSyx process, and remains enabled once established. Services that share the database must therefore use compatible history-guard settings; an unguarded service can fail to start against an already guarded database.
+The guard belongs to the PostgreSQL database, not to an individual BaSyx process, and remains enabled once established. Services that share the database must therefore use compatible history-guard settings. An unguarded service can fail to start against an already guarded database.
 
 `postgres_guarded` is not an absolute WORM boundary. A sufficiently privileged PostgreSQL administrator can alter or remove the database mechanisms that enforce it. Use independent mutation evidence when the database administrator must not be the sole trust boundary.
 
@@ -121,17 +121,23 @@ See the [configuration caveat](configuration.md#history) and [upgrading an exist
 
 ## Mutation Evidence
 
-Mutation evidence is independent of PostgreSQL history. When `history.evidence.enabled: true`, BaSyx records mutation evidence in supported S3-compatible WORM storage. Evidence can be enabled even when `history.mode: off`.
+Mutation evidence is independent of PostgreSQL history recording. When `history.evidence.enabled: true`, BaSyx records mutation evidence in S3-compatible object storage using WORM retention. Evidence can be enabled even when `history.mode: off`.
 
-Required evidence writes are synchronous: if the configured evidence cannot be stored, the mutation fails. Evidence requires an S3-compatible provider, bucket, and Object Lock retention settings.
+Required evidence writes are synchronous: if the configured evidence cannot be stored, the mutation fails. Evidence requires the `s3` provider, a bucket and region, and Object Lock retention settings.
 
-Mutation evidence does not enable the `$history` API. PostgreSQL history and external evidence can be used independently or together.
+Mutation evidence is not used by `$history`. When `history.mode: off`, evidence can still be recorded, but no new PostgreSQL history states are created for historical reads. PostgreSQL history and external evidence can also be enabled together.
 
-See the [evidence configuration reference](configuration.md#historyevidence) and the stable [history and evidence guide](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.0.12/docu/user/aas_api_v3_2.md) for storage setup, verification, backup, and recovery procedures.
+See the [evidence configuration reference](configuration.md#history-evidence) and the stable [history and evidence guide](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.0.12/docu/user/aas_api_v3_2.md) for storage setup, verification, backup, and recovery procedures.
 
 ## Signed Reads
 
-A signed read returns a compact JWS for the requested AAS or Submodel. Configure a mounted RSA private key using `jws.privateKeyPath`; `jws.certificateChainPath` can supply the certificate chain. Restart the service after configuring its signing material.
+Signed reads let a client verify that the returned AAS or Submodel payload was signed by the BaSyx service and has not been altered since it was signed. Instead of returning the resource directly as JSON, the signed endpoint returns a JSON Web Signature (JWS) containing the signed payload.
+
+A signed read does not make the data confidential. Its purpose is to provide integrity and authenticity for the returned representation.
+
+A signed read returns the requested AAS or Submodel as a compact RS256 JWS. Signed reads use the same read authorization rules as the corresponding normal read endpoints.
+
+Configure a mounted RSA private key with `jws.privateKeyPath`. Optionally, `jws.certificateChainPath` can point to a PEM-encoded X.509 certificate chain that BaSyx includes in the JWS `x5c` header. Restart the service after configuring the signing material.
 
 ```yaml
 jws:
