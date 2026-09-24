@@ -608,10 +608,6 @@ The infrastructure editor exposes the list as **Additional Trusted Origins**, wi
 
 Backend requests do not follow redirects because the browser does not expose the next destination in time for the Web UI to validate it. Every redirect is rejected, including a redirect to another trusted origin. When migrating an existing setup, configure the final endpoint URLs directly. A reverse proxy on the Web UI's own origin continues to work, including relative proxy URLs, without a `trustedOrigins` entry.
 
-```{note}
-This behavior is available in Web UI builds that contain [basyx-aas-web-ui#1557](https://github.com/eclipse-basyx/basyx-aas-web-ui/pull/1557).
-```
-
 ### Docker Deployment
 
 #### Mounting the Configuration File
