@@ -554,6 +554,7 @@ Each `claimMappings` entry contains:
 | `trustProxyHeaders` | `false` | Allows trusted reverse proxies to supply the public request scheme, host, and client information through `Forwarded` or `X-Forwarded-*` headers. |
 | `trustedProxyCIDRs` | `[]` | CIDR allowlist of proxy source addresses whose forwarded headers may be trusted. |
 | `uploadMaxSizeBytes` | `134217728` | Maximum compressed HTTP request size, including multipart overhead, for binary upload endpoints. |
+| `delegatedOperationResponseMaxSizeBytes` | `1048576` | Maximum JSON response size in bytes from a delegated Submodel Operation. Applies to synchronous and asynchronous invocation in the Submodel Repository and AAS Environment. |
 | `aasxMaxPartCount` | `10000` | Maximum number of non-directory entries in an AASX package. |
 | `aasxMaxOPCMetadataSizeBytes` | `16777216` | Maximum combined expanded size of AASX OPC metadata. |
 | `aasxMaxPartExpandedSizeBytes` | `134217728` | Maximum expanded size of one AASX payload part. |
@@ -563,6 +564,8 @@ Each `claimMappings` entry contains:
 | `bulkBatchLimit` | `1000` | Maximum row count per generated bulk SQL statement. Must be greater than `0`. |
 
 `uploadMaxSizeBytes` limits the compressed HTTP request, including multipart overhead. The AASX settings independently limit expanded package content to protect against packages whose contents are much larger than the uploaded file. All six values must be greater than `0`. In addition, `aasxMaxTotalExpandedSizeBytes` must be greater than or equal to `aasxMaxPartExpandedSizeBytes`, which must be greater than or equal to `aasxMaxThumbnailSizeBytes`.
+
+`delegatedOperationResponseMaxSizeBytes` defaults to 1 MiB. Set a larger positive byte count when a delegated Operation returns more data, such as records. The response is buffered in memory, so size the limit for the available memory. File element attachment downloads are unaffected.
 
 When registry synchronization is enabled, `general.externalUrl` must be set to at least one absolute URL with scheme and host.
 
@@ -701,6 +704,7 @@ general:
   trustProxyHeaders: false
   trustedProxyCIDRs: []
   uploadMaxSizeBytes: 134217728
+  delegatedOperationResponseMaxSizeBytes: 1048576
   aasxMaxPartCount: 10000
   aasxMaxOPCMetadataSizeBytes: 16777216
   aasxMaxPartExpandedSizeBytes: 134217728
@@ -787,6 +791,7 @@ OIDC_TRUSTLISTPATH=config/trustlist.json
 GENERAL_EXTERNALURL=https://example.org/aas
 GENERAL_TRUSTPROXYHEADERS=false
 GENERAL_UPLOADMAXSIZEBYTES=134217728
+GENERAL_DELEGATEDOPERATIONRESPONSEMAXSIZEBYTES=1048576
 GENERAL_AASXMAXPARTCOUNT=10000
 GENERAL_AASXMAXOPCMETADATASIZEBYTES=16777216
 GENERAL_AASXMAXPARTEXPANDEDSIZEBYTES=134217728
@@ -876,6 +881,7 @@ In containers, paths are resolved inside the container filesystem. Mount the fil
 
 - The BaSyx Configuration Service mainly uses the `postgres` section.
 - Repository, environment, and AASX File Server endpoints use `general.uploadMaxSizeBytes` for compressed request limits.
+- Submodel Repository and AAS Environment use `general.delegatedOperationResponseMaxSizeBytes` for delegated Submodel Operation responses.
 - Services that process AASX packages use the `general.aasxMax*` settings for expanded package limits.
 - AAS Environment additionally supports `general.aasPreconfigPaths`.
 - AAS Repository, Submodel Repository, and AAS Environment use the registry synchronization settings when enabled.
