@@ -17,9 +17,9 @@ An AAS Descriptor identifies an AAS and describes how clients can reach it. Depe
 - endpoints at which the AAS can be accessed;
 - Submodel Descriptors associated with that AAS.
 
-`AssetAdministrationShellDescriptor`, `SubmodelDescriptor`, and the related descriptor payload types are defined in the [AAS Part 2 API payload data types](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/specification/interfaces-payload.html#_assetadministrationshelldescriptor). They are API payload types, not regular Part 1 AAS metamodel elements.
-
 A Submodel Descriptor plays the same role for a Submodel: It identifies the Submodel and advertises endpoints and other discovery metadata. In the AAS Registry, Submodel Descriptors are scoped to their parent AAS Descriptor.
+
+`AssetAdministrationShellDescriptor`, `SubmodelDescriptor`, and the related descriptor payload types are defined in the [AAS Part 2 API payload data types](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/specification/interfaces-payload.html#_assetadministrationshelldescriptor). They are API payload types, not regular Part 1 AAS metamodel elements.
 
 ## Registry or Repository?
 
@@ -87,7 +87,7 @@ Bulk creation, update, and deletion are asynchronous and atomic: if a descriptor
 
 The Registry uses PostgreSQL and expects the shared BaSyx database schema to be initialized and migrated by the BaSyx Configuration Service. The Registry validates the schema during startup and does not initialize it itself. See [Setting Up the AAS Registry](setup) for the required startup order.
 
-### Advanced: Shared Asset Identifiers with Discovery
+### Shared Asset Identifiers with Discovery
 
 The AAS Registry and Discovery normally serve different purposes. The Registry stores AAS Descriptors, including their `specificAssetIds`. Discovery stores associations between asset identifiers and AAS identifiers so that a client can find an AAS from an asset identifier.
 
