@@ -17,7 +17,7 @@ A Submodel Descriptor identifies a Submodel and describes how clients can reach 
 - endpoints at which the Submodel can be accessed;
 - supplemental semantic IDs and other discovery metadata.
 
-The complete payload definition is specified in the [Specification of the Asset Administration Shell, Part 2: Application Programming Interfaces, `SubmodelDescriptor`](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/specification/interfaces-payload.html#_submodeldescriptor). A `SubmodelDescriptor` is an API payload type; it is not the Submodel metamodel object stored by a Repository.
+The complete payload definition is specified in the [Specification of the Asset Administration Shell, Part 2: Application Programming Interfaces](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/specification/interfaces-payload.html#_submodeldescriptor). A `SubmodelDescriptor` is an API payload type; it is not the Submodel metamodel object stored by a Repository.
 
 ## Registry or Repository?
 
@@ -46,7 +46,6 @@ It also supports:
 - filtering Submodel Descriptors by creation and update timestamps;
 - structured queries for more expressive descriptor searches;
 - asynchronous bulk creation, update, and deletion of Submodel Descriptors;
-- polling the status and result of asynchronous bulk operations;
 - service self-description.
 
 See [API Documentation](#api-documentation) for the authoritative list of operations, parameters, schemas, and responses.
@@ -61,7 +60,7 @@ A Submodel Descriptor registered below an AAS Descriptor is a separate registrat
 
 ### Repository-to-Registry Integration
 
-Manual Registry calls are not the only way to maintain descriptors. When [Submodel Registry integration](../submodel_repository/registry_integration) is enabled, the standalone Submodel Repository maintains the standalone descriptor as Submodel content changes. It also refreshes embedded descriptors in existing AAS Descriptors that reference that Submodel. The integration is disabled by default and requires the Repository and Registries to use the same BaSyx database; it is not an HTTP synchronization between independent services.
+Manual Registry calls are not the only way to maintain descriptors. When [Submodel Registry integration](../submodel_repository/registry_integration) is enabled, the standalone Submodel Repository maintains the standalone descriptor as Submodel content changes. It also refreshes embedded descriptors in existing AAS Descriptors that reference that Submodel. The integration is disabled by default and requires the Repository and Registries to use the same BaSyx database. It is not an HTTP synchronization between independent services.
 
 This synchronization is triggered by Repository mutations. Direct writes to either Registry API remain scoped to the descriptor registration addressed by that API. The [usage walkthrough](usage) demonstrates those direct standalone Registry calls.
 
@@ -75,11 +74,11 @@ Collection requests use [cursor-based pagination](../common/pagination). See the
 
 `createdFrom` and `updatedFrom` filter the descriptor's persisted `administration.createdAt` and `administration.updatedAt`. The Registry does not generate or update these values on writes; the registering application must maintain them. Bounds are inclusive, and when both timestamp filters are supplied, either condition can match.
 
-Use [Structured Queries](usage.md#structured-queries) to search descriptor fields such as semantic identification. The ordinary descriptor-list endpoint supports `limit`, `cursor`, `createdFrom`, and `updatedFrom`; it does not provide a `semanticId` filter parameter.
+The ordinary descriptor-list endpoint supports `limit`, `cursor`, `createdFrom`, and `updatedFrom`; it does not provide a `semanticId` filter parameter. Use [Structured Queries](usage.md#structured-queries) to search descriptor fields such as semantic identification. 
 
 ### Updates
 
-PUT creates a missing descriptor and replaces an existing descriptor. The body identifier must match the decoded path identifier. Submit the complete descriptor, including endpoints and metadata that should remain; PUT is not a partial update. Replacing or deleting a descriptor does not modify the Submodel content in a Repository.
+PUT creates a missing descriptor and replaces an existing descriptor. The body identifier must match the decoded path identifier. Submit the complete descriptor, including endpoints and metadata that should remain. PUT is not a partial update. Replacing or deleting a descriptor does not modify the Submodel content in a Repository.
 
 ### Bulk Operations
 
@@ -116,11 +115,11 @@ When `server.contextPath` is configured, both locations are served below that co
 
 - [Setting Up the Submodel Registry](setup)
 - [Using the Submodel Registry](usage)
-- [Submodel Repository Registry Integration](../submodel_repository/registry_integration)
+- [Submodel Repository-to-Registry Integration](../submodel_repository/registry_integration)
 - [AAS Environment](../aas_environment/index)
 - [General Configuration](../common/configuration)
-- [Common / Shared Features](../common/shared_features)
-- [Swagger UI Docs](../common/swagger)
+- [Shared Runtime Features](../common/shared_features)
+- [Swagger UI and OpenAPI](../common/swagger)
 
 ```{toctree}
 :hidden:

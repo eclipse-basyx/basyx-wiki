@@ -1,17 +1,14 @@
 # Setting Up the Digital Twin Registry
-We provide example setups to get you started with the BaSyx Go Components in the [examples directory](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples).
-But if you need to configure the service yourself, this page will guide you through.
 
-The Docker example uses `latest` for both BaSyx Go images. For native builds, use one stable source release and its matching database assets as described in [Version Scope](../common/deployment.md#version-scope).
+Example deployments are available in the BaSyx Go Components [examples directory](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples). This page provides a small standalone setup and the requirements for building from source.
 
 ## Using Docker Compose
-The easiest way to use and set up the Digital Twin Registry is Docker Compose.
 
-The minimal configuration includes three services:
+The minimal setup contains PostgreSQL, the BaSyx Configuration Service that initializes the database, and the Digital Twin Registry.
 
-1. PostgreSQL
-2. BaSyx Configuration Service (Go), which initializes the database
-3. BaSyx Digital Twin Registry (Go)
+```{warning}
+The Compose file below is for local evaluation and development. It uses demo database credentials, disables ABAC, publishes the API without TLS, has no named PostgreSQL volume, and defaults to the mutable `latest` BaSyx image tag. Do not expose it to an untrusted network or use it unchanged for production.
+```
 
 ```yaml
 services:
@@ -31,7 +28,7 @@ services:
 
   basyx_configuration:
     container_name: basyx_configuration
-    image: eclipsebasyx/basyxconfigurationservice-go:latest
+    image: eclipsebasyx/basyxconfigurationservice-go:${BASYX_VERSION:-latest}
     pull_policy: always
     environment:
       - POSTGRES_HOST=postgres
@@ -49,7 +46,7 @@ services:
 
   digital_twin_registry:
     container_name: digital_twin_registry
-    image: eclipsebasyx/digitaltwinregistry-go:latest
+    image: eclipsebasyx/digitaltwinregistry-go:${BASYX_VERSION:-latest}
     pull_policy: always
     environment:
       - SERVER_PORT=5004
@@ -66,15 +63,20 @@ services:
       basyx_configuration:
         condition: service_completed_successfully
 ```
-*docker-compose.yml including PostgreSQL 18, the BaSyx Configuration Service, and BaSyx Go Digital Twin Registry*
 
-Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service. Do not mix these stable images with `SNAPSHOT` images.
+*`docker-compose.yml` for local evaluation with PostgreSQL 18, the BaSyx Configuration Service, and the Digital Twin Registry*
+
+With no `BASYX_VERSION` value, this quick start uses `latest`, which can change to a different image digest at any time. For a reproducible deployment, set the same `BASYX_VERSION` in a `.env` file to a concrete release tag or commit-specific tag:
+
+```text
+BASYX_VERSION=<release-or-commit-specific-tag>
+```
+
+Alternatively, replace each complete `image` reference with an image digest. Use the same BaSyx version or build revision for every database-backed BaSyx service in the deployment, especially the Configuration Service. `latest` tracks the newest release and `SNAPSHOT` tracks the current main-branch snapshot; neither mutable tag guarantees repeatable or mutually compatible pulls over time. See [Version Scope](../common/deployment.md#version-scope).
 
 ### Start and Check the Service
 
-This minimal example does not declare a named PostgreSQL volume. Container recreation can therefore leave a new database container attached to different storage and make existing data appear lost. Add the [version-correct named volume](../common/deployment.md#persistent-state) before creating data when persistence is required; adding one later does not migrate data from an existing anonymous volume.
-
-Save the example as `docker-compose.yml`, then run these commands in the same directory:
+Save the example as `docker-compose.yml`, then run:
 
 ```bash
 docker compose up -d
@@ -83,21 +85,33 @@ docker compose logs basyx_configuration digital_twin_registry
 curl -i http://localhost:5004/health
 ```
 
-The Configuration Service runs once and exits with code `0`. The HTTP service starts after successful initialization. Once it is listening, expect `200 OK` and `{"status":"UP"}` from the health endpoint; retry if startup is still in progress.
+The Configuration Service runs once and exits with code `0`. The DTR starts after successful database initialization. Once it is listening, the health endpoint returns `200 OK` and `{"status":"UP"}`; retry if startup is still in progress.
 
 In Windows PowerShell, use `curl.exe` instead of `curl`. Open [Swagger UI](http://localhost:5004/swagger) to inspect the API. Include any configured `server.contextPath` in health, Swagger, and API URLs.
 
-For a secured setup example (including Keycloak), see [`examples/BaSyxDigitalTwinRegistryExample`](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxDigitalTwinRegistryExample). Before enabling custom `Edc-Bpn` header injection, read the [Edc-Bpn Trust Boundary](index.md#edc-bpn-trust-boundary); an ordinary deployment must not trust a caller-supplied identity header.
+The example has no named PostgreSQL volume. Add a named volume that matches the selected PostgreSQL image before creating data that must survive container replacement; adding a volume later does not migrate data from an existing anonymous volume.
 
-### Access Rules and Trustlist Files (Secured Setup)
+For a secured example with Keycloak, see [`examples/BaSyxDigitalTwinRegistryExample`](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxDigitalTwinRegistryExample). Before enabling custom `Edc-Bpn` header injection, read [AssetLink Visibility and `Edc-Bpn`](index.md#assetlink-visibility-and-edc-bpn).
 
-The local Compose example is unsecured: `ABAC_ENABLED=false`, and custom header injection is explicitly disabled. Security-related settings or mounted files do not secure the service unless the OIDC/ABAC middleware is enabled and configured with a matching policy. Follow [Runtime Security](../common/security) for the complete workflow and [Security Configuration Files](../common/configuration.md#security-files) for the field reference.
+### Production Deployment Requirements
 
-For DTR, an omitted `abac.policyFileImport` defaults to `always`: the access-rules file is imported on every startup and supersedes the active database policy. Read [Policy Persistence and Restart Behavior](../common/security.md#policy-persistence-and-restart-behavior) before editing the file or restarting the service.
+Published container images are the normal deployment artifacts, but the default Compose setup is not a production configuration. A production deployment should use:
 
-For the Digital Twin Registry specifically, these paths are resolved inside the container. In Docker Compose, mount the files (or a folder containing them) into the container and point the environment variables to the mounted paths.
+- a concrete BaSyx release/commit tag or image digest
+- persistent PostgreSQL storage and tested backup/restore procedures
+- unique database credentials stored as secrets, with database transport security where required
+- authentication and authorization appropriate to the deployment
+- TLS at the service or a trusted ingress/reverse proxy
+- network controls that prevent bypassing any trusted identity-header gateway
 
-Example:
+### Access Rules and Trust-List Files
+
+The local Compose example is unsecured: `ABAC_ENABLED=false`, and custom header injection is explicitly disabled. Mounted security files have no effect unless OIDC/ABAC is enabled and configured with a matching policy. See [OIDC and ABAC configuration](../common/configuration.md#oidc-and-abac) and [Security Configuration Files](../common/configuration.md#security-files).
+
+For DTR, an omitted `abac.policyFileImport` uses `always`: the access-rules file is imported on every startup and supersedes the active database policy. Set `ABAC_POLICY_FILE_IMPORT` to `always`, `if_missing`, or `never` deliberately for the required policy lifecycle.
+
+Paths are resolved inside the DTR container. Mount the files read-only and configure their container paths, for example:
+
 ```yaml
 services:
   digital_twin_registry:
@@ -109,64 +123,61 @@ services:
       - OIDC_TRUSTLISTPATH=/security_env/trustlist.json
 ```
 
-If `ABAC_ENABLED=false`, the Digital Twin Registry does not require these files at startup.
+If `ABAC_ENABLED=false`, the DTR does not require these files at startup.
 
 ## Using BaSyx Go Components without Docker
-If you need to run the Digital Twin Registry without Docker, build the binary from source for your target platform.
 
-```{warning}
-We recommend using the Docker Images for production use-cases, as they are pre-configured and optimized for production environments.
-```
+Build the binary from the same source revision as the Configuration Service and database assets. Published images are convenient deployment artifacts, but a correctly built native binary supports the same service behavior; production readiness depends on the surrounding security, persistence, networking, and operational configuration.
 
 ### Prerequisites
-- [Go](https://go.dev/dl/) at the version declared by the selected release's `go.mod`.
-- PostgreSQL 16 or newer, initialized by a Configuration Service built from the same source revision as the HTTP service.
+
+- [Go](https://go.dev/dl/) at the version declared by the selected release's `go.mod`
+- PostgreSQL 16 or newer, initialized by a Configuration Service from the same source revision
 - [Git](https://git-scm.com/)
 
-### Cloning the Repository
+### Clone the Repository
+
 ```bash
 git clone https://github.com/eclipse-basyx/basyx-go-components.git
 git -C basyx-go-components checkout RELEASE_TAG
 ```
 
-Replace `RELEASE_TAG` with the stable release you intend to build. Use the Configuration Service and SQL assets from this same checkout.
+Replace `RELEASE_TAG` with the concrete release or commit you intend to build. Use the Configuration Service and SQL assets from this checkout.
 
-### Building the Binary
+### Build the Binary
 
-Change to the Digital Twin Registry service directory:
+Change to the DTR command directory:
+
 ```bash
 cd basyx-go-components/cmd/digitaltwinregistryservice
 ```
 
-#### Linux / macOS
+On Linux or macOS:
 
-Build the executable with:
 ```bash
 go build -o digitaltwinregistryservice
 ```
 
-#### Windows
+On Windows PowerShell:
 
-Build the executable with the `.exe` extension:
 ```powershell
 go build -o digitaltwinregistryservice.exe
 ```
 
-### Running the Service
-Before running the service, ensure PostgreSQL is available and that the BaSyx database schema has already been initialized by the [BaSyx Configuration Service](../configuration_service/index). Configure the PostgreSQL connection through environment variables or the provided `config.yaml`.
+### Run the Service
 
-#### Linux / macOS
+Ensure PostgreSQL is available and the BaSyx database schema has been initialized by the [BaSyx Configuration Service](../configuration_service/index). Configure the PostgreSQL connection through environment variables or `config.yaml`.
 
-Run the service with:
+On Linux or macOS:
+
 ```bash
 ./digitaltwinregistryservice -config ./config.yaml
 ```
 
-#### Windows PowerShell
+On Windows PowerShell:
 
-Run the service with:
 ```powershell
 .\digitaltwinregistryservice.exe -config .\config.yaml
 ```
 
-The Digital Twin Registry does not initialize the database schema itself. Database initialization and migrations are handled by the BaSyx Configuration Service.
+The DTR does not initialize or migrate the database schema itself. Run the Configuration Service successfully before starting the DTR and whenever the selected BaSyx version requires a schema update.
