@@ -17,7 +17,7 @@ A Submodel Descriptor identifies a Submodel and describes how clients can reach 
 - endpoints at which the Submodel can be accessed;
 - supplemental semantic IDs and other discovery metadata.
 
-A complete list of Submodel Descriptor attributes is found in the [Specification of the Asset Administration Shell](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/specification/interfaces-payload.html#_submodeldescriptor).
+The complete payload definition is specified in the [Specification of the Asset Administration Shell, Part 2: Application Programming Interfaces, `SubmodelDescriptor`](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/specification/interfaces-payload.html#_submodeldescriptor). A `SubmodelDescriptor` is an API payload type; it is not the Submodel metamodel object stored by a Repository.
 
 ## Registry or Repository?
 
@@ -53,9 +53,17 @@ See [API Documentation](#api-documentation) for the authoritative list of operat
 
 ## Important Behavior
 
-### Standalone Submodel Descriptors
+### Standalone and AAS-associated Submodel Descriptors
 
-Submodel Descriptors in this component are managed independently of an AAS Descriptor. Clients address a descriptor using only its Submodel identifier. Use the [AAS Registry](../aas_registry/index) when Submodel Descriptors should be managed as part of an AAS Descriptor.
+The standalone Submodel Registry manages standalone `SubmodelDescriptor` resources. Clients address each one by its Submodel identifier at `/submodel-descriptors/{submodelIdentifier}`.
+
+A Submodel Descriptor registered below an AAS Descriptor is a separate registration in the [AAS Registry](../aas_registry/index). Its route includes both the parent AAS identifier and the Submodel identifier. Creating, replacing, or deleting a standalone descriptor does not automatically change an AAS-associated descriptor, and changing an AAS-associated descriptor does not automatically change the standalone registration.
+
+### Repository-to-Registry Integration
+
+Manual Registry calls are not the only way to maintain descriptors. When [Submodel Registry integration](../submodel_repository/registry_integration) is enabled, the standalone Submodel Repository maintains the standalone descriptor as Submodel content changes. It also refreshes embedded descriptors in existing AAS Descriptors that reference that Submodel. The integration is disabled by default and requires the Repository and Registries to use the same BaSyx database; it is not an HTTP synchronization between independent services.
+
+This synchronization is triggered by Repository mutations. Direct writes to either Registry API remain scoped to the descriptor registration addressed by that API. The [usage walkthrough](usage) demonstrates those direct standalone Registry calls.
 
 ### Identifier Encoding
 
@@ -85,7 +93,7 @@ The Registry uses PostgreSQL and expects the shared BaSyx database schema to be 
 
 ## Configuration
 
-See [General Configuration](../common/configuration) for server and database settings. For supported authentication, authorization, and policy persistence, see [Runtime Security](../common/security).
+See [General Configuration](../common/configuration) for the shared server, database, and feature settings used by BaSyx Go components.
 
 ## API Documentation
 
@@ -108,8 +116,8 @@ When `server.contextPath` is configured, both locations are served below that co
 
 - [Setting Up the Submodel Registry](setup)
 - [Using the Submodel Registry](usage)
+- [Submodel Repository Registry Integration](../submodel_repository/registry_integration)
 - [AAS Environment](../aas_environment/index)
-- [Runtime Security](../common/security)
 - [General Configuration](../common/configuration)
 - [Common / Shared Features](../common/shared_features)
 - [Swagger UI Docs](../common/swagger)
