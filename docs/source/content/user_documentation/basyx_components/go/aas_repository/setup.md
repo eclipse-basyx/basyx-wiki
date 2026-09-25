@@ -2,7 +2,7 @@
 We provide example setups to get you started with the BaSyx Go Components in the [example directory](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples).
 But if you need to configure the service yourself, this page will guide you through.
 
-The Docker example uses `latest` for both BaSyx Go images. For native builds, use one stable source release and its matching database assets as described in [Version Scope](../common/deployment.md#version-scope).
+The Docker quick-start uses `latest`, which tracks the newest stable BaSyx Go release. `SNAPSHOT` tracks unreleased development from `main`. For reproducible deployments, pin matching concrete release tags or image digests instead of relying on a mutable tag. See [Version Scope](../common/deployment.md#version-scope).
 
 ## Using Docker Compose
 The easiest way to use and set up the AAS Repository is Docker Compose.
@@ -12,6 +12,10 @@ The minimal configuration includes three services:
 1. PostgreSQL
 2. BaSyx Configuration Service (Go), which initializes the database
 3. BaSyx AAS Repository (Go)
+
+```{warning}
+This Compose file is for local evaluation and development. It uses demonstration database credentials, disables ABAC, uses mutable image tags, exposes HTTP without TLS, and has no named PostgreSQL volume. Do not expose it to an untrusted network or use it unchanged for production.
+```
 
 ```yaml
 services:
@@ -66,13 +70,11 @@ services:
 ```
 *docker-compose.yml including PostgreSQL 18, the BaSyx Configuration Service, and BaSyx Go AAS Repository*
 
-Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service.
+The Configuration Service and every database-backed BaSyx component sharing this database must come from matching release or build artifacts. Using `latest` consistently is suitable for this quick-start, but it is not immutable: later pulls can resolve to different digests. For reproducible deployments, use the same concrete release version across the BaSyx images or pin matching image digests.
 
 ### Start and Check the Repository
 
-```{warning}
-This minimal local Compose file does not declare a named PostgreSQL volume. Do not rely on removing and recreating its containers to preserve data: an image-created anonymous volume is not automatically reused after `docker compose down`. Add a correctly mounted named volume before storing data that must survive, and migrate existing data explicitly rather than expecting a new volume declaration to copy it. See [Persistent State](../common/deployment.md#persistent-state).
-```
+This minimal local Compose file does not declare a named PostgreSQL volume. Add a correctly mounted named volume before storing data that must survive container replacement; adding one later does not migrate data from an existing anonymous volume.
 
 Save the example as `docker-compose.yml`, then run:
 
@@ -93,14 +95,12 @@ Include any configured context path in every URL. For example, `SERVER_CONTEXTPA
 
 ### Access Rules and Trustlist Files (Secured Setup)
 
-The local Compose example does not enable ABAC and is not a secured deployment. For this component, enable the supported middleware with `ABAC_ENABLED=true`, mount the access-rule and OIDC trust-list files, and configure their container paths. When `ABAC_POLICY_FILE_IMPORT` is omitted, the effective import mode is `if_missing`, so editing a mounted policy file and restarting does not replace an active policy already stored in PostgreSQL. Follow [Runtime Security](../common/security), especially [Policy Persistence and Restart Behavior](../common/security.md#policy-persistence-and-restart-behavior), before exposing the service.
+The local Compose example does not enable ABAC and is not a secured deployment. For this component, enable the supported authorization with `ABAC_ENABLED=true`, mount the access-rule and OIDC trust-list files, and configure their container paths. When `ABAC_POLICY_FILE_IMPORT` is omitted, the effective import mode is `if_missing`, so editing a mounted policy file and restarting does not replace an active policy already stored in PostgreSQL. See [OIDC and ABAC Configuration](../common/configuration.md#oidc-and-abac) and [Security Files](../common/configuration.md#security-files) before exposing the service.
 
 ## Using BaSyx Go Components without Docker
 If you need to run the AAS Repository without Docker, build the binary from source for your target platform.
 
-```{warning}
-We recommend using the Docker Images for production use-cases, as they are pre-configured and optimized for production environments.
-```
+Published container images are the normal deployment artifacts. Production deployments must configure appropriate authentication and authorization, persistent database storage, secure credentials, networking and TLS, backups, and reproducible image versions where required. A native binary can be deployed with the same operational controls.
 
 ### Prerequisites
 - [Go](https://go.dev/dl/) at the version declared by the selected release's `go.mod`.
@@ -140,6 +140,8 @@ go build -o aasrepositoryservice.exe
 
 ### Running the Service
 Before running the service, ensure PostgreSQL is available and that the BaSyx database schema has already been initialized by the [BaSyx Configuration Service](../configuration_service/index). Configure the PostgreSQL connection through environment variables or the provided `config.yaml`.
+
+The provided native `config.yaml` listens on port `5004` unless `server.port` is overridden. The Compose example overrides this with `SERVER_PORT=8084`, so its URLs use port `8084`.
 
 #### Linux / macOS
 

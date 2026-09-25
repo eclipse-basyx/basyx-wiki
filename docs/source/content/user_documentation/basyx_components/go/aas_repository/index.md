@@ -18,6 +18,7 @@ An AAS contains Submodel references, not inline Submodel content. This Go compon
 - List AASs with filters and [cursor-based pagination](../common/pagination).
 - Retrieve and replace asset information independently of the complete AAS.
 - Manage Submodel references and access Submodel content through an AAS.
+- Query AAS-level fields through `POST /query/shells`.
 - Optionally synchronize AAS Descriptors through [Registry Integration](registry_integration).
 - Expose service self-description and runtime API documentation.
 
@@ -27,9 +28,23 @@ An AAS contains Submodel references, not inline Submodel content. This Go compon
 
 The AAS identifier in the request path is Base64URL-encoded. Identifiers in JSON request bodies remain unencoded. PUT creates the AAS if it does not exist or replaces the existing AAS. The identifier in the request body must match the decoded path identifier. The request body must contain the complete AAS, including all references and metadata that should be retained.
 
-### References and Submodel Content
+### Shared Submodel Content
 
-Removing a Submodel reference unlinks it from the AAS. Deleting through an AAS-scoped Submodel route removes the reference and the stored Submodel content. These are different operations, especially when several AASs refer to the same Submodel. See [AAS-scoped Submodel Access](usage.md#aas-scoped-submodel-access).
+Submodel content is stored once per Submodel ID. AAS-scoped routes do not create a private copy for each AAS. Multiple AASs can reference the same Submodel ID. Updating it through one AAS therefore changes the content seen through every AAS that references that ID.
+
+```{warning}
+Submodel content is shared by Submodel ID, even when it is accessed through an AAS-scoped endpoint.
+
+- `DELETE /shells/{aasIdentifier}/submodels/{submodelIdentifier}` deletes the shared Submodel content and removes the reference from the addressed AAS. References from other AASs are not removed and may therefore point to a Submodel that no longer exists.
+- `DELETE /shells/{aasIdentifier}/submodel-refs/{submodelIdentifier}` removes only the reference from the addressed AAS. The Submodel content remains stored.
+- `DELETE /shells/{aasIdentifier}` deletes the AAS and its references. Referenced Submodel content remains stored.
+```
+
+See [Resource Lifecycle](usage.md#resource-lifecycle) before replacing or deleting shared resources.
+
+### Structured Query Scope
+
+The standalone Repository supports `POST /query/shells` for structured queries over AAS data. Queries that traverse into Submodels or Submodel Elements using `$sm` or `$sme` are not supported by the standalone service and return `400 Bad Request`. Use the [AAS Environment](../aas_environment/index) for hierarchy-spanning queries.
 
 ### Database Schema
 
@@ -37,7 +52,7 @@ The Repository uses PostgreSQL. The BaSyx Configuration Service must initialize 
 
 ## Configuration
 
-See [General Configuration](../common/configuration) for server and database settings. For authentication, authorization, supported executables, and policy persistence, see [Runtime Security](../common/security). [Registry Integration](registry_integration) explains the component-specific integration flag and public endpoint generation.
+See [General Configuration](../common/configuration) for server, database, OIDC, and ABAC settings. [Registry Integration](registry_integration) explains the component-specific integration flag and public endpoint generation.
 
 ## API Documentation and Availability
 
@@ -67,7 +82,7 @@ The standalone AAS Repository does not support the `/serialization` endpoint. Fo
 - [Using the AAS Repository](usage)
 - [Registry Integration](registry_integration)
 - [AAS Environment](../aas_environment/index)
-- [Runtime Security](../common/security)
+- [OIDC and ABAC Configuration](../common/configuration.md#oidc-and-abac)
 - [Submodel Repository](../submodel_repository/index)
 - [Common / Shared Features](../common/shared_features)
 

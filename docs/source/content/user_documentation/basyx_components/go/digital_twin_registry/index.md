@@ -4,13 +4,9 @@
 ![Metamodel](https://img.shields.io/badge/Metamodel-v3.1.1-yellow)
 ![API](https://img.shields.io/badge/API-v3.2.0-yellow)
 
-## Contents
-
-* [Creating your own Set-Up](setup)
-
 The BaSyx Digital Twin Registry (DTR) combines the AAS Registry API and Basic Discovery API in one service. Registering an AAS descriptor also makes its asset identifiers available to Discovery, so clients normally do not have to maintain the same mapping through two services.
 
-The API badge describes the OpenAPI document shipped with the component; see [Version Scope](../common/deployment.md#version-scope). The exact API for a running instance is available through its Swagger UI at `/swagger`.
+The API badge describes the OpenAPI document shipped with the component. The exact API for a running instance is available through its Swagger UI at `/swagger`.
 
 ## Standard APIs Included in the DTR
 
@@ -22,7 +18,7 @@ The DTR includes the AAS Registry operations for:
 - structured descriptor queries through `POST /query/shell-descriptors`
 - asynchronous bulk creation, replacement, and deletion, including bulk status and result retrieval
 
-`POST /query/shell-descriptors` is part of the standalone AAS Registry API as well; it is not a DTR-specific extension. See [AAS Registry](../aas_registry/index) for the Registry concepts and common behavior.
+See [AAS Registry](../aas_registry/index) for Registry concepts and common behavior.
 
 ### Basic Discovery API
 

@@ -87,7 +87,7 @@ curl -i http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE
 
 The response should now contain `"idShort": "MotorAASUpdated"` and the original asset information. PUT creates a missing AAS with `201 Created`. The body `id` must match the decoded path identifier.
 
-PUT replaces the complete AAS. Later in this walkthrough you will add a Submodel reference through a separate API call. This call does not update your local `aas.json`. Before replacing the AAS again, retrieve its current state and preserve the references and metadata you want to keep. Reusing the initial file would omit the new reference.
+PUT replaces the complete AAS. Later in this walkthrough you will add a Submodel reference through a separate API call. This call does not update your local `aas.json`. Before replacing the AAS again, retrieve its current state and preserve the references and metadata you want to keep. Reusing the initial file would omit the new reference. Omitting a previously referenced Submodel removes that reference from the AAS, but does not delete or garbage-collect the separately stored Submodel content.
 
 ## Asset Information
 
@@ -157,6 +157,8 @@ curl -i http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/submodels/dXJuOmV4Y
 
 The parent AAS must exist. PUT stores the Submodel and ensures its reference exists in that AAS in one transaction. Expect `201 Created` on a fresh example database, or `204 No Content` if that Submodel already exists. GET returns `200 OK` with `idShort: "MotorNameplate"` and the nameplate collection. You do not need to POST a reference separately after this PUT.
 
+Submodel storage is shared by Submodel ID. This route does not create a Submodel copy owned by the parent AAS. If two AASs reference `urn:example:submodel:1`, replacing it through either AAS updates the same stored content, and reads through both references return the updated Submodel.
+
 The Submodel's serial number deliberately matches the asset information in this example. These are separate stored values: updating one does not automatically update the other.
 
 The standalone AAS Repository uses local database-backed Submodel storage for these routes. It does not follow a Registry endpoint to fetch a remote Submodel.
@@ -171,7 +173,7 @@ Expect `200 OK` with a Property containing `idShort: "SerialNumber"`, `valueType
 
 See the [Submodel Element walkthrough](../submodel_repository/usage.md#submodel-element-paths) when you need additional element operations. Replace its `/submodels/{submodelIdentifier}` prefix with the AAS-scoped prefix when using these routes.
 
-Unlike removing a reference, DELETE on `/shells/{aasIdentifier}/submodels/{submodelIdentifier}` removes the reference and the Submodel content. Be careful because other AASs may use that same content.
+Unlike removing a reference, DELETE on `/shells/{aasIdentifier}/submodels/{submodelIdentifier}` removes the reference from the addressed AAS and deletes the shared Submodel content. It does not remove references from other AASs.
 
 ## Submodel References
 
@@ -211,6 +213,21 @@ curl -i http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/submodel-refs
 Expect `201 Created` for the restored reference, then `200 OK` with it in the list. This is also the operation to use when you only want to link an existing Submodel. It does not upload content or fetch a remote Submodel.
 
 Read the Submodel again using the AAS-scoped GET from the previous section. It is accessible again without re-uploading its content.
+
+## Resource Lifecycle
+
+Submodel references and Submodel content have separate lifecycles:
+
+| Operation | Endpoint | Effect |
+| --- | --- | --- |
+| Delete a Submodel reference | `DELETE /shells/{aasIdentifier}/submodel-refs/{submodelIdentifier}` | Removes only the relationship from the addressed AAS. Shared Submodel content remains stored. |
+| Delete an AAS-scoped Submodel | `DELETE /shells/{aasIdentifier}/submodels/{submodelIdentifier}` | Removes the reference from the addressed AAS and deletes the shared Submodel content. References in other AASs are not removed. |
+| Delete an AAS | `DELETE /shells/{aasIdentifier}` | Deletes the AAS and all of its Submodel references. Referenced Submodel content remains stored. |
+| Replace a complete AAS | `PUT /shells/{aasIdentifier}` | Replaces the AAS and its reference set. Omitted references are removed, but their Submodel content remains stored. |
+
+```{warning}
+Suppose AAS A and AAS B both reference Submodel X. Deleting X through AAS A deletes the single shared Submodel X and removes AAS A's reference. AAS B can retain its reference to X, but an AAS-scoped read through B then has no Submodel content to return. Remove or reconcile such remaining references explicitly.
+```
 
 ## Filtering and Pagination
 
@@ -315,9 +332,34 @@ After the asset-information step above, the serial number is `SN-002`. The follo
 curl -i -G http://localhost:8084/shells --data-urlencode 'assetIds=eyJuYW1lIjoic2VyaWFsTnVtYmVyIiwidmFsdWUiOiJTTi0wMDIifQ'
 ```
 
-Expect your AAS in `result`. Searching for `SN-001` after changing it to `SN-002` would return no match. For your own asset filters, encode the complete JSON object using the [shared encoding commands](../common/encoding.md#encode-your-own-identifier). Use `{"name":"globalAssetId","value":"urn:example:asset:1"}` for the global asset identifier. Normal URL escaping is separate from Base64URL encoding; `--data-urlencode` handles it here.
+Expect your AAS in `result`. Searching for `SN-001` after changing it to `SN-002` would return no match. For your own asset filters, encode the complete JSON object's UTF-8 bytes with Base64URL. Use `{"name":"globalAssetId","value":"urn:example:asset:1"}` for the global asset identifier. Normal URL escaping is separate from Base64URL encoding; `--data-urlencode` handles it here.
 
 Timestamp filters use administrative timestamps supplied in the AAS payload. Writes do not automatically generate or overwrite `administration.createdAt` and `administration.updatedAt`; see [Find Recently Changed AASs](#find-recently-changed-aass) for a complete example. Current-resource lists do not report deletions. Ordinary list parameters select supported attributes; structured query expressions belong to `POST /query/shells` and are not arbitrary additional list parameters. Consult the running Swagger UI for the query schema in your component version.
+
+### Query AAS Data
+
+`POST /query/shells` accepts structured AAS queries. Save this AAS-level query as `query.json`:
+
+```json
+{
+  "$condition": {
+    "$eq": [
+      { "$field": "$aas#idShort" },
+      { "$strVal": "MotorAASUpdated" }
+    ]
+  }
+}
+```
+
+Send it to the query endpoint:
+
+```bash
+curl -i -X POST http://localhost:8084/query/shells -H 'Content-Type: application/json' --data-binary '@query.json'
+```
+
+Expect `200 OK` with `MotorAASUpdated` in the `result` array. `limit` and `cursor` can be supplied as query parameters for pagination.
+
+The standalone AAS Repository supports structured queries over AAS data only. Expressions that use `$sm` or `$sme` to traverse into referenced Submodels or Submodel Elements return `400 Bad Request`; use the [AAS Environment Service](../aas_environment/index) for those hierarchy-spanning queries.
 
 ## Read a Historical AAS State
 
@@ -438,12 +480,7 @@ Expect `204 No Content`. Deleting the thumbnail does not delete the AAS.
 
 ## Delete the Example Content
 
-Once you have finished, delete the example Submodel through the motor AAS, then delete all three AASs. The reference must still be present, so restore it first if you stopped partway through the reference-management section. The pump and historical AASs have no Submodels to clean up.
-
-| Request | What it removes |
-| --- | --- |
-| DELETE the `/submodel-refs/{submodelIdentifier}` route | Only the link from this AAS. |
-| DELETE the `/submodels/{submodelIdentifier}` route below the AAS | The link and the stored Submodel content. |
+Once you have finished, delete the example Submodel through the motor AAS, then delete all three AASs. The reference must still be present, so restore it first if you stopped partway through the reference-management section. The pump and historical AASs have no Submodels to clean up. Review [Resource Lifecycle](#resource-lifecycle) before adapting these destructive requests to shared Submodels.
 
 The commands below intentionally use the second operation:
 
@@ -464,4 +501,4 @@ The expected `404` confirms the AAS is no longer available. The example identifi
 
 ## Shared API Guidance
 
-See [Identifiers and Encoding](../common/encoding), [Validation](../common/validation), [API Errors](../common/api_errors), and [History, Timestamps, and Signed Reads](../common/history_and_changes). For available model views, see [Response Representations](../common/representations). Component-specific requests and lifecycle behavior are documented above.
+See [Validation](../common/validation) and [History, Timestamps, and Signed Reads](../common/history_and_changes). For available model views, see [Response Representations](../common/representations). Component-specific encoding examples, requests, errors, and lifecycle behavior are documented above and in the running Swagger UI.
