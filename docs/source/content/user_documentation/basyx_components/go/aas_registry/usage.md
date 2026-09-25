@@ -2,10 +2,6 @@
 
 This walkthrough uses the unsecured [Docker Compose setup](setup) at `http://localhost:8082` with an empty context path. Run the examples in order against an example database. Save the JSON files in your working directory. The curl commands are single-line commands usable in Bash; in Windows PowerShell, invoke `curl.exe` instead of `curl`.
 
-```{note}
-In a Registry deployment with Discovery integration enabled, writes to a descriptor's `specificAssetIds` can share mapping rows with Discovery. Later Discovery replacement or deletion can therefore affect the values visible in that descriptor. Review [Shared Registry Asset Identifiers](../basic_discovery/index.md#shared-registry-asset-identifiers) before maintaining these fields. This warning does not apply merely because unrelated Registry and Discovery processes use the same PostgreSQL server.
-```
-
 The descriptor endpoints below use `example.com` as placeholders. Replace them with Repository URLs reachable by the clients that will use the descriptors.
 
 ## Register an AAS Descriptor
@@ -45,6 +41,14 @@ curl -i -X POST http://localhost:8082/shell-descriptors -H 'Content-Type: applic
 Expect `201 Created` and the registered descriptor. Posting the same visible identifier again returns `409 Conflict`. In this walkthrough you register the descriptor explicitly.  In a scenario where you use the [AAS Repository](../aas_repository/index) or the AAS Environment with the [Registry integration](../common/registry_integration) feature turned on, the AAS Descriptors can be created, updated, and deleted automatically.
 
 ## Retrieve and Update the Descriptor
+
+Path identifiers use the unpadded Base64URL encoding of the identifier's UTF-8 bytes. The AAS identifier in `aas-descriptor.json` therefore becomes:
+
+```text
+urn:example:aas:1 -> dXJuOmV4YW1wbGU6YWFzOjE
+```
+
+Identifiers in JSON bodies remain unencoded. Apply the same UTF-8 Base64URL rule, without padding, when substituting another path identifier.
 
 ```bash
 curl -i http://localhost:8082/shell-descriptors/dXJuOmV4YW1wbGU6YWFzOjE
@@ -86,18 +90,23 @@ Save this as `submodel-descriptor.json`:
 }
 ```
 
-The parent AAS Descriptor must already exist. Register and retrieve the child:
+The parent AAS Descriptor must already exist. Register the child, then list the Submodel Descriptors associated with the parent AAS:
 
 ```bash
 curl -i -X POST http://localhost:8082/shell-descriptors/dXJuOmV4YW1wbGU6YWFzOjE/submodel-descriptors -H 'Content-Type: application/json' --data-binary '@submodel-descriptor.json'
-curl -i http://localhost:8082/shell-descriptors/dXJuOmV4YW1wbGU6YWFzOjE/submodel-descriptors/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ
+curl -i 'http://localhost:8082/shell-descriptors/dXJuOmV4YW1wbGU6YWFzOjE/submodel-descriptors?limit=10'
 ```
 
-Expect `201 Created` and then `200 OK`. Both path identifiers are encoded. To replace this child, edit its JSON file and use PUT on its individual URL. For an existing child this returns `204 No Content`:
+Expect `201 Created` and then `200 OK`. The collection response contains the registered descriptor in `result` and pagination information in `paging_metadata`.
+
+To replace this child, change its `idShort` in `submodel-descriptor.json` to `MotorNameplateUpdated`, keep the original `id`, and use PUT on its individual URL. The encoded Submodel identifier `dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ` represents `urn:example:submodel:1`. Replacing the existing child returns `204 No Content`:
 
 ```bash
 curl -i -X PUT http://localhost:8082/shell-descriptors/dXJuOmV4YW1wbGU6YWFzOjE/submodel-descriptors/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ -H 'Content-Type: application/json' --data-binary '@submodel-descriptor.json'
+curl -i 'http://localhost:8082/shell-descriptors/dXJuOmV4YW1wbGU6YWFzOjE/submodel-descriptors?limit=10'
 ```
+
+The second collection request shows the updated child. Submodel Descriptors are scoped to the parent AAS Descriptor, so an individual child route includes both the encoded AAS identifier and the encoded Submodel identifier.
 
 ## Filtering and Pagination
 
@@ -109,13 +118,19 @@ Find the example descriptor by asset kind and type:
 curl -i -G http://localhost:8082/shell-descriptors --data-urlencode 'assetKind=Instance' --data-urlencode 'assetType=TW90b3I' --data-urlencode 'limit=10'
 ```
 
-To search by serial number, encode the complete JSON value `{"name":"serialNumber","value":"SN-001"}` using the [shared encoding commands](../common/encoding.md#encode-your-own-identifier), then replace `ENCODED_SPECIFIC_ASSET_ID`:
+`TW90b3I` is the unpadded Base64URL encoding of the descriptor's plain `assetType` value, `Motor`.
+
+The `assetIds` filter expects a Base64URL-encoded `SpecificAssetId` JSON object. For the descriptor registered above, encode the compact UTF-8 JSON `{"name":"serialNumber","value":"SN-001"}`. The resulting unpadded value is `eyJuYW1lIjoic2VyaWFsTnVtYmVyIiwidmFsdWUiOiJTTi0wMDEifQ`:
 
 ```bash
-curl -i -G http://localhost:8082/shell-descriptors --data-urlencode 'assetIds=ENCODED_SPECIFIC_ASSET_ID'
+curl -i -G http://localhost:8082/shell-descriptors --data-urlencode 'assetIds=eyJuYW1lIjoic2VyaWFsTnVtYmVyIiwidmFsdWUiOiJTTi0wMDEifQ'
 ```
 
-For a global asset identifier, encode `{"name":"globalAssetId","value":"urn:example:asset:1"}` instead. Repeat `assetIds` for multiple identifiers; a descriptor matches if at least one supplied asset identifier matches. Other supplied filters further restrict the result.
+Compact JSON makes the encoded value reproducible; the service parses the decoded JSON rather than comparing its whitespace. For a global asset identifier, encode `{"name":"globalAssetId","value":"urn:example:asset:1"}` instead. Repeat `assetIds` for multiple identifiers. A descriptor matches if at least one supplied asset identifier matches. Other supplied filters further restrict the result.
+
+```{note}
+This next consideration applies only to Registry deployments with Discovery integration enabled, including the combined Digital Twin Registry. In those deployments, descriptor `specificAssetIds` can share mapping rows with Discovery, so a later Discovery replacement or deletion can affect the identifiers visible through the descriptor. Merely running independent Registry and Discovery services on the same PostgreSQL server does not enable this behavior. See [Shared Registry Asset Identifiers](../basic_discovery/index.md#shared-registry-asset-identifiers) before maintaining these fields in an integrated deployment.
+```
 
 Find the descriptor using the update timestamp set earlier:
 
@@ -181,7 +196,7 @@ Expect `202 Accepted` and a `Location: /bulk/status/<handleId>` header. Acceptan
 curl -i http://localhost:8082/bulk/status/HANDLE_ID
 ```
 
-While running, the response is `200 OK` with `executionState: Running` and `Retry-After: 2`. Wait for that interval before polling again. When processing has finished, status returns `302 Found` with `Location: /bulk/result/<handleId>`. Fetch that result explicitly:
+While running, the response is `200 OK` with `executionState: Running` and a `Retry-After` header. Wait for the number of seconds returned by the service before polling again. When processing has finished, status returns `302 Found` with `Location: /bulk/result/<handleId>`. Fetch that result explicitly:
 
 ```bash
 curl -i http://localhost:8082/bulk/result/HANDLE_ID
@@ -189,7 +204,9 @@ curl -i http://localhost:8082/bulk/result/HANDLE_ID
 
 Success returns `204 No Content`. A descriptor-operation failure returns `400` with failure details; execution failures can return another error status. Completion alone does not indicate success. Bulk descriptor mutations are atomic: if an operation fails, all descriptor changes in that job are rolled back.
 
-Retrieving a completed result consumes the handle, including for failed jobs. Save the response if it is needed later; subsequent status/result requests return `404`. Fetching a result while the job is still running returns `400` and does not consume the running handle.
+Retrieving a completed result consumes the handle, including for failed jobs. Save the response if it is needed later; subsequent status/result requests return `404`. Fetching a result while the job is still running returns `400` and does not consume the running handle. Do not automatically follow the status redirect unless you intend to consume the result.
+
+Asynchronous execution capacity is bounded. A submission can return `429 Too Many Requests` when no execution slot is available; retry the submission later.
 
 ## Delete the Example Registrations
 
@@ -210,4 +227,4 @@ curl -i -X DELETE http://localhost:8082/bulk/shell-descriptors -H 'Content-Type:
 
 ## Shared API Guidance
 
-See [Identifiers and Encoding](../common/encoding), [Validation](../common/validation), [API Errors](../common/api_errors), and [History, Timestamps, and Signed Reads](../common/history_and_changes). For bulk status polling and result handling, see [Asynchronous API Operations](../common/asynchronous_requests). Component-specific requests and lifecycle behavior are documented above.
+See [Validation](../common/validation) and [History, Timestamps, and Signed Reads](../common/history_and_changes). For bulk status polling and result handling, see [Asynchronous API Operations](../common/asynchronous_requests). Component-specific requests and lifecycle behavior are documented above.

@@ -17,7 +17,8 @@ An AAS Descriptor identifies an AAS and describes how clients can reach it. Depe
 - endpoints at which the AAS can be accessed;
 - Submodel Descriptors associated with that AAS.
 
-A complete list of AAS Descriptor attributes is found in the [specification of the AAS](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/specification/interfaces-payload.html#_assetadministrationshelldescriptor). <br>
+`AssetAdministrationShellDescriptor`, `SubmodelDescriptor`, and the related descriptor payload types are defined in the [AAS Part 2 API payload data types](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/specification/interfaces-payload.html#_assetadministrationshelldescriptor). They are API payload types, not regular Part 1 AAS metamodel elements.
+
 A Submodel Descriptor plays the same role for a Submodel: It identifies the Submodel and advertises endpoints and other discovery metadata. In the AAS Registry, Submodel Descriptors are scoped to their parent AAS Descriptor.
 
 ## Registry or Repository?
@@ -86,13 +87,23 @@ Bulk creation, update, and deletion are asynchronous and atomic: if a descriptor
 
 The Registry uses PostgreSQL and expects the shared BaSyx database schema to be initialized and migrated by the BaSyx Configuration Service. The Registry validates the schema during startup and does not initialize it itself. See [Setting Up the AAS Registry](setup) for the required startup order.
 
-### Shared Specific Asset Identifiers
+### Advanced: Shared Asset Identifiers with Discovery
 
-When AAS Registry writes participate in configured Discovery integration, or when the combined Digital Twin Registry is used, descriptor `specificAssetIds` and Discovery can refer to shared mapping rows. Discovery replacement or deletion can then change the specific asset identifiers visible through a descriptor. This is conditional behavior, not a consequence of merely putting independent services on the same PostgreSQL server. See [Shared Registry Asset Identifiers](../basic_discovery/index.md#shared-registry-asset-identifiers) for the affected rows and resources that are not deleted.
+The AAS Registry and Discovery normally serve different purposes. The Registry stores AAS Descriptors, including their `specificAssetIds`. Discovery stores associations between asset identifiers and AAS identifiers so that a client can find an AAS from an asset identifier.
+
+For separately deployed services, this sharing occurs only when `general.discoveryIntegration` is enabled for the AAS Registry and both services use the same BaSyx database and schema. The combined Digital Twin Registry enables the integration automatically. In either case, both APIs use the same stored asset-identifier associations for an AAS. Consequently, a write through one API can affect what the other API returns:
+
+- creating or replacing an AAS Descriptor can add or replace asset identifiers used by Discovery lookups;
+- replacing Discovery links can remove identifiers that were previously visible in the descriptor's `specificAssetIds`; and
+- deleting the Discovery registration can remove those shared identifiers from later descriptor responses.
+
+For example, suppose a descriptor for `urn:example:aas:1` contains the specific asset identifier `serialNumber=SN-001`. If the Discovery registration for that AAS is later deleted, the AAS Descriptor itself remains registered, but `serialNumber=SN-001` may no longer appear in a subsequent Registry response. The operation does not delete the AAS or Submodel content stored in a Repository.
+
+This behavior is enabled explicitly. It does not occur merely because independently configured Registry and Discovery services connect to the same PostgreSQL server. See [Shared Registry Asset Identifiers](../basic_discovery/index.md#shared-registry-asset-identifiers) for the detailed operation-by-operation effects.
 
 ## Configuration
 
-See [General Configuration](../common/configuration) for server and database settings. For supported authentication, authorization, and policy persistence, see [Runtime Security](../common/security).
+See [General Configuration](../common/configuration) for the shared server and PostgreSQL settings used by the AAS Registry.
 
 ## API Documentation
 
@@ -113,13 +124,14 @@ When `server.contextPath` is configured, both locations are served below that co
 
 ## Related Documentation
 
-- [Setting Up the AAS Registry](setup)
-- [Using the AAS Registry](usage)
-- [AAS Environment](../aas_environment/index)
-- [Runtime Security](../common/security)
-- [General Configuration](../common/configuration)
-- [Common / Shared Features](../common/shared_features)
-- [Swagger UI Docs](../common/swagger)
+- [Setting Up the AAS Registry](setup) — Provides the Docker Compose and native setup instructions.
+- [Using the AAS Registry](usage) — Walks through registering, retrieving, updating, filtering, and deleting descriptors.
+- [AAS Environment](../aas_environment/index) — Describes the combined component that exposes Repository and Registry capabilities together.
+- [Basic Discovery](../basic_discovery/index) — Explains asset-identifier lookup and the optional sharing of asset identifiers with the Registry.
+- [General Configuration](../common/configuration) — Lists the shared server and PostgreSQL configuration settings.
+- [Pagination](../common/pagination) — Explains collection limits and continuation cursors.
+- [Asynchronous API Operations](../common/asynchronous_requests) — Explains the lifecycle of asynchronous bulk jobs.
+- [Swagger UI and OpenAPI](../common/swagger) — Shows how to inspect the complete API contract exposed by the running service.
 
 ```{toctree}
 :hidden:

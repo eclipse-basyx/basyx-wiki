@@ -23,7 +23,6 @@ This section covers features and configuration that are shared across multiple B
 :maxdepth: 1
 
 deployment
-security
 swagger
 configuration
 shared_features
