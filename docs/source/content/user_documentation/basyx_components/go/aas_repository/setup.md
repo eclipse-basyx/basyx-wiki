@@ -2,7 +2,7 @@
 We provide example setups to get you started with the BaSyx Go Components in the [example directory](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples).
 But if you need to configure the service yourself, this page will guide you through.
 
-The Docker quick-start uses `latest`, which tracks the newest stable BaSyx Go release. `SNAPSHOT` tracks unreleased development from `main`. For reproducible deployments, pin matching concrete release tags or image digests instead of relying on a mutable tag. See [Version Scope](../common/deployment.md#version-scope).
+The Docker example uses `latest` for both BaSyx Go images. For native builds, use one stable source release and its matching database assets as described in [Version Scope](../common/deployment.md#version-scope).
 
 ## Using Docker Compose
 The easiest way to use and set up the AAS Repository is Docker Compose.
@@ -14,7 +14,7 @@ The minimal configuration includes three services:
 3. BaSyx AAS Repository (Go)
 
 ```{warning}
-This Compose file is for local evaluation and development. It uses demonstration database credentials, disables ABAC, uses mutable image tags, exposes HTTP without TLS, and has no named PostgreSQL volume. Do not expose it to an untrusted network or use it unchanged for production.
+This Compose example is intended for local evaluation and development.
 ```
 
 ```yaml
@@ -70,11 +70,13 @@ services:
 ```
 *docker-compose.yml including PostgreSQL 18, the BaSyx Configuration Service, and BaSyx Go AAS Repository*
 
-The Configuration Service and every database-backed BaSyx component sharing this database must come from matching release or build artifacts. Using `latest` consistently is suitable for this quick-start, but it is not immutable: later pulls can resolve to different digests. For reproducible deployments, use the same concrete release version across the BaSyx images or pin matching image digests.
+Use matching BaSyx versions for the Configuration Service and AAS Repository.
 
 ### Start and Check the Repository
 
-This minimal local Compose file does not declare a named PostgreSQL volume. Add a correctly mounted named volume before storing data that must survive container replacement; adding one later does not migrate data from an existing anonymous volume.
+```{warning}
+This minimal local Compose setup does not declare a named PostgreSQL volume. An image-created anonymous volume is not automatically reused after `docker compose down`, so recreating the containers can make previously stored data appear to be lost. Add a correctly mounted named volume before storing persistent data, and migrate existing data explicitly rather than expecting a new volume declaration to copy it. See [Persistent State](../common/deployment.md#persistent-state).
+```
 
 Save the example as `docker-compose.yml`, then run:
 
@@ -100,7 +102,7 @@ The local Compose example does not enable ABAC and is not a secured deployment. 
 ## Using BaSyx Go Components without Docker
 If you need to run the AAS Repository without Docker, build the binary from source for your target platform.
 
-Published container images are the normal deployment artifacts. Production deployments must configure appropriate authentication and authorization, persistent database storage, secure credentials, networking and TLS, backups, and reproducible image versions where required. A native binary can be deployed with the same operational controls.
+Published BaSyx container images provide a ready-to-run distribution of the service. The minimal Compose example above is intentionally unsecured and is not, by itself, a production-ready deployment configuration.
 
 ### Prerequisites
 - [Go](https://go.dev/dl/) at the version declared by the selected release's `go.mod`.
@@ -115,7 +117,7 @@ git clone https://github.com/eclipse-basyx/basyx-go-components
 git -C basyx-go-components checkout RELEASE_TAG
 ```
 
-Replace `RELEASE_TAG` with the stable release you intend to build. Initialize PostgreSQL with the Configuration Service and SQL assets from this same checkout.
+Replace `RELEASE_TAG` with the stable release you intend to build. Initialize PostgreSQL using the Configuration Service and database schema files from the same checkout.
 
 ### Building the Binary
 
@@ -141,8 +143,6 @@ go build -o aasrepositoryservice.exe
 ### Running the Service
 Before running the service, ensure PostgreSQL is available and that the BaSyx database schema has already been initialized by the [BaSyx Configuration Service](../configuration_service/index). Configure the PostgreSQL connection through environment variables or the provided `config.yaml`.
 
-The provided native `config.yaml` listens on port `5004` unless `server.port` is overridden. The Compose example overrides this with `SERVER_PORT=8084`, so its URLs use port `8084`.
-
 #### Linux / macOS
 
 Run the service with:
@@ -158,5 +158,3 @@ Run the service with:
 ```
 
 The AAS Repository does not initialize the database schema itself. Database initialization and migrations are handled by the BaSyx Configuration Service.
-
-The Compose example uses port `8084` so it can run alongside the Submodel Repository on `8085`. The two setup files describe independent Compose projects. If using both simultaneously, use distinct container names and host ports. For shared-database access through both Repository APIs, combine them into one Compose project with one PostgreSQL service and one Configuration Service, and configure both Repositories for that database.

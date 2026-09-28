@@ -57,7 +57,7 @@ services:
 Use the same image tag for every BaSyx Go service sharing this database.
 
 ```{warning}
-This minimal example has no named PostgreSQL volume. Add and correctly mount one before storing packages that must survive container recreation. Backups and migrations must include PostgreSQL Large Objects because that is where the package bytes are stored. See [Persistent State](../common/deployment.md#persistent-state).
+This minimal local Compose setup does not declare a named PostgreSQL volume. An image-created anonymous volume is not automatically reused after `docker compose down`, so recreating the containers can make previously stored data appear to be lost. Add a correctly mounted named volume before storing persistent data, and migrate existing data explicitly rather than expecting a new volume declaration to copy it. See [Persistent State](../common/deployment.md#persistent-state).
 ```
 
 Save the example as `docker-compose.yml`, then start it:

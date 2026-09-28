@@ -75,10 +75,8 @@ Use the same image tag for every BaSyx Go service sharing this database, includi
 ### Start and Check the Service
 
 ```{warning}
-The 1.0.11 Company Lookup executable does not install the shared OIDC/ABAC middleware. Common `oidc.*` or `abac.*` settings do not secure it. Put required access control at a trusted deployment boundary and prevent direct bypass; read [Security Limitations in 1.0.11](index.md#security-limitations-in-1011) before exposing this service.
+This minimal local Compose setup does not declare a named PostgreSQL volume. An image-created anonymous volume is not automatically reused after `docker compose down`, so recreating the containers can make previously stored data appear to be lost. Add a correctly mounted named volume before storing persistent data, and migrate existing data explicitly rather than expecting a new volume declaration to copy it. See [Persistent State](../common/deployment.md#persistent-state).
 ```
-
-This minimal local Compose file also does not declare a named PostgreSQL volume. An image-created anonymous volume is not automatically reused after `docker compose down`; container recreation can therefore make the database appear empty. Add a correctly mounted named volume before storing persistent data, and explicitly migrate any existing database rather than expecting a new volume declaration to copy it. See [Persistent State](../common/deployment.md#persistent-state).
 
 Save the example as `docker-compose.yml`, then run these commands in the same directory:
 
@@ -113,7 +111,7 @@ git clone https://github.com/eclipse-basyx/basyx-go-components
 git -C basyx-go-components checkout RELEASE_TAG
 ```
 
-Replace `RELEASE_TAG` with the stable release you intend to build. Initialize PostgreSQL with the Configuration Service and SQL assets from this same checkout.
+Replace `RELEASE_TAG` with the stable release you intend to build. Initialize PostgreSQL using the Configuration Service and database schema files from the same checkout.
 
 ### Building the Binary
 

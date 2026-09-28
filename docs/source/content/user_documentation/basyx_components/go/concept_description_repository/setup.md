@@ -54,14 +54,10 @@ services:
         condition: service_completed_successfully
 ```
 
-Use the same image tag for every BaSyx Go service sharing this database.
-
-```{note}
-The checked-in Concept Description configuration and container image declare different default ports. Set `SERVER_PORT` explicitly, as the example does, rather than relying on either default.
-```
+Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service.
 
 ```{warning}
-This minimal example has no named PostgreSQL volume. Add and correctly mount one before storing data that must survive container recreation. See [Persistent State](../common/deployment.md#persistent-state).
+This minimal local Compose setup does not declare a named PostgreSQL volume. An image-created anonymous volume is not automatically reused after `docker compose down`, so recreating the containers can make previously stored data appear to be lost. Add a correctly mounted named volume before storing persistent data, and migrate existing data explicitly rather than expecting a new volume declaration to copy it. See [Persistent State](../common/deployment.md#persistent-state).
 ```
 
 Save the example as `docker-compose.yml`, then start it:

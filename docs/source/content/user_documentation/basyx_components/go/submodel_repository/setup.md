@@ -69,13 +69,11 @@ services:
 
 Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service.
 
-### Before the First Start
-
-This minimal Compose file does not declare a named PostgreSQL volume. Do not rely on container removal or recreation to preserve data. For durable local state, add the release-appropriate named-volume mount before creating data; adding one later does not migrate an existing anonymous volume. See [Persistent State](../common/deployment.md#persistent-state) for the PostgreSQL 18 mount path, lifecycle table, and safe cleanup guidance.
-
-The local example is unsecured: ABAC remains at its default `false` value. If you enable it, follow the [Runtime Security](../common/security) workflow for the trust list, access rules, and verification. The Submodel Repository's default policy import mode is `if_missing`: after an active policy exists in PostgreSQL, editing the mounted file and restarting does not replace that policy. Review [Policy Persistence and Restart Behavior](../common/security.md#policy-persistence-and-restart-behavior) before changing policy files.
-
 ### Start and Check the Repository
+
+```{warning}
+This minimal local Compose setup does not declare a named PostgreSQL volume. An image-created anonymous volume is not automatically reused after `docker compose down`, so recreating the containers can make previously stored data appear to be lost. Add a correctly mounted named volume before storing persistent data, and migrate existing data explicitly rather than expecting a new volume declaration to copy it. See [Persistent State](../common/deployment.md#persistent-state).
+```
 
 Save the example as `docker-compose.yml`, then run the following command in the same directory:
 

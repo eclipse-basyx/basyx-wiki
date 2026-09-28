@@ -71,7 +71,7 @@ Use the same image tag for every BaSyx Go service sharing this database, includi
 ### Start and Check the Registry
 
 ```{warning}
-This minimal local Compose file does not declare a named PostgreSQL volume. An image-created anonymous volume is not automatically reused after `docker compose down`; container recreation can therefore make the Registry appear empty. Add a correctly mounted named volume before storing persistent descriptors, and explicitly migrate existing data rather than expecting a new declaration to copy it. See [Persistent State](../common/deployment.md#persistent-state).
+This minimal local Compose setup does not declare a named PostgreSQL volume. An image-created anonymous volume is not automatically reused after `docker compose down`, so recreating the containers can make previously stored data appear to be lost. Add a correctly mounted named volume before storing persistent data, and migrate existing data explicitly rather than expecting a new volume declaration to copy it. See [Persistent State](../common/deployment.md#persistent-state).
 ```
 
 The services can be started by running the following command in the directory of the compose file:
@@ -116,7 +116,7 @@ git clone https://github.com/eclipse-basyx/basyx-go-components
 git -C basyx-go-components checkout RELEASE_TAG
 ```
 
-Replace `RELEASE_TAG` with the stable release you intend to build. Initialize PostgreSQL with the Configuration Service and SQL assets from this same checkout.
+Replace `RELEASE_TAG` with the stable release you intend to build. Initialize PostgreSQL using the Configuration Service and database schema files from the same checkout.
 
 ### Building the Binary
 
