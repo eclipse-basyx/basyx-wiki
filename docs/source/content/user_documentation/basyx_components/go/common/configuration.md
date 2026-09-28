@@ -518,6 +518,21 @@ If `abac.enabled` is `false`, the shared security setup is skipped. If it is `tr
 
 When set, `policyScope` is trimmed, must not exceed 255 characters, and may contain ASCII letters, digits, `_`, `-`, `.`, and `:`.
 
+### `rebac`
+
+Relationship-based access control (ReBAC) is experimental. It lets users share their own resources with other users or groups without editing the ABAC policy. ReBAC extends ABAC as a strict union: a request is allowed when ABAC or ReBAC allows it. See [Relationship-Based Access Control](rebac) for setup and operation.
+
+| Key | Default | Purpose |
+| --- | --- | --- |
+| `rebac.enabled` | `false` | Enables ReBAC. Requires `abac.enabled=true` and a readable `oidc.trustlistPath`. |
+| `rebac.subjectClaim` | `sub` | Top-level access token claim with a stable user identifier. Use `oid` for Microsoft Entra ID. |
+| `rebac.groupClaim` | `groups` | Top-level access token claim with group names. Use `basyx.<target>` for a claim mapped in the trustlist. |
+| `rebac.administrators` | `[]` | Bootstrap and recovery administrators as `issuer\|subject` or `issuer\|group:<name>`. |
+
+With `rebac.enabled=false`, no ReBAC code is wired and services behave exactly as before. When ReBAC is enabled, `subjectClaim` and `groupClaim` must not be empty, and every `administrators` entry must contain an issuer and a subject or a non-empty group name separated by `|`. A service with ReBAC enabled refuses to start without ABAC (`REBAC-SETUP-ABACREQUIRED`) or OIDC (`REBAC-SETUP-OIDCREQUIRED`).
+
+Relationships are stored in the BaSyx PostgreSQL database, and all services sharing a database share them. Enable ReBAC consistently on all services that share the database. Company Lookup and Digital Twin Registry do not support ReBAC and always run with ReBAC disabled.
+
 #### OIDC trustlist provider fields
 
 The source also defines the following provider fields for entries read from the JSON file at `oidc.trustlistPath`. They are not additional keys in the main YAML `oidc` section.
@@ -621,17 +636,83 @@ Credentials are sensitive. Prefer secret-backed environment variables or mounted
 
 ### `eventing`
 
-The eventing configuration is reserved for future publishing and outbox support.
+Eventing is experimental. It publishes AAS, asset, Submodel, and PCN changes as CloudEvents through MQTT 5, Kafka, and AMQP 1.0 brokers, or makes them available through the REST Event Feed. The AAS Repository, Submodel Repository, and AAS Environment support eventing.
 
 | Key | Default | Purpose |
 | --- | --- | --- |
-| `enabled` | `false` | Requests event publishing. Currently rejected because event publishing is not implemented. |
-| `format` | `cloudevents` | Reserved event serialization format. |
-| `sinks` | `[]` | Reserved list of event sink destinations. A non-empty list is currently rejected. |
-| `outboxEnabled` | `false` | Requests transactional outbox processing. Currently rejected. |
-| `topicPrefix` | `basyx` | Reserved prefix for generated event topics. |
+| `enabled` | `false` | Enables event publishing to broker transports. |
+| `format` | `cloudevents` | Event serialization format. Only `cloudevents` is supported. |
+| `sinks` | `[]` | Broker transports: `mqtt`, `kafka`, and `amqp`. Several transports can be enabled together. |
+| `outboxEnabled` | `false` | Enables the transactional outbox that stores pending events in PostgreSQL. Required by every transport. |
+| `topicPrefix` | `basyx` | Prefix of the generated MQTT topics. It must not contain `+` or `#` or end with `/`. |
+| `sourceBaseUrl` | `""` | Optional event source base URL. Defaults to the first `general.externalUrl`, then to the local server URL and context path. |
+| `schemaBaseUrl` | `""` | Optional base URL of the event payload schemas. Defaults to the source base URL followed by `/.well-known/event-feed/schemas`. |
 
-Keep `enabled` and `outboxEnabled` set to `false` and `sinks` empty until eventing support is implemented.
+A non-empty `sinks` list requires both `enabled` and `outboxEnabled`. An enabled outbox requires at least one sink. Sink names must be unique, and every transport must use a distinct `sinkId`. `sourceBaseUrl` and `schemaBaseUrl` must be absolute HTTP(S) URLs without credentials, query, or fragment.
+
+Event delivery is at least once. Consumers should deduplicate by CloudEvents ID. Pending events are retried indefinitely and do not expire, so allow database capacity for broker outages. Drain pending deliveries before changing the broker, sink ID, or destination of a transport.
+
+Credential and TLS settings are available for every transport. Supply either a credential value or its file, not both. Files are read at startup, and trailing line endings are removed. Client certificate and key files must be supplied together. TLS requires TLS 1.2 or later and verifies the server certificate.
+
+#### `eventing.mqtt`
+
+| Key | Default | Purpose |
+| --- | --- | --- |
+| `broker` | `""` | Required. Broker URL `mqtt://host:port` or `tls://host:port` without credentials or path. |
+| `clientId` | `""` | Required. MQTT client ID. It must be unique for each process connecting to the broker, including replicas. |
+| `sinkId` | `mqtt` | Stable identifier of the delivery queue. Replicas sharing a database use the same value. |
+| `qos` | `1` | MQTT QoS: `0`, `1`, or `2`. QoS `0` weakens the at-least-once guarantee. |
+| `retained` | `false` | Publishes retained messages. |
+| `username`, `password` | `""` | Optional broker credentials. |
+| `usernameFile`, `passwordFile` | `""` | Files containing the broker credentials. |
+| `caFile` | `""` | Optional PEM CA bundle. Requires a `tls://` broker. |
+| `certificateFile`, `keyFile` | `""` | Optional client certificate and key for mutual TLS. Requires a `tls://` broker. |
+
+#### `eventing.kafka`
+
+| Key | Default | Purpose |
+| --- | --- | --- |
+| `brokers` | `[]` | Required bootstrap brokers as `host:port` without scheme or credentials. |
+| `topic` | `basyx.events` | Topic for all event families. Create it before enabling the sink. |
+| `sinkId` | `kafka` | Stable identifier of the delivery queue. |
+| `clientId` | `basyx` | Client name reported to Kafka. |
+| `producerBatchMaxBytes` | `0` | Maximum uncompressed batch size. `0` uses the client default of 1,000,012 bytes; otherwise `512` to `1073741824`. Align broker and topic message limits with this value. |
+| `tlsEnabled` | `false` | Enables TLS. |
+| `caFile` | `""` | Optional PEM CA bundle. Requires `tlsEnabled`. |
+| `certificateFile`, `keyFile` | `""` | Optional client certificate and key for mutual TLS. Requires `tlsEnabled`. |
+| `saslMechanism` | `""` | Empty disables SASL. Supported values are `PLAIN`, `SCRAM-SHA-256`, and `SCRAM-SHA-512`. |
+| `username`, `password` | `""` | SASL credentials. Required when `saslMechanism` is set and rejected otherwise. |
+| `usernameFile`, `passwordFile` | `""` | Files containing the SASL credentials. |
+
+#### `eventing.amqp`
+
+| Key | Default | Purpose |
+| --- | --- | --- |
+| `broker` | `""` | Required. Broker URL `amqp://host[:port]` or `amqps://host[:port]` without credentials, path, query, or fragment. Default ports are 5672 and 5671. |
+| `address` | `""` | Required target address, for example `/queues/basyx.events` or `/exchanges/<exchange>/<routing-key>` for RabbitMQ 4. BaSyx does not create queues, exchanges, or bindings. |
+| `sinkId` | `amqp` | Stable identifier of the delivery queue. |
+| `hostName` | `""` | Optional AMQP connection hostname. RabbitMQ selects a virtual host with `vhost:<name>`. |
+| `username`, `password` | `""` | Optional SASL PLAIN credentials. Supply both or neither. |
+| `usernameFile`, `passwordFile` | `""` | Files containing the SASL PLAIN credentials. |
+| `caFile` | `""` | Optional PEM CA bundle. Requires `amqps`. |
+| `certificateFile`, `keyFile` | `""` | Optional client certificate and key for mutual TLS. Requires `amqps`. |
+
+#### `eventing.feed`
+
+The REST Event Feed is independent of `eventing.enabled` and the broker transports. When enabled, it adds `GET /events`, `GET /.well-known/event-feed.json`, and the schema endpoints to the service.
+
+| Key | Default | Purpose |
+| --- | --- | --- |
+| `enabled` | `false` | Enables the REST Event Feed. |
+| `maxAgeDays` | `30` | Visible retention window in days, measured from the mutation time. |
+| `hardDeleteGraceDays` | `10` | Additional days before expired events are physically deleted. `0` disables the delay. |
+| `maxPageSize` | `100` | Default and maximum page size. |
+| `sourceBaseUrl` | `""` | Compatible alias of `eventing.sourceBaseUrl`. If both are set, they must match. |
+| `schemaBaseUrl` | `""` | Compatible alias of `eventing.schemaBaseUrl`. If both are set, they must match. |
+| `cleanupIntervalHours` | `24` | Interval of the physical cleanup. Cleanup also runs at startup. |
+| `publishIntervalMillis` | `250` | Interval before checking for committed events to publish to the feed. |
+
+`maxAgeDays`, `hardDeleteGraceDays`, `maxPageSize`, and `publishIntervalMillis` must not be negative. Running the feed requires database schema v1.2.0 or later, and broker transports require v1.2.1 or later. Run the Configuration Service before starting the updated services.
 
 ## Example YAML
 
@@ -691,6 +772,12 @@ abac:
   policyScope: ""
   managementApi:
     enabled: false
+
+rebac:
+  enabled: false
+  subjectClaim: sub
+  groupClaim: groups
+  administrators: []
 
 general:
   enableImplicitCasts: true
@@ -755,6 +842,57 @@ eventing:
   sinks: []
   outboxEnabled: false
   topicPrefix: basyx
+  sourceBaseUrl: ""
+  schemaBaseUrl: ""
+  mqtt:
+    broker: ""
+    clientId: ""
+    sinkId: mqtt
+    qos: 1
+    retained: false
+    username: ""
+    password: ""
+    usernameFile: ""
+    passwordFile: ""
+    caFile: ""
+    certificateFile: ""
+    keyFile: ""
+  kafka:
+    brokers: []
+    topic: basyx.events
+    sinkId: kafka
+    clientId: basyx
+    producerBatchMaxBytes: 0
+    tlsEnabled: false
+    caFile: ""
+    certificateFile: ""
+    keyFile: ""
+    saslMechanism: ""
+    username: ""
+    password: ""
+    usernameFile: ""
+    passwordFile: ""
+  amqp:
+    broker: ""
+    address: ""
+    sinkId: amqp
+    hostName: ""
+    username: ""
+    password: ""
+    usernameFile: ""
+    passwordFile: ""
+    caFile: ""
+    certificateFile: ""
+    keyFile: ""
+  feed:
+    enabled: false
+    maxAgeDays: 30
+    hardDeleteGraceDays: 10
+    maxPageSize: 100
+    sourceBaseUrl: ""
+    schemaBaseUrl: ""
+    cleanupIntervalHours: 24
+    publishIntervalMillis: 250
 ```
 
 ## Environment Variables
@@ -787,6 +925,7 @@ ABAC_ENABLED=false
 ABAC_POLICYFILEIMPORT=if_missing
 ABAC_POLICY_SCOPE=aasregistryservice
 ABAC_MANAGEMENTAPI_ENABLED=false
+REBAC_ENABLED=false
 OIDC_TRUSTLISTPATH=config/trustlist.json
 GENERAL_EXTERNALURL=https://example.org/aas
 GENERAL_TRUSTPROXYHEADERS=false
@@ -848,6 +987,56 @@ The following explicit aliases are also supported:
 | `eventing.sinks` | `BASYX_EVENTING_SINKS` (comma-separated) |
 | `eventing.outboxEnabled` | `BASYX_EVENTING_OUTBOX_ENABLED` |
 | `eventing.topicPrefix` | `BASYX_EVENTING_TOPIC_PREFIX` |
+| `eventing.sourceBaseUrl` | `BASYX_EVENTING_SOURCE_BASE_URL` |
+| `eventing.schemaBaseUrl` | `BASYX_EVENTING_SCHEMA_BASE_URL` |
+| `eventing.mqtt.broker` | `BASYX_EVENTING_MQTT_BROKER` |
+| `eventing.mqtt.clientId` | `BASYX_EVENTING_MQTT_CLIENT_ID` |
+| `eventing.mqtt.sinkId` | `BASYX_EVENTING_MQTT_SINK_ID` |
+| `eventing.mqtt.qos` | `BASYX_EVENTING_MQTT_QOS` |
+| `eventing.mqtt.retained` | `BASYX_EVENTING_MQTT_RETAINED` |
+| `eventing.mqtt.username` | `BASYX_EVENTING_MQTT_USERNAME` |
+| `eventing.mqtt.password` | `BASYX_EVENTING_MQTT_PASSWORD` |
+| `eventing.mqtt.usernameFile` | `BASYX_EVENTING_MQTT_USERNAME_FILE` |
+| `eventing.mqtt.passwordFile` | `BASYX_EVENTING_MQTT_PASSWORD_FILE` |
+| `eventing.mqtt.caFile` | `BASYX_EVENTING_MQTT_CA_FILE` |
+| `eventing.mqtt.certificateFile` | `BASYX_EVENTING_MQTT_CERTIFICATE_FILE` |
+| `eventing.mqtt.keyFile` | `BASYX_EVENTING_MQTT_KEY_FILE` |
+| `eventing.kafka.brokers` | `BASYX_EVENTING_KAFKA_BROKERS` (comma-separated) |
+| `eventing.kafka.topic` | `BASYX_EVENTING_KAFKA_TOPIC` |
+| `eventing.kafka.sinkId` | `BASYX_EVENTING_KAFKA_SINK_ID` |
+| `eventing.kafka.clientId` | `BASYX_EVENTING_KAFKA_CLIENT_ID` |
+| `eventing.kafka.producerBatchMaxBytes` | `BASYX_EVENTING_KAFKA_PRODUCER_BATCH_MAX_BYTES` |
+| `eventing.kafka.tlsEnabled` | `BASYX_EVENTING_KAFKA_TLS_ENABLED` |
+| `eventing.kafka.caFile` | `BASYX_EVENTING_KAFKA_CA_FILE` |
+| `eventing.kafka.certificateFile` | `BASYX_EVENTING_KAFKA_CERTIFICATE_FILE` |
+| `eventing.kafka.keyFile` | `BASYX_EVENTING_KAFKA_KEY_FILE` |
+| `eventing.kafka.saslMechanism` | `BASYX_EVENTING_KAFKA_SASL_MECHANISM` |
+| `eventing.kafka.username` | `BASYX_EVENTING_KAFKA_USERNAME` |
+| `eventing.kafka.password` | `BASYX_EVENTING_KAFKA_PASSWORD` |
+| `eventing.kafka.usernameFile` | `BASYX_EVENTING_KAFKA_USERNAME_FILE` |
+| `eventing.kafka.passwordFile` | `BASYX_EVENTING_KAFKA_PASSWORD_FILE` |
+| `eventing.amqp.broker` | `BASYX_EVENTING_AMQP_BROKER` |
+| `eventing.amqp.address` | `BASYX_EVENTING_AMQP_ADDRESS` |
+| `eventing.amqp.sinkId` | `BASYX_EVENTING_AMQP_SINK_ID` |
+| `eventing.amqp.hostName` | `BASYX_EVENTING_AMQP_HOST_NAME` |
+| `eventing.amqp.username` | `BASYX_EVENTING_AMQP_USERNAME` |
+| `eventing.amqp.password` | `BASYX_EVENTING_AMQP_PASSWORD` |
+| `eventing.amqp.usernameFile` | `BASYX_EVENTING_AMQP_USERNAME_FILE` |
+| `eventing.amqp.passwordFile` | `BASYX_EVENTING_AMQP_PASSWORD_FILE` |
+| `eventing.amqp.caFile` | `BASYX_EVENTING_AMQP_CA_FILE` |
+| `eventing.amqp.certificateFile` | `BASYX_EVENTING_AMQP_CERTIFICATE_FILE` |
+| `eventing.amqp.keyFile` | `BASYX_EVENTING_AMQP_KEY_FILE` |
+| `eventing.feed.enabled` | `BASYX_EVENTING_FEED_ENABLED` |
+| `eventing.feed.maxAgeDays` | `BASYX_EVENTING_FEED_MAX_AGE_DAYS` |
+| `eventing.feed.hardDeleteGraceDays` | `BASYX_EVENTING_FEED_HARD_DELETE_GRACE_DAYS` |
+| `eventing.feed.maxPageSize` | `BASYX_EVENTING_FEED_MAX_PAGE_SIZE` |
+| `eventing.feed.sourceBaseUrl` | `BASYX_EVENTING_FEED_SOURCE_BASE_URL` |
+| `eventing.feed.schemaBaseUrl` | `BASYX_EVENTING_FEED_SCHEMA_BASE_URL` |
+| `eventing.feed.cleanupIntervalHours` | `BASYX_EVENTING_FEED_CLEANUP_INTERVAL_HOURS` |
+| `eventing.feed.publishIntervalMillis` | `BASYX_EVENTING_FEED_PUBLISH_INTERVAL_MILLIS` |
+| `rebac.subjectClaim` | `REBAC_SUBJECT_CLAIM` |
+| `rebac.groupClaim` | `REBAC_GROUP_CLAIM` |
+| `rebac.administrators` | `REBAC_ADMINISTRATORS` (comma-separated) |
 
 The legacy Viper-derived names without word-separating underscores, such as `SERVER_READTIMEOUTSECONDS`, remain supported. The explicit aliases are applied after normal environment-variable decoding and therefore take precedence when both forms are set.
 
@@ -874,6 +1063,9 @@ The shared configuration may reference these security-sensitive files:
 - `postgres.sslcert`
 - `postgres.sslkey`
 - `postgres.sslrootcert`
+- `eventing.mqtt.usernameFile`, `eventing.mqtt.passwordFile`, `eventing.mqtt.caFile`, `eventing.mqtt.certificateFile`, `eventing.mqtt.keyFile`
+- `eventing.kafka.usernameFile`, `eventing.kafka.passwordFile`, `eventing.kafka.caFile`, `eventing.kafka.certificateFile`, `eventing.kafka.keyFile`
+- `eventing.amqp.usernameFile`, `eventing.amqp.passwordFile`, `eventing.amqp.caFile`, `eventing.amqp.certificateFile`, `eventing.amqp.keyFile`
 
 In containers, paths are resolved inside the container filesystem. Mount the files or their parent directory and point the YAML value or environment variable to the mounted path.
 
@@ -885,3 +1077,5 @@ In containers, paths are resolved inside the container filesystem. Mount the fil
 - Services that process AASX packages use the `general.aasxMax*` settings for expanded package limits.
 - AAS Environment additionally supports `general.aasPreconfigPaths`.
 - AAS Repository, Submodel Repository, and AAS Environment use the registry synchronization settings when enabled.
+- AAS Repository, Submodel Repository, and AAS Environment use the `eventing` settings.
+- AAS Repository, Submodel Repository, Concept Description Repository, AAS Registry, Submodel Registry, Discovery, AASX File Server, AAS Environment, and DPP API use the `rebac` settings. Company Lookup and Digital Twin Registry always disable ReBAC.

@@ -9,6 +9,7 @@ This section documents features and configuration aspects that are implemented i
 * [General Configuration](configuration)
 * [Common / Shared Features](shared_features)
 * [Observability](observability)
+* [Relationship-Based Access Control (ReBAC)](rebac)
 
 ```{toctree}
 :hidden:
@@ -18,4 +19,5 @@ swagger
 configuration
 shared_features
 observability
+rebac
 ```
