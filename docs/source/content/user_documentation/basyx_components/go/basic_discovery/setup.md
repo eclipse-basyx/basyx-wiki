@@ -106,7 +106,7 @@ Basic Discovery also supports experimental relationship-based access control (Re
 
 For ReBAC-covered Discovery routes, an authenticated request is allowed when either ABAC or ReBAC grants access. Anonymous requests and endpoints outside the ReBAC-covered Discovery routes remain governed by ABAC. The `/verify` endpoint, when enabled, remains ABAC-only.
 
-Enable ReBAC with `rebac.enabled: true` or `REBAC_ENABLED=true`.
+Enable ReBAC with `rebac.enabled: true` or `REBAC_ENABLED=true`. When multiple BaSyx services share the same database, enable ReBAC consistently in all of them.
 
 Discovery registrations can be shared through ReBAC. Registrations created through AAS Registry Discovery integration inherit access from their source descriptor. See [Relationship-Based Access Control](../common/rebac) for configuration and access-management details.
 
