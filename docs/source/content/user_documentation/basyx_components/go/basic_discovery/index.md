@@ -68,18 +68,18 @@ Lookup responses contain original, unencoded AAS identifier strings in `result`,
 
 `DELETE /lookup/shells/{aasIdentifier}` removes the discovery registration and its asset links. It does not delete AAS content from a Repository.
 
-## Shared Registry Asset Identifiers
+## Registry Integration
 
-Discovery and AAS Registry use linked specific-asset-ID rows when Registry Discovery integration is enabled, including inside the combined [Digital Twin Registry](../digital_twin_registry/index). For separate services, the Registry must have Discovery integration enabled and both services must address the same BaSyx database/schema; merely pointing independent services at the same PostgreSQL server is not sufficient. In those topologies, a Discovery mutation can be visible in an AAS descriptor's `specificAssetIds`, and a descriptor write can change Discovery lookup results.
+When AAS Registry Discovery integration is enabled, the Registry and Basic Discovery share asset-identifier information for the same AAS. Both components must use the same BaSyx database and schema, and Discovery integration must be enabled explicitly in the Registry.
 
-| Operation | Affected mapping rows | Possible descriptor effect | Resources not deleted |
-| --- | --- | --- | --- |
-| Standalone Discovery replacement | Removes the existing specific-asset-ID rows linked to the matching AAS identifier, then inserts the submitted complete set as Discovery mapping rows. | With Registry Discovery integration, removing the previously shared rows can remove entries from a later descriptor read's `specificAssetIds`; the newly inserted standalone Discovery rows are not descriptor-owned rows. | The AAS descriptor itself and Repository AAS/Submodel content are not deleted. |
-| DTR asset-link append | Adds the submitted rows to those already linked to the existing descriptor; it does not imply deduplication. | A later DTR descriptor read can include the appended `specificAssetIds`. | No descriptor or Repository content is deleted. |
-| Discovery deletion | Removes the AAS identifier's Discovery registration and its associated linked specific-asset-ID rows. | In an integrated topology, the descriptor can remain while its affected `specificAssetIds` are removed. | The complete AAS descriptor and Repository AAS/Submodel content are not deleted. |
-| Registry-integrated descriptor write | Creates or replaces the linked rows derived from the submitted descriptor's asset identifiers. | The descriptor's `specificAssetIds` change as requested, and Discovery lookups can change with them. | Repository AAS/Submodel content is not deleted. |
+Changes made through one API can therefore affect what the other API returns:
 
-The descriptor's `globalAssetId` field has its own descriptor storage. With Discovery integration, a descriptor write can additionally represent that value as a linked row named `globalAssetId`; that special row must not be confused with every ordinary `specificAssetIds` row. DTR's append-only asset-link POST remains a separate case from standalone Discovery replacement.
+- `POST /lookup/shells/{aasIdentifier}` in the standalone Discovery Service replaces the complete Discovery mapping. In an integrated setup, this can also change the `specificAssetIds` returned with the corresponding AAS Descriptor.
+- Deleting a Discovery registration can remove linked asset identifiers from the descriptor, but it does not delete the AAS Descriptor or Repository content.
+- Creating or updating an integrated AAS Descriptor can change subsequent Discovery lookup results.
+- The Digital Twin Registry behaves differently: its asset-link POST appends links and requires an existing AAS Descriptor.
+
+The descriptor's `globalAssetId` remains a dedicated descriptor property and can also be used for Basic Discovery lookup.
 
 ### Database Schema
 

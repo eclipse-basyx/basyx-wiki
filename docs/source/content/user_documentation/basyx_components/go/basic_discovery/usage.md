@@ -2,7 +2,7 @@
 
 This walkthrough uses the unsecured, standalone [Compose setup](setup) at `http://localhost:8086`, with an empty context path. Save the JSON files in your working directory and run the commands in order against an example database. In Windows PowerShell, use `curl.exe` instead of `curl`. Include any configured context path in each URL.
 
-The requests below demonstrate standalone Discovery replacement and deletion. DTR changes the asset-link POST to append semantics and requires an existing descriptor; compare [Standalone and DTR Behavior](../digital_twin_registry/index.md#standalone-and-dtr-behavior). If Discovery is integrated with an AAS Registry, also read [Shared Registry Asset Identifiers](index.md#shared-registry-asset-identifiers) before changing mappings.
+The requests below demonstrate standalone Discovery replacement and deletion. DTR changes the asset-link POST to append semantics and requires an existing descriptor; compare [Differences from Standalone Registry and Discovery](../digital_twin_registry/index.md#differences-from-standalone-registry-and-discovery). If Discovery is integrated with an AAS Registry, also read [Registry Integration](index.md#registry-integration) before changing mappings.
 
 Only the Discovery Service, PostgreSQL, and the Configuration Service are required. A Registry or Repository is needed only when continuing from the discovered identifier to a descriptor or AAS content.
 
@@ -25,7 +25,7 @@ curl -i -X POST http://localhost:8086/lookup/shells/dXJuOmV4YW1wbGU6YWFzOjE -H '
 
 Expect `201 Created` and an array containing the submitted links. No pre-existing AAS in a Repository is required. Repeating POST replaces the links for this AAS identifier rather than reporting a duplicate-registration conflict.
 
-Keep asset names and values in the body unencoded. Use the [encoding commands](../common/encoding.md#encode-your-own-identifier) when substituting your own AAS identifier.
+Keep asset names and values in the body unencoded. When substituting your own AAS identifier, encode its UTF-8 bytes using unpadded Base64URL for the path value.
 
 ## Retrieve the Registered Links
 
@@ -58,13 +58,7 @@ Expect `200 OK`. In a database containing only this example, the response is:
 }
 ```
 
-The returned AAS identifier is unencoded. Encode it before using it in a Registry or Repository URL. For example, if the corresponding descriptor has also been registered in the [AAS Registry](../aas_registry/usage), retrieve it with:
-
-```bash
-curl -i http://localhost:8082/shell-descriptors/dXJuOmV4YW1wbGU6YWFzOjE
-```
-
-That Registry request requires a separate Registry setup and descriptor registration. Discovery registration alone does not create the descriptor.
+The returned AAS identifier is unencoded. Encode it before using it in a Registry or Repository URL. If the corresponding descriptor has also been registered, follow the [AAS Registry usage guide](../aas_registry/usage) to retrieve it. A separate Registry setup and descriptor registration are required; Discovery registration alone does not create the descriptor.
 
 ### Global Asset Identifier Lookup
 
@@ -101,7 +95,7 @@ The encoded value represents `{"name":"serialNumber","value":"SN-001"}`. Expect 
 ## Replace the Asset Links
 
 ```{warning}
-This standalone POST removes the current linked asset-identifier rows before inserting standalone Discovery mapping rows. With Registry Discovery integration, removing previously shared rows can also remove entries from the AAS descriptor's visible `specificAssetIds`. It does not delete the descriptor or Repository content. See [Shared Registry Asset Identifiers](index.md#shared-registry-asset-identifiers).
+In a Registry-integrated deployment, replacing a Discovery mapping can also change the `specificAssetIds` returned with the corresponding AAS Descriptor. The AAS Descriptor itself and Repository content are not deleted. See [Registry Integration](index.md#registry-integration).
 ```
 
 Change the serial number in `asset-links.json` to `SN-002`, retaining the global asset identifier:
@@ -125,7 +119,7 @@ Expect `201 Created` for the replacement and `200 OK` for the read. A lookup by 
 ## Delete the Discovery Registration
 
 ```{warning}
-In a Registry-integrated deployment, this deletion can remove linked specific-asset-ID rows that are also visible through the descriptor. It does not delete the descriptor or any Repository AAS/Submodel content. See [Shared Registry Asset Identifiers](index.md#shared-registry-asset-identifiers).
+In a Registry-integrated deployment, deleting the Discovery registration can also remove linked `specificAssetIds` from the corresponding AAS Descriptor. It does not delete the descriptor or any Repository AAS/Submodel content. See [Registry Integration](index.md#registry-integration).
 ```
 
 ```bash
@@ -134,7 +128,3 @@ curl -i http://localhost:8086/lookup/shells/dXJuOmV4YW1wbGU6YWFzOjE
 ```
 
 Expect `204 No Content` for deletion and `404 Not Found` for the subsequent read. Repeating an asset-link lookup returns an empty result for this example. The AAS content in a Repository is unaffected.
-
-## Shared API Guidance
-
-See [Identifiers and Encoding](../common/encoding), [Pagination](../common/pagination), [API Errors](../common/api_errors), and [Validation](../common/validation). The shared `/verify` endpoint verifies AAS model content; it is not a Discovery asset-link validation endpoint.

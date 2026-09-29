@@ -1,6 +1,6 @@
 # Setting Up the Basic Discovery Component
-We provide example setups to get you started with the BaSyx Go Components in the [examples directory](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples).
-But if you need to configure the service yourself, this page will guide you through.
+
+Additional deployment examples are available in the [BaSyx Go repository](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples). Use examples from the same release as the BaSyx components you deploy. The configuration below provides a minimal standalone Basic Discovery service with PostgreSQL and the BaSyx Configuration Service.
 
 The Docker example uses `latest` for both BaSyx Go images. For native builds, use one stable source release and its matching database assets as described in [Version Scope](../common/deployment.md#version-scope).
 
@@ -92,20 +92,28 @@ Expect HTTP `200` with `{"status":"UP"}`. In Windows PowerShell, use `curl.exe` 
 
 The Compose example explicitly selects port `8086`. When using a context path, include it in health, Swagger, and API URLs; for example, `SERVER_CONTEXTPATH=/api/v3` makes the health URL `http://localhost:8086/api/v3/health`.
 
-### Access Rules and Trustlist Files (Secured Setup)
+### Security
 
-The local Compose example is unsecured because it does not enable ABAC. Security-related settings or mounted files do not secure the service unless the OIDC/ABAC middleware is enabled and configured with a matching policy. Follow [Runtime Security](../common/security) for the complete workflow and [Security Configuration Files](../common/configuration.md#security-files) for the field reference.
+The local Compose example is unsecured because it does not enable authorization. For secured deployments, configure OIDC together with the authorization mechanism required for your deployment. See [OIDC and ABAC Configuration](../common/configuration.md#oidc-and-abac) and [Security Files](../common/configuration.md#security-files).
 
-For Basic Discovery, an omitted `abac.policyFileImport` defaults to `if_missing`. Once an active policy exists in PostgreSQL, editing the file and restarting does not replace it. Read [Policy Persistence and Restart Behavior](../common/security.md#policy-persistence-and-restart-behavior) before editing the file or restarting the service.
+For Basic Discovery, an omitted `abac.policyFileImport` defaults to `if_missing`. Once an active policy exists in PostgreSQL, editing the file and restarting does not replace it.
 
 For this component in Docker Compose, mount the security files into the container and configure `ABAC_ENABLED=true`, `ABAC_MODELPATH`, and `OIDC_TRUSTLISTPATH` if you enable ABAC.
+
+### Relationship-Based Access Control
+
+Basic Discovery also supports experimental relationship-based access control (ReBAC) for Discovery registrations. ReBAC is disabled by default and requires OIDC and ABAC to be enabled. When ReBAC is enabled, a request is allowed when either ABAC or ReBAC grants access.
+
+Discovery registrations can be shared through ReBAC. Registrations created through AAS Registry Discovery integration inherit access from their source descriptor. See [Relationship-Based Access Control](../common/rebac) for configuration and access-management details.
+
+```{note}
+ReBAC support described here applies to the standalone Basic Discovery component. The Digital Twin Registry uses ABAC only.
+```
 
 ## Using BaSyx Go Components without Docker
 If you need to run the Basic Discovery component without Docker, build the binary from source for your target platform.
 
-```{warning}
-We recommend using the Docker Images for production use-cases, as they are pre-configured and optimized for production environments.
-```
+Published container images are the normal deployment artifacts. A native build should use the same source release as the Configuration Service and database assets.
 
 ### Prerequisites
 - [Go](https://go.dev/dl/) at the version declared by the selected release's `go.mod`.
@@ -143,6 +151,13 @@ go build -o discoveryservice.exe
 
 ### Running the Service
 Before running the service, ensure PostgreSQL is available and that the BaSyx database schema has already been initialized by the [BaSyx Configuration Service](../configuration_service/index). Configure the PostgreSQL connection through environment variables or the provided `config.yaml`.
+
+Set the Discovery port explicitly in `config.yaml`:
+
+```yaml
+server:
+  port: 8086
+```
 
 #### Linux / macOS
 
