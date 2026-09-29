@@ -1,6 +1,6 @@
 # Using the Submodel Repository
 
-This walkthrough creates a motor nameplate Submodel, changes its metadata and element values, and lists Submodels with filters and pagination. You will then remove the example data.
+This walkthrough creates a motor nameplate Submodel, works with Submodel Elements and a File attachment, changes metadata and values, and lists Submodels with filters and pagination. You will then remove the example data.
 
 You need only the Submodel Repository and the database services from [Setup](setup). A separate AAS Repository or Registry is not required for these examples.
 
@@ -311,7 +311,7 @@ For the example's semantic identifier, encode the string `urn:example:semantic:n
 curl -i -G http://localhost:8085/submodels --data-urlencode 'semanticId=dXJuOmV4YW1wbGU6c2VtYW50aWM6bmFtZXBsYXRl'
 ```
 
-The decoded value is compared with semantic reference key values; this is not an equality comparison of an entire multi-key reference. This describes the current Go implementation; use the runtime contract when comparing it with the standardized semantic-reference parameter.
+The decoded value is compared with semantic reference key values; this is not an equality comparison of an entire multi-key reference. The decoded filter value is compared with the individual `semanticId.keys[].value` entries. It is not compared with the complete multi-key reference.
 
 Timestamp filters use `administration.createdAt` and `administration.updatedAt` supplied in the resource payload, rather than automatically recording each write. The example does not supply them. Maintain those fields if using timestamp-filtered lists; current-resource lists do not provide deletion notifications.
 

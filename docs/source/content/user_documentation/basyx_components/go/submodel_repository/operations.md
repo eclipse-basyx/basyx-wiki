@@ -113,7 +113,11 @@ curl --include 'http://localhost:8090/<returned operation-results path>'
 
 Expect `200 OK`. The completed `OperationResult` again has `executionState: "Completed"`, `success: true`, and output `sum` equal to `"8"`.
 
-These are operation-specific resources. Do not apply Registry bulk assumptions about `204` results, consuming a result on retrieval, or bulk retention to delegated-operation results. See [Asynchronous API Operations](../common/asynchronous_requests) for the cross-component comparison.
+Asynchronous operation handles are retained for 15 minutes by default. Configure `SMREPO_DELEGATION_ASYNC_TTL` if clients need a different retention period. Retrieve the status and result before the handle expires.
+
+If the Repository's concurrent asynchronous delegation capacity is exhausted, a new asynchronous invocation returns `429 Too Many Requests`. Retry after an active invocation completes.
+
+These are operation-specific resources. Do not apply Registry bulk assumptions about `204` results, consuming a result on retrieval, or bulk retention to delegated-operation results. See [Asynchronous API Operations](../common/asynchronous_requests) for a comparison with other asynchronous BaSyx APIs.
 
 ## Failure Diagnosis
 
