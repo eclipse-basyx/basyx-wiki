@@ -28,7 +28,7 @@ For the [Compose setup](setup), append these entries to the AAS Repository's exi
       - GENERAL_EXTERNALURL=http://localhost:8080
 ```
 
-The default is disabled. Standalone AAS Repository startup rejects `general.submodelRegistryIntegration=true`; that flag belongs to the standalone Submodel Repository or the composed AAS Environment configuration.
+The default is disabled. Standalone AAS Repository startup rejects `general.submodelRegistryIntegration=true`. That flag belongs to the standalone Submodel Repository or the composed AAS Environment configuration.
 
 Registry synchronization derives both AAS endpoints (`<externalUrl>/shells/{encodedAasId}`) and Submodel endpoints (`<externalUrl>/submodels/{encodedSubmodelId}`) from the same `externalUrl`. Configure an externally reachable URL whose routing serves both path families. It advertises `http://localhost:8080` because it assumes a gateway that routes `/shells/...` to the AAS Repository and `/submodels/...` to a Submodel Repository using the same database.
 
@@ -41,7 +41,7 @@ The standalone AAS Repository serves Submodels only below `/shells/{aasIdentifie
 | Create an AAS | Create its AAS Descriptor from AAS and asset information. Embedded Submodel Descriptors are derived from references and contain the Submodel ID and generated endpoint. |
 | Replace an AAS | Regenerate the AAS Descriptor when descriptor-relevant data has changed. Embedded Submodel Descriptors generated during this full-resource synchronization are reference-derived. |
 | Replace Asset Information | Update the corresponding asset-related fields of the AAS Descriptor. |
-| Add a Submodel reference | Add or update the corresponding embedded Submodel Descriptor. If the referenced Submodel exists, descriptor metadata is derived from it; otherwise a minimal descriptor containing the Submodel ID and endpoint is generated. |
+| Add a Submodel reference | Add or update the corresponding embedded Submodel Descriptor. If the referenced Submodel exists, descriptor metadata is derived from it. Otherwise a minimal descriptor containing the Submodel ID and endpoint is generated. |
 | Remove a Submodel reference | Remove the corresponding embedded Submodel Descriptor. |
 | Create or replace a Submodel through the AAS-scoped API | Create or update its embedded Submodel Descriptor and ensure that the AAS contains the corresponding Submodel reference. |
 | Patch a Submodel or its metadata through the AAS-scoped API | Regenerate and update its embedded Submodel Descriptor from the resulting Submodel. |
@@ -60,7 +60,7 @@ Endpoint addresses are constructed by appending `/shells/{encodedAasId}` or `/su
 
 Synchronization of AAS-scoped Submodel changes is performed for the AAS named in the request. If AAS A and AAS B both reference shared Submodel X, updating X through AAS A changes the shared content and updates AAS A's embedded descriptor. AAS B's descriptor is not automatically reconciled. Deleting X through AAS A removes the shared content and AAS A's reference and embedded descriptor, while AAS B and its Registry descriptor can retain stale references.
 
-Enabling `general.aasRegistryIntegration` does not backfill AASs that already exist. Synchronization is mutation-driven; explicitly register or reconcile pre-existing resources. See [Existing Resources and Manual Changes](../common/registry_integration.md#existing-resources-and-manual-changes).
+Enabling `general.aasRegistryIntegration` does not backfill AASs that already exist. Synchronization is mutation-driven. Explicitly register or reconcile pre-existing resources. See [Existing Resources and Manual Changes](../common/registry_integration.md#existing-resources-and-manual-changes).
 
 ## Check the Integration
 
