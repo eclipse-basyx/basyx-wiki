@@ -1,6 +1,6 @@
 # Setting Up the AASX File Server
 
-The Docker example uses `latest` for both BaSyx Go images. For native builds, use one stable source release and its matching database assets as described in [Version Scope](../common/deployment.md#version-scope).
+The following local setup runs the AASX File Server with PostgreSQL and the BaSyx Configuration Service.
 
 ## Using Docker Compose
 
@@ -25,7 +25,6 @@ services:
   basyx_configuration:
     container_name: basyx_configuration_aasx
     image: eclipsebasyx/basyxconfigurationservice-go:latest
-    pull_policy: always
     environment:
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
@@ -39,7 +38,6 @@ services:
   aasx_file_server:
     container_name: aasx_file_server
     image: eclipsebasyx/aasxfileserver-go:latest
-    pull_policy: always
     environment:
       - SERVER_PORT=8087
       - POSTGRES_HOST=postgres
@@ -54,10 +52,10 @@ services:
         condition: service_completed_successfully
 ```
 
-Use the same image tag for every BaSyx Go service sharing this database.
+Use matching BaSyx versions for the Configuration Service and every database-backed BaSyx component sharing this database.
 
 ```{warning}
-This minimal local Compose setup does not declare a named PostgreSQL volume. An image-created anonymous volume is not automatically reused after `docker compose down`, so recreating the containers can make previously stored data appear to be lost. Add a correctly mounted named volume before storing persistent data, and migrate existing data explicitly rather than expecting a new volume declaration to copy it. See [Persistent State](../common/deployment.md#persistent-state).
+This local example uses demonstration credentials, disables access control, and does not define a persistent PostgreSQL volume. Recreating the database container can therefore make stored packages unavailable. Do not expose this setup to an untrusted network or use it unchanged for persistent data. See [Persistent State](../common/deployment.md#persistent-state) before configuring a durable deployment.
 ```
 
 Save the example as `docker-compose.yml`, then start it:
@@ -109,21 +107,28 @@ Do not combine `postgres.dsn` with the individual connection fields. See [Genera
 | `SERVER_CONTEXTPATH` | Optional prefix for every service route. |
 | `POSTGRES_HOST`, `POSTGRES_PORT`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DBNAME` | Writer database connection. |
 | `POSTGRES_DSN` | Alternative complete writer connection string. Do not mix it with the individual connection fields. |
+| `POSTGRES_MAXOPENCONNECTIONS` | Maximum writer-pool connections. Default: `50`; SSP-002 requires at least `2`. |
 | `POSTGRES_READER_HOST`, `POSTGRES_READER_PORT`, `POSTGRES_READER_USER`, `POSTGRES_READER_PASSWORD`, `POSTGRES_READER_DBNAME` | Optional read-replica connection. |
-| `GENERAL_UPLOADMAXSIZEBYTES` | Maximum compressed HTTP upload size. Default: `134217728` (128 MiB). |
+| `GENERAL_UPLOADMAXSIZEBYTES` | Maximum uploaded file content size. Default: `134217728` (128 MiB). |
 | `GENERAL_AASXMAXPARTCOUNT` | Maximum package part count. Default: `10000`. |
 | `GENERAL_AASXMAXOPCMETADATASIZEBYTES` | Maximum expanded OPC metadata size. Default: `16777216` (16 MiB). |
 | `GENERAL_AASXMAXPARTEXPANDEDSIZEBYTES` | Maximum expanded size of one part. Default: `134217728` (128 MiB). |
 | `GENERAL_AASXMAXTOTALEXPANDEDSIZEBYTES` | Maximum total expanded package size. Default: `536870912` (512 MiB). |
 | `GENERAL_AASXMAXTHUMBNAILSIZEBYTES` | Maximum expanded thumbnail size. Default: `16777216` (16 MiB). |
-| `ABAC_ENABLED`, `ABAC_MODELPATH`, `ABAC_POLICY_FILE_IMPORT` | Enable ABAC and configure its policy source/import behavior. |
-| `OIDC_TRUSTLISTPATH` | Path to the mounted OIDC trust list. |
 
 Omit the complete `postgres.reader` configuration to reuse the writer connection for reads. When a replica is configured, list and download operations may briefly be eventually consistent after an upload or replacement.
 
+### Asynchronous Upload Profile
+
+Asynchronous package processing requires at least two writer-pool connections. Setting `POSTGRES_MAXOPENCONNECTIONS=1` disables SSP-002 and leaves only the synchronous SSP-001 routes. Check `GET /description` for the SSP-002 profile before using `/packages-async`. The default writer-pool configuration in this example provides sufficient capacity.
+
+The service limits concurrent asynchronous work. When no execution slot is available, `POST /packages-async` returns `429 Too Many Requests`. Retry the submission later.
+
 ### Secured Setup
 
-The Compose example is unsecured. The File Server supports the common OIDC and ABAC middleware. Set `ABAC_ENABLED=true`, mount an access-rule model and OIDC trust list, and set their container paths. The effective default policy import mode is `if_missing`; consult [Runtime Security](../common/security) before operating a secured deployment.
+The Compose example is unsecured. The File Server supports OIDC authentication, ABAC authorization, and experimental [ReBAC](../common/rebac). To enable ABAC, set `ABAC_ENABLED=true`, mount an access-rule model and OIDC trust list, and configure their container paths. The effective default policy import mode is `if_missing`. See the [`oidc` and `abac`](../common/configuration.md#oidc-and-abac) and [Security Files](../common/configuration.md#security-files) sections for setup details.
+
+When ABAC/OIDC security is enabled, every `/packages-async` submission, status request, and result request requires an authenticated caller. Use the same bearer-token identity throughout the workflow because operation handles are scoped to their owner. With access control disabled as in this local example, the asynchronous routes accept anonymous requests.
 
 ## Running without Docker
 
