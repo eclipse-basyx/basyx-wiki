@@ -2,26 +2,9 @@
 
 This walkthrough creates a motor nameplate Submodel, works with Submodel Elements and a File attachment, changes metadata and values, and lists Submodels with filters and pagination. You will then remove the example data.
 
+The examples the unsecured [Docker Compose setup](setup) at `http://localhost:8085` with an empty context path. Run them in order against an empty example database. Save the JSON files in your working directory. The curl commands are single-line commands usable in Bash. In Windows PowerShell, invoke `curl.exe` instead of `curl`.
+
 You need only the Submodel Repository and the database services from [Setup](setup). A separate AAS Repository or Registry is not required for these examples.
-
-## Before You Start
-
-Start the [Compose setup](setup), then check the connection:
-
-```bash
-curl -i http://localhost:8085/health
-```
-
-Continue when the response is HTTP `200` with `{"status":"UP"}`. The examples use port `8085` and an empty context path. If your configuration differs, replace `http://localhost:8085` throughout. Include any context path, for example `http://localhost:8085/api/v3`. You can also inspect requests in [Swagger UI](http://localhost:8085/swagger).
-
-Run commands from one working directory and save each JSON file there before the command that uses it. Use the filenames shown, including the `.json` extension. No additional scripts or JSON command-line tools are needed.
-
-- **Bash:** copy the commands as shown.
-- **Windows PowerShell:** replace `curl` with `curl.exe`; this avoids the PowerShell alias.
-- **Request files:** `--data-binary '@submodel.json'` reads the file from the current directory and sends it as the request body.
-- **Responses:** `-i` displays HTTP headers and the body. A successful `204 No Content` response intentionally has no JSON body; use GET to check the new state.
-
-The commands assume the unsecured example setup. For an existing secured deployment, use credentials and permissions appropriate to that deployment. Run the walkthrough on example data: it creates and later deletes `urn:example:submodel:1` and `urn:example:submodel:2`.
 
 ## Create a Submodel
 
