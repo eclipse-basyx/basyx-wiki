@@ -8,15 +8,15 @@ BaSyx Go Eventing exposes changes to AAS and Submodel data as CloudEvents. Appli
 
 The AAS Repository, Submodel Repository, and AAS Environment can produce events for changes to Asset Administration Shells, asset information, Submodels, and Product Change Notification (PCN) records.
 
-Eventing is opt-in and must be enabled explicitly. Run the [Configuration Service](../configuration_service/index) before enabling it so that PostgreSQL contains the required schema.
+Each Eventing delivery option is opt-in and must be enabled explicitly. Run the [Configuration Service](../configuration_service/index) before enabling it so that PostgreSQL contains the required schema.
 
 ## Supported Components and Events
 
 | Producer | Events |
 | --- | --- |
-| AAS Repository | AAS and asset changes, plus Submodel and PCN changes made through its AAS-scoped Submodel API |
-| Submodel Repository | Submodel and PCN changes |
-| AAS Environment | AAS, asset, Submodel, and PCN changes, including changes made through environment upload/import paths |
+| AAS Repository | AAS and asset changes, plus Submodel changes and PCN notifications made through its AAS-scoped Submodel API |
+| Submodel Repository | Submodel changes and PCN notifications |
+| AAS Environment | AAS, asset, and Submodel changes and PCN notifications, including changes made through environment upload/import paths |
 
 | Event family | CloudEvents `type` values |
 | --- | --- |
@@ -42,7 +42,7 @@ Adding one or more Product Change Notification records to an existing Submodel p
 | REST Event Feed | Poll retained events through the hosting BaSyx HTTP API without operating a message broker |
 | MQTT 5 | Publish events to MQTT topics, with configurable QoS and retained-message behavior |
 | Kafka | Publish all event families to one Kafka topic with entity-based record keys |
-| AMQP 1.0 | Publish durable AMQP messages to a configured broker address |
+| AMQP 1.0 | Publish events to a configured AMQP broker address |
 
 All four options use the same CloudEvents-based event model. The REST feed retains events for non-destructive HTTP reads, while the broker transports deliver events asynchronously through a transactional queue.
 
@@ -163,7 +163,7 @@ Expressions are limited to 16 KiB and 32 levels of nesting. Quote values contain
 | --- | --- | --- |
 | `eventing.feed.hardDeleteGraceDays` | `BASYX_EVENTING_FEED_HARD_DELETE_GRACE_DAYS` | `10`; delay between feed expiry and physical deletion. `0` removes the delay. |
 | `eventing.feed.cleanupIntervalHours` | `BASYX_EVENTING_FEED_CLEANUP_INTERVAL_HOURS` | `24`; physical cleanup interval. Cleanup also runs at startup. |
-| `eventing.feed.publishIntervalMillis` | `BASYX_EVENTING_FEED_PUBLISH_INTERVAL_MILLIS` | `250`; interval for making newly committed feed events visible. |
+| `eventing.feed.publishIntervalMillis` | `BASYX_EVENTING_FEED_PUBLISH_INTERVAL_MILLIS` | `250`; interval for checking for newly committed feed events. Actual visibility can be later under database load or backlog. |
 | `eventing.feed.sourceBaseUrl` | `BASYX_EVENTING_FEED_SOURCE_BASE_URL` | Feed-specific compatibility source URL. Prefer `eventing.sourceBaseUrl`. |
 | `eventing.feed.schemaBaseUrl` | `BASYX_EVENTING_FEED_SCHEMA_BASE_URL` | Feed-specific compatibility schema URL. Prefer `eventing.schemaBaseUrl`. |
 
@@ -287,7 +287,7 @@ eventing:
 
 Messages use `application/cloudevents+json` and are marked durable, but durable storage also depends on the broker configuration, including durable queues and appropriate replication. Only an AMQP `Accepted` outcome completes a publication; other or ambiguous outcomes are retried. BaSyx preserves per-entity queue order, but broker redelivery and consumer concurrency can affect observed processing order.
 
-Multiple consumers of the same queue share its messages. If each application must receive every event, publish to an exchange and provision a separate bound queue for each application.
+Multiple consumers of the same queue share its messages. If each application must receive every event, use separate broker destinations for the applications. With RabbitMQ, publish to an exchange and provision a separate bound queue for each application.
 
 This transport implements AMQP 1.0, not AMQP 0-9-1. The runnable [AMQP/RabbitMQ example](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxAMQPExample) shows the required RabbitMQ setup.
 
