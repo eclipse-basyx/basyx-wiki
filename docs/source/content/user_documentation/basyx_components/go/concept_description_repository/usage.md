@@ -1,6 +1,6 @@
 # Using the Concept Description Repository
 
-This walkthrough creates, reads, lists, replaces, and deletes one Concept Description through the standalone Repository.
+This walkthrough creates, reads, lists, replaces, and deletes a Concept Description and introduces the Repository's filters, structured queries, and recent-changes API.
 
 ## Before You Start
 
@@ -44,7 +44,7 @@ The URL uses the Base64URL encoding of the Concept Description identifier, witho
 curl -i http://localhost:8086/concept-descriptions/dXJuOmV4YW1wbGU6Y2Q6bW90b3Itc3BlZWQ
 ```
 
-Expect `200 OK` and the stored object. Keep the identifier in JSON unencoded; encode only the path value. See [Identifiers and Encoding](../common/encoding) for commands that encode another identifier.
+Expect `200 OK` and the stored object. Keep the identifier in JSON unencoded; encode only the path value. For another identifier, encode its UTF-8 bytes with Base64URL without padding.
 
 ## List and Filter Concept Descriptions
 
@@ -55,7 +55,27 @@ curl -i -G http://localhost:8086/concept-descriptions --data-urlencode 'idShort=
 
 The collection response contains a `result` array and `paging_metadata`. If `paging_metadata.cursor` is present, pass it unchanged as the `cursor` parameter of the next request. See [Pagination](../common/pagination).
 
-The `idShort` filter is plain text. The optional `isCaseOf` and `dataSpecificationRef` filters are Base64URL-encoded reference values. The collection also supports the RFC 3339 lower-bound filters `createdFrom` and `updatedFrom`. Consult the running Swagger UI for their schemas instead of guessing an encoding.
+The `idShort` filter is plain text. The optional `isCaseOf` and `dataSpecificationRef` filters are Base64URL-encoded reference values. Consult the running Swagger UI for their schemas instead of guessing an encoding.
+
+`createdFrom` and `updatedFrom` are inclusive RFC 3339 lower-bound filters for the Concept Description's `administration.createdAt` and `administration.updatedAt` values. They are not repository POST or PUT timestamps, and the Repository does not generate or advance these fields when it writes a resource. If both filters are provided, a Concept Description matches when either `createdAt >= createdFrom` or `updatedAt >= updatedFrom`. A missing or invalid timestamp does not satisfy its comparison.
+
+### Structured Queries
+
+Use `POST /query/concept-descriptions` when the predefined collection filters are not sufficient. The endpoint accepts the shared BaSyx query language and returns matching Concept Descriptions with `limit` and cursor-based pagination.
+
+See the release-matched [Query Language examples](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.0.12/docu/query_language/examples.md) and the running Swagger UI for supported conditions, fragment filters, and request structure.
+
+### Recent Changes
+
+Use `GET /concept-descriptions/$recent-changes` to list current Concept Description identifiers together with their administration timestamps:
+
+```bash
+curl -i -G 'http://localhost:8086/concept-descriptions/$recent-changes' --data-urlencode 'limit=10'
+```
+
+The response contains a `result` array whose entries have `id`, `createdAt`, and `updatedAt`, plus `paging_metadata` for cursor-based pagination. The endpoint supports `createdFrom`, `updatedFrom`, `limit`, and `cursor`; the timestamp filters have the same inclusive and OR behavior described above.
+
+This endpoint reads the `administration.createdAt` and `administration.updatedAt` values stored in each current Concept Description. It is not a repository mutation log and does not report deleted resources or the time at which BaSyx received a POST or PUT. Concept Descriptions without both valid administration timestamps are omitted, including the minimal example created above. Continue following a returned cursor even when omitted entries make a page shorter than its requested limit.
 
 ## Replace the Concept Description
 
@@ -69,13 +89,13 @@ Expect `204 No Content` for an existing resource. PUT creates a missing resource
 
 ## Delete the Example
 
+```{note}
+Deleting a Concept Description does not remove or update references to its identifier in AAS or Submodel content.
+```
+
 ```bash
 curl -i -X DELETE http://localhost:8086/concept-descriptions/dXJuOmV4YW1wbGU6Y2Q6bW90b3Itc3BlZWQ
 curl -i http://localhost:8086/concept-descriptions/dXJuOmV4YW1wbGU6Y2Q6bW90b3Itc3BlZWQ
 ```
 
 The DELETE returns `204 No Content`; the following GET returns `404 Not Found`.
-
-## Further Operations
-
-The service also exposes structured queries at `POST /query/concept-descriptions`, recent changes at `GET /concept-descriptions/$recent-changes`, and serialization at `GET /serialization`. Use the running [Swagger UI](http://localhost:8086/swagger) for the request and response schemas supported by the installed release. For secured deployments, add a valid bearer token and ensure its subject has permission for the requested operation.

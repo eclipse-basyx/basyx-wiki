@@ -122,7 +122,7 @@ An explicitly configured reader may be eventually consistent. Omit it when reque
 
 ### Secured Setup
 
-The Compose example is unsecured. To enable the supported security middleware, set `ABAC_ENABLED=true`, mount the access-rule and OIDC trust-list files, and set their container paths. A mounted policy is not automatically re-imported on every restart: the effective default import mode is `if_missing`. Follow [Runtime Security](../common/security), including its policy-persistence guidance.
+The Compose example is unsecured. To enable the supported security middleware, set `ABAC_ENABLED=true`, mount the access-rule and OIDC trust-list files, and set their container paths. A mounted policy is not automatically re-imported on every restart: the effective default import mode is `if_missing`. See the [`oidc` and `abac`](../common/configuration.md#oidc-and-abac) and [Security Files](../common/configuration.md#security-files) sections in General Configuration before exposing the service.
 
 ## Running without Docker
 

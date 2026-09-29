@@ -6,41 +6,43 @@
 
 The BaSyx Go Concept Description Repository stores and exposes Concept Descriptions independently through the standardized Concept Description Repository API. Concept Descriptions provide the semantic definitions referenced by AAS and Submodel content.
 
-Use the combined [AAS Environment](../aas_environment/index) when one deployment should provide the AAS, Submodel, Concept Description, serialization, and import APIs. Use this standalone Repository when Concept Description storage and API access need an independent lifecycle, endpoint, or security boundary. The standalone service is not obsolete when an AAS Environment is also available.
+Use the [AAS Environment](../aas_environment/index) when AASs, Submodels, Concept Descriptions, serialization, and import should be provided by one deployment. Use the standalone Concept Description Repository when Concept Description storage needs its own endpoint, lifecycle, or security boundary.
 
 ## Main Capabilities
 
 - Create, retrieve, replace, and delete Concept Descriptions.
 - List Concept Descriptions with filters and [cursor-based pagination](../common/pagination).
-- Query Concept Descriptions and inspect recent changes.
-- Serialize selected Concept Descriptions through `/serialization`.
+- Query Concept Descriptions with structured conditions and inspect recent changes.
 - Expose health, service-description, and runtime API-documentation endpoints.
 
 ## Important Behavior
 
 The identifier in a resource URL is UTF-8 Base64URL-encoded without padding. Identifiers in JSON request bodies remain unencoded. A PUT creates a missing Concept Description or replaces an existing one; its body identifier must match the decoded path identifier.
 
-This service stores Concept Descriptions only. It does not store AASs or Submodels and does not register endpoints in an AAS Registry. Applications remain responsible for using matching semantic identifiers in the resources that refer to a Concept Description.
+The Repository stores Concept Descriptions independently of the AAS and Submodel resources that reference them. It does not validate or synchronize semantic references in those resources.
+
+Creating, replacing, or deleting a Concept Description does not modify AASs or Submodels that reference its identifier. Deleting a Concept Description can therefore leave existing semantic references pointing to an identifier that is no longer available from this Repository.
 
 The Repository uses PostgreSQL. The BaSyx Configuration Service must initialize the shared database schema before the Repository starts. See [Setup](setup).
 
 ## Configuration and Security
 
-See [General Configuration](../common/configuration) for server, database, environment-variable, and reader-pool settings. The service supports the common OIDC and ABAC middleware; both are disabled in the local example. See [Runtime Security](../common/security) before exposing it.
+See [General Configuration](../common/configuration) for server, database, environment-variable, reader-pool, OIDC, and ABAC settings. Authentication and authorization are disabled in the local example.
 
 ## API Documentation
 
-With the default empty context path, the running service exposes Swagger UI at `/swagger`, its OpenAPI document at `/api-docs/openapi.yaml`, and its self-description at `/description`. A configured `server.contextPath` prefixes all of these paths and the API routes.
+With the default empty context path, the service exposes Swagger UI at `/swagger`, its OpenAPI document at `/api-docs/openapi.yaml`, and its self-description at `/description`. A configured `server.contextPath` prefixes these paths and the API routes. Use the availability note below when comparing the bundled OpenAPI document with the standalone runtime.
 
-The current [service source](https://github.com/eclipse-basyx/basyx-go-components/tree/main/cmd/conceptdescriptionrepositoryservice) and [OpenAPI document](https://github.com/eclipse-basyx/basyx-go-components/blob/main/cmd/conceptdescriptionrepositoryservice/openapi.yaml) are the reference for these pages. Use the running service's Swagger UI for the exact contract of the installed release.
+### Availability Notes
+
+The standalone Concept Description Repository does not provide `/serialization` or `/upload`. Use the [AAS Environment](../aas_environment/index) when serialization or environment import is required.
 
 ## Related Documentation
 
 - [Setting Up the Concept Description Repository](setup)
 - [Using the Concept Description Repository](usage)
 - [AAS Environment](../aas_environment/index)
-- [Identifiers and Encoding](../common/encoding)
-- [Runtime Security](../common/security)
+- [General Configuration](../common/configuration)
 
 ```{toctree}
 :hidden:
