@@ -38,6 +38,7 @@ This file defines:
 * The infrastructure template for each backend topology
 * Component endpoints (registry, repository, discovery, etc.)
 * Authentication configuration per infrastructure
+* Additional origins that the infrastructure is allowed to contact
 
 ### Characteristics
 
@@ -45,6 +46,7 @@ This file defines:
 * It is loaded at runtime, not build time
 * It supports multi-infrastructure setups
 * Each infrastructure can select a topology template
+* `trustedOrigins` belongs to an individual infrastructure; it is not an environment variable
 
 ```{warning}
 Changes made via the UI infrastructure editor are stored in `localStorage` only and are **not written back** to `basyx-infra.yml`.
@@ -365,6 +367,8 @@ infrastructures:
   <infra-key>:
     name: <infrastructure-name>
     template: <template-name>
+    trustedOrigins:                         # optional
+      - "<http-or-https-origin>"
     components:
       aasDiscovery:
         baseUrl: "<url>"
@@ -388,6 +392,10 @@ infrastructures:
 ```
 
 The `template` field is optional for backward compatibility. If it is omitted or contains an unknown value, the Web UI uses `full`.
+
+The optional `trustedOrigins` field is a list on each infrastructure, at the same level as `name`, `template`, `components`, and `security`. It has no environment-variable equivalent. If omitted, the infrastructure has no additional trusted origins.
+
+Each entry must be an HTTP(S) origin: a scheme, host, and optional port. For example, `http://localhost:8086` and `https://repository.example.com:8443` are valid. Matching uses the normalized scheme, host, and effective port; an optional trailing slash is normalized away. Wildcards are not supported. User information, other paths, queries, and fragments are rejected. Invalid YAML entries are ignored and reported in the browser console.
 
 ### Infrastructure Templates
 
@@ -416,6 +424,11 @@ infrastructures:
   local:
     name: Local Development Environment
     template: full
+    trustedOrigins:
+      # LinkedSegment data source outside the configured BaSyx components
+      - "http://localhost:8086"
+      # Repository reached through a descriptor or deep link
+      - "https://repository.example.com:8443"
     components:
       aasDiscovery:
         baseUrl: "http://localhost:9084"
@@ -578,6 +591,22 @@ infrastructures:
         clientId: "basyx-integration"
         scope: "openid"
 ```
+
+### Trusted Request Origins
+
+The request layer evaluates the target origin before calling the browser's `fetch` API. It allows:
+
+* Relative URLs and absolute URLs on the Web UI's own origin
+* Origins derived from the selected infrastructure's configured component URLs
+* Origins explicitly listed in that infrastructure's `trustedOrigins`
+
+All other targets are blocked before a request is sent, even when the selected infrastructure uses `security.type: none`. The comparison uses the origin only, so every path on a listed origin is in scope. Add an origin only when every service on it may receive requests made in the context of that infrastructure.
+
+For authenticated requests, an additional trusted origin may receive the selected infrastructure's Basic, Bearer, OAuth2, or custom-header credentials. A Time Series `LinkedSegment` request is a special case: it sends its explicitly configured InfluxDB token instead of the infrastructure authorization header, but its target must still pass the same origin check.
+
+The infrastructure editor exposes the list as **Additional Trusted Origins**, with one origin per line. Connection tests use the draft endpoints, trusted origins, and credentials currently entered in the editor, so users can test a complete change before saving it.
+
+Backend requests do not follow redirects because the browser does not expose the next destination in time for the Web UI to validate it. Every redirect is rejected, including a redirect to another trusted origin. When migrating an existing setup, configure the final endpoint URLs directly. A reverse proxy on the Web UI's own origin continues to work, including relative proxy URLs, without a `trustedOrigins` entry.
 
 ### Docker Deployment
 

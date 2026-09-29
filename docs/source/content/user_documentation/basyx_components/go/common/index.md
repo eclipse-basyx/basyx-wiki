@@ -18,6 +18,7 @@ This section covers features and configuration that are shared across multiple B
 - [Asynchronous API Operations](asynchronous_requests) — Describes the API operations that BaSyx Go provides asynchronously and how their results are retrieved.
 - [Response Representations](representations) — Explains the supported AAS response representations, including normal, `$value`, `$metadata`, `$reference`, and `$path`.
 - [Recent Changes, History, and Signed Reads](history_and_changes) — Covers recent-change queries, historical states, integrity and mutation evidence, and cryptographically signed reads.
+* [Relationship-Based Access Control (ReBAC)](rebac)
 
 ```{toctree}
 :hidden:
@@ -35,4 +36,5 @@ registry_integration
 asynchronous_requests
 representations
 history_and_changes
+rebac
 ```

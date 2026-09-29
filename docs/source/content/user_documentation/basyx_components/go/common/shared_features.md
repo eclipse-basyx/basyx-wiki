@@ -74,6 +74,7 @@ The common configuration and security packages provide reusable building blocks 
 - OIDC trustlist-based issuer configuration (`oidc.trustlistPath`)
 - ABAC enablement and model configuration (`abac.*`)
 - startup security middleware setup that reads trustlist / access-rules files when ABAC is enabled
+- experimental relationship-based access control on top of ABAC (`rebac.*`, see [ReBAC](rebac))
 
 ## Shared PostgreSQL Configuration Pattern
 

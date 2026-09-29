@@ -69,6 +69,11 @@ Enter the endpoint URLs shown for the selected template. If a template groups se
 **Integration Options:**
 For templates that include registries or discovery, the form may show options such as **Backend creates AAS descriptors automatically**, **Backend creates Submodel descriptors automatically**, or **Backend creates AAS discovery asset links automatically**. Disable these options when the backend does not synchronize descriptors or discovery links on its own and the Web UI should manage them.
 
+**Additional Trusted Origins:**
+Requests are allowed to the origins of the configured component endpoints and to the Web UI's own origin. If an AAS or Submodel refers the Web UI to another server, add that server's origin under **Additional Trusted Origins**, one per line. Enter only the scheme, host, and optional port, for example `http://localhost:8086` or `https://repository.example.com:8443`. Do not include a path, query, fragment, or username and password.
+
+Only add origins that you trust with the selected infrastructure's credentials. Requests to other origins are blocked before they are sent, including for infrastructures without authentication. Backend redirects are also blocked; configure the final endpoint URL instead. A same-origin proxy under the Web UI URL remains usable without an additional entry.
+
 **Security Configuration:**
 See the [Security](./security.md) page for detailed information on authentication and authorization options.
 
@@ -84,6 +89,8 @@ Form for creating or editing an infrastructure configuration
 ```{note}
 Infrastructure configurations created or modified through the UI are stored in your browser's local storage and will persist across sessions on the same device. However, they are not shared across different browsers or devices.
 ```
+
+When you test component connections while editing, the test uses the endpoints, trusted origins, and credentials currently entered in the form, including changes that have not yet been saved.
 
 ### Multiple Infrastructures Support
 
