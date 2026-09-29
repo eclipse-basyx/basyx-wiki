@@ -6,7 +6,6 @@ This section covers features and configuration that are shared across multiple B
 
 ## Contents
 
-- [Eventing](eventing) — Describes experimental CloudEvents-based change notifications and their REST, MQTT, Kafka, and AMQP delivery options.
 - [Deployment and Versions](deployment) — Covers version alignment, database initialization, persistent state, and deployment considerations shared across BaSyx Go components.
 - [Swagger UI and OpenAPI](swagger) — Describes the Swagger UI and OpenAPI documents exposed by BaSyx Go components.
 - [General Configuration](configuration) — Provides the common YAML configuration options and their environment-variable mappings.
@@ -19,6 +18,7 @@ This section covers features and configuration that are shared across multiple B
 - [Response Representations](representations) — Explains the supported AAS response representations, including normal, `$value`, `$metadata`, `$reference`, and `$path`.
 - [Recent Changes, History, and Signed Reads](history_and_changes) — Covers recent-change queries, historical states, integrity and mutation evidence, and cryptographically signed reads.
 - [Relationship-Based Access Control (ReBAC)](rebac) — Describes experimental owner-managed resource sharing with users and groups alongside ABAC.
+- [Eventing](eventing) — Describes experimental CloudEvents-based change notifications and their REST, MQTT, Kafka, and AMQP delivery options.
 
 ```{toctree}
 :hidden:
@@ -28,7 +28,6 @@ deployment
 swagger
 configuration
 shared_features
-eventing
 observability
 pagination
 validation
@@ -37,4 +36,5 @@ asynchronous_requests
 representations
 history_and_changes
 rebac
+eventing
 ```

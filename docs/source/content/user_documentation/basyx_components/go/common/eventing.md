@@ -92,7 +92,7 @@ Use `eventing.sourceBaseUrl` (`BASYX_EVENTING_SOURCE_BASE_URL`) or `eventing.sch
 
 ### URL Resolution
 
-The shared Eventing URL settings are preferred; feed-specific compatibility settings are used when the shared setting is empty. Configuring both forms with different values is rejected. Without an override, BaSyx uses the first `general.externalUrl`; if none is configured, it uses the local server URL and context path. Without a schema override, the schema base is the selected source URL followed by `/.well-known/event-feed/schemas`.
+The shared Eventing URL settings are preferred. Feed-specific compatibility settings are used when the shared setting is empty. Configuring both forms with different values is rejected. Without an override, BaSyx uses the first `general.externalUrl`. If none is configured, it uses the local server URL and context path. Without a schema override, the schema base is the selected source URL followed by `/.well-known/event-feed/schemas`.
 
 ## REST Event Feed
 
