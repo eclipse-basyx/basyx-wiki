@@ -102,7 +102,11 @@ For this component in Docker Compose, mount the security files into the containe
 
 ### Relationship-Based Access Control
 
-Basic Discovery also supports experimental relationship-based access control (ReBAC) for Discovery registrations. ReBAC is disabled by default and requires OIDC and ABAC to be enabled. When ReBAC is enabled, a request is allowed when either ABAC or ReBAC grants access.
+Basic Discovery also supports experimental relationship-based access control (ReBAC) for Discovery registrations. ReBAC is disabled by default and requires OIDC and ABAC to be enabled.
+
+For ReBAC-covered Discovery routes, an authenticated request is allowed when either ABAC or ReBAC grants access. Anonymous requests and endpoints outside the ReBAC-covered Discovery routes remain governed by ABAC. The `/verify` endpoint, when enabled, remains ABAC-only.
+
+Enable ReBAC with `rebac.enabled: true` or `REBAC_ENABLED=true`.
 
 Discovery registrations can be shared through ReBAC. Registrations created through AAS Registry Discovery integration inherit access from their source descriptor. See [Relationship-Based Access Control](../common/rebac) for configuration and access-management details.
 
