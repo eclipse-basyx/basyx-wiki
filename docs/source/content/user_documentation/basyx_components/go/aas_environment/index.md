@@ -3,9 +3,9 @@
 ![GitHub](https://img.shields.io/github/license/eclipse-basyx/basyx-go-components)
 ![API](https://img.shields.io/badge/API-AAS%203.2-yellow)
 
-The BaSyx Go AAS Environment is a **single runtime** that exposes the main APIs needed to store, register, discover, import, and export an AAS environment. Choose it when those API areas should share one deployment and one PostgreSQL database. Choose the [standalone components](../index.md#component-overview) when they need separate lifecycles, scaling, or trust boundaries.
+The BaSyx Go AAS Environment is a **single runtime** that provides the main APIs for storing, registering, discovering, importing, and exporting AAS data. Use it when these capabilities should run in one deployment and share one PostgreSQL database. Use the [standalone components](../index.md#component-overview) when they require independent lifecycles, scaling, or trust boundaries.
 
-The service is not just the serialized AAS metamodel `Environment` object. That object is the import/export document containing AASs, Submodels, and Concept Descriptions; the AAS Environment service is the running HTTP application that persists the objects and exposes multiple APIs. It also does not start a collection of separate Repository, Registry, or Discovery containers.
+The AAS Environment service is distinct from the serialized AAS metamodel `Environment` object. The AAS Environment service is distinct from the serialized AAS metamodel Environment object. The metamodel object is an import/export representation containing AASs, Submodels, and Concept Descriptions, while the AAS Environment service is the running HTTP application that persists this data and exposes the corresponding APIs. It runs these capabilities within a single process rather than starting separate Repository, Registry, or Discovery services.
 
 ## Included APIs and Data
 
@@ -16,13 +16,14 @@ One AAS Environment process provides:
 - a [Concept Description Repository](../concept_description_repository/index) for Concept Description content;
 - an [AAS Registry](../aas_registry/index) and [Submodel Registry](../submodel_registry/index) for endpoint descriptors;
 - [Basic Discovery](../basic_discovery/index) for asset-identifier-to-AAS-identifier mappings;
-- `/upload` and `/serialization` for whole-environment import and export.
+- `/upload` and `/serialization` for whole-environment import and export;
+- `/description` for the AAS Environment service description and supported profiles.
 
 All of these API areas are routes of the same runtime and use shared PostgreSQL persistence. Registry descriptors remain different resources from Repository content, and Discovery mappings remain different from both. Use the linked standalone component pages for detailed CRUD and query semantics. The routes behave as composed API areas here rather than as network calls between internal services.
 
-The Environment can also emit experimental CloudEvents for AAS, asset, and Submodel changes, including dedicated notifications for newly added Product Change Notification (PCN) records through the shared [Eventing](../common/eventing) capability.
+The Environment also supports experimental Eventing for AAS, asset, and Submodel changes, including dedicated notifications for newly added Product Change Notification (PCN) records. Eventing is disabled by default and must be enabled explicitly; see [Eventing](../common/eventing) for Event Feed and broker configuration.
 
-Environment upload parses an AASX package into model content and supplementary files; serialization creates an environment representation from stored content. It does not expose the package-oriented `/packages` API. Use the standalone [AASX File Server](../aasx_file_server/index) when clients must store, list, download, replace, or delete complete AASX package files by package identifier.
+`/upload` imports AAS Environment documents in JSON or XML format as well as AASX packages. For AASX input, the package is parsed into model content and supplementary files. `/serialization` creates an Environment representation from stored content. The AAS Environment does not expose the package-oriented `/packages` API. Use the standalone [AASX File Server](../aasx_file_server/index) when clients must store, list, download, replace, or delete complete AASX package files by package identifier.
 
 ```{mermaid}
 flowchart LR
@@ -45,10 +46,10 @@ flowchart LR
     CLIENT -->|HTTP| HTTP
     HTTP -->|SQL / persistent state| DB
     CONFIG -->|initialize / migrate| DB
-    CONFIG -.->|completion prerequisite for startup| HTTP
+    CONFIG -.->|Compose startup dependency| HTTP
 ```
 
-The Configuration Service prepares the database and exits before the Environment starts. It is not part of normal request traffic.
+The PostgreSQL schema must be initialized or migrated by a release-compatible Configuration Service before the AAS Environment starts. In the provided Compose setup, the Configuration Service runs as a one-shot job and the Environment starts only after it exits successfully. It is not part of normal request traffic.
 
 ## Registry and Discovery Integration
 

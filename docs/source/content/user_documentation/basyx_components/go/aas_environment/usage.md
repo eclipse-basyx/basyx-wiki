@@ -105,7 +105,9 @@ Expect HTTP `200` and a response containing:
 }
 ```
 
-The endpoint also accepts AAS Environment XML (`application/xml` or `text/xml`) and AASX packages, including `application/aasx+xml` and `application/aasx+json`. Supply the actual format as the `file` part's media type, for example `-F 'file=@environment.aasx;type=application/aasx+json'`.
+The endpoint accepts plain AAS Environment documents using `application/json`, `application/xml`, or `text/xml`. AASX packages use `application/aasx+json`, `application/aasx+xml`, `application/asset-administration-shell+json`, or `application/asset-administration-shell+xml`. Supply the actual format as the `file` part's media type, for example `-F 'file=@environment.aasx;type=application/aasx+json'`.
+
+Uploads are size-limited. The default maximum uploaded file-content size is 128 MiB (`134217728` bytes), and AASX packages are subject to additional limits on package parts, OPC metadata, individual expanded parts, total expanded content, and thumbnails. See [General Configuration](../common/configuration.md#general) when larger uploads require different limits.
 
 ## Retrieve the Imported Content
 

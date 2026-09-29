@@ -73,6 +73,18 @@ The database health check prevents initialization from starting too early. The C
 
 Do not add `GENERAL_DISCOVERYINTEGRATION`: the AAS Environment executable forces Discovery integration on. The three services above are the complete topology for this walkthrough.
 
+## Optional Startup Preconfiguration
+
+The AAS Environment can import AAS data automatically during startup. Set `GENERAL_AAS_PRECONFIG_PATHS` to a comma-separated list of files or directories. Directories are searched recursively for `.aasx`, `.json`, and `.xml` files.
+
+For example, add this to the AAS Environment service's environment settings and mount the referenced paths into the container:
+
+```yaml
+GENERAL_AAS_PRECONFIG_PATHS: /data/aas,/data/initial.aasx
+```
+
+The HTTP server can accept connections while preconfiguration is still running, but `/health` returns HTTP `503` until processing finishes. Wait for `/health` to return HTTP `200` before sending normal application traffic.
+
 ## Start and Check Readiness
 
 Start the project:
@@ -99,4 +111,4 @@ The named volume `aas_environment_postgres` stores PostgreSQL 18 data at `/var/l
 Do not run `docker compose down -v` when the data must be retained. Adding or renaming a volume later does not migrate the old database. See [Persistent State](../common/deployment.md#persistent-state) for lifecycle and backup considerations.
 ```
 
-For a larger topology with automatic AASX preconfiguration and a Web UI, see the [BaSyx Minimal Example](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxMinimalExample). If that example uses `SNAPSHOT` BaSyx image tags, replace them with `latest` for a stable deployment or pin the required release tags or image digests.
+For a larger topology with automatic AASX preconfiguration and a Web UI, see the [BaSyx Minimal Example](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxMinimalExample). If that example uses `SNAPSHOT` BaSyx image tags, replace them with `latest` to follow the newest release, or pin a concrete release tag or image digest for a reproducible deployment.
