@@ -95,9 +95,7 @@ The Compose example explicitly selects port `8085`. When using a context path, i
 
 ### Access Rules and Trustlist Files (Secured Setup)
 
-For the complete OIDC/ABAC workflow and policy lifecycle, see [Runtime Security](../common/security). For the configuration keys and file mounts, see [Security Configuration Files (Common)](../common/configuration.md#security-files).
-
-For this component in Docker Compose, mount the security files into the container and configure `ABAC_ENABLED=true`, `ABAC_MODELPATH`, and `OIDC_TRUSTLISTPATH` if you enable ABAC.
+The local Compose example does not enable ABAC and is not a secured deployment. For this component, enable the supported authorization with `ABAC_ENABLED=true`, mount the access-rule and OIDC trust-list files, and configure their container paths. When `ABAC_POLICY_FILE_IMPORT` is omitted, the effective import mode is `if_missing`, so editing a mounted policy file and restarting does not replace an active policy already stored in PostgreSQL. See [OIDC and ABAC Configuration](../common/configuration.md#oidc-and-abac) and [Security Files](../common/configuration.md#security-files) before exposing the service.
 
 ## Using BaSyx Go Components without Docker
 If you need to run the Submodel Repository without Docker, build the binary from source for your target platform.

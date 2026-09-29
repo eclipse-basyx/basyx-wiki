@@ -93,7 +93,7 @@ The Compose example explicitly selects port `8082`. When using a context path, i
 
 ### Access Rules and Trustlist Files (Secured Setup)
 
-The local Compose example does not enable ABAC and is not a secured deployment. For this component, enable the supported middleware with `ABAC_ENABLED=true`, mount the access-rule and OIDC trust-list files, and configure their container paths. When `ABAC_POLICY_FILE_IMPORT` is omitted, the effective import mode is `if_missing`; editing a mounted policy and restarting does not replace an active policy already stored in PostgreSQL. See the [`oidc` and `abac` settings](../common/configuration.md#oidc-and-abac) and [Security Files](../common/configuration.md#security-files) before exposing the service.
+The local Compose example does not enable ABAC and is not a secured deployment. For this component, enable the supported authorization with `ABAC_ENABLED=true`, mount the access-rule and OIDC trust-list files, and configure their container paths. When `ABAC_POLICY_FILE_IMPORT` is omitted, the effective import mode is `if_missing`, so editing a mounted policy file and restarting does not replace an active policy already stored in PostgreSQL. See [OIDC and ABAC Configuration](../common/configuration.md#oidc-and-abac) and [Security Files](../common/configuration.md#security-files) before exposing the service.
 
 ## Using BaSyx Go Components without Docker
 If you need to run the AAS Registry without Docker, build the binary from source for your target platform.

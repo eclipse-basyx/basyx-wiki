@@ -13,10 +13,6 @@ The minimal configuration includes three services:
 2. BaSyx Configuration Service (Go), which initializes the database
 3. BaSyx AAS Repository (Go)
 
-```{warning}
-This Compose example is intended for local evaluation and development.
-```
-
 ```yaml
 services:
   postgres:

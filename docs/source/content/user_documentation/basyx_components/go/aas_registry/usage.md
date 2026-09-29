@@ -1,8 +1,8 @@
 # Using the AAS Registry
 
-This walkthrough uses the unsecured [Docker Compose setup](setup) at `http://localhost:8082` with an empty context path. Run the examples in order against an example database. Save the JSON files in your working directory. The curl commands are single-line commands usable in Bash. In Windows PowerShell, invoke `curl.exe` instead of `curl`.
+This walkthrough registers a motor AAS Descriptor, updates it, and adds a nameplate Submodel Descriptor through the Go AAS Registry. You will then filter and query descriptors, use pagination and asynchronous bulk operations, and remove the example registrations.
 
-The descriptor endpoints below use `example.com` as placeholders. Replace them with Repository URLs reachable by the clients that will use the descriptors.
+The examples use the unsecured [Docker Compose setup](setup) at `http://localhost:8082` with an empty context path. Run them in order against an example database. Save the JSON files in your working directory. The curl commands are single-line commands usable in Bash. In Windows PowerShell, invoke `curl.exe` instead of `curl`.
 
 ## Register an AAS Descriptor
 

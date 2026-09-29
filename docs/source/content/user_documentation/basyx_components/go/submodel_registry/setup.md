@@ -94,7 +94,7 @@ The example uses port `8083` and an empty context path. If `server.contextPath` 
 
 ### Access Rules and Trustlist Files (Secured Setup)
 
-The local Compose example does not enable ABAC and is not a secured deployment. For this component, enable the supported middleware with `ABAC_ENABLED=true`, mount the access-rule and OIDC trust-list files, and configure their container paths. When `ABAC_POLICY_FILE_IMPORT` is omitted, the effective import mode is `if_missing`; editing a mounted policy and restarting does not replace an active policy already stored in PostgreSQL. See the [`oidc` and `abac` configuration reference](../common/configuration.md#oidc-and-abac) before exposing the service.
+The local Compose example does not enable ABAC and is not a secured deployment. For this component, enable the supported authorization with `ABAC_ENABLED=true`, mount the access-rule and OIDC trust-list files, and configure their container paths. When `ABAC_POLICY_FILE_IMPORT` is omitted, the effective import mode is `if_missing`, so editing a mounted policy file and restarting does not replace an active policy already stored in PostgreSQL. See [OIDC and ABAC Configuration](../common/configuration.md#oidc-and-abac) and [Security Files](../common/configuration.md#security-files) before exposing the service.
 
 ## Using BaSyx Go Components without Docker
 If you need to run the Submodel Registry without Docker, build the binary from source for your target platform.

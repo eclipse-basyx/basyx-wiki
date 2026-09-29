@@ -2,26 +2,9 @@
 
 This walkthrough creates a motor AAS, changes its asset information, and stores a nameplate Submodel through the Go AAS Repository. You will then read the Submodel through the AAS, manage its reference, and remove the example data.
 
-You need only the AAS Repository and the database services from [Setup](setup). A separate Registry or Submodel Repository service is not required for these examples.
+The examples the unsecured [Docker Compose setup](setup) at `http://localhost:8084` with an empty context path. Run them in order against an empty example database. Save the JSON files in your working directory. The curl commands are single-line commands usable in Bash. In Windows PowerShell, invoke `curl.exe` instead of `curl`.
 
-## Before You Start
-
-Start the [Compose setup](setup), then check the connection:
-
-```bash
-curl -i http://localhost:8084/health
-```
-
-Continue when the response is HTTP `200` with `{"status":"UP"}`. The examples use port `8084` and an empty context path. If your configuration differs, replace `http://localhost:8084` throughout. Include any context path, for example `http://localhost:8084/api/v3`. You can also inspect requests in [Swagger UI](http://localhost:8084/swagger).
-
-Run commands from one working directory and save each JSON file there before the command that uses it. Use the filenames shown, including the `.json` extension. No additional scripts or JSON command-line tools are needed.
-
-- **Bash:** copy the commands as shown.
-- **Windows PowerShell:** replace `curl` with `curl.exe`; this avoids the PowerShell alias.
-- **Request files:** `--data-binary '@aas.json'` reads the file from the current directory and sends it as the request body.
-- **Responses:** `-i` displays HTTP headers and the body. A successful `204 No Content` response intentionally has no JSON body; use GET to check the new state.
-
-The commands assume the unsecured example setup. For an existing secured deployment, use credentials and permissions appropriate to that deployment. Run the walkthrough on example data: it creates and later deletes `urn:example:aas:1`, `urn:example:aas:2`, `urn:example:aas:history`, and `urn:example:submodel:1`.
+Only the AAS Repository and its database-related services from [Setup](setup) are required. A separate AAS Registry or Submodel Repository is not required.
 
 ## Create an AAS
 
@@ -238,8 +221,7 @@ See [Pagination](../common/pagination) for `limit`, cursor handling, and the sha
 The motor AAS created earlier contains client-supplied `administration.createdAt` and `administration.updatedAt` values. Query the dedicated recent-changes endpoint for AASs updated at or after the given RFC 3339 time:
 
 ```bash
-curl -i -G 'http://localhost:8084/shells/$recent-changes' \
-  --data-urlencode 'updatedFrom=2026-09-02T00:00:00Z'
+curl -i -G 'http://localhost:8084/shells/$recent-changes' --data-urlencode 'updatedFrom=2026-09-02T00:00:00Z'
 ```
 
 Expect `200 OK`. On a database containing only the walkthrough resources, the response is:
@@ -264,7 +246,7 @@ Expect `200 OK`. On a database containing only the walkthrough resources, the re
 }
 ```
 
-The response contains summary entries, not complete AAS resources. `id`, `createdAt`, and `updatedAt` are required in each entry; asset identifiers are included when present on the AAS. An empty `paging_metadata` object means there is no next page. When another page is available, it contains a `cursor` to pass in the next request.
+The response contains summary entries, not complete AAS resources. `id`, `createdAt`, and `updatedAt` are required in each entry. Asset identifiers are included when present on the AAS. An empty `paging_metadata` object means there is no next page. When another page is available, it contains a `cursor` to pass in the next request.
 
 Resources without valid administrative timestamps are excluded, and deleted resources are not returned. This endpoint is a timestamp-filtered view of current resources, not a mutation history or deletion feed.
 
@@ -332,9 +314,9 @@ After the asset-information step above, the serial number is `SN-002`. The follo
 curl -i -G http://localhost:8084/shells --data-urlencode 'assetIds=eyJuYW1lIjoic2VyaWFsTnVtYmVyIiwidmFsdWUiOiJTTi0wMDIifQ'
 ```
 
-Expect your AAS in `result`. Searching for `SN-001` after changing it to `SN-002` would return no match. For your own asset filters, encode the complete JSON object's UTF-8 bytes with Base64URL. Use `{"name":"globalAssetId","value":"urn:example:asset:1"}` for the global asset identifier. Normal URL escaping is separate from Base64URL encoding; `--data-urlencode` handles it here.
+Expect your AAS in `result`. Searching for `SN-001` after changing it to `SN-002` would return no match. For your own asset filters, encode the complete JSON object's UTF-8 bytes with Base64URL. Use `{"name":"globalAssetId","value":"urn:example:asset:1"}` for the global asset identifier.
 
-Timestamp filters use administrative timestamps supplied in the AAS payload. Writes do not automatically generate or overwrite `administration.createdAt` and `administration.updatedAt`; see [Find Recently Changed AASs](#find-recently-changed-aass) for a complete example. Current-resource lists do not report deletions. Ordinary list parameters select supported attributes; structured query expressions belong to `POST /query/shells` and are not arbitrary additional list parameters. Consult the running Swagger UI for the query schema in your component version.
+Timestamp filters use administrative timestamps supplied in the AAS payload. Writes do not automatically generate or overwrite `administration.createdAt` and `administration.updatedAt`; see [Find Recently Changed AASs](#find-recently-changed-aass) for a complete example. Current-resource lists do not report deletions. Ordinary list parameters select supported attributes. Structured query expressions belong to `POST /query/shells` and are not arbitrary additional list parameters. Consult the running Swagger UI for the query schema in your component version.
 
 ### Query AAS Data
 
@@ -359,7 +341,7 @@ curl -i -X POST http://localhost:8084/query/shells -H 'Content-Type: application
 
 Expect `200 OK` with `MotorAASUpdated` in the `result` array. `limit` and `cursor` can be supplied as query parameters for pagination.
 
-The standalone AAS Repository supports structured queries over AAS data only. Expressions that use `$sm` or `$sme` to traverse into referenced Submodels or Submodel Elements return `400 Bad Request`; use the [AAS Environment Service](../aas_environment/index) for those hierarchy-spanning queries.
+The standalone AAS Repository supports structured queries over AAS data only. Expressions that use `$sm` or `$sme` to traverse into referenced Submodels or Submodel Elements return `400 Bad Request`. Use the [AAS Environment Service](../aas_environment/index) for those hierarchy-spanning queries.
 
 ## Read a Historical AAS State
 
@@ -464,13 +446,13 @@ Place an existing PNG image named `thumbnail.png` in your working directory. Upl
 curl -i -X PUT http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/asset-information/thumbnail -F 'fileName=thumbnail.png' -F 'file=@thumbnail.png;type=image/png'
 ```
 
-Expect `204 No Content`. Let curl set the multipart boundary; do not set an application/json header for this request. Download the thumbnail and save response headers separately:
+Expect `204 No Content`. Let curl set the multipart boundary. Do not set an application/json header for this request. Download the thumbnail and save response headers separately:
 
 ```bash
 curl -D thumbnail-headers.txt -o downloaded-thumbnail.png http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/asset-information/thumbnail
 ```
 
-A stored thumbnail returns `200 OK` with binary content and its response content type. Open `downloaded-thumbnail.png` to verify the result; HTTP headers are in `thumbnail-headers.txt`. Repeat PUT with another image to replace it. When asset information points to an external HTTP(S) thumbnail, GET can instead return `302` with the external location.
+A stored thumbnail returns `200 OK` with binary content and its response content type. Open `downloaded-thumbnail.png` to verify the result. HTTP headers are in `thumbnail-headers.txt`. Repeat PUT with another image to replace it. When asset information points to an external HTTP(S) thumbnail, GET can instead return `302` with the external location.
 
 ```bash
 curl -i -X DELETE http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/asset-information/thumbnail
