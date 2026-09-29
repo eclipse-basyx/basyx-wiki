@@ -20,6 +20,8 @@ One AAS Environment process provides:
 
 All of these API areas are routes of the same runtime and use shared PostgreSQL persistence. Registry descriptors remain different resources from Repository content, and Discovery mappings remain different from both. Use the linked standalone component pages for detailed CRUD and query semantics; the routes behave as composed API areas here rather than as network calls between internal services.
 
+The Environment can also produce experimental CloudEvents for AAS and Submodel changes, asset-information changes, and Product Change Notifications (PCN) through the shared [Eventing](../common/eventing) capability.
+
 Environment upload parses an AASX package into model content and supplementary files; serialization creates an environment representation from stored content. It does not expose the package-oriented `/packages` API. Use the standalone [AASX File Server](../aasx_file_server/index) when clients must store, list, download, replace, or delete complete AASX package files by package identifier.
 
 ```{mermaid}

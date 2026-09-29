@@ -19,6 +19,7 @@ An AAS contains Submodel references, not inline Submodel content. This Go compon
 - Retrieve and replace asset information independently of the complete AAS.
 - Manage Submodel references and access Submodel content through an AAS.
 - Query AAS-level fields through `POST /query/shells`.
+- Emit experimental CloudEvents through the REST Event Feed or broker transports. See [Eventing](../common/eventing).
 - Optionally synchronize AAS Descriptors through [Registry Integration](registry_integration).
 - Expose service self-description and runtime API documentation.
 
@@ -52,9 +53,7 @@ The Repository uses PostgreSQL. The BaSyx Configuration Service must initialize 
 
 ## Configuration
 
-```markdown
 See [General Configuration](../common/configuration.md) for shared server, database, and other configuration options. See [Shared Runtime Features](../common/shared_features.md) for common runtime capabilities. [Registry Integration](registry_integration.md) explains AAS Registry synchronization and the generation of public descriptor endpoints.
-```
 
 ## API Documentation and Availability
 

@@ -1,6 +1,6 @@
 # General Configuration
 
-BaSyx Go components use a shared application configuration model. Configuration can be provided through a YAML file and overridden with environment variables. This reference describes the stable configuration represented by the component images tagged `latest`.
+BaSyx Go components use a shared application configuration model. Configuration can be provided through a YAML file and overridden with environment variables. This reference describes the common configuration shared by the component services.
 
 ## Configuration Source Precedence
 
@@ -658,17 +658,18 @@ Credentials are sensitive. Prefer secret-backed environment variables or mounted
 
 ### `eventing`
 
-The eventing configuration is reserved for future publishing and outbox support.
+Eventing provides experimental CloudEvents-based change notifications in the AAS Repository, Submodel Repository, and AAS Environment. The REST feed is enabled independently; broker sinks require the common activation and outbox settings. See [Eventing](eventing) for transport configuration, delivery guarantees, and security behavior.
 
 | Key | Default | Purpose |
 | --- | --- | --- |
-| `enabled` | `false` | Requests event publishing. Currently rejected because event publishing is not implemented. |
-| `format` | `cloudevents` | Reserved event serialization format. |
-| `sinks` | `[]` | Reserved list of event sink destinations. A non-empty list is currently rejected. |
-| `outboxEnabled` | `false` | Requests transactional outbox processing. Currently rejected. |
-| `topicPrefix` | `basyx` | Reserved prefix for generated event topics. |
-
-Keep `enabled` and `outboxEnabled` set to `false` and `sinks` empty until eventing support is implemented.
+| `enabled` | `false` | Enables the broker sinks selected in `sinks`. |
+| `format` | `cloudevents` | Event serialization format. `cloudevents` is the supported value. |
+| `sinks` | `[]` | Broker sinks: `mqtt`, `kafka`, and/or `amqp`. |
+| `outboxEnabled` | `false` | Enables transactional outbox delivery for configured broker sinks. |
+| `topicPrefix` | `basyx` | MQTT topic prefix. |
+| `sourceBaseUrl` | `""` | Optional public base URL override for CloudEvents `source`. |
+| `schemaBaseUrl` | `""` | Optional public base URL override for `dataschema` links. |
+| `feed.enabled` | `false` | Enables the retained REST Event Feed. |
 
 ## Example YAML
 
@@ -791,6 +792,10 @@ eventing:
   sinks: []
   outboxEnabled: false
   topicPrefix: basyx
+  sourceBaseUrl: ""
+  schemaBaseUrl: ""
+  feed:
+    enabled: false
 ```
 
 ## Environment Variables
@@ -890,6 +895,9 @@ The following explicit aliases are also supported:
 | `eventing.sinks` | `BASYX_EVENTING_SINKS` (comma-separated) |
 | `eventing.outboxEnabled` | `BASYX_EVENTING_OUTBOX_ENABLED` |
 | `eventing.topicPrefix` | `BASYX_EVENTING_TOPIC_PREFIX` |
+| `eventing.sourceBaseUrl` | `BASYX_EVENTING_SOURCE_BASE_URL` |
+| `eventing.schemaBaseUrl` | `BASYX_EVENTING_SCHEMA_BASE_URL` |
+| `eventing.feed.enabled` | `BASYX_EVENTING_FEED_ENABLED` |
 
 The legacy Viper-derived names without word-separating underscores, such as `SERVER_READTIMEOUTSECONDS`, remain supported. The explicit aliases are applied after normal environment-variable decoding and therefore take precedence when both forms are set.
 

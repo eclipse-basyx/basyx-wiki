@@ -21,6 +21,7 @@ For one runtime that combines AAS, Submodel, Registry, and Discovery APIs, see t
 - Create, read, update, and delete individual Submodel Elements.
 - Read normal, value-only, metadata, reference, and path representations.
 - Update existing values or metadata through the corresponding PATCH operations.
+- Emit experimental CloudEvents through the REST Event Feed or broker transports; see [Eventing](../common/eventing).
 - Invoke modeled Operations synchronously or asynchronously when they have a configured delegation target; see [Operation Invocation and Delegation](operations).
 - Optionally synchronize descriptors through [Registry Integration](registry_integration).
 - Expose service self-description and runtime API documentation.

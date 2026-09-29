@@ -6,6 +6,7 @@ This section covers features and configuration that are shared across multiple B
 
 ## Contents
 
+- [Eventing](eventing) — Describes experimental CloudEvents-based change notifications and their REST, MQTT, Kafka, and AMQP delivery options.
 - [Deployment and Versions](deployment) — Covers version alignment, database initialization, persistent state, and deployment considerations shared across BaSyx Go components.
 - [Swagger UI and OpenAPI](swagger) — Describes the Swagger UI and OpenAPI documents exposed by BaSyx Go components.
 - [General Configuration](configuration) — Provides the common YAML configuration options and their environment-variable mappings.
@@ -26,6 +27,7 @@ deployment
 swagger
 configuration
 shared_features
+eventing
 observability
 pagination
 validation

@@ -59,6 +59,14 @@ default and configured through standard OpenTelemetry environment variables.
 See [Observability](observability) for activation, propagation, sampling,
 metric interpretation, and backend integration.
 
+## Experimental Eventing
+
+The AAS Repository, Submodel Repository, and AAS Environment can emit
+CloudEvents for model changes through a retained REST Event Feed, MQTT 5,
+Kafka, or AMQP 1.0. Event capture and broker outbox writes participate in the
+model mutation transaction. See [Eventing](eventing) for supported mutations,
+configuration, delivery guarantees, and security boundaries.
+
 ## Shared Security Building Blocks
 
 The common configuration and security packages provide reusable building blocks for:

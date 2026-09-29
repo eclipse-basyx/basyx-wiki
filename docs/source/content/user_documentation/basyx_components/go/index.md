@@ -27,6 +27,7 @@ For separate Repository and Registry processes, read [Repository-to-Registry Int
 
 ## Shared Guidance
 
+- [Eventing](common/eventing) — Describes the experimental CloudEvents-based change notifications available through the REST Event Feed, MQTT 5, Kafka, and AMQP 1.0.
 - [Deployment and Versions](common/deployment) — Covers version alignment, database initialization, persistent state, and deployment considerations shared across BaSyx Go components.
 - [Swagger UI and OpenAPI](common/swagger) — Describes the Swagger UI and OpenAPI documents exposed by BaSyx Go components.
 - [General Configuration](common/configuration) — Provides the common YAML configuration options and their environment-variable mappings.
