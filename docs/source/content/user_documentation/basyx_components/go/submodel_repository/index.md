@@ -19,16 +19,16 @@ For one runtime that combines AAS, Submodel, Registry, and Discovery APIs, see t
 - Create, retrieve, replace, and delete complete Submodels.
 - List Submodels with filters and [cursor-based pagination](../common/pagination).
 - Create, read, update, and delete individual Submodel Elements.
+- Upload, download, and delete attachments of `File` Submodel Elements.
 - Read normal, value-only, metadata, reference, and path representations.
 - Update existing values or metadata through the corresponding PATCH operations.
+- Query Submodels with [structured conditions](usage.md#structured-queries) through `POST /query/submodels`.
 - Emit experimental CloudEvents through the REST Event Feed or broker transports; see [Eventing](../common/eventing).
 - Invoke modeled Operations synchronously or asynchronously when they have a configured delegation target; see [Operation Invocation and Delegation](operations).
 - Optionally synchronize descriptors through [Registry Integration](registry_integration).
 - Expose service self-description and runtime API documentation.
 
 See [Using the Submodel Repository](usage) for a walkthrough with Properties and a nested collection.
-
-A stored `Operation` describes its variables and other model metadata. It does not contain executable code. In BaSyx Go 1.0.11, execution requires an `invocationDelegation` qualifier and a trusted reachable delegation endpoint; the [operation guide](operations) demonstrates both invocation modes.
 
 ## Important Behavior
 
@@ -38,7 +38,11 @@ The Submodel identifier in a request path is Base64URL-encoded. A Submodel Eleme
 
 ### Replacement and Partial Updates
 
-PUT creates or replaces a complete resource, and its body identifier must agree with the path. Include all content that should remain. PATCH updates existing content according to the selected representation; it is not a generic JSON Patch endpoint. Use `$value` to change values while retaining metadata. See [Representations and Partial Updates](usage.md#representations-and-partial-updates).
+PUT creates or replaces a complete resource, and its body identifier must agree with the path. Include all content that should remain. PATCH updates existing content according to the selected representation. It is not a generic JSON Patch endpoint. Use `$value` to change values while retaining metadata. See [Representations and Partial Updates](usage.md#representations-and-partial-updates).
+
+### Operation Execution
+
+A stored `Operation` describes its variables and other model metadata. It does not contain executable code. To invoke it, configure an `invocationDelegation` qualifier whose value identifies a trusted, reachable HTTP(S) endpoint. See [Operation Invocation and Delegation](operations) for synchronous and asynchronous invocation.
 
 ### Database Schema
 
@@ -56,7 +60,7 @@ Use the following API documentation depending on whether you need the behavior o
 - **[IDTA Submodel Repository Swagger UI v3.2.0](https://industrialdigitaltwin.io/aas-specs-api/docs/swagger-ui.html?url=..%2FSubmodelRepositoryServiceSpecification%2FV3.2_SSP-001.yaml&version=v3.2.0)** presents the standardized Submodel Repository Full Profile interactively.
 - **[IDTA Specification of the Asset Administration Shell, Part 2: Application Programming Interfaces v3.2.0](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/index.html)** defines the standardized operations, service specifications, profiles, and serialization behavior. The [metamodel specification v3.2](https://industrialdigitaltwin.io/aas-specifications/IDTA-01001/v3.2/index.html) defines Submodels and Submodel Element types.
 
-The OpenAPI document shipped with the current BaSyx Go Submodel Repository identifies API version `V3.2.0` and declares profiles `SSP-001`, `SSP-003`, `SSP-004`, `SSP-005`, `SSP-006`, and `SSP-007`. These declarations describe the shipped specification; use the running component's Swagger UI and the availability notes below to determine the installed service's supported operations.
+The OpenAPI document shipped with the current BaSyx Go Submodel Repository identifies API version `V3.2.0` and declares profiles `SSP-001`, `SSP-003`, `SSP-004`, `SSP-005`, `SSP-006`, and `SSP-007`. These declarations describe the shipped specification. Use the running component's Swagger UI and the availability notes below to determine the installed service's supported operations.
 
 With the default empty context path, the service exposes:
 
@@ -68,7 +72,7 @@ When `server.contextPath` is configured, these locations are served below that c
 
 ### Availability Notes
 
-The standalone `/serialization` route is not provided by this component. For full environment import/export, use the AAS Environment's implemented `/serialization` and `/upload` APIs. See the release-pinned [Go API availability guide](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/docu/user/aas_api_v3_2.md).
+The standalone Submodel Repository exposes `GET /serialization`, but this operation is not implemented and returns `501 Not Implemented`. For environment serialization and import, use the AAS Environment's `/serialization` and `/upload` APIs.
 
 ## Related Documentation
 

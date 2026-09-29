@@ -78,7 +78,7 @@ The request URL uses the encoded **Submodel identifier**, not its `idShort` or s
 | `urn:example:submodel:1` | `dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ` |
 | `urn:example:submodel:2` | `dXJuOmV4YW1wbGU6c3VibW9kZWw6Mg` |
 
-These values are already substituted into every example URL. Keep identifiers in JSON bodies unencoded. For your own identifiers, see [Encode Your Own Identifier](../common/encoding.md#encode-your-own-identifier).
+These values are already substituted into every example URL. Keep identifiers in JSON bodies unencoded. For your own identifier, encode its UTF-8 bytes with Base64URL for the request path.
 
 ```bash
 curl -i http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ
@@ -154,6 +154,45 @@ curl -i -X DELETE http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ
 ```
 
 Expect `204 No Content`; a subsequent GET of that element returns `404`. Other elements remain available.
+
+## File Attachments
+
+`File` Submodel Elements provide a separate `/attachment` resource for their content. Create the `File` element first. Save this as `manual-file.json`:
+
+```json
+{
+  "modelType": "File",
+  "idShort": "Manual",
+  "contentType": "application/pdf",
+  "value": ""
+}
+```
+
+```bash
+curl -i -X POST http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ/submodel-elements -H 'Content-Type: application/json' --data-binary '@manual-file.json'
+```
+
+Place a file named `manual.pdf` in the working directory, then upload it as multipart form data:
+
+```bash
+curl -i -X PUT http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ/submodel-elements/Manual/attachment -F 'fileName=manual.pdf' -F 'file=@manual.pdf;type=application/pdf'
+```
+
+Expect `204 No Content`. Download the stored content with `GET` on the same attachment resource:
+
+```bash
+curl --fail-with-body --output downloaded-manual.pdf http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ/submodel-elements/Manual/attachment
+```
+
+Delete the attachment content when it is no longer needed:
+
+```bash
+curl -i -X DELETE http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ/submodel-elements/Manual/attachment
+```
+
+Expect `200 OK`. The `File` element remains, but its `value` is empty and a later attachment download returns `404 Not Found`.
+
+If a `File` element's `value` starts with `http://` or `https://`, `GET` on its `/attachment` resource returns `302 Found` with that URL in the `Location` header instead of locally stored content. A client may follow that redirect to retrieve the remote file.
 
 ## Representations and Partial Updates
 
@@ -276,11 +315,15 @@ The decoded value is compared with semantic reference key values; this is not an
 
 Timestamp filters use `administration.createdAt` and `administration.updatedAt` supplied in the resource payload, rather than automatically recording each write. The example does not supply them. Maintain those fields if using timestamp-filtered lists; current-resource lists do not provide deletion notifications.
 
-Ordinary filters select resources by these defined parameters. Structured queries can express combinations and conditions on element values; see the running API documentation for `/query/submodels`. Adding arbitrary field names as list query parameters does not create a structured query.
+### Structured Queries
+
+Use `POST /query/submodels` when the predefined list filters are not sufficient. Structured queries can combine conditions and filter on Submodel content, including Submodel Element values. Query results use the same `limit` parameter and cursor-based pagination as other collection requests.
+
+See the release-matched [Query Language examples](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.0.12/docu/query_language/examples.md) and the running Swagger UI for the supported query structure and operators. Adding arbitrary field names as list query parameters does not create a structured query.
 
 ## Invoke an Operation
 
-Storing a Submodel Element with `modelType: Operation` defines the operation and its variables; it does not supply executable behavior. BaSyx Go 1.0.11 invokes an operation only when its `invocationDelegation` qualifier identifies a reachable delegation endpoint and that destination is explicitly trusted.
+Storing a Submodel Element with `modelType: Operation` defines the operation and its variables; it does not supply executable behavior. Invocation requires an `invocationDelegation` qualifier that identifies a reachable delegation endpoint and an explicit trust configuration for that destination.
 
 Use `/invoke` for a synchronous response or `/invoke-async` to receive a status location and later retrieve the result. The [Operation Invocation and Delegation](operations) guide configures the trust boundary and demonstrates both routes with `5 + 3 = 8`.
 
@@ -303,4 +346,4 @@ The expected `404 Not Found` confirms deletion. The example identifiers can now 
 
 ## Shared API Guidance
 
-See [Identifiers and Encoding](../common/encoding), [Validation](../common/validation), [API Errors](../common/api_errors), and [History, Timestamps, and Signed Reads](../common/history_and_changes). For available model views, see [Response Representations](../common/representations). Component-specific requests and lifecycle behavior are documented above.
+See [Validation](../common/validation) and [History, Timestamps, and Signed Reads](../common/history_and_changes). For available model views, see [Response Representations](../common/representations). Component-specific requests and lifecycle behavior are documented above.

@@ -1,8 +1,8 @@
 # Submodel Registry Integration
 
-The standalone Submodel Repository can generate and maintain descriptors in the [Submodel Registry](../submodel_registry/index) when Repository content changes. This connects content management to discovery without requiring a separate descriptor write for each supported mutation.
+When Submodel Registry integration is enabled, Submodel Repository writes also update the corresponding descriptors in the shared BaSyx database. Repository content and descriptor changes are applied in the same transaction.
 
-The [AAS Environment](../aas_environment/index) provides a combined deployment route with the same Submodel APIs. In either executable, Repository-to-Registry synchronization must be enabled explicitly; sharing a process or database is not enough by itself and does not turn this into HTTP synchronization between services.
+This is database-backed integration inside the BaSyx components; the Repository does not synchronize descriptors by calling a separately running Registry over HTTP. The [AAS Environment](../aas_environment/index) provides the same Submodel APIs and integration behavior. In either executable, synchronization must be enabled explicitly. Sharing a process or database is not enough by itself.
 
 ## Shared Behavior
 
@@ -61,5 +61,3 @@ Expect `200 OK`. Check the advertised endpoint, change the Submodel short name t
 For embedded descriptors, also create an AAS reference and an AAS Descriptor in the same database, then verify the corresponding entry through the [AAS Registry API](../aas_registry/usage). Keep each generated endpoint reachable from the clients that use it.
 
 See [General Configuration](../common/configuration.md#general) and [Submodel Registry Usage](../submodel_registry/usage) for further configuration and descriptor requests.
-
-The lifecycle behavior described here is release-scoped to 1.0.11; see the pinned [standalone service wiring](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/cmd/submodelrepositoryservice/main.go) and [shared registry-synchronization implementation](https://github.com/eclipse-basyx/basyx-go-components/tree/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/internal/aasenvironment).

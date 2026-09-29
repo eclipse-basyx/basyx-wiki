@@ -1,9 +1,8 @@
 # Setting Up the Submodel Repository
 
-The Docker example uses `latest` for both BaSyx Go images. For native builds, use one stable source release and its matching database assets as described in [Version Scope](../common/deployment.md#version-scope).
+The selected release's `examples/` directory contains additional deployment setups. The configuration below provides a minimal standalone Submodel Repository with PostgreSQL and the BaSyx Configuration Service.
 
-We provide example setups to get you started with the BaSyx Go Components in the [examples directory](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples).
-But if you need to configure the service yourself, this page will guide you through.
+The Docker example uses `latest` for both BaSyx Go images. For native builds, use one stable source release and its matching database assets as described in [Version Scope](../common/deployment.md#version-scope).
 
 ## Using Docker Compose
 The easiest way to use and set up the Submodel Repository is Docker Compose.
@@ -67,7 +66,7 @@ services:
 ```
 *docker-compose.yml including PostgreSQL 18, the BaSyx Configuration Service, and BaSyx Go Submodel Repository*
 
-Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service.
+Use matching BaSyx versions for the Configuration Service and Submodel Repository.
 
 ### Start and Check the Repository
 
@@ -100,9 +99,7 @@ The local Compose example does not enable ABAC and is not a secured deployment. 
 ## Using BaSyx Go Components without Docker
 If you need to run the Submodel Repository without Docker, build the binary from source for your target platform.
 
-```{warning}
-We recommend using the Docker Images for production use-cases, as they are pre-configured and optimized for production environments.
-```
+Published BaSyx container images provide a ready-to-run distribution of the service. The minimal Compose example above is intentionally unsecured and is not, by itself, a production-ready deployment configuration.
 
 ### Prerequisites
 - [Go](https://go.dev/dl/) at the version declared by the selected release's `go.mod`.
@@ -114,17 +111,16 @@ We recommend using the Docker Images for production use-cases, as they are pre-c
 Download the source code:
 ```bash
 git clone https://github.com/eclipse-basyx/basyx-go-components
-cd basyx-go-components
-git checkout RELEASE_TAG
+git -C basyx-go-components checkout RELEASE_TAG
 ```
 
 Replace `RELEASE_TAG` with the stable release you intend to build. Use the Configuration Service and SQL assets from this same checkout.
 
 ### Building the Binary
 
-From the repository root, change to the Submodel Repository service directory:
+Change to the Submodel Repository service directory:
 ```bash
-cd cmd/submodelrepositoryservice
+cd basyx-go-components/cmd/submodelrepositoryservice
 ```
 
 #### Linux / macOS

@@ -63,7 +63,7 @@ Use the following API documentation depending on whether you need the behavior o
 - **[IDTA AAS Repository Swagger UI v3.2.0](https://industrialdigitaltwin.io/aas-specs-api/docs/swagger-ui.html?url=..%2FAssetAdministrationShellRepositoryServiceSpecification%2FV3.2_SSP-001.yaml&version=v3.2.0)** presents the standardized AAS Repository Full Profile interactively.
 - **[IDTA Specification of the Asset Administration Shell, Part 2: Application Programming Interfaces v3.2.0](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/index.html)** defines the standardized operations, service specifications, profiles, and serialization behavior. The [metamodel specification v3.2](https://industrialdigitaltwin.io/aas-specifications/IDTA-01001/v3.2/index.html) defines AAS payloads.
 
-The OpenAPI document shipped with the current BaSyx Go AAS Repository identifies API version `V3.2.0` and declares profiles `SSP-001`, `SSP-003`, `SSP-004`, `SSP-005`, and `SSP-006`. These declarations describe the shipped specification; use the running component's Swagger UI and the availability notes below to determine the installed service's supported operations.
+The OpenAPI document shipped with the current BaSyx Go AAS Repository identifies API version `V3.2.0` and declares profiles `SSP-001`, `SSP-003`, `SSP-004`, `SSP-005`, and `SSP-006`. These declarations describe the shipped specification. Use the running component's Swagger UI and the availability notes below to determine the installed service's supported operations.
 
 With the default empty context path, the service exposes:
 
