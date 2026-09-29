@@ -6,9 +6,9 @@ Eventing is an experimental feature. Its configuration, event schemas, delivery 
 
 BaSyx Go Eventing exposes changes to AAS and Submodel data as CloudEvents. Applications can read retained events through the REST Event Feed or receive events through MQTT 5, Kafka, or AMQP 1.0.
 
-Eventing is supported by the AAS Repository, Submodel Repository, and AAS Environment. It covers changes to Asset Administration Shells, assets, and Submodels, including dedicated notifications for newly added Product Change Notification (PCN) records.
+The AAS Repository, Submodel Repository, and AAS Environment can produce events for changes to Asset Administration Shells, asset information, Submodels, and Product Change Notification (PCN) records.
 
-Eventing is disabled by default and must be enabled explicitly. Run the [Configuration Service](../configuration_service/index) before enabling it so that PostgreSQL contains the required database schema.
+Eventing is opt-in and must be enabled explicitly. Run the [Configuration Service](../configuration_service/index) before enabling it so that PostgreSQL contains the required schema.
 
 ## Supported Components and Events
 
@@ -25,15 +25,15 @@ Eventing is disabled by default and must be enabled explicitly. Run the [Configu
 | Submodel | `io.admin-shell.submodel.created.v1`, `io.admin-shell.submodel.updated.v1`, `io.admin-shell.submodel.deleted.v1` |
 | PCN | `io.admin-shell.pcn.v1` |
 
-Creating, updating, or deleting an AAS or Submodel produces the corresponding change event. Changes to nested Submodel Elements, values, and File attachments produce a Submodel update event. An AAS change can produce both an AAS event and a related asset event. Changes to asset information or thumbnails produce an AAS update event and can also produce a related asset update event.
+Creating, updating, or deleting an AAS or Submodel produces the corresponding change event. Changes to nested Submodel Elements, values, and File attachments produce a Submodel update event. An AAS change produces an AAS event and, when the captured AAS has a `globalAssetId`, the corresponding asset event. Changes to asset information or thumbnails produce an AAS update event and, under the same condition, an asset update event.
 
 Reads and rolled-back transactions do not produce events. A `PUT` that does not change the stored content also produces no update event. A single operation can produce multiple events when it affects multiple resources.
 
 ### Product Change Notifications
 
-BaSyx recognizes Product Change Notification (PCN) Submodels by the ECLASS IRDI code `01-AHE582` used by the IDTA ProductChangeNotifications Submodel Template. Matching uses the code segment of an IRDI such as `0173-1#01-AHE582#003`, so the revision segment may vary.
+BaSyx recognizes Product Change Notifications Submodels by the ECLASS IRDI code `01-AHE582` used by the IDTA Product Change Notifications Submodel Template. The revision part of the semantic ID may vary.
 
-When a mutation adds one or more PCN records, BaSyx produces the normal Submodel change event and one `io.admin-shell.pcn.v1` notification for each newly added record. The PCN event contains the added record in Value-Only representation. Other changes to a PCN Submodel produce only the normal Submodel event.
+Adding one or more Product Change Notification records to an existing Submodel produces the normal Submodel update event and one `io.admin-shell.pcn.v1` event for each newly added record. Creating a PCN Submodel that already contains records produces the corresponding Submodel create event and one PCN event per record. The regular PCN payload contains the added record in Value-Only representation. Other changes to a PCN Submodel produce only the normal Submodel event.
 
 ## Delivery Options
 
@@ -90,6 +90,10 @@ Set `general.externalUrl` to the public API base URL that Eventing consumers can
 
 Use `eventing.sourceBaseUrl` (`BASYX_EVENTING_SOURCE_BASE_URL`) or `eventing.schemaBaseUrl` (`BASYX_EVENTING_SCHEMA_BASE_URL`) only when Eventing must advertise different public URLs. These values come from configuration rather than incoming request host headers. A custom schema URL must serve the same versioned schemas advertised by the events.
 
+### URL Resolution
+
+The shared Eventing URL settings are preferred; feed-specific compatibility settings are used when the shared setting is empty. Configuring both forms with different values is rejected. Without an override, BaSyx uses the first `general.externalUrl`; if none is configured, it uses the local server URL and context path. Without a schema override, the schema base is the selected source URL followed by `/.well-known/event-feed/schemas`.
+
 ## REST Event Feed
 
 The Event Feed retains events in PostgreSQL and does not require an external message broker. The [Event Feed example](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxEventFeedExample) provides a runnable local setup for normal Submodel changes and PCN notifications.
@@ -120,13 +124,17 @@ The following routes are relative to the hosting service's configured context pa
 
 The feed and discovery routes are absent when the feed is disabled. The schema route remains available when a broker transport is enabled so broker consumers can follow `dataschema` links.
 
+The feed contains retained history. Startup imports and earlier changes can therefore appear alongside newly generated events.
+
 ### Read and Resume
 
-`GET /events` returns the earliest retained events first. Reading events does not remove them. Follow the returned opaque `cursor` until no cursor is present to read the remaining pages. A cursor preserves the original `since`, `filter`, and `presentation`; omit those parameters on subsequent requests or repeat the same values. Conflicting values are rejected.
+`GET /events` returns retained events without consuming them. Follow the returned opaque `cursor` until no cursor is present.
 
-For continuous consumption, store the `id` of the last event your application processed and pass it as `lastEventId` when resuming. Events can be replayed, so consumers must deduplicate using the CloudEvents `id`.
+For continuous consumption, store the `id` of the last event your application processed and use it as `lastEventId` when resuming. Resume operations can replay events, so consumers must deduplicate by CloudEvents `id`.
 
-The `since` parameter is an inclusive RFC 3339 time filter for an initial query. Do not use it as a durable checkpoint: transactions can commit later with an earlier mutation timestamp. `since` and `lastEventId` cannot be combined. The response's `updated` value is the newest mutation timestamp in that page, not a continuation token.
+Without a filter or checkpoint, reading starts at the earliest retained events in publication order. Records within each returned page are sorted chronologically. A cursor preserves the original `since`, `filter`, and `presentation`; omit those parameters on subsequent requests or repeat the same values. Conflicting values are rejected. Authorization is evaluated on every request, so even an empty page can contain a cursor when more records remain to be scanned.
+
+The `since` parameter is an inclusive RFC 3339 time filter for an initial query. Do not use it as a durable checkpoint: transactions can commit later with an earlier mutation timestamp, which can appear on a later page. `since` and `lastEventId` cannot be combined. The response's `updated` value is the newest mutation timestamp in that page, not a continuation token.
 
 Events are retained only for the configured retention period. If a consumer falls behind that period, read the current resource state from the BaSyx APIs before resuming event processing.
 
@@ -149,20 +157,19 @@ Expressions are limited to 16 KiB and 32 levels of nesting. Quote values contain
 
 `REGULAR` is the default and returns the regular payload. `COMPACT` returns its identification subset; compact PCN events omit `record`. `FULL` is accepted only as a deprecated compatibility alias for `REGULAR`.
 
+### Advanced Feed Configuration
+
+| Setting | Environment variable | Default and purpose |
+| --- | --- | --- |
+| `eventing.feed.hardDeleteGraceDays` | `BASYX_EVENTING_FEED_HARD_DELETE_GRACE_DAYS` | `10`; delay between feed expiry and physical deletion. `0` removes the delay. |
+| `eventing.feed.cleanupIntervalHours` | `BASYX_EVENTING_FEED_CLEANUP_INTERVAL_HOURS` | `24`; physical cleanup interval. Cleanup also runs at startup. |
+| `eventing.feed.publishIntervalMillis` | `BASYX_EVENTING_FEED_PUBLISH_INTERVAL_MILLIS` | `250`; interval for making newly committed feed events visible. |
+| `eventing.feed.sourceBaseUrl` | `BASYX_EVENTING_FEED_SOURCE_BASE_URL` | Feed-specific compatibility source URL. Prefer `eventing.sourceBaseUrl`. |
+| `eventing.feed.schemaBaseUrl` | `BASYX_EVENTING_FEED_SCHEMA_BASE_URL` | Feed-specific compatibility schema URL. Prefer `eventing.schemaBaseUrl`. |
+
 ## Broker Delivery
 
-Broker-based Eventing requires Eventing and the transactional delivery queue to be enabled. Add each required transport to `eventing.sinks` and configure its connection settings as described below:
-
-```yaml
-general:
-  externalUrl: "https://example.com/api/v3"
-eventing:
-  enabled: true
-  outboxEnabled: true
-  sinks: [mqtt]
-```
-
-The only supported `eventing.format` value is `cloudevents`, which is also the default. Broker messages contain structured CloudEvents with the regular event payload.
+Each transport section below contains a complete configuration example. Broker delivery requires `eventing.enabled: true`, the transport in `eventing.sinks`, and `eventing.outboxEnabled: true`. The only supported `eventing.format` is `cloudevents`, which is also the default.
 
 ```{important}
 Kafka, AMQP, and MQTT with QoS 1 or 2 use at-least-once delivery. Consumers must use the CloudEvents `id` to detect duplicate deliveries. MQTT QoS 0 does not provide this guarantee.
@@ -171,6 +178,8 @@ Kafka, AMQP, and MQTT with QoS 1 or 2 use at-least-once delivery. Consumers must
 ## Delivery Guarantees and Retries
 
 Event creation and the corresponding model change are committed in the same PostgreSQL transaction. A failure before commit produces neither the model change nor its events. Broker publication occurs after commit, so a temporary broker outage does not prevent a model mutation from committing once its event is durably queued.
+
+BaSyx provides these properties through a transactional outbox in PostgreSQL. Acknowledged broker deliveries are removed from this queue.
 
 Failed publications remain pending and are retried with exponential backoff and jitter until delivered. Pending broker events do not expire automatically. Allow enough database capacity for the expected outage duration.
 
@@ -181,8 +190,13 @@ The REST Event Feed uses separate retained storage. Reading the feed does not ac
 ## MQTT 5
 
 ```yaml
+general:
+  externalUrl: "https://example.com/api/v3"
 eventing:
+  enabled: true
+  format: cloudevents
   sinks: [mqtt]
+  outboxEnabled: true
   mqtt:
     broker: mqtt://localhost:1883
     clientId: basyx-instance-1
@@ -207,6 +221,8 @@ eventing:
 | Submodel | `basyx/submodelrepository/submodel/{created,updated,deleted}` |
 | PCN | `basyx/submodelrepository/pcn/notification` |
 
+The AAS Environment uses the same logical AAS Repository and Submodel Repository topic names.
+
 QoS 1 and 2 wait for broker acknowledgement. QoS 0 has no broker acknowledgement and therefore provides weaker delivery behavior. See the runnable [MQTT example](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxMQTTExample).
 
 ## Kafka
@@ -214,8 +230,13 @@ QoS 1 and 2 wait for broker acknowledgement. QoS 0 has no broker acknowledgement
 Create the Kafka topic before starting BaSyx:
 
 ```yaml
+general:
+  externalUrl: "https://example.com/api/v3"
 eventing:
+  enabled: true
+  format: cloudevents
   sinks: [kafka]
+  outboxEnabled: true
   kafka:
     brokers: [localhost:9092]
     topic: basyx.events
@@ -234,6 +255,8 @@ eventing:
 
 Kafka record values contain the structured CloudEvent and use `content-type: application/cloudevents+json`. Records use the key `aas_history:<AAS ID>` or `submodel_history:<Submodel ID>`; related asset and PCN events share their parent entity's key. Events for one entity therefore use the same partition and remain ordered while the topic's partition count is stable. There is no ordering guarantee across partitions. Kafka requires acknowledgement from all in-sync replicas before BaSyx marks a publication as delivered.
 
+After Kafka acknowledges publication, the BaSyx outbox is no longer a replay store for that event. Configure Kafka topic retention for the replay period your consumers require. Log compaction can remove earlier events that use the same entity key.
+
 See the runnable [Kafka example](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxKafkaExample).
 
 ## AMQP 1.0
@@ -241,8 +264,13 @@ See the runnable [Kafka example](https://github.com/eclipse-basyx/basyx-go-compo
 Provision the target address before starting BaSyx:
 
 ```yaml
+general:
+  externalUrl: "https://example.com/api/v3"
 eventing:
+  enabled: true
+  format: cloudevents
   sinks: [amqp]
+  outboxEnabled: true
   amqp:
     broker: amqp://localhost:5672
     address: /queues/basyx.events
@@ -257,7 +285,9 @@ eventing:
 | `eventing.amqp.username`, `password` | Optional SASL PLAIN credentials; file-based alternatives are also supported. |
 | `eventing.amqp.caFile`, `certificateFile`, `keyFile` | Optional private CA and mutual-TLS material for `amqps`. |
 
-Messages are durable and use `application/cloudevents+json`. Only an AMQP `Accepted` outcome completes a publication; other or ambiguous outcomes are retried. BaSyx preserves per-entity queue order, but broker redelivery and consumer concurrency can affect observed processing order.
+Messages use `application/cloudevents+json` and are marked durable, but durable storage also depends on the broker configuration, including durable queues and appropriate replication. Only an AMQP `Accepted` outcome completes a publication; other or ambiguous outcomes are retried. BaSyx preserves per-entity queue order, but broker redelivery and consumer concurrency can affect observed processing order.
+
+Multiple consumers of the same queue share its messages. If each application must receive every event, publish to an exchange and provision a separate bound queue for each application.
 
 This transport implements AMQP 1.0, not AMQP 0-9-1. The runnable [AMQP/RabbitMQ example](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxAMQPExample) shows the required RabbitMQ setup.
 
@@ -267,20 +297,11 @@ The REST Event Feed inherits the hosting service's HTTP authentication and autho
 
 HTTP authorization does not filter MQTT, Kafka, or AMQP subscribers. Protect broker delivery independently with TLS where appropriate, secret-backed credentials, and least-privilege topic or address ACLs.
 
-### Authorization Details
+### REST Event Feed Authorization
 
 With ABAC enabled, callers need `READ` access to the feed and schema routes. AAS events require unrestricted read access to the referenced AAS. Submodel and PCN events require unrestricted read access to the Submodel and, when asset identifiers are present, every contributing AAS. Asset events require access to the owning AAS. Row or field restrictions that prevent safe evaluation cause the complete event to be hidden.
 
-## Advanced Configuration and Operations
-
-The normal Event Feed settings are sufficient for most deployments. These settings control cleanup, visibility latency, or compatibility behavior:
-
-| Setting | Environment variable | Default and purpose |
-| --- | --- | --- |
-| `eventing.feed.hardDeleteGraceDays` | `BASYX_EVENTING_FEED_HARD_DELETE_GRACE_DAYS` | `10`; delay between feed expiry and physical deletion. `0` removes the delay. |
-| `eventing.feed.cleanupIntervalHours` | `BASYX_EVENTING_FEED_CLEANUP_INTERVAL_HOURS` | `24`; physical cleanup interval. Cleanup also runs at startup. |
-| `eventing.feed.publishIntervalMillis` | `BASYX_EVENTING_FEED_PUBLISH_INTERVAL_MILLIS` | `250`; interval for making newly committed feed events visible. |
-| `eventing.feed.sourceBaseUrl`, `schemaBaseUrl` | `BASYX_EVENTING_FEED_SOURCE_BASE_URL`, `BASYX_EVENTING_FEED_SCHEMA_BASE_URL` | Feed-specific compatibility aliases. Prefer the shared Eventing URL settings. |
+## Advanced Broker Operations
 
 Each configured broker transport has an independent queue identified by its `sinkId`; transports used together must have distinct IDs. Replicas sharing a database should use the same sink ID and destination settings, while MQTT client IDs must remain unique per process. Drain pending deliveries before changing a sink ID, broker, topic, address, or other routing setting.
 
