@@ -63,7 +63,7 @@ The `idShort` filter is plain text. The optional `isCaseOf` and `dataSpecificati
 
 Use `POST /query/concept-descriptions` when the predefined collection filters are not sufficient. The endpoint accepts the shared BaSyx query language and returns matching Concept Descriptions with `limit` and cursor-based pagination.
 
-See the release-matched [Query Language examples](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.0.12/docu/query_language/examples.md) and the running Swagger UI for supported conditions, fragment filters, and request structure.
+See the release-matched [Query Language examples](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.0/docu/query_language/examples.md) and the running Swagger UI for supported conditions, fragment filters, and request structure.
 
 ### Recent Changes
 
@@ -75,7 +75,7 @@ curl -i -G 'http://localhost:8086/concept-descriptions/$recent-changes' --data-u
 
 The response contains a `result` array whose entries have `id`, `createdAt`, and `updatedAt`, plus `paging_metadata` for cursor-based pagination. The endpoint supports `createdFrom`, `updatedFrom`, `limit`, and `cursor`; the timestamp filters have the same inclusive and OR behavior described above.
 
-This endpoint reads the `administration.createdAt` and `administration.updatedAt` values stored in each current Concept Description. It is not a repository mutation log and does not report deleted resources or the time at which BaSyx received a POST or PUT. Concept Descriptions without both valid administration timestamps are omitted, including the minimal example created above. Continue following a returned cursor even when omitted entries make a page shorter than its requested limit.
+This endpoint reads the `administration.createdAt` and `administration.updatedAt` values stored in each current Concept Description. It is not a repository mutation log and does not report deleted resources or the time at which BaSyx received a POST or PUT. Concept Descriptions without both valid administration timestamps are omitted, including the minimal example created above. Omitted entries can make a page shorter than its requested `limit`. If the response contains a cursor, continue with that cursor even when the page contains fewer results than requested.
 
 ## Replace the Concept Description
 
