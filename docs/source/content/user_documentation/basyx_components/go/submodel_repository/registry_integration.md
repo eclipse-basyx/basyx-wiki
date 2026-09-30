@@ -10,6 +10,8 @@ See [Repository-to-Registry Integration](../common/registry_integration) for dat
 
 The standalone Submodel Repository also refreshes embedded Submodel Descriptors in existing AAS Descriptors that reference the Submodel. Missing AAS Descriptors are skipped.
 
+When ReBAC is enabled, the standalone Submodel Descriptor created by Repository-to-Registry synchronization inherits access from its source Submodel. An embedded Submodel Descriptor remains part of its enclosing AAS Descriptor. See [Relationship-Based Access Control](../common/rebac) for the sharing and inheritance model.
+
 ## Configuration
 
 For a native configuration file:

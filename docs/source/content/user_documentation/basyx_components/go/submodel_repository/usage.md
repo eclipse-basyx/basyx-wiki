@@ -2,7 +2,7 @@
 
 This walkthrough creates a motor nameplate Submodel, works with Submodel Elements and a File attachment, changes metadata and values, and lists Submodels with filters and pagination. You will then remove the example data.
 
-The examples the unsecured [Docker Compose setup](setup) at `http://localhost:8085` with an empty context path. Run them in order against an empty example database. Save the JSON files in your working directory. The curl commands are single-line commands usable in Bash. In Windows PowerShell, invoke `curl.exe` instead of `curl`.
+The examples use the unsecured [Docker Compose setup](setup) at `http://localhost:8085` with an empty context path. Run them in order against an empty example database. Save the JSON files in your working directory. The curl commands are single-line commands usable in Bash. In Windows PowerShell, invoke `curl.exe` instead of `curl`.
 
 You need only the Submodel Repository and the database services from [Setup](setup). A separate AAS Repository or Registry is not required for these examples.
 
@@ -50,7 +50,7 @@ curl -i -X POST http://localhost:8085/submodels -H 'Content-Type: application/js
 
 Expect `201 Created` and a JSON body containing `id: "urn:example:submodel:1"` and `idShort: "MotorNameplate"`. The Submodel is now stored in the Repository. Generating a Registry descriptor requires [Registry Integration](registry_integration) or explicit registration; neither is needed to continue here.
 
-If you repeat this step, `409 Conflict` means the visible identifier already exists. Continue with that resource only if it is your earlier example, or use different identifiers consistently throughout the walkthrough.
+If you repeat this step, `409 Conflict` means a Submodel with the same `id` already exists. Continue with that resource only if it is your earlier example, or use different identifiers consistently throughout the walkthrough.
 
 ## Retrieve and Replace the Submodel
 
@@ -61,7 +61,7 @@ The request URL uses the encoded **Submodel identifier**, not its `idShort` or s
 | `urn:example:submodel:1` | `dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ` |
 | `urn:example:submodel:2` | `dXJuOmV4YW1wbGU6c3VibW9kZWw6Mg` |
 
-These values are already substituted into every example URL. Keep identifiers in JSON bodies unencoded. For your own identifier, encode its UTF-8 bytes with Base64URL for the request path.
+Path identifiers use Base64URL encoding of the identifier's UTF-8 bytes. BaSyx Go accepts valid padded and unpadded Base64URL values. The examples below use the unpadded form. The same rule applies to Base64URL-encoded filters such as `semanticId`. Identifiers in JSON request bodies remain unencoded. The example values above are already substituted into every URL.
 
 ```bash
 curl -i http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ
@@ -294,7 +294,7 @@ For the example's semantic identifier, encode the string `urn:example:semantic:n
 curl -i -G http://localhost:8085/submodels --data-urlencode 'semanticId=dXJuOmV4YW1wbGU6c2VtYW50aWM6bmFtZXBsYXRl'
 ```
 
-The decoded value is compared with semantic reference key values. This is not an equality comparison of an entire multi-key reference. The decoded filter value is compared with the individual `semanticId.keys[].value` entries. It is not compared with the complete multi-key reference.
+The decoded value is compared with individual `semanticId.keys[].value` entries, not with the complete multi-key reference.
 
 Timestamp filters use `administration.createdAt` and `administration.updatedAt` supplied in the resource payload, rather than automatically recording each write. The example does not supply them. Maintain those fields if using timestamp-filtered lists; current-resource lists do not provide deletion notifications.
 
@@ -302,7 +302,7 @@ Timestamp filters use `administration.createdAt` and `administration.updatedAt` 
 
 Use `POST /query/submodels` when the predefined list filters are not sufficient. Structured queries can combine conditions and filter on Submodel content, including Submodel Element values. Query results use the same `limit` parameter and cursor-based pagination as other collection requests.
 
-See the release-matched [Query Language examples](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.0.12/docu/query_language/examples.md) and the running Swagger UI for the supported query structure and operators. Adding arbitrary field names as list query parameters does not create a structured query.
+See the release-matched [Query Language examples](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.0/docu/query_language/examples.md) and the running Swagger UI for the supported query structure and operators. Adding arbitrary field names as list query parameters does not create a structured query.
 
 ## Invoke an Operation
 

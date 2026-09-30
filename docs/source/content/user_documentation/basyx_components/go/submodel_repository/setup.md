@@ -66,7 +66,7 @@ services:
 ```
 *docker-compose.yml including PostgreSQL 18, the BaSyx Configuration Service, and BaSyx Go Submodel Repository*
 
-Use matching BaSyx versions for the Configuration Service and Submodel Repository.
+Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service. For reproducible deployments, replace `latest` with the same concrete BaSyx version tag for all of these services. Alternatively, pin each service image to the corresponding immutable image digest from the same release. The `latest` tag is mutable and advances when a new release is published.
 
 ### Start and Check the Repository
 
@@ -92,9 +92,11 @@ Expect HTTP `200` with `{"status":"UP"}`. In Windows PowerShell, use `curl.exe` 
 
 The Compose example explicitly selects port `8085`. When using a context path, include it in health, Swagger, and API URLS. For example, `SERVER_CONTEXTPATH=/api/v3` makes the health URL `http://localhost:8085/api/v3/health`.
 
-### Access Rules and Trustlist Files (Secured Setup)
+### Security Configuration
 
-The local Compose example does not enable ABAC and is not a secured deployment. For this component, enable the supported authorization with `ABAC_ENABLED=true`, mount the access-rule and OIDC trust-list files, and configure their container paths. When `ABAC_POLICY_FILE_IMPORT` is omitted, the effective import mode is `if_missing`, so editing a mounted policy file and restarting does not replace an active policy already stored in PostgreSQL. See [OIDC and ABAC Configuration](../common/configuration.md#oidc-and-abac) and [Security Files](../common/configuration.md#security-files) before exposing the service.
+The local Compose example does not enable authorization and is not a secured deployment. To enable OIDC-based ABAC, set `ABAC_ENABLED=true`, mount the access-rule and OIDC trust-list files, and configure their container paths. When `ABAC_POLICY_FILE_IMPORT` is omitted, the effective import mode is `if_missing`, so editing a mounted policy file and restarting does not replace an active policy already stored in PostgreSQL. See [OIDC and ABAC Configuration](../common/configuration.md#oidc-and-abac) and [Security Files](../common/configuration.md#security-files) before exposing the service.
+
+The Submodel Repository also supports experimental relationship-based access control (ReBAC). ReBAC is disabled by default, requires ABAC and a readable OIDC trust list, and can be enabled with `REBAC_ENABLED=true`. For ReBAC-covered routes—including Submodels, Submodel Elements, attachments, and synchronous and asynchronous Operation invocation, status, and results—an authenticated request is allowed when either ABAC or ReBAC grants access. Anonymous requests and endpoints outside the ReBAC-covered routes remain ABAC-only. In particular, `$history`, `$recent-changes`, event feed endpoints, and `$signed` representations remain ABAC-only. If multiple ReBAC-capable BaSyx services share the same database, enable ReBAC consistently across them; services running without ReBAC do not apply ReBAC grants or ownership semantics. See [Relationship-Based Access Control](../common/rebac) for configuration and access-management details.
 
 ## Using BaSyx Go Components without Docker
 If you need to run the Submodel Repository without Docker, build the binary from source for your target platform.

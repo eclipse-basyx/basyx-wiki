@@ -10,7 +10,7 @@ An AAS `Operation` Submodel Element models input, output, and in-output variable
 
 The Repository loads the stored Operation, forwards the request's input and in-output variables to the delegation endpoint, validates the delegated response, and returns an `OperationResult`. Treat the modeled contract, the Repository invocation API, and the delegated implementation as three distinct concerns.
 
-Delegated invocation supports both the normal `OperationRequest` and `OperationResult` representation and the value-only representation. Use `/invoke/$value` for synchronous value-only invocation, `/invoke-async/$value` for asynchronous value-only invocation, and `/operation-results/{handleId}/$value` to retrieve the completed value-only result. Asynchronous invocation requests, including value-only requests, require `clientTimeoutDuration`.
+Delegated invocation supports both the normal `OperationRequest` and `OperationResult` representation and the value-only representation. Use `/invoke/$value` for synchronous value-only invocation, `/invoke-async/$value` for asynchronous value-only invocation, and `/operation-results/{handleId}/$value` to retrieve the completed value-only result. In v1.1.0, both normal and value-only asynchronous invocation requests require a non-empty `clientTimeoutDuration`. A missing or empty value produces `400 Bad Request`.
 
 ## Delegation Prerequisite and Trusted Destinations
 
@@ -53,7 +53,7 @@ services:
     image: eclipsebasyx/basyxconfigurationservice-go:${BASYX_IMAGE_TAG}
 ```
 
-Set `BASYX_IMAGE_TAG` to the Docker release tag matching the selected source tag; Docker release tags omit the source tag's leading `v`. You can use `latest` when the selected checkout is the current stable release.
+Set `BASYX_IMAGE_TAG` to the concrete Docker release tag matching the selected source tag. Docker release tags omit the source tag's leading `v`.
 
 Start the database, Configuration Service, AAS Environment, delegated service, and data initializer. The AAS Web UI is optional and is not started:
 
@@ -72,7 +72,7 @@ Wait for `Delegated operations example data initialized` and an exit code of `0`
 - Operations `AddNumbersSync` and `AddNumbersAsync`;
 - request body `data/invoke-request-add-5-and-3.json`.
 
-When substituting a different Submodel identifier, encode its UTF-8 bytes with Base64URL for the request path. The example directory in the selected checkout contains the Submodel fixture, invocation request, and delegated service used below.
+When substituting a different Submodel identifier, encode its UTF-8 bytes with Base64URL for the request path. The example uses the unpadded form. BaSyx Go accepts valid padded and unpadded Base64URL values. See [Using the Submodel Repository](usage.md#retrieve-and-replace-the-submodel) for the identifier-encoding guidance. The example directory in the selected checkout contains the Submodel fixture, invocation request, and delegated service used below.
 
 ## Synchronous Invocation
 
@@ -125,7 +125,7 @@ These are operation-specific resources. Do not apply Registry bulk assumptions a
 | --- | --- |
 | Invocation is not implemented | Confirm the addressed element is an `Operation` and has a non-empty `invocationDelegation` qualifier. A modeled Operation alone is not executable. |
 | Target is reported as untrusted | Ensure `SMREPO_DELEGATION_TRUSTED_HOSTS` contains both the qualifier's hostname and port and its resolved IP address and port. Check that the Compose subnet and static service address still match. |
-| Delegated call fails or times out | Check the delegated service logs, container network reachability, qualifier URL, and `clientTimeoutDuration` in the request. The URL is resolved from inside the Repository container, not from the client host. |
+| Delegated call fails or times out | Check the delegated service logs, container network reachability, and qualifier URL. For asynchronous calls, verify the required `clientTimeoutDuration`. for synchronous calls, check it when supplied. The URL is resolved from inside the Repository container, not from the client host. |
 | `404` for a status or result | Use the exact returned location and the same caller identity. Verify the handle belongs to the same Submodel identifier and Operation path and has not expired. |
 | Status appears to skip the pending state | Fast work can complete before the first poll. A direct `302` to the returned result location is valid; keep redirect following off to observe it. |
 | Result reports delegated failure | Inspect the stored failure body and delegated service logs. `202 Accepted` confirms submission, not successful execution. |

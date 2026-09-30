@@ -24,7 +24,7 @@ For one runtime that combines AAS, Submodel, Registry, and Discovery APIs, see t
 - Update existing values or metadata through the corresponding PATCH operations.
 - Query Submodels with [structured conditions](usage.md#structured-queries) through `POST /query/submodels`.
 - Emit experimental CloudEvents through the REST Event Feed or broker transports; see [Eventing](../common/eventing).
-- Invoke modeled Operations synchronously or asynchronously when they have a configured delegation target; see [Operation Invocation and Delegation](operations).
+- Invoke modeled Operations synchronously or asynchronously, including value-only invocation, when they have a configured delegation target; see [Operation Invocation and Delegation](operations).
 - Optionally synchronize descriptors through [Registry Integration](registry_integration).
 - Expose service self-description and runtime API documentation.
 
@@ -80,6 +80,7 @@ The standalone Submodel Repository exposes `GET /serialization`, but this operat
 - [Using the Submodel Repository](usage)
 - [Operation Invocation and Delegation](operations)
 - [Registry Integration](registry_integration)
+- [Relationship-Based Access Control](../common/rebac)
 - [AAS Environment](../aas_environment/index)
 - [AAS Repository](../aas_repository/index)
 - [Common / Shared Features](../common/shared_features)
