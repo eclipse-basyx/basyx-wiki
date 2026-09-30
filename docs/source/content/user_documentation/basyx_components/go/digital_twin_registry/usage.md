@@ -47,7 +47,7 @@ Register the descriptor:
 curl -i -X POST http://localhost:5004/shell-descriptors -H 'Content-Type: application/json' --data-binary '@dtr-descriptor.json'
 ```
 
-Expect `201 Created`. Because the request omits the DTR-specific top-level `createdAt`, the database assigns it and the response includes the stored value. The DTR also makes the descriptor's `specificAssetIds` available through Discovery and generates a `globalAssetId` AssetLink. No separate Discovery registration is required.
+Expect `201 Created`. Because the request omits the DTR-specific top-level `createdAt`, the database assigns it. Retrieve the descriptor afterward to obtain the stored `createdAt` value. The DTR also makes the descriptor's `specificAssetIds` available through Discovery and generates a `globalAssetId` AssetLink. No separate Discovery registration is required.
 
 The example marks the serial-number link `PUBLIC_READABLE`. This affects AssetLink matching when a restricted ABAC read policy is active. It does not by itself authorize access to an endpoint. See [Security and Visibility Semantics](index.md#security-and-visibility-semantics).
 
