@@ -52,7 +52,7 @@ services:
         condition: service_completed_successfully
 ```
 
-Use matching BaSyx versions for the Configuration Service and every database-backed BaSyx component sharing this database.
+Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service. For reproducible deployments, replace `latest` with the same concrete BaSyx version tag for all of these services. Alternatively, pin each service image to the corresponding immutable image digest from the same release. The `latest` tag is mutable and advances when a new release is published.
 
 ```{warning}
 This local example uses demonstration credentials, disables access control, and does not define a persistent PostgreSQL volume. Recreating the database container can therefore make stored packages unavailable. Do not expose this setup to an untrusted network or use it unchanged for persistent data. See [Persistent State](../common/deployment.md#persistent-state) before configuring a durable deployment.
@@ -116,7 +116,7 @@ Do not combine `postgres.dsn` with the individual connection fields. See [Genera
 | `GENERAL_AASXMAXTOTALEXPANDEDSIZEBYTES` | Maximum total expanded package size. Default: `536870912` (512 MiB). |
 | `GENERAL_AASXMAXTHUMBNAILSIZEBYTES` | Maximum expanded thumbnail size. Default: `16777216` (16 MiB). |
 
-Omit the complete `postgres.reader` configuration to reuse the writer connection for reads. When a replica is configured, list and download operations may briefly be eventually consistent after an upload or replacement.
+Omit the complete `postgres.reader` configuration to reuse the writer connection for reads. When a replica is configured, list and download operations may briefly be eventually consistent after an upload, replacement, or deletion.
 
 ### Asynchronous Upload Profile
 
@@ -124,9 +124,13 @@ Asynchronous package processing requires at least two writer-pool connections. S
 
 The service limits concurrent asynchronous work. When no execution slot is available, `POST /packages-async` returns `429 Too Many Requests`. Retry the submission later.
 
-### Secured Setup
+### Security Configuration
 
-The Compose example is unsecured. The File Server supports OIDC authentication, ABAC authorization, and experimental [ReBAC](../common/rebac). To enable ABAC, set `ABAC_ENABLED=true`, mount an access-rule model and OIDC trust list, and configure their container paths. The effective default policy import mode is `if_missing`. See the [`oidc` and `abac`](../common/configuration.md#oidc-and-abac) and [Security Files](../common/configuration.md#security-files) sections for setup details.
+The Compose example is unsecured. The File Server supports OIDC authentication, ABAC authorization, and experimental [ReBAC](../common/rebac). To enable OIDC-based ABAC, set `ABAC_ENABLED=true`, mount an access-rule model and OIDC trust list, and configure their container paths. The effective default policy import mode is `if_missing`. See the [`oidc` and `abac`](../common/configuration.md#oidc-and-abac) and [Security Files](../common/configuration.md#security-files) sections for setup details.
+
+ReBAC is disabled by default, requires ABAC and a readable OIDC trust list, and can be enabled with `REBAC_ENABLED=true`. AASX packages and asynchronous uploads are covered by ReBAC. For authenticated callers on these routes, access can be granted by either ABAC or ReBAC; anonymous callers remain ABAC-only.
+
+If multiple ReBAC-capable BaSyx services share the same database, enable ReBAC consistently across them. A service running without ReBAC ignores grants, does not assign owners to resources it creates, and does not maintain ReBAC state when deleting resources. See [Relationship-Based Access Control](../common/rebac) for configuration and administration details.
 
 When ABAC/OIDC security is enabled, every `/packages-async` submission, status request, and result request requires an authenticated caller. Use the same bearer-token identity throughout the workflow because operation handles are scoped to their owner. With access control disabled as in this local example, the asynchronous routes accept anonymous requests.
 

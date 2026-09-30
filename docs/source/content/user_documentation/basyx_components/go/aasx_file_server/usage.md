@@ -64,6 +64,8 @@ curl -i -X PUT http://localhost:8087/packages/RETURNED_PACKAGE_ID -F 'file=@repl
 
 Expect `204 No Content` for an existing package. PUT creates a missing package with `201 Created`. Replacement changes the stored file, file name, and AAS associations together; include every association that should remain.
 
+In secured deployments, authorization follows the operation that `PUT` actually performs: creating a missing package requires create permission, while replacing an existing package requires update permission.
+
 ## Delete the Package
 
 ```bash
