@@ -175,7 +175,7 @@ An `Operation` stored in a referenced Submodel can be invoked through its AAS-sc
 | Asynchronous status | `/operation-status/{handleId}` |
 | Asynchronous result | `/operation-results/{handleId}` or `/operation-results/{handleId}/$value` for a value-only result |
 
-Asynchronous invocation returns `202 Accepted`. Use the returned location and handle to read status and then the result. Storing an `Operation` models its contract but does not install executable code. Configure its `invocationDelegation` qualifier and trusted destination before calling it. Consult the running [Swagger UI](http://localhost:8084/swagger) for the request and response schemas.
+Asynchronous invocation returns `202 Accepted` with a `Location` header for the operation status resource. Follow the returned location to monitor the invocation and retrieve its result. Do not construct status or result URLs from the handle. Operation execution is delegated: the modeled `Operation` requires an `invocationDelegation` qualifier, and the target must satisfy the service's delegation trust configuration. See [Operation Invocation and Delegation](../submodel_repository/operations) for delegation configuration and the asynchronous workflow. Consult the running [Swagger UI](http://localhost:8084/swagger) for the request and response schemas.
 
 ## Submodel References
 
