@@ -89,17 +89,11 @@ The Registry uses PostgreSQL and expects the shared BaSyx database schema to be 
 
 ### Shared Asset Identifiers with Discovery
 
-The AAS Registry and Discovery normally serve different purposes. The Registry stores AAS Descriptors, including their `specificAssetIds`. Discovery stores associations between asset identifiers and AAS identifiers so that a client can find an AAS from an asset identifier.
+The AAS Registry and Discovery normally serve different purposes. The Registry stores AAS Descriptors, including their specificAssetIds, while Discovery stores associations between asset identifiers and AAS identifiers.
+When general.discoveryIntegration is enabled, both APIs use the same stored asset-identifier associations. Registry writes can therefore affect Discovery lookup results, and Discovery writes can affect the specificAssetIds returned by the Registry.
+For separately deployed services, the integration must be enabled and both services must use the same BaSyx database and schema. The Digital Twin Registry enables this integration automatically.
+See [Basic Discovery Registry Integration](../basic_discovery/index.md#registry-integration) for the detailed create, replace, and delete behavior.
 
-For separately deployed services, this sharing occurs only when `general.discoveryIntegration` is enabled for the AAS Registry and both services use the same BaSyx database and schema. The combined Digital Twin Registry enables the integration automatically. In either case, both APIs use the same stored asset-identifier associations for an AAS. Consequently, a write through one API can affect what the other API returns:
-
-- creating or replacing an AAS Descriptor can add or replace asset identifiers used by Discovery lookups;
-- replacing Discovery links can remove identifiers that were previously visible in the descriptor's `specificAssetIds`; and
-- deleting the Discovery registration can remove those shared identifiers from later descriptor responses.
-
-For example, suppose a descriptor for `urn:example:aas:1` contains the specific asset identifier `serialNumber=SN-001`. If the Discovery registration for that AAS is later deleted, the AAS Descriptor itself remains registered, but `serialNumber=SN-001` may no longer appear in a subsequent Registry response. The operation does not delete the AAS or Submodel content stored in a Repository.
-
-This behavior is enabled explicitly. It does not occur merely because independently configured Registry and Discovery services connect to the same PostgreSQL server. See [Basic Discovery Registry Integration](../basic_discovery/index.md#registry-integration) for the detailed create, replace, and delete behavior.
 ## Configuration
 
 See [General Configuration](../common/configuration) for the shared server and PostgreSQL settings used by the AAS Registry.
