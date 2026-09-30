@@ -1,6 +1,6 @@
 # Setting Up the Digital Twin Registry
 
-Example deployments are available in the BaSyx Go Components [examples directory](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples). This page provides a small standalone setup and the requirements for building from source.
+Example deployments are available in the BaSyx Go Components [examples directory](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples). This page provides a small standalone setup and the requirements for building from source.
 
 ## Using Docker Compose
 
@@ -91,7 +91,7 @@ In Windows PowerShell, use `curl.exe` instead of `curl`. Open [Swagger UI](http:
 
 The example has no named PostgreSQL volume. Add a named volume that matches the selected PostgreSQL image before creating data that must survive container replacement; adding a volume later does not migrate data from an existing anonymous volume.
 
-For a secured example with Keycloak, see [`examples/BaSyxDigitalTwinRegistryExample`](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxDigitalTwinRegistryExample). Before enabling custom `Edc-Bpn` header injection, read [AssetLink Visibility and `Edc-Bpn`](index.md#assetlink-visibility-and-edc-bpn).
+For a secured example with Keycloak, see [`examples/BaSyxDigitalTwinRegistryExample`](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxDigitalTwinRegistryExample). Before enabling custom `Edc-Bpn` header injection, read [AssetLink Visibility and `Edc-Bpn`](index.md#assetlink-visibility-and-edc-bpn).
 
 ### Production Deployment Requirements
 

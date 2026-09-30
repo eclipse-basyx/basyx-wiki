@@ -96,7 +96,7 @@ The shared Eventing URL settings are preferred. Feed-specific compatibility sett
 
 ## REST Event Feed
 
-The Event Feed retains events in PostgreSQL and does not require an external message broker. The [Event Feed example](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxEventFeedExample) provides a runnable local setup for normal Submodel changes and PCN notifications.
+The Event Feed retains events in PostgreSQL and does not require an external message broker. The [Event Feed example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxEventFeedExample) provides a runnable local setup for normal Submodel changes and PCN notifications.
 
 ### Enable the Event Feed
 
@@ -223,7 +223,7 @@ eventing:
 
 The AAS Environment uses the same logical AAS Repository and Submodel Repository topic names.
 
-QoS 1 and 2 wait for broker acknowledgement. QoS 0 has no broker acknowledgement and therefore provides weaker delivery behavior. See the runnable [MQTT example](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxMQTTExample).
+QoS 1 and 2 wait for broker acknowledgement. QoS 0 has no broker acknowledgement and therefore provides weaker delivery behavior. See the runnable [MQTT example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxMQTTExample).
 
 ## Kafka
 
@@ -257,7 +257,7 @@ Kafka record values contain the structured CloudEvent and use `content-type: app
 
 After Kafka acknowledges publication, the BaSyx outbox is no longer a replay store for that event. Configure Kafka topic retention for the replay period your consumers require. Log compaction can remove earlier events that use the same entity key.
 
-See the runnable [Kafka example](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxKafkaExample).
+See the runnable [Kafka example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxKafkaExample).
 
 ## AMQP 1.0
 
@@ -289,7 +289,7 @@ Messages use `application/cloudevents+json` and are marked durable, but durable 
 
 Multiple consumers of the same queue share its messages. If each application must receive every event, use separate broker destinations for the applications. With RabbitMQ, publish to an exchange and provision a separate bound queue for each application.
 
-This transport implements AMQP 1.0, not AMQP 0-9-1. The runnable [AMQP/RabbitMQ example](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxAMQPExample) shows the required RabbitMQ setup.
+This transport implements AMQP 1.0, not AMQP 0-9-1. The runnable [AMQP/RabbitMQ example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxAMQPExample) shows the required RabbitMQ setup.
 
 ## Security
 

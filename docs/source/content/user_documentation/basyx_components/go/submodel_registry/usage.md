@@ -165,7 +165,7 @@ curl -i -X POST http://localhost:8083/query/submodel-descriptors -H 'Content-Typ
 
 Expect `200 OK` with a paged descriptor result. This query matches a key value rather than asserting equality of an entire multi-key reference. Query string values inside JSON are unencoded. If the query result spans multiple pages, repeat the same request body and `limit` while supplying the returned cursor; see [Pagination](../common/pagination).
 
-See the release-pinned [query language examples](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.0.12/docu/query_language/examples.md) for combinations, result-fragment filters, and supplemental semantic ID queries. Use the running Swagger UI for the installed version's operation contract.
+See the release-pinned [query language examples](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.0/docu/query_language/examples.md) for combinations, result-fragment filters, and supplemental semantic ID queries. Use the running Swagger UI for the installed version's operation contract.
 
 ## Bulk Operations
 
