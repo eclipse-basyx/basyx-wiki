@@ -90,7 +90,7 @@ curl -i http://localhost:8085/health
 
 Expect HTTP `200` with `{"status":"UP"}`. In Windows PowerShell, use `curl.exe` instead of `curl`. Open [Swagger UI](http://localhost:8085/swagger) to explore the API, then follow [Using the Submodel Repository](usage) to create your first Submodel.
 
-The Compose example explicitly selects port `8085`. When using a context path, include it in health, Swagger, and API URLS. For example, `SERVER_CONTEXTPATH=/api/v3` makes the health URL `http://localhost:8085/api/v3/health`.
+The Compose example explicitly selects port `8085`. When using a context path, include it in health, Swagger, and API URLs. For example, `SERVER_CONTEXTPATH=/api/v3` makes the health URL `http://localhost:8085/api/v3/health`.
 
 ### Security Configuration
 
