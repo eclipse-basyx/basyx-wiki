@@ -88,9 +88,9 @@ Once the Registry is ready, check its health:
 curl -i http://localhost:5004/health
 ```
 
-Expect HTTP `200` with `{"status":"UP"}`. Open [Swagger UI](http://localhost:8082/swagger) to explore the API. To help you with the first steps using the registry, follow TODO TODO TODO to TODO TODO TODO.
+Expect HTTP `200` with `{"status":"UP"}`. Open [Swagger UI](http://localhost:5004/swagger) to explore the API. To help you with the first steps using the registry, follow TODO TODO TODO to TODO TODO TODO.
 
-The Compose example explicitly selects port `8082`. When using a context path, include it in health, Swagger, and API URLs; for example, `SERVER_CONTEXTPATH=/api/v3` makes the health URL `http://localhost:8082/api/v3/health`.
+The Compose example explicitly selects port `5004`. When using a context path, include it in health, Swagger, and API URLS. For example, `SERVER_CONTEXTPATH=/api/v3` makes the health URL `http://localhost:5004/api/v3/health`.
 
 For a secured example with Keycloak, see [`examples/BaSyxDigitalTwinRegistryExample`](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxDigitalTwinRegistryExample). Before enabling custom `Edc-Bpn` header injection, read [AssetLink Visibility and `Edc-Bpn`](index.md#assetlink-visibility-and-edc-bpn).
 

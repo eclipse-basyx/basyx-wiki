@@ -62,6 +62,8 @@ Synchronization of AAS-scoped Submodel changes is performed for the AAS named in
 
 Enabling `general.aasRegistryIntegration` does not backfill AASs that already exist. Synchronization is mutation-driven. Explicitly register or reconcile pre-existing resources. See [Existing Resources and Manual Changes](../common/registry_integration.md#existing-resources-and-manual-changes).
 
+When ReBAC is enabled, AAS Descriptors created by Repository-to-Registry synchronization inherit access from their source AAS. See [Relationship-Based Access Control](../common/rebac) for the sharing and inheritance model.
+
 ## Check the Integration
 
 1. Use the [combined proxy example](../common/registry_integration.md#combined-compose-example), or provide equivalent routing for `/shells/...` and `/submodels/...`. Configure the AAS Registry and both Repositories against the same database. Direct service ports can remain `8084` for the AAS Repository, `8085` for the Submodel Repository, and `8082` for the AAS Registry.

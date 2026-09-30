@@ -10,7 +10,7 @@ An AAS `Operation` Submodel Element models input, output, and in-output variable
 
 The Repository loads the stored Operation, forwards the request's input and in-output variables to the delegation endpoint, validates the delegated response, and returns an `OperationResult`. Treat the modeled contract, the Repository invocation API, and the delegated implementation as three distinct concerns.
 
-Delegated invocation uses the normal `OperationRequest` and `OperationResult` representation. Value-only delegated invocation and value-only asynchronous results are not supported.
+Delegated invocation supports both the normal `OperationRequest` and `OperationResult` representation and the value-only representation. Use `/invoke/$value` for synchronous value-only invocation, `/invoke-async/$value` for asynchronous value-only invocation, and `/operation-results/{handleId}/$value` to retrieve the completed value-only result. Asynchronous invocation requests, including value-only requests, require `clientTimeoutDuration`.
 
 ## Delegation Prerequisite and Trusted Destinations
 

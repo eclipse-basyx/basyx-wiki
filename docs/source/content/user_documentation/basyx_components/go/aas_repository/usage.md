@@ -2,7 +2,7 @@
 
 This walkthrough creates a motor AAS, changes its asset information, and stores a nameplate Submodel through the Go AAS Repository. You will then read the Submodel through the AAS, manage its reference, and remove the example data.
 
-The examples the unsecured [Docker Compose setup](setup) at `http://localhost:8084` with an empty context path. Run them in order against an empty example database. Save the JSON files in your working directory. The curl commands are single-line commands usable in Bash. In Windows PowerShell, invoke `curl.exe` instead of `curl`.
+The examples use the unsecured [Docker Compose setup](setup) at `http://localhost:8084` with an empty context path. Run them in order against an empty example database. Save the JSON files in your working directory. The curl commands are single-line commands usable in Bash. In Windows PowerShell, invoke `curl.exe` instead of `curl`.
 
 Only the AAS Repository and its database-related services from [Setup](setup) are required. A separate AAS Registry or Submodel Repository is not required.
 
@@ -38,9 +38,11 @@ Expect `201 Created` and a JSON body containing `id: "urn:example:aas:1"` and `i
 
 If you need to import an AAS together with referenced Submodels and Concept Descriptions from JSON, XML, or AASX instead of creating resources individually, use the combined [AAS Environment import workflow](../aas_environment/usage.md#import-an-environment).
 
-If you repeat this step, `409 Conflict` means the visible identifier already exists. Continue with that resource only if it is your earlier example, or use different identifiers consistently throughout the walkthrough.
+If you repeat this step, `409 Conflict` means an AAS with the same `id` already exists. Continue with that resource only if it is your earlier example, or use different identifiers consistently throughout the walkthrough.
 
 ## Retrieve and Replace the AAS
+
+Path identifiers use Base64URL encoding of the identifier's UTF-8 bytes. BaSyx Go accepts valid padded and unpadded Base64URL values. The examples below use the unpadded form. Identifiers in JSON request bodies remain unencoded.
 
 The request URL uses the encoded **AAS identifier**, not the asset identifier or `idShort`:
 
@@ -50,7 +52,7 @@ The request URL uses the encoded **AAS identifier**, not the asset identifier or
 | `urn:example:aas:history` | `dXJuOmV4YW1wbGU6YWFzOmhpc3Rvcnk` |
 | `urn:example:submodel:1` | `dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ` |
 
-These values are already substituted into every example URL. Keep identifiers in JSON bodies unencoded.
+These values are already substituted into every example URL.
 
 ```bash
 curl -i http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE
@@ -157,6 +159,23 @@ Expect `200 OK` with a Property containing `idShort: "SerialNumber"`, `valueType
 See the [Submodel Element walkthrough](../submodel_repository/usage.md#submodel-element-paths) when you need additional element operations. Replace its `/submodels/{submodelIdentifier}` prefix with the AAS-scoped prefix when using these routes.
 
 Unlike removing a reference, DELETE on `/shells/{aasIdentifier}/submodels/{submodelIdentifier}` removes the reference from the addressed AAS and deletes the shared Submodel content. It does not remove references from other AASs.
+
+## Invoke a Modeled Operation
+
+An `Operation` stored in a referenced Submodel can be invoked through its AAS-scoped Submodel Element path. Use this common prefix:
+
+```text
+/shells/{aasIdentifier}/submodels/{submodelIdentifier}/submodel-elements/{idShortPath}
+```
+
+| Purpose | Path suffix |
+| --- | --- |
+| Synchronous invocation | `/invoke` or `/invoke/$value` for value-only request and result bodies |
+| Asynchronous invocation | `/invoke-async` or `/invoke-async/$value` for a value-only request |
+| Asynchronous status | `/operation-status/{handleId}` |
+| Asynchronous result | `/operation-results/{handleId}` or `/operation-results/{handleId}/$value` for a value-only result |
+
+Asynchronous invocation returns `202 Accepted`. Use the returned location and handle to read status and then the result. Storing an `Operation` models its contract but does not install executable code. Configure its `invocationDelegation` qualifier and trusted destination before calling it. Consult the running [Swagger UI](http://localhost:8084/swagger) for the request and response schemas.
 
 ## Submodel References
 
@@ -304,11 +323,11 @@ Expect `200 OK` with only `MotorAASUpdated` in `result`. `PumpAAS` does not matc
 | Parameter | Meaning |
 | --- | --- |
 | `idShort` | Plain short-name filter. |
-| `assetIds` | Asset identifier filter; each value is Base64URL-encoded JSON for a `SpecificAssetId`. |
+| `assetIds` | Asset identifier filter; each value is Base64URL-encoded JSON for a `SpecificAssetId`. Valid padded and unpadded forms are accepted. |
 | `limit`, `cursor` | Page size and continuation cursor. |
 | `createdFrom`, `updatedFrom` | RFC 3339 lower bounds on administrative creation/update timestamps. |
 
-After the asset-information step above, the serial number is `SN-002`. The following ready-to-run request searches for that value. Its `assetIds` value is the Base64URL encoding of `{"name":"serialNumber","value":"SN-002"}`:
+After the asset-information step above, the serial number is `SN-002`. The following ready-to-run request searches for that value. Its `assetIds` value is the unpadded Base64URL encoding of `{"name":"serialNumber","value":"SN-002"}`:
 
 ```bash
 curl -i -G http://localhost:8084/shells --data-urlencode 'assetIds=eyJuYW1lIjoic2VyaWFsTnVtYmVyIiwidmFsdWUiOiJTTi0wMDIifQ'

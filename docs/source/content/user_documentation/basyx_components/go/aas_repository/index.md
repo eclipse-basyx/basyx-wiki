@@ -18,6 +18,7 @@ An AAS contains Submodel references, not inline Submodel content. This Go compon
 - List AASs with filters and [cursor-based pagination](../common/pagination).
 - Retrieve and replace asset information independently of the complete AAS.
 - Manage Submodel references and access Submodel content through an AAS.
+- Invoke modeled Submodel Operations synchronously or asynchronously through AAS-scoped Submodel routes, including value-only invocation.
 - Query AAS-level fields through `POST /query/shells`.
 - Emit experimental CloudEvents through the REST Event Feed or broker transports. See [Eventing](../common/eventing).
 - Optionally synchronize AAS Descriptors through [Registry Integration](registry_integration).
@@ -84,6 +85,7 @@ The standalone AAS Repository does not support the `/serialization` endpoint. Fo
 - [Registry Integration](registry_integration)
 - [AAS Environment](../aas_environment/index)
 - [OIDC and ABAC Configuration](../common/configuration.md#oidc-and-abac)
+- [Relationship-Based Access Control](../common/rebac)
 - [Submodel Repository](../submodel_repository/index)
 - [Common / Shared Features](../common/shared_features)
 
