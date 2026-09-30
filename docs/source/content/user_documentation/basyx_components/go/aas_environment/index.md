@@ -5,7 +5,7 @@
 
 The BaSyx Go AAS Environment is a **single runtime** that provides the main APIs for storing, registering, discovering, importing, and exporting AAS data. Use it when these capabilities should run in one deployment and share one PostgreSQL database. Use the [standalone components](../index.md#component-overview) when they require independent lifecycles, scaling, or trust boundaries.
 
-The AAS Environment service is distinct from the serialized AAS metamodel `Environment` object. The AAS Environment service is distinct from the serialized AAS metamodel Environment object. The metamodel object is an import/export representation containing AASs, Submodels, and Concept Descriptions, while the AAS Environment service is the running HTTP application that persists this data and exposes the corresponding APIs. It runs these capabilities within a single process rather than starting separate Repository, Registry, or Discovery services.
+The AAS Environment service is distinct from the serialized AAS metamodel `Environment` object. The metamodel object is an import/export representation containing AASs, Submodels, and Concept Descriptions, while the AAS Environment service is the running HTTP application that persists this data and exposes the corresponding APIs. It runs these capabilities within a single process rather than starting separate Repository, Registry, or Discovery services.
 
 ## Included APIs and Data
 
@@ -61,7 +61,7 @@ See [Registry Integration](../common/registry_integration) for synchronization l
 
 ## Dependencies, Persistence, and Security
 
-The runtime requires PostgreSQL initialized or migrated by a release-compatible BaSyx Configuration Service. The database holds content, descriptors, Discovery mappings, and other service state; restarting or replacing the application container does not make that state disposable. Read [Deployment, Versions, and Persistent State](../common/deployment.md#version-scope) before deploying and its [persistent-state guidance](../common/deployment.md#persistent-state) before changing volumes or removing the Compose project.
+The runtime requires PostgreSQL initialized or migrated by a release-compatible BaSyx Configuration Service. PostgreSQL holds Repository content, Registry descriptors, Discovery mappings, and other persistent service state independently of the AAS Environment application container. Read [Deployment, Versions, and Persistent State](../common/deployment.md#version-scope) before deploying and its [persistent-state guidance](../common/deployment.md#persistent-state) before changing volumes or removing the Compose project.
 
 Runtime authorization is optional and disabled in the local walkthrough. Before exposing the service beyond a trusted development machine, follow [Runtime Security](../common/security).
 

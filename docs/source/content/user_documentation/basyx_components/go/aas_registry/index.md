@@ -71,7 +71,7 @@ Asset-related filters help clients narrow discovery results before contacting a 
 - `assetKind` limits results by the kind of asset represented by the AAS;
 - `assetType` selects descriptors whose asset information uses a particular asset-type value;
 - asset-identifier filters locate descriptors associated with known asset identifiers;
-- `createdFrom` and `updatedFrom` select descriptors by their persisted administrative timestamps.
+- `createdFrom` and `updatedFrom` filter on the descriptor's `administration.createdAt` and `administration.updatedAt` values.
 
 Timestamp filters use `administration.createdAt` and `administration.updatedAt` from the descriptor payload. The Registry does not generate or update these values on writes. Instead, the registering application must maintain them. The lower bounds are inclusive. When both timestamp filters are supplied, a descriptor matches if either bound is satisfied.
 
@@ -99,8 +99,7 @@ For separately deployed services, this sharing occurs only when `general.discove
 
 For example, suppose a descriptor for `urn:example:aas:1` contains the specific asset identifier `serialNumber=SN-001`. If the Discovery registration for that AAS is later deleted, the AAS Descriptor itself remains registered, but `serialNumber=SN-001` may no longer appear in a subsequent Registry response. The operation does not delete the AAS or Submodel content stored in a Repository.
 
-This behavior is enabled explicitly. It does not occur merely because independently configured Registry and Discovery services connect to the same PostgreSQL server. See [Shared Registry Asset Identifiers](../basic_discovery/index.md#shared-registry-asset-identifiers) for the detailed operation-by-operation effects.
-
+This behavior is enabled explicitly. It does not occur merely because independently configured Registry and Discovery services connect to the same PostgreSQL server. See [Basic Discovery Registry Integration](../basic_discovery/index.md#registry-integration) for the detailed create, replace, and delete behavior.
 ## Configuration
 
 See [General Configuration](../common/configuration) for the shared server and PostgreSQL settings used by the AAS Registry.

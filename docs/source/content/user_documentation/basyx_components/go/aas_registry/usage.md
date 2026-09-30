@@ -38,17 +38,17 @@ Save this as `aas-descriptor.json`:
 curl -i -X POST http://localhost:8082/shell-descriptors -H 'Content-Type: application/json' --data-binary '@aas-descriptor.json'
 ```
 
-Expect `201 Created` and the registered descriptor. Posting the same visible identifier again returns `409 Conflict`. In this walkthrough you register the descriptor explicitly.  In a scenario where you use the [AAS Repository](../aas_repository/index) or the AAS Environment with the [Registry integration](../common/registry_integration) feature turned on, the AAS Descriptors can be created, updated, and deleted automatically.
+Expect `201 Created` and the registered descriptor. Posting another AAS Descriptor with the same `id` returns `409 Conflict`. In this walkthrough you register the descriptor explicitly.  In a scenario where you use the [AAS Repository](../aas_repository/index) or the AAS Environment with the [Registry integration](../common/registry_integration) feature turned on, the AAS Descriptors can be created, updated, and deleted automatically.
 
 ## Retrieve and Update the Descriptor
 
-Path identifiers use the unpadded Base64URL encoding of the identifier's UTF-8 bytes. The AAS identifier in `aas-descriptor.json` therefore becomes:
+Path identifiers use Base64URL encoding of the identifier's UTF-8 bytes. BaSyx Go accepts valid padded and unpadded Base64URL values; the examples below use the unpadded form. The AAS identifier in `aas-descriptor.json` therefore becomes:
 
 ```text
 urn:example:aas:1 -> dXJuOmV4YW1wbGU6YWFzOjE
 ```
 
-Identifiers in JSON bodies remain unencoded. Apply the same UTF-8 Base64URL rule, without padding, when substituting another path identifier.
+Identifiers in JSON bodies remain unencoded. Apply the same UTF-8 Base64URL rule when substituting another path identifier.
 
 ```bash
 curl -i http://localhost:8082/shell-descriptors/dXJuOmV4YW1wbGU6YWFzOjE
@@ -118,7 +118,7 @@ Find the example descriptor by asset kind and type:
 curl -i -G http://localhost:8082/shell-descriptors --data-urlencode 'assetKind=Instance' --data-urlencode 'assetType=TW90b3I'
 ```
 
-`TW90b3I` is the unpadded Base64URL encoding of the descriptor's plain `assetType` value, `Motor`.
+`TW90b3I` is the unpadded Base64URL encoding of the descriptor's plain `assetType` value, `Motor`. Encoded query parameters also accept valid padded and unpadded Base64URL values.
 
 The `assetIds` filter expects a Base64URL-encoded `SpecificAssetId` JSON object. For the descriptor registered above, encode the compact UTF-8 JSON `{"name":"serialNumber","value":"SN-001"}`. The resulting unpadded value is `eyJuYW1lIjoic2VyaWFsTnVtYmVyIiwidmFsdWUiOiJTTi0wMDEifQ`:
 

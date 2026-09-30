@@ -111,4 +111,4 @@ The named volume `aas_environment_postgres` stores PostgreSQL 18 data at `/var/l
 Do not run `docker compose down -v` when the data must be retained. Adding or renaming a volume later does not migrate the old database. See [Persistent State](../common/deployment.md#persistent-state) for lifecycle and backup considerations.
 ```
 
-For a larger topology with automatic AASX preconfiguration and a Web UI, see the [BaSyx Minimal Example](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxMinimalExample). If that example uses `SNAPSHOT` BaSyx image tags, replace them with `latest` to follow the newest release, or pin a concrete release tag or image digest for a reproducible deployment.
+For a larger topology with automatic AASX preconfiguration and a Web UI, see the [BaSyx Minimal Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxMinimalExample). If that example uses `SNAPSHOT` BaSyx image tags, replace them with `latest` to follow the newest release, or pin a concrete release tag or image digest for a reproducible deployment.
