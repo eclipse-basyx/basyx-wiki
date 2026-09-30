@@ -222,7 +222,7 @@ Expect `204 No Content`. The normal Property now includes the description and re
 
 PATCH on normal, metadata, and value endpoints expects the corresponding representation, not an RFC 6902 array of `op`/`path` instructions. Use element creation routes to add elements, complete PUT bodies to replace resources, and the relevant PATCH representation to update existing content. A `$metadata` update changes metadata while retaining values. Follow its schema in Swagger rather than including value fields in that payload.
 
-For `SubmodelElementCollection` and `SubmodelElementList`, a normal `PATCH` that includes `value` replaces the stored child list: omitted children are removed, and `"value": []` removes all children. If the PATCH omits `value`, existing children remain unchanged. A `$metadata` PATCH changes metadata without replacing child content.
+For container-like elements, a normal `PATCH` that includes the child-bearing field replaces the stored child list: omitted children are removed, and an empty list removes all children. This applies to `value` for `SubmodelElementCollection` and `SubmodelElementList`, `statements` for `Entity`, and `annotations` for `AnnotatedRelationshipElement`. If the PATCH omits the applicable child-bearing field, existing children remain unchanged. A `$metadata` PATCH changes metadata without replacing child content.
 
 See [Response Representations](../common/representations) for the shared meaning of `level` and `extent`. For example:
 
