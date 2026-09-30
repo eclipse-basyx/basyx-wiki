@@ -47,21 +47,11 @@ No separate Discovery request is required for identifiers supplied in the descri
 
 ### `assetIds` on `GET /shell-descriptors`
 
-Each repeated `assetIds` query value is a Base64URL-encoded `SpecificAssetId` JSON object, not a plain asset identifier. To construct a selector:
-
-1. Create a compact JSON object containing at least `name` and `value`, for example `{"name":"customerPartId","value":"4711"}`.
-2. Encode the JSON as UTF-8 bytes and then Base64URL-encode those bytes. BaSyx Go accepts valid padded and unpadded Base64URL forms. The example's unpadded representation is `eyJuYW1lIjoiY3VzdG9tZXJQYXJ0SWQiLCJ2YWx1ZSI6IjQ3MTEifQ`.
-3. Supply the encoded value as `assetIds`. Repeat the parameter to select multiple links:
-
-   ```text
-   GET /shell-descriptors?assetIds=<encoded-selector-1>&assetIds=<encoded-selector-2>
-   ```
-
-The DTR decodes each selector and resolves its `name` and `value` through Discovery. All supplied selectors must match the same descriptor, so multiple values use **AND** semantics. The DTR's [AssetLink visibility rules](#assetlink-visibility-and-edc-bpn) apply to each matching stored link. An `externalSubjectId` included in the query object does not affect selection or visibility.
+`assetIds` uses the standard Base64URL-encoded `SpecificAssetId` representation. The DTR decodes each selector and resolves its `name` and `value` through Discovery. All supplied selectors must match the same descriptor, so repeated values use **AND** semantics. The DTR's [AssetLink visibility rules](#assetlink-visibility-and-edc-bpn) apply to each matching stored link. An `externalSubjectId` included in the query object does not affect selection or visibility.
 
 Invalid Base64URL, non-UTF-8 content, invalid JSON, or a `SpecificAssetId` that fails validation produces `400 Bad Request`.
 
-A selector whose `name` is exactly `globalAssetId` uses the special global-asset-ID discovery behavior described below.
+A selector whose `name` is exactly `globalAssetId` uses the special global-asset-ID discovery behavior described below. See [Filter Descriptors by AssetLinks](usage.md#filter-descriptors-by-assetlinks) for request construction and a repeated-parameter example.
 
 ### `createdAt` and `createdAfter`
 
@@ -124,6 +114,7 @@ Path identifiers such as `aasIdentifier` and `submodelIdentifier` contain the id
 ## Related Documentation
 
 - [Setting Up the Digital Twin Registry](setup)
+- [Using the Digital Twin Registry](usage)
 - [AAS Registry](../aas_registry/index)
 - [Basic Discovery](../basic_discovery/index)
 - [General Configuration](../common/configuration)
@@ -136,4 +127,5 @@ Path identifiers such as `aasIdentifier` and `submodelIdentifier` contain the id
 :maxdepth: 1
 
 setup
+usage
 ```

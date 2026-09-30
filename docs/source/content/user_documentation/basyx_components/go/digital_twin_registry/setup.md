@@ -68,7 +68,7 @@ services:
 
 Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service. For reproducible deployments, replace `latest` with the same concrete BaSyx version tag for all of these services. Alternatively, pin each service image to the corresponding immutable image digest from the same release. The `latest` tag is mutable and advances when a new release is published.
 
-### Start and Check the Registry
+### Start and Check the Digital Twin Registry
 
 ```{warning}
 This minimal local Compose setup does not declare a named PostgreSQL volume. An image-created anonymous volume is not automatically reused after `docker compose down`, so recreating the containers can make previously stored data appear to be lost. Add a correctly mounted named volume before storing persistent data, and migrate existing data explicitly rather than expecting a new volume declaration to copy it. See [Persistent State](../common/deployment.md#persistent-state).
@@ -80,23 +80,25 @@ The services can be started by running the following command in the directory of
 docker compose up -d
 ```
 
-The Configuration Service is a one-time initialization/migration job. An exit code of `0` is expected. The Registry starts only after that job completes successfully.
+The Configuration Service is a one-time initialization/migration job. An exit code of `0` is expected. The Digital Twin Registry starts only after that job completes successfully.
 
-Once the Registry is ready, check its health:
+Once the Digital Twin Registry is ready, check its health:
 
 ```bash
 curl -i http://localhost:5004/health
 ```
 
-Expect HTTP `200` with `{"status":"UP"}`. Open [Swagger UI](http://localhost:5004/swagger) to explore the API. To help you with the first steps using the registry, follow TODO TODO TODO to TODO TODO TODO.
+Expect HTTP `200` with `{"status":"UP"}`. Open [Swagger UI](http://localhost:5004/swagger) to explore the API. To get started with the combined Registry and Discovery workflow, follow [Using the Digital Twin Registry](usage).
 
-The Compose example explicitly selects port `5004`. When using a context path, include it in health, Swagger, and API URLS. For example, `SERVER_CONTEXTPATH=/api/v3` makes the health URL `http://localhost:5004/api/v3/health`.
+The Compose example explicitly selects port `5004`. When using a context path, include it in health, Swagger, and API URLs. For example, `SERVER_CONTEXTPATH=/api/v3` makes the health URL `http://localhost:5004/api/v3/health`.
 
 For a secured example with Keycloak, see [`examples/BaSyxDigitalTwinRegistryExample`](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxDigitalTwinRegistryExample). Before enabling custom `Edc-Bpn` header injection, read [AssetLink Visibility and `Edc-Bpn`](index.md#assetlink-visibility-and-edc-bpn).
 
 ### Access Rules and Trust-List Files
 
 The local Compose example is unsecured: `ABAC_ENABLED=false`, and custom header injection is explicitly disabled. Mounted security files have no effect unless OIDC/ABAC is enabled and configured with a matching policy. See [OIDC and ABAC configuration](../common/configuration.md#oidc-and-abac) and [Security Configuration Files](../common/configuration.md#security-files).
+
+The Digital Twin Registry uses ABAC only in BaSyx Go v1.1.0; `rebac.*` settings are ignored. See [Security and Visibility Semantics](index.md#security-and-visibility-semantics).
 
 For DTR, an omitted `abac.policyFileImport` uses `always`: the access-rules file is imported on every startup and supersedes the active database policy. Set `ABAC_POLICY_FILE_IMPORT` to `always`, `if_missing`, or `never` deliberately for the required policy lifecycle.
 
