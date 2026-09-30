@@ -32,6 +32,10 @@ SMREPO_DELEGATION_TRUSTED_HOSTS=delegated-operation-service:8080,172.28.0.10:808
 
 If the service name, port, or Compose network address changes, update the qualifier and allowlist together.
 
+### Delegated Response Size
+
+Delegated Operation responses are limited by `general.delegatedOperationResponseMaxSizeBytes` or `GENERAL_DELEGATEDOPERATIONRESPONSEMAXSIZEBYTES`. The default is 1 MiB (`1048576` bytes) and applies to synchronous and asynchronous delegation. Increase the limit only when required by the expected result size because delegated responses are buffered in memory.
+
 ## Start the Example
 
 Clone the BaSyx Go repository and select the source tag that matches the BaSyx images you intend to run:
@@ -125,7 +129,7 @@ These are operation-specific resources. Do not apply Registry bulk assumptions a
 | --- | --- |
 | Invocation is not implemented | Confirm the addressed element is an `Operation` and has a non-empty `invocationDelegation` qualifier. A modeled Operation alone is not executable. |
 | Target is reported as untrusted | Ensure `SMREPO_DELEGATION_TRUSTED_HOSTS` contains both the qualifier's hostname and port and its resolved IP address and port. Check that the Compose subnet and static service address still match. |
-| Delegated call fails or times out | Check the delegated service logs, container network reachability, and qualifier URL. For asynchronous calls, verify the required `clientTimeoutDuration`. for synchronous calls, check it when supplied. The URL is resolved from inside the Repository container, not from the client host. |
+| Delegated call fails or times out | Check the delegated service logs, container network reachability, and qualifier URL. For asynchronous calls, verify the required `clientTimeoutDuration`. For synchronous calls, check it when supplied. The URL is resolved from inside the Repository container, not from the client host. |
 | `404` for a status or result | Use the exact returned location and the same caller identity. Verify the handle belongs to the same Submodel identifier and Operation path and has not expired. |
 | Status appears to skip the pending state | Fast work can complete before the first poll. A direct `302` to the returned result location is valid; keep redirect following off to observe it. |
 | Result reports delegated failure | Inspect the stored failure body and delegated service logs. `202 Accepted` confirms submission, not successful execution. |
