@@ -64,45 +64,35 @@ services:
         condition: service_completed_successfully
 ```
 
-*`docker-compose.yml` for local evaluation with PostgreSQL 18, the BaSyx Configuration Service, and the Digital Twin Registry*
+*docker-compose.yml including PostgreSQL 18, the BaSyx Go Configuration Service, and the Digital Twin Registry*
 
-With no `BASYX_VERSION` value, this quick start uses `latest`, which can change to a different image digest at any time. For a reproducible deployment, set the same `BASYX_VERSION` in a `.env` file to a concrete release tag or commit-specific tag:
+Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service. For reproducible deployments, replace `latest` with the same concrete BaSyx version tag for all of these services. Alternatively, pin each service image to the corresponding immutable image digest from the same release. The `latest` tag is mutable and advances when a new release is published.
 
-```text
-BASYX_VERSION=<release-or-commit-specific-tag>
+### Start and Check the Registry
+
+```{warning}
+This minimal local Compose setup does not declare a named PostgreSQL volume. An image-created anonymous volume is not automatically reused after `docker compose down`, so recreating the containers can make previously stored data appear to be lost. Add a correctly mounted named volume before storing persistent data, and migrate existing data explicitly rather than expecting a new volume declaration to copy it. See [Persistent State](../common/deployment.md#persistent-state).
 ```
 
-Alternatively, replace each complete `image` reference with an image digest. Use the same BaSyx version or build revision for every database-backed BaSyx service in the deployment, especially the Configuration Service. `latest` tracks the newest release and `SNAPSHOT` tracks the current main-branch snapshot; neither mutable tag guarantees repeatable or mutually compatible pulls over time. See [Version Scope](../common/deployment.md#version-scope).
-
-### Start and Check the Service
-
-Save the example as `docker-compose.yml`, then run:
+The services can be started by running the following command in the directory of the compose file:
 
 ```bash
 docker compose up -d
-docker compose ps -a
-docker compose logs basyx_configuration digital_twin_registry
+```
+
+The Configuration Service is a one-time initialization/migration job. An exit code of `0` is expected. The Registry starts only after that job completes successfully.
+
+Once the Registry is ready, check its health:
+
+```bash
 curl -i http://localhost:5004/health
 ```
 
-The Configuration Service runs once and exits with code `0`. The DTR starts after successful database initialization. Once it is listening, the health endpoint returns `200 OK` and `{"status":"UP"}`; retry if startup is still in progress.
+Expect HTTP `200` with `{"status":"UP"}`. Open [Swagger UI](http://localhost:8082/swagger) to explore the API. To help you with the first steps using the registry, follow TODO TODO TODO to TODO TODO TODO.
 
-In Windows PowerShell, use `curl.exe` instead of `curl`. Open [Swagger UI](http://localhost:5004/swagger) to inspect the API. Include any configured `server.contextPath` in health, Swagger, and API URLs.
-
-The example has no named PostgreSQL volume. Add a named volume that matches the selected PostgreSQL image before creating data that must survive container replacement; adding a volume later does not migrate data from an existing anonymous volume.
+The Compose example explicitly selects port `8082`. When using a context path, include it in health, Swagger, and API URLs; for example, `SERVER_CONTEXTPATH=/api/v3` makes the health URL `http://localhost:8082/api/v3/health`.
 
 For a secured example with Keycloak, see [`examples/BaSyxDigitalTwinRegistryExample`](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxDigitalTwinRegistryExample). Before enabling custom `Edc-Bpn` header injection, read [AssetLink Visibility and `Edc-Bpn`](index.md#assetlink-visibility-and-edc-bpn).
-
-### Production Deployment Requirements
-
-Published container images are the normal deployment artifacts, but the default Compose setup is not a production configuration. A production deployment should use:
-
-- a concrete BaSyx release/commit tag or image digest
-- persistent PostgreSQL storage and tested backup/restore procedures
-- unique database credentials stored as secrets, with database transport security where required
-- authentication and authorization appropriate to the deployment
-- TLS at the service or a trusted ingress/reverse proxy
-- network controls that prevent bypassing any trusted identity-header gateway
 
 ### Access Rules and Trust-List Files
 

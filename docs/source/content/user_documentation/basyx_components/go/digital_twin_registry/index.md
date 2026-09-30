@@ -27,9 +27,10 @@ The DTR includes asset-link lookup and management from the [Basic Discovery Comp
 - `POST /lookup/shellsByAssetLink` searches for AAS identifiers by AssetLinks.
 - `POST /lookup/shells/{aasIdentifier}` adds AssetLinks to an existing DTR descriptor.
 - `GET /lookup/shells/{aasIdentifier}` returns the AssetLinks associated with an AAS identifier.
+- `DELETE /lookup/shells/{aasIdentifier}` removes the AssetLinks associated with an AAS identifier.
 - `GET /lookup/shells` remains supported but is **deprecated**. New integrations should use `POST /lookup/shellsByAssetLink`, whose request body carries the AssetLinks.
 
-The service also exposes its API description through `GET /description`.
+The service also exposes its service description through `GET /description`.
 
 ## Digital Twin Registry-Specific Behavior
 
@@ -46,26 +47,32 @@ No separate Discovery request is required for identifiers supplied in the descri
 
 ### `assetIds` on `GET /shell-descriptors`
 
-In the DTR, each repeated `assetIds` query value is interpreted as an encoded AssetLink selector, not as a plain asset identifier. Construct each value as follows:
+Each repeated `assetIds` query value is a Base64URL-encoded `SpecificAssetId` JSON object, not a plain asset identifier. To construct a selector:
 
-1. Create a JSON `SpecificAssetId` object containing at least `name` and `value`, for example `{"name":"customerPartId","value":"4711"}`.
-2. Encode the JSON text as UTF-8 bytes and then Base64URL-encode those bytes. Correctly padded and unpadded Base64URL forms are accepted.
-3. Repeat the query parameter to request more than one link: `?assetIds=<encoded-link-1>&assetIds=<encoded-link-2>`.
+1. Create a compact JSON object containing at least `name` and `value`, for example `{"name":"customerPartId","value":"4711"}`.
+2. Encode the JSON as UTF-8 bytes and then Base64URL-encode those bytes. BaSyx Go accepts valid padded and unpadded Base64URL forms. The example's unpadded representation is `eyJuYW1lIjoiY3VzdG9tZXJQYXJ0SWQiLCJ2YWx1ZSI6IjQ3MTEifQ`.
+3. Supply the encoded value as `assetIds`. Repeat the parameter to select multiple links:
 
-Only the encoded object's `name` and `value` select the AssetLink. Visibility is determined from the matching stored AssetLink, not from an `externalSubjectId` included in the query value. When several values are supplied, a descriptor must match **all** requested links. Invalid Base64URL, non-UTF-8 content, invalid JSON, or an invalid `SpecificAssetId` produces `400 Bad Request`.
+   ```text
+   GET /shell-descriptors?assetIds=<encoded-selector-1>&assetIds=<encoded-selector-2>
+   ```
 
-The lookup is subject to the [AssetLink visibility rules](#assetlink-visibility-and-edc-bpn) below. A selector whose `name` is exactly `globalAssetId` uses the special global-asset-ID discovery behavior.
+The DTR decodes each selector and resolves its `name` and `value` through Discovery. All supplied selectors must match the same descriptor, so multiple values use **AND** semantics. The DTR's [AssetLink visibility rules](#assetlink-visibility-and-edc-bpn) apply to each matching stored link. An `externalSubjectId` included in the query object does not affect selection or visibility.
+
+Invalid Base64URL, non-UTF-8 content, invalid JSON, or a `SpecificAssetId` that fails validation produces `400 Bad Request`.
+
+A selector whose `name` is exactly `globalAssetId` uses the special global-asset-ID discovery behavior described below.
 
 ### `createdAt` and `createdAfter`
 
-The DTR's AAS descriptor list and individual descriptor responses include a top-level `createdAt` timestamp. It is the descriptor's stored registration-creation timestamp and remains unchanged when the descriptor is updated. It is distinct from timestamps inside the descriptor's `administration` object.
+The DTR's AAS descriptor list and individual descriptor responses include a top-level `createdAt` timestamp. On creation, a supplied top-level `createdAt` is stored; if it is omitted, the database assigns the creation time. The stored value remains unchanged when the descriptor is updated and is distinct from timestamps inside the descriptor's `administration` object.
 
 The optional `createdAfter` query parameter is supported on:
 
 - `GET /shell-descriptors`
 - `POST /lookup/shellsByAssetLink`
 
-Its value must be an RFC 3339 date-time, for example `2026-09-25T10:15:30Z`; an invalid value produces `400 Bad Request`. The comparison is inclusive: a result is eligible when its DTR descriptor `createdAt` is equal to or later than `createdAfter`. On the Discovery POST, this is the creation timestamp of the associated AAS descriptor, not the time at which an AssetLink was added.
+Its value must be an RFC 3339 date-time, for example `2026-09-25T10:15:30Z`; an invalid value produces `400 Bad Request`. The comparison is inclusive: a result is eligible when its stored DTR descriptor `createdAt` is equal to or later than `createdAfter`. On the Discovery POST, this is the stored `createdAt` of the associated AAS descriptor, not the time at which an AssetLink was added.
 
 `createdAfter` is not part of the declared contract for deprecated `GET /lookup/shells` and should not be used there.
 
@@ -74,6 +81,8 @@ Its value must be an RFC 3339 date-time, for example `2026-09-25T10:15:30Z`; an 
 The standard Submodel Descriptor field is `supplementalSemanticIds` (plural). For compatibility with clients that use `supplementalSemanticId` (singular), the DTR's shipped configuration sets `general.supportsSingularSupplementalSemanticId: true`. In that mode, DTR accepts and emits the singular form. Set the option to `false` to use the plural form instead; clients and the service must agree on the selected representation.
 
 ## Security and Visibility Semantics
+
+The Digital Twin Registry does not support ReBAC in BaSyx Go v1.1.0. It uses ABAC for authorization; `rebac.*` settings are ignored, and the DTR does not expose the ReBAC management API or advertise a ReBAC service profile.
 
 ### AssetLink Visibility and `Edc-Bpn`
 
@@ -106,7 +115,7 @@ If `abac.policyFileImport` is omitted, the DTR uses `always`: the configured acc
 | --- | --- | --- | --- |
 | `POST /lookup/shells/{aasIdentifier}` | Basic Discovery replaces the complete AssetLink set. | DTR appends the submitted links, does not remove duplicates, and requires the AAS descriptor to exist. | Create the descriptor first, send only additions, and avoid blind retries if duplicates matter. |
 | Descriptor PUT path/body IDs | Standalone AAS Registry rejects an empty body ID or one that differs from the decoded path ID. | For AAS descriptors and nested Submodel Descriptors, DTR treats the decoded path identifier as authoritative and replaces the body ID. | Treat the path as the update target; a conflicting body ID does not select another resource. |
-| `GET /shell-descriptors?assetIds=...` | Registry filtering follows the standalone Registry behavior. | DTR resolves encoded `name`/`value` selectors through Discovery and applies DTR AssetLink visibility. | Do not send plain asset IDs; follow the DTR encoding and visibility rules above. |
+| `GET /shell-descriptors?assetIds=...` | Registry filtering follows the standalone Registry behavior. | DTR resolves encoded `name`/`value` selectors through Discovery and applies DTR AssetLink visibility. | Use the standard Registry `assetIds` encoding, but account for DTR AND semantics and AssetLink visibility. |
 | Empty Discovery search result | Standalone Discovery returns a paged wrapper with `"result": []`. | A DTR search can omit `result` and return `{"paging_metadata": {}}`. | Treat an absent `result` as an empty page. |
 | Descriptor/Discovery synchronization | The standalone services can be operated independently. | DTR synchronizes descriptor identifiers into Discovery automatically. | Do not register the descriptor's identifiers a second time. |
 
