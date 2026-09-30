@@ -42,7 +42,7 @@ Expect `201 Created` and the registered descriptor. Posting another AAS Descript
 
 ## Retrieve and Update the Descriptor
 
-Path identifiers use Base64URL encoding of the identifier's UTF-8 bytes. BaSyx Go accepts valid padded and unpadded Base64URL values; the examples below use the unpadded form. The AAS identifier in `aas-descriptor.json` therefore becomes:
+Path identifiers use Base64URL encoding of the identifier's UTF-8 bytes. BaSyx Go accepts valid padded and unpadded Base64URL values. The examples below use the unpadded form. The AAS identifier in `aas-descriptor.json` therefore becomes:
 
 ```text
 urn:example:aas:1 -> dXJuOmV4YW1wbGU6YWFzOjE

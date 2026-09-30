@@ -72,7 +72,7 @@ The Submodel identifier in a request path is Base64URL-encoded. Identifiers in J
 
 Collection requests use [cursor-based pagination](../common/pagination). See the shared guide for page size, response structure, and continuation requests.
 
-`createdFrom` and `updatedFrom` filter the descriptor's persisted `administration.createdAt` and `administration.updatedAt`. The Registry does not generate or update these values on writes; the registering application must maintain them. Bounds are inclusive, and when both timestamp filters are supplied, either condition can match.
+`createdFrom` and `updatedFrom` filter on the descriptor's `administration.createdAt` and `administration.updatedAt` values. The Registry does not generate or update these values on writes; the registering application must maintain them. Bounds are inclusive, and when both timestamp filters are supplied, either condition can match.
 
 The ordinary descriptor-list endpoint supports `limit`, `cursor`, `createdFrom`, and `updatedFrom`; it does not provide a `semanticId` filter parameter. Use [Structured Queries](usage.md#structured-queries) to search descriptor fields such as semantic identification. 
 

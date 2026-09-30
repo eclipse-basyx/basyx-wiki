@@ -220,7 +220,7 @@ curl -i -X PATCH 'http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ
 
 Expect `204 No Content`. The normal Property now includes the description and retains the previously stored `SN-002` value and `xs:string` datatype. This implementation accepts common metadata fields in a Submodel Element `$metadata` PATCH, but rejects `valueType`; omit it from this payload.
 
-PATCH on normal, metadata, and value endpoints expects the corresponding representation, not an RFC 6902 array of `op`/`path` instructions. Use element creation routes to add elements, complete PUT bodies to replace resources, and the relevant PATCH representation to update existing content. A `$metadata` update changes metadata while retaining values; follow its schema in Swagger rather than including value fields in that payload.
+PATCH on normal, metadata, and value endpoints expects the corresponding representation, not an RFC 6902 array of `op`/`path` instructions. Use element creation routes to add elements, complete PUT bodies to replace resources, and the relevant PATCH representation to update existing content. A `$metadata` update changes metadata while retaining values. Follow its schema in Swagger rather than including value fields in that payload.
 
 See [Response Representations](../common/representations) for the shared meaning of `level` and `extent`. For example:
 
@@ -294,7 +294,7 @@ For the example's semantic identifier, encode the string `urn:example:semantic:n
 curl -i -G http://localhost:8085/submodels --data-urlencode 'semanticId=dXJuOmV4YW1wbGU6c2VtYW50aWM6bmFtZXBsYXRl'
 ```
 
-The decoded value is compared with semantic reference key values; this is not an equality comparison of an entire multi-key reference. The decoded filter value is compared with the individual `semanticId.keys[].value` entries. It is not compared with the complete multi-key reference.
+The decoded value is compared with semantic reference key values. This is not an equality comparison of an entire multi-key reference. The decoded filter value is compared with the individual `semanticId.keys[].value` entries. It is not compared with the complete multi-key reference.
 
 Timestamp filters use `administration.createdAt` and `administration.updatedAt` supplied in the resource payload, rather than automatically recording each write. The example does not supply them. Maintain those fields if using timestamp-filtered lists; current-resource lists do not provide deletion notifications.
 

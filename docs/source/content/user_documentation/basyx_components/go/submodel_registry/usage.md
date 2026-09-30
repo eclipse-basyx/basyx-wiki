@@ -52,13 +52,13 @@ Expect `201 Created` and the registered descriptor. Posting another standalone d
 
 ## Retrieve and Update the Descriptor
 
-Path identifiers use the unpadded Base64URL encoding of the identifier's UTF-8 bytes. The Submodel identifier in `submodel-descriptor.json` therefore becomes:
+Path identifiers use Base64URL encoding of the identifier's UTF-8 bytes. BaSyx Go accepts valid padded and unpadded Base64URL values. The examples below use the unpadded form. The Submodel identifier in `submodel-descriptor.json` therefore becomes:
 
 ```text
 urn:example:submodel:1 -> dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ
 ```
 
-Identifiers in JSON bodies remain unencoded. Apply the same UTF-8 Base64URL rule, without padding, when substituting another path identifier.
+Identifiers in JSON bodies remain unencoded. Apply the same UTF-8 Base64URL rule when substituting another path identifier.
 
 ```bash
 curl -i http://localhost:8083/submodel-descriptors/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ
