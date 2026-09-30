@@ -158,7 +158,7 @@ For the generated global-asset link, encode `{"name":"globalAssetId","value":"ur
 
 ## Filter by DTR Creation Time
 
-Copy the top-level `createdAt` from the registered or retrieved descriptor and use it as `RETURNED_CREATED_AT` below:
+Copy the top-level `createdAt` from the retrieved descriptor and use it as `RETURNED_CREATED_AT` below:
 
 ```bash
 curl -i -G http://localhost:5004/shell-descriptors --data-urlencode 'createdAfter=RETURNED_CREATED_AT'

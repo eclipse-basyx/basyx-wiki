@@ -1,7 +1,7 @@
 # Digital Twin Registry
 
 ![GitHub](https://img.shields.io/github/license/eclipse-basyx/basyx-go-components)
-![Metamodel](https://img.shields.io/badge/Metamodel-v3.1.1-yellow)
+![Metamodel](https://img.shields.io/badge/Metamodel-v3.2-yellow)
 ![API](https://img.shields.io/badge/API-v3.2.0-yellow)
 
 The BaSyx Digital Twin Registry (DTR) combines the AAS Registry API and Basic Discovery API in one service. Registering an AAS descriptor also makes its asset identifiers available to Discovery, so clients normally do not have to maintain the same mapping through two services.
@@ -103,13 +103,11 @@ If `abac.policyFileImport` is omitted, the DTR uses `always`: the configured acc
 
 | Operation or topic | Standalone service | DTR behavior | Client implication |
 | --- | --- | --- | --- |
-| `POST /lookup/shells/{aasIdentifier}` | Basic Discovery replaces the complete AssetLink set. | DTR appends the submitted links, does not remove duplicates, and requires the AAS descriptor to exist. | Create the descriptor first, send only additions, and avoid blind retries if duplicates matter. |
+| `POST /lookup/shells/{aasIdentifier}` | Basic Discovery replaces the complete AssetLink set. | DTR appends the submitted links without deduplication, so repeated submissions can create duplicates. The AAS descriptor must already exist. | Create the descriptor first, send only additions, and avoid blind retries if duplicates matter. |
 | Descriptor PUT path/body IDs | Standalone AAS Registry rejects an empty body ID or one that differs from the decoded path ID. | For AAS descriptors and nested Submodel Descriptors, DTR treats the decoded path identifier as authoritative and replaces the body ID. | Treat the path as the update target; a conflicting body ID does not select another resource. |
 | `GET /shell-descriptors?assetIds=...` | Registry filtering follows the standalone Registry behavior. | DTR resolves encoded `name`/`value` selectors through Discovery and applies DTR AssetLink visibility. | Use the standard Registry `assetIds` encoding, but account for DTR AND semantics and AssetLink visibility. |
 | Empty Discovery search result | Standalone Discovery returns a paged wrapper with `"result": []`. | A DTR search can omit `result` and return `{"paging_metadata": {}}`. | Treat an absent `result` as an empty page. |
 | Descriptor/Discovery synchronization | The standalone services can be operated independently. | DTR synchronizes descriptor identifiers into Discovery automatically. | Do not register the descriptor's identifiers a second time. |
-
-Path identifiers such as `aasIdentifier` and `submodelIdentifier` contain the identifier encoded as UTF-8 bytes and then Base64URL-encoded. Correctly padded and unpadded forms are accepted.
 
 ## Related Documentation
 
