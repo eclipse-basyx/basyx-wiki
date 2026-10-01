@@ -14,7 +14,7 @@ It returns HTTP `200` with:
 {"status":"UP"}
 ```
 
-The basic health handler confirms that the HTTP process can respond; it does not probe PostgreSQL or guarantee that API operations will succeed. For example:
+The basic health handler confirms that the HTTP process can respond. It does not probe PostgreSQL or guarantee that API operations will succeed. For example:
 
 ```bash
 curl -i http://localhost:8084/health
@@ -75,6 +75,9 @@ The common configuration and security packages provide reusable building blocks 
 - ABAC enablement and model configuration (`abac.*`)
 - startup security middleware setup that reads trustlist / access-rules files when ABAC is enabled
 - experimental relationship-based access control on top of ABAC (`rebac.*`, see [ReBAC](rebac))
+
+See [Runtime Security](security) for token validation, claim mapping, anonymous
+requests, ABAC evaluation, and resource-filtering behavior.
 
 ## Shared PostgreSQL Configuration Pattern
 

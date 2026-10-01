@@ -9,6 +9,7 @@ This section covers features and configuration that are shared across multiple B
 - [Deployment and Versions](deployment) — Covers version alignment, database initialization, persistent state, and deployment considerations shared across BaSyx Go components.
 - [Swagger UI and OpenAPI](swagger) — Describes the Swagger UI and OpenAPI documents exposed by BaSyx Go components.
 - [General Configuration](configuration) — Provides the common YAML configuration options and their environment-variable mappings.
+- [Runtime Security](security) — Explains OIDC authentication, ABAC authorization, trustlists, claims, and resource filtering for runtime API access.
 - [Shared Runtime Features](shared_features) — Describes runtime functionality implemented in shared BaSyx Go code and identifies where those features are available.
 - [Observability](observability) — Covers the common logging, metrics, tracing, and health-related capabilities provided by BaSyx Go components.
 - [Pagination](pagination) — Describes paged API responses, pagination parameters, and continuation cursors.
@@ -27,6 +28,7 @@ This section covers features and configuration that are shared across multiple B
 deployment
 swagger
 configuration
+security
 shared_features
 observability
 pagination
