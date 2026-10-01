@@ -25,6 +25,8 @@ curl -i -X POST http://localhost:8086/lookup/shells/dXJuOmV4YW1wbGU6YWFzOjE -H '
 
 Expect `201 Created` and an array containing the submitted links. No pre-existing AAS in a Repository is required. Repeating POST replaces the links for this AAS identifier rather than reporting a duplicate-registration conflict.
 
+When authorization relies on ReBAC, a missing Discovery entry requires the repository `creator` role. An entry that exists when authorization is checked requires `editor` or `owner` access.
+
 Path identifiers use Base64URL encoding of the identifier's UTF-8 bytes. BaSyx Go accepts valid padded and unpadded Base64URL values; the examples use the unpadded form. Asset-link names and values in JSON request bodies remain unencoded.
 
 ## Retrieve the Registered Links
@@ -107,7 +109,7 @@ Change the serial number in `asset-links.json` to `SN-002`, retaining the global
 ]
 ```
 
-In a Registry-integrated deployment, retaining the `globalAssetId` link keeps lookup by the descriptor's global asset identifier available after the replacement.
+Retaining the `globalAssetId` link preserves it in the Discovery registration returned by `GET /lookup/shells/{aasIdentifier}`. When an AAS Descriptor exists for that Discovery entry in the same database, lookup by global asset ID can also match the descriptor's separate `globalAssetId` property, even if the link was omitted from the Discovery replacement.
 
 Submit the complete replacement:
 
