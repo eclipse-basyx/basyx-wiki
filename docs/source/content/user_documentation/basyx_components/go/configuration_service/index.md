@@ -22,10 +22,10 @@ The BaSyx Configuration Service makes database startup and upgrades safer and ea
 Key benefits include:
 
 - **Safer updates**: Database schema changes are applied centrally before regular BaSyx services start, reducing the risk of competing containers modifying the schema at the same time.
-- **Reduced risk of data loss**: Patches are versioned and executed only when required. This helps avoid accidental repeated migrations and makes upgrade behavior more predictable.
+- **Version-aware patches**: Registered patches are skipped when the recorded schema version has already reached their target version.
 - **Clear database state**: The current schema version and schema state are stored in the `basyxsystem` table. BaSyx services can verify that the database is compatible and clean before serving requests.
 - **Fail-fast protection**: If the database schema is missing, outdated, or incompatible, services fail during startup instead of running against an unsafe database state.
-- **Traceable errors**: Startup failures include stable BaSyx error codes such as `BASYXCFG-DB-CONNECT`, `BASYXCFG-SCHEMA-EXECUTE`, and `BASYXCFG-PATCH-EXECUTE`, making troubleshooting easier in container logs and CI pipelines.
+- **Traceable errors**: Startup failures include BaSyx error codes such as `BASYXCFG-DB-CONNECT`, `BASYXCFG-SCHEMA-EXECUTE`, and `BASYXCFG-PATCH-EXECUTE`, making troubleshooting easier in container logs and CI pipelines.
 - **Repeatable deployments**: The same initialization flow can be used for local development, Docker Compose examples, CI environments, and containerized deployments.
 - **Simpler service containers**: Regular BaSyx services no longer need to own schema initialization. They can focus on their runtime responsibilities and rely on a prepared database.
 - **Predictable startup ordering**: Deployment tooling can wait for the Configuration Service to complete successfully before starting dependent services.
