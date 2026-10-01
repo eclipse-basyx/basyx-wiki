@@ -20,6 +20,7 @@ This section covers features and configuration that are shared across multiple B
 - [Asynchronous API Operations](asynchronous_requests) — Describes the API operations that BaSyx Go provides asynchronously and how their results are retrieved.
 - [Response Representations](representations) — Explains the supported AAS response representations, including normal, `$value`, `$metadata`, `$reference`, and `$path`.
 - [Recent Changes, History, and Signed Reads](history_and_changes) — Covers recent-change queries, historical states, integrity and mutation evidence, and cryptographically signed reads.
+- [History Evidence Verifier](history_evidence_verifier) — Explains how to verify and recover supported history, mutation, and ReBAC audit evidence.
 - [Relationship-Based Access Control (ReBAC)](rebac) — Describes experimental owner-managed resource sharing with users and groups alongside ABAC.
 - [Eventing](eventing) — Describes experimental CloudEvents-based change notifications and their REST, MQTT, Kafka, and AMQP delivery options.
 
@@ -41,6 +42,7 @@ registry_integration
 asynchronous_requests
 representations
 history_and_changes
+history_evidence_verifier
 rebac
 eventing
 ```

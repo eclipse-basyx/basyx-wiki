@@ -127,7 +127,7 @@ Required evidence writes are synchronous: if the configured evidence cannot be s
 
 Mutation evidence is not used by `$history`. When `history.mode: off`, evidence can still be recorded, but no new PostgreSQL history states are created for historical reads. PostgreSQL history and external evidence can also be enabled together.
 
-See the [evidence configuration reference](configuration.md#history-evidence) and the stable [history and evidence guide](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.0.12/docu/user/aas_api_v3_2.md) for storage setup, verification, backup, and recovery procedures.
+See [General Configuration](configuration) for storage settings and [History Evidence Verifier](history_evidence_verifier) for verification and recovery-export workflows.
 
 ## Signed Reads
 
