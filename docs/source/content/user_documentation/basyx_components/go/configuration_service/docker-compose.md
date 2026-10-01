@@ -3,10 +3,8 @@
 In Docker Compose deployments, run the BaSyx Configuration Service after PostgreSQL is healthy and before regular BaSyx services start.
 
 ```{warning}
-Use the same image tag for `basyxconfigurationservice` and the runtime services that share its database. This example uses `latest` for both.
+Use the same BaSyx version or build for `basyxconfigurationservice` and the runtime services.
 ```
-
-If the named volume already contains BaSyx data, do not treat `depends_on` as a complete upgrade procedure. `service_completed_successfully` orders the new processes shown in the Compose project, but it does not stop older containers, external services, or other database clients. Back up and, where required, quiesce the database by following [Upgrading an existing database](operations.md#upgrading-an-existing-database) before starting the migration.
 
 ## Minimal Example
 
@@ -64,8 +62,6 @@ volumes:
   postgres_data:
 ```
 
-`postgres_data` is a named volume mounted at the PostgreSQL 16 data directory, `/var/lib/postgresql/data`. It preserves the database across ordinary container replacement. Manage its lifecycle explicitly and include its database in backups; removing the volume removes the persisted database. See [Deployment, Versions, and Persistent State](../common/deployment.md).
-
 ## Startup Ordering
 
 Recommended ordering:
@@ -77,11 +73,13 @@ Recommended ordering:
 
 Use `condition: service_completed_successfully` for services that depend on the database schema being initialized.
 
-For an existing database, this only controls when the new `submodelrepository` process starts. It does not prove that every old process has stopped using the database.
-
 Each container process has its own PostgreSQL pool. In this example, the Configuration Service exits before the Submodel Repository starts, so their configured limits do not normally overlap. Account for both during manual restarts or upgrades where they may run at the same time, and add the limits of all concurrently running service replicas when sizing PostgreSQL.
 
-Update the Configuration Service and runtime images as one tag-aligned change. See [Version Scope](../common/deployment.md#version-scope) for the shared tag convention.
+```{warning}
+Mutable image tags such as `latest` and `SNAPSHOT` can change between restarts. If images are pulled fresh on restart, run `basyx_configuration` before DB-backed runtime services because schema requirements may have changed.
+```
+
+Pin exact image versions or image digests for reproducible deployments.
 
 ## Custom Schema and Patch Paths
 
