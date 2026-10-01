@@ -79,7 +79,7 @@ Changes made through one API can therefore affect what the other API returns:
 - Creating or updating an integrated AAS Descriptor can change subsequent Discovery lookup results.
 - The Digital Twin Registry behaves differently: its asset-link POST appends links and requires an existing AAS Descriptor.
 
-The descriptor's `globalAssetId` remains a dedicated descriptor property and can also be used for Basic Discovery lookup.
+The descriptor's `globalAssetId` remains a separate descriptor property. When Registry integration writes the descriptor's asset identifiers to Discovery, the `globalAssetId` is also represented as an asset link named `globalAssetId`. A standalone Discovery replacement replaces this link together with the rest of the Discovery mapping, so include it if lookup by global asset ID should remain available. Omitting the link does not clear the descriptor's `globalAssetId` property.
 
 ### Database Schema
 

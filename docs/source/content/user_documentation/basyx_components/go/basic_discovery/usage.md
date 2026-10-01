@@ -25,7 +25,7 @@ curl -i -X POST http://localhost:8086/lookup/shells/dXJuOmV4YW1wbGU6YWFzOjE -H '
 
 Expect `201 Created` and an array containing the submitted links. No pre-existing AAS in a Repository is required. Repeating POST replaces the links for this AAS identifier rather than reporting a duplicate-registration conflict.
 
-Keep asset names and values in the body unencoded. When substituting your own AAS identifier, encode its UTF-8 bytes using unpadded Base64URL for the path value.
+Path identifiers use Base64URL encoding of the identifier's UTF-8 bytes. BaSyx Go accepts valid padded and unpadded Base64URL values; the examples use the unpadded form. Asset-link names and values in JSON request bodies remain unencoded.
 
 ## Retrieve the Registered Links
 
@@ -84,7 +84,7 @@ Replace `RETURNED_CURSOR` with the server-provided value, URL-escaped as needed.
 
 ### Deprecated GET Lookup
 
-For existing clients, `GET /lookup/shells` accepts `assetIds` query parameters containing Base64URL-encoded JSON asset links. The preferred POST endpoint avoids this additional encoding step. For the original serial-number lookup:
+For existing clients, `GET /lookup/shells` accepts `assetIds` query parameters containing Base64URL-encoded JSON asset links. Valid padded and unpadded values are accepted; the example uses the unpadded form. The preferred POST endpoint avoids this additional encoding step. For the original serial-number lookup:
 
 ```bash
 curl -i -G http://localhost:8086/lookup/shells --data-urlencode 'assetIds=eyJuYW1lIjoic2VyaWFsTnVtYmVyIiwidmFsdWUiOiJTTi0wMDEifQ'
@@ -107,6 +107,8 @@ Change the serial number in `asset-links.json` to `SN-002`, retaining the global
 ]
 ```
 
+The example retains the `globalAssetId` link so that lookup by the descriptor's global asset identifier remains available after the replacement.
+
 Submit the complete replacement:
 
 ```bash
@@ -114,7 +116,7 @@ curl -i -X POST http://localhost:8086/lookup/shells/dXJuOmV4YW1wbGU6YWFzOjE -H '
 curl -i http://localhost:8086/lookup/shells/dXJuOmV4YW1wbGU6YWFzOjE
 ```
 
-Expect `201 Created` for the replacement and `200 OK` for the read. A lookup by `SN-001` now returns an empty result; a lookup by `SN-002` finds the AAS. Global asset identifier lookup still finds it because that link was retained. Omitting a link from the replacement removes it from the registered set.
+Expect `201 Created` for the replacement and `200 OK` for the read. A lookup by `SN-001` now returns an empty result; a lookup by `SN-002` finds the AAS. Omitting a link from the replacement removes it from the registered set.
 
 ## Delete the Discovery Registration
 

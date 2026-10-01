@@ -66,7 +66,7 @@ services:
 ```
 *docker-compose.yml including PostgreSQL 18, the BaSyx Configuration Service, and BaSyx Go Basic Discovery*
 
-Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service.
+Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service. For reproducible deployments, replace `latest` with the same concrete BaSyx version tag for all of these services. Alternatively, pin each service image to the corresponding immutable image digest from the same release. The `latest` tag is mutable and advances when a new release is published.
 
 ### Start and Check the Discovery Service
 
@@ -106,7 +106,7 @@ Basic Discovery also supports experimental relationship-based access control (Re
 
 For ReBAC-covered Discovery routes, an authenticated request is allowed when either ABAC or ReBAC grants access. Anonymous requests and endpoints outside the ReBAC-covered Discovery routes remain governed by ABAC. The `/verify` endpoint, when enabled, remains ABAC-only.
 
-Enable ReBAC with `rebac.enabled: true` or `REBAC_ENABLED=true`. When multiple BaSyx services share the same database, enable ReBAC consistently in all of them.
+Enable ReBAC with `rebac.enabled: true` or `REBAC_ENABLED=true`. If multiple ReBAC-capable BaSyx services share the same database, enable ReBAC consistently across them. A service running without ReBAC ignores ReBAC grants, does not assign owners to resources it creates, and does not remove ReBAC grants for resources it deletes.
 
 Discovery registrations can be shared through ReBAC. Registrations created through AAS Registry Discovery integration inherit access from their source descriptor. See [Relationship-Based Access Control](../common/rebac) for configuration and access-management details.
 

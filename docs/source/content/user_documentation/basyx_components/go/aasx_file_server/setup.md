@@ -130,7 +130,7 @@ The Compose example is unsecured. The File Server supports OIDC authentication, 
 
 ReBAC is disabled by default, requires ABAC and a readable OIDC trust list, and can be enabled with `REBAC_ENABLED=true`. AASX packages and asynchronous uploads are covered by ReBAC. For authenticated callers on these routes, access can be granted by either ABAC or ReBAC; anonymous callers remain ABAC-only.
 
-If multiple ReBAC-capable BaSyx services share the same database, enable ReBAC consistently across them. A service running without ReBAC ignores grants, does not assign owners to resources it creates, and does not maintain ReBAC state when deleting resources. See [Relationship-Based Access Control](../common/rebac) for configuration and administration details.
+If multiple ReBAC-capable BaSyx services share the same database, enable ReBAC consistently across them. A service running without ReBAC ignores ReBAC grants, does not assign owners to resources it creates, and does not remove ReBAC grants for resources it deletes. See [Relationship-Based Access Control](../common/rebac) for configuration and administration details.
 
 When ABAC/OIDC security is enabled, every `/packages-async` submission, status request, and result request requires an authenticated caller. Use the same bearer-token identity throughout the workflow because operation handles are scoped to their owner. With access control disabled as in this local example, the asynchronous routes accept anonymous requests.
 
