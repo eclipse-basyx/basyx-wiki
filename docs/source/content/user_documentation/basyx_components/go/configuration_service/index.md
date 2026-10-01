@@ -12,7 +12,7 @@ Typical use cases include:
 
 - Initializing a fresh PostgreSQL database for BaSyx services.
 - Applying standardized BaSyx database patches during deployment startup.
-- Serializing schema initialization in Docker Compose or containerized environments.
+- Coordinating schema initialization in Docker Compose or other containerized environments.
 - Making service startup depend on a completed database initialization job.
 
 ## User Benefits

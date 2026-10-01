@@ -12,7 +12,7 @@ It currently supports:
 - Uploading the base SQL schema from `base.sql` when the recorded schema version is below the baseline threshold for the release.
 - Applying registered SQL patch files only when the database schema version is older than the patch target version.
 - Tracking the schema version and schema state through `basyxsystem.schema_version` and `basyxsystem.state`.
-- Serializing schema and patch execution with a PostgreSQL advisory lock.
+- Using PostgreSQL advisory locks to coordinate schema initialization and patch execution.
 - Exiting with a non-zero status code when initialization fails.
 
 The base-schema decision is version-based. If the recorded schema version has reached the baseline threshold, the service skips `base.sql`; it does not independently verify that every expected base table exists.
