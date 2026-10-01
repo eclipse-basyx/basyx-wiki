@@ -69,23 +69,35 @@ starts:
 | Empty | Uses the component default: `always` for Digital Twin Registry and `if_missing` for the other components listed under [Component Support](#component-support). |
 
 With `if_missing`, changing the mounted JSON file does not change an existing
-active policy on restart. With `always`, different files used by instances that
-share a scope can successively supersede one another.
+active policy on restart. With `always`, a restart imports
+`abac.modelPath` again and can supersede a different policy that was activated
+through the API. When API-managed changes should persist across restarts, use
+`if_missing` after file-based bootstrap, or `never` once an active database
+policy exists. With `never`, startup fails closed when the scope has no active
+policy. Instances sharing a scope and using `always` can successively supersede
+one another when their configured files differ.
 
 ### Enabling the Management API
 
-The `/security/abac/**` routes exist only when both `abac.enabled` and
-`abac.managementApi.enabled` are `true`. Their OpenAPI definitions are added to
-the service's Swagger document only under the same condition and when Swagger
-itself is enabled.
+The management routes under `/security/abac` exist only when both
+`abac.enabled` and `abac.managementApi.enabled` are `true`. Their OpenAPI
+definitions are added to the service's Swagger document only under the same
+condition and when Swagger itself is enabled.
 
 ## Protecting the Management API
 
 The management routes pass through the active ABAC policy. Before enabling the
 API, ensure that the active or startup policy explicitly grants the required
 rights to trusted administrators for both `/security/abac` and
-`/security/abac/*`. The route mappings use `READ`, `CREATE`, `UPDATE`, and
-`DELETE` according to the operation.
+`/security/abac/*`. Required rights are assigned by management operation, not
+mechanically by HTTP method:
+
+| Management operation | Required ABAC access |
+| --- | --- |
+| Read the active policy, versions, rules, or definitions | `READ` |
+| Import or clone a version; create or duplicate a rule; create a definition | `CREATE` |
+| Validate, activate, or reject a version; replace, merge-patch, move, enable, or disable a rule; replace or merge-patch a definition | `UPDATE` |
+| Delete a rule or definition | `DELETE` |
 
 ABAC-denied requests below `/security/abac` return `404 Not Found` rather than
 `403 Forbidden`, which avoids exposing policy and rule identifiers through
@@ -95,21 +107,41 @@ not found.
 ## Managing Policies
 
 Paths below are relative to the service base URL, including any configured
-`server.contextPath`. Use the runtime Swagger page for complete request and
-response schemas.
+`server.contextPath`. JSON management request bodies are limited to 10 MiB
+(`10485760` bytes). A larger body is rejected with `400 Bad Request`.
 
-| Purpose | Method and path |
+| Versions | Method and path |
 | --- | --- |
-| Inspect the active version or its rules | `GET /security/abac/active-policy`; `GET /security/abac/active-policy/rules` |
-| List, import, or inspect versions | `GET` or `POST /security/abac/policy-versions`; `GET /security/abac/policy-versions/{versionID}` |
-| Clone, validate, activate, or reject | `POST /security/abac/policy-versions/{versionID}/{clone|validate|activate|reject}` |
-| Inspect or edit rules | `/security/abac/policy-versions/{versionID}/rules/**` |
-| Inspect or edit definitions | `/security/abac/policy-versions/{versionID}/definitions/**` |
+| Read the active version and its materialized rules | `GET /security/abac/active-policy`; `GET /security/abac/active-policy/rules` |
+| List or import versions | `GET /security/abac/policy-versions`; `POST /security/abac/policy-versions` |
+| Read one version | `GET /security/abac/policy-versions/{versionID}` |
+| Clone a version | `POST /security/abac/policy-versions/{versionID}/clone` |
+| Validate, activate, or reject a staged version | `POST /security/abac/policy-versions/{versionID}/validate`; `POST /security/abac/policy-versions/{versionID}/activate`; `POST /security/abac/policy-versions/{versionID}/reject` |
+
+| Rules | Method and path |
+| --- | --- |
+| List or create | `GET` or `POST /security/abac/policy-versions/{versionID}/rules` |
+| Read, replace, merge-patch, or delete | `GET`, `PUT`, `PATCH`, or `DELETE /security/abac/policy-versions/{versionID}/rules/{ruleIndex}` |
+| Duplicate or move | `POST /security/abac/policy-versions/{versionID}/rules/{ruleIndex}/duplicate`; `POST /security/abac/policy-versions/{versionID}/rules/{ruleIndex}/move` |
+| Enable or disable | `PUT /security/abac/policy-versions/{versionID}/rules/{ruleIndex}/enabled` |
+
+| Definitions | Method and path |
+| --- | --- |
+| List all kinds | `GET /security/abac/policy-versions/{versionID}/definitions` |
+| List or create by kind | `GET` or `POST /security/abac/policy-versions/{versionID}/definitions/{kind}` |
+| Read, replace, merge-patch, or delete by name | `GET`, `PUT`, `PATCH`, or `DELETE /security/abac/policy-versions/{versionID}/definitions/{kind}/{name}` |
+
+The supported `{kind}` values are `attributes`, `acls`, `objects`, and
+`formulas`. The API also accepts their source-document names `DEFATTRIBUTES`,
+`DEFACLS`, `DEFOBJECTS`, and `DEFFORMULAS`.
 
 ### Recommended Workflow
 
 The normal change workflow is to inspect the active version, clone it, edit the
-staged clone, validate it, and activate it:
+staged clone, validate it, and activate it. The shell examples require `curl`
+and `jq`. `BASE_URL` is the externally reachable component URL and must include
+`server.contextPath` when one is configured; the value below is only an
+example.
 
 ```bash
 export BASE_URL=http://localhost:8081
@@ -130,31 +162,81 @@ export DRAFT_VERSION_ID="$(
 )"
 ```
 
-Use the rule and definition endpoints or Swagger to edit
-`${DRAFT_VERSION_ID}`. Then validate and activate it:
+Use the rule and definition endpoints below to edit `${DRAFT_VERSION_ID}`.
+Then validate and activate it:
 
 ```bash
-curl --fail-with-body -sS -X POST \
-  -H "Authorization: Bearer ${TOKEN}" \
-  "${BASE_URL}/security/abac/policy-versions/${DRAFT_VERSION_ID}/validate"
+VALIDATION="$(
+  curl --fail-with-body -sS -X POST \
+    -H "Authorization: Bearer ${TOKEN}" \
+    "${BASE_URL}/security/abac/policy-versions/${DRAFT_VERSION_ID}/validate"
+)"
 
-curl --fail-with-body -sS -X POST \
-  -H "Authorization: Bearer ${TOKEN}" \
-  "${BASE_URL}/security/abac/policy-versions/${DRAFT_VERSION_ID}/activate"
+printf '%s\n' "${VALIDATION}" | jq .
+
+if printf '%s\n' "${VALIDATION}" | jq -e '.valid == true' >/dev/null; then
+  curl --fail-with-body -sS -X POST \
+    -H "Authorization: Bearer ${TOKEN}" \
+    "${BASE_URL}/security/abac/policy-versions/${DRAFT_VERSION_ID}/activate"
+else
+  printf '%s\n' 'Policy validation failed; activation was not attempted.' >&2
+  exit 1
+fi
+```
+
+The validation endpoint returns `200 OK` for a completed validation even when
+the policy is invalid. Always inspect `valid`. When it is `false`, the optional
+`error` field describes the policy-content failure. Activate only after
+validation returns `valid: true`.
+
+```{warning}
+Validation checks policy parsing and materialization, not whether administrators
+will retain access. Before activation, verify that the staged policy grants the
+required management rights to at least one trusted administrator. After a
+successful activation commits, subsequent authorization checks on the handling
+service instance use the new policy. Removing access to the management routes
+can lock administrators out.
 ```
 
 Verify the result with `GET /security/abac/active-policy`. Keep the old active
 version's identifier until the new policy has been operationally verified. The
-old version remains stored as `superseded` and can be cloned for a rollback
-policy.
+old version remains stored as `superseded`. To roll back, clone that superseded
+version, optionally validate the new staged clone, and activate the clone. A
+superseded version cannot be reactivated directly.
 
 ### Creating a Staged Version
 
 `POST /security/abac/policy-versions` accepts a complete policy in the `policy`
 field and creates a staged version. Optional `source_ref` metadata can identify
-the change ticket or deployment source. Set `activate: true` only when import
-and immediate activation are intentional. Creation and activation then use one
-database transaction and a failure rolls back the imported version.
+the change ticket or deployment source:
+
+```json
+{
+  "policy": {
+    "AllAccessPermissionRules": {
+      "rules": [
+        {
+          "ACL": {
+            "ACCESS": "ALLOW",
+            "RIGHTS": ["READ"],
+            "ATTRIBUTES": [{"GLOBAL": "ANONYMOUS"}]
+          },
+          "OBJECTS": [{"ROUTE": "/description"}],
+          "FORMULA": {"$boolean": true}
+        }
+      ]
+    }
+  },
+  "source_ref": "change-ticket:SEC-1042",
+  "activate": false
+}
+```
+
+The `policy` value must be a complete access-rule document. When `activate` is
+omitted or `false`, the returned version is staged. With `activate: true`,
+import and activation occur in one database transaction and the returned
+version is active. A failure rolls back the imported version.
+The self-lockout warning above also applies when using `activate: true`.
 
 Cloning copies any stored version into a new staged version. Cloning the active
 version is generally the safest starting point because it preserves currently
@@ -168,6 +250,31 @@ It also supports creating, replacing, merge-patching, deleting, duplicating,
 moving, and enabling or disabling staged rules. Definition changes can affect
 every rule that references that definition.
 
+Create a rule either by sending the rule object directly, which appends it, or
+by wrapping it to request an insertion position:
+
+```json
+{
+  "position": 1,
+  "rule": {
+    "ACL": {
+      "ACCESS": "ALLOW",
+      "RIGHTS": ["READ"],
+      "ATTRIBUTES": [{"GLOBAL": "ANONYMOUS"}]
+    },
+    "OBJECTS": [{"ROUTE": "/description"}],
+    "FORMULA": {"$boolean": true}
+  }
+}
+```
+
+Move and duplicate requests use `{ "position": 2 }`. A duplicate request may
+also have an empty body. Enable or disable a rule with
+`{ "enabled": true }` or `{ "enabled": false }`. Definition create and
+replace bodies contain one definition of the `{kind}` named in the path,
+including its `name` and kind-specific `attributes`, `acl`, `objects`, or
+`formula` member.
+
 Every edit rematerializes the complete staged policy within its database
 transaction. A malformed change or unresolved reference is rejected without
 committing the edit. Active, superseded, and rejected versions reject these
@@ -178,19 +285,32 @@ objects. `null` removes a field. It is not RFC 6902 JSON Patch. The result must
 still satisfy the policy grammar, including the mutually exclusive pairs
 `ACL`/`USEACL`, `FORMULA`/`USEFORMULA`, and `OBJECTS`/`USEOBJECTS`.
 
-Rule indices are 1-based. Inserting, deleting, duplicating, or moving rules
-recomputes their order, and order is security-relevant. Audit
-`matched_rule_id` values contain an order-derived prefix, so reordering can
-change the identifier recorded for an otherwise unchanged rule.
+Rule indices and positions are 1-based. For creation, an omitted position or a
+position outside `1` through the new list length appends. A duplicate without a
+position is inserted immediately after its source. An explicit out-of-range
+duplicate position appends. Moving requires a position from `1` through the
+current rule count and otherwise returns `400 Bad Request`. Deleting the only
+remaining rule is also rejected with `400 Bad Request`. Successful insert,
+delete, duplicate, and move operations recompute rule order. Order is
+security-relevant, and reordering can change the order-derived prefix in
+`matched_rule_id`.
+
+```{warning}
+Enabling or disabling a rule that uses `USEACL` resolves the referenced ACL,
+writes it into that rule as an inline `ACL`, removes `USEACL`, and then changes
+`ACCESS` to `ALLOW` or `DISABLED`. The staged rule therefore no longer follows
+subsequent changes to the shared ACL definition.
+```
 
 ### Validation, Activation, and Rejection
 
-Validation reparses and materializes a staged policy, resolves reusable
-definitions, refreshes its stored materialized rules and hashes, and returns
-`valid`, `policy_id`, and `materialized_policy_hash`. Validation does not
-activate the version. It verifies the grammar and materialization supported by
-BaSyx. It does not prove that route coverage or organizational authorization
-intent is complete.
+Validation attempts to parse and materialize a staged policy and resolve its
+reusable definitions. When successful, it refreshes the stored materialized
+rules and hashes and returns `valid: true`, `policy_id`, and
+`materialized_policy_hash`. A policy-content failure returns `valid: false`
+and `error` without replacing the stored materialization. Validation does not
+activate the version or prove that route coverage and organizational
+authorization intent are complete.
 
 Activation repeats validation. Superseding the current active version, marking
 the staged version active, and recording the corresponding policy events use one
