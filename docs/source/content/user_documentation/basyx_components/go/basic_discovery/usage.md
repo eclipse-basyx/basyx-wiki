@@ -25,7 +25,7 @@ curl -i -X POST http://localhost:8086/lookup/shells/dXJuOmV4YW1wbGU6YWFzOjE -H '
 
 Expect `201 Created` and an array containing the submitted links. No pre-existing AAS in a Repository is required. Repeating POST replaces the links for this AAS identifier rather than reporting a duplicate-registration conflict.
 
-When authorization relies on ReBAC, a missing Discovery entry requires the repository `creator` role. An entry that exists when authorization is checked requires `editor` or `owner` access.
+When authorization relies on ReBAC, a missing Discovery entry requires repository `creator` or `admin` access. An entry that exists when authorization is checked requires update permission on that entry.
 
 Path identifiers use Base64URL encoding of the identifier's UTF-8 bytes. BaSyx Go accepts valid padded and unpadded Base64URL values; the examples use the unpadded form. Asset-link names and values in JSON request bodies remain unencoded.
 
