@@ -304,7 +304,7 @@ Timestamp filters use `administration.createdAt` and `administration.updatedAt` 
 
 Use `POST /query/submodels` when the predefined list filters are not sufficient. Structured queries can combine conditions and filter on Submodel content, including Submodel Element values. Query results use the same `limit` parameter and cursor-based pagination as other collection requests.
 
-See the release-matched [Query Language examples](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.0/docu/query_language/examples.md) and the running Swagger UI for the supported query structure and operators. Adding arbitrary field names as list query parameters does not create a structured query.
+See the shared [Query Language](../common/query_language) for conditions, operators, `$sm` and `$sme` fields, fragment filters, and matching semantics. Use the running Swagger UI for the operation contract. Adding arbitrary field names as list query parameters does not create a structured query.
 
 ## Invoke an Operation
 

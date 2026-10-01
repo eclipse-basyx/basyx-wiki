@@ -19,7 +19,7 @@ One AAS Environment process provides:
 - `/upload` and `/serialization` for whole-environment import and export;
 - `/description` for the AAS Environment service description and supported profiles.
 
-All of these API areas are routes of the same runtime and use shared PostgreSQL persistence. Registry descriptors remain different resources from Repository content, and Discovery mappings remain different from both. Use the linked standalone component pages for detailed CRUD and query semantics. The routes behave as composed API areas here rather than as network calls between internal services.
+All of these API areas are routes of the same runtime and use shared PostgreSQL persistence. Registry descriptors remain different resources from Repository content, and Discovery mappings remain different from both. Use the linked standalone component pages for detailed CRUD behavior and the shared [Query Language](../common/query_language) for query syntax and the Environment's hierarchy-spanning query scope. The routes behave as composed API areas here rather than as network calls between internal services.
 
 The Environment also supports experimental Eventing for AAS, asset, and Submodel changes, including dedicated notifications for newly added Product Change Notification (PCN) records. Eventing is disabled by default and must be enabled explicitly; see [Eventing](../common/eventing) for Event Feed and broker configuration.
 

@@ -11,6 +11,7 @@ This section covers features and configuration that are shared across multiple B
 - [General Configuration](configuration) — Provides the common YAML configuration options and their environment-variable mappings.
 - [Runtime Security](security) — Explains OIDC authentication, ABAC authorization, trustlists, claims, and resource filtering for runtime API access.
 - [ABAC Policy Management](abac_policy_management) — Explains PostgreSQL-backed policy versions, startup import, staged changes, activation, and operation across replicas.
+- [Query Language](query_language) — Explains structured query conditions, field roots, nested matching, fragment filters, and authorization-filter interaction.
 - [Shared Runtime Features](shared_features) — Describes runtime functionality implemented in shared BaSyx Go code and identifies where those features are available.
 - [Observability](observability) — Covers the common logging, metrics, tracing, and health-related capabilities provided by BaSyx Go components.
 - [Pagination](pagination) — Describes paged API responses, pagination parameters, and continuation cursors.
@@ -31,6 +32,7 @@ swagger
 configuration
 security
 abac_policy_management
+query_language
 shared_features
 observability
 pagination

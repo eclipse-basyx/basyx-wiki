@@ -335,7 +335,7 @@ curl -i -G http://localhost:8084/shells --data-urlencode 'assetIds=eyJuYW1lIjoic
 
 Expect your AAS in `result`. Searching for `SN-001` after changing it to `SN-002` would return no match. For your own asset filters, encode the complete JSON object's UTF-8 bytes with Base64URL. Use `{"name":"globalAssetId","value":"urn:example:asset:1"}` for the global asset identifier.
 
-Timestamp filters use administrative timestamps supplied in the AAS payload. Writes do not automatically generate or overwrite `administration.createdAt` and `administration.updatedAt`; see [Find Recently Changed AASs](#find-recently-changed-aass) for a complete example. Current-resource lists do not report deletions. Ordinary list parameters select supported attributes. Structured query expressions belong to `POST /query/shells` and are not arbitrary additional list parameters. Consult the running Swagger UI for the query schema in your component version.
+Timestamp filters use administrative timestamps supplied in the AAS payload. Writes do not automatically generate or overwrite `administration.createdAt` and `administration.updatedAt`; see [Find Recently Changed AASs](#find-recently-changed-aass) for a complete example. Current-resource lists do not report deletions. Ordinary list parameters select supported attributes. Structured query expressions belong to `POST /query/shells` and are not arbitrary additional list parameters. Consult the running Swagger UI for the operation contract.
 
 ### Query AAS Data
 
@@ -358,7 +358,7 @@ Send it to the query endpoint:
 curl -i -X POST http://localhost:8084/query/shells -H 'Content-Type: application/json' --data-binary '@query.json'
 ```
 
-Expect `200 OK` with `MotorAASUpdated` in the `result` array. `limit` and `cursor` can be supplied as query parameters for pagination.
+Expect `200 OK` with `MotorAASUpdated` in the `result` array. `limit` and `cursor` can be supplied as query parameters for pagination. See [Query Language](../common/query_language) for conditions, operators, fields, and fragment filters.
 
 The standalone AAS Repository supports structured queries over AAS data only. Expressions that use `$sm` or `$sme` to traverse into referenced Submodels or Submodel Elements return `400 Bad Request`. Use the [AAS Environment Service](../aas_environment/index) for those hierarchy-spanning queries.
 

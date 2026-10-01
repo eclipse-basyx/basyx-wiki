@@ -15,7 +15,7 @@ The API badge describes the OpenAPI document shipped with the component. The exa
 The DTR includes the AAS Registry operations for:
 
 - AAS descriptor CRUD and paged listing, including AAS-scoped Submodel Descriptors
-- structured descriptor queries through `POST /query/shell-descriptors`
+- structured descriptor queries through `POST /query/shell-descriptors` using the shared [Query Language](../common/query_language)
 - asynchronous bulk creation, replacement, and deletion, including bulk status and result retrieval
 
 See [AAS Registry](../aas_registry/index) for Registry concepts and common behavior.

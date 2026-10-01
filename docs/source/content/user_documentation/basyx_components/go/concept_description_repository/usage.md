@@ -63,7 +63,7 @@ The `idShort` filter is plain text. The optional `isCaseOf` and `dataSpecificati
 
 Use `POST /query/concept-descriptions` when the predefined collection filters are not sufficient. The endpoint accepts the shared BaSyx query language and returns matching Concept Descriptions with `limit` and cursor-based pagination.
 
-See the release-matched [Query Language examples](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.0/docu/query_language/examples.md) and the running Swagger UI for supported conditions, fragment filters, and request structure.
+See the shared [Query Language](../common/query_language) for conditions, operators, `$cd` fields, and fragment filters. Use the running Swagger UI for the operation contract.
 
 ### Recent Changes
 

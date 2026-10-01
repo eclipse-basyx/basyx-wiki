@@ -183,7 +183,7 @@ Use `POST /query/shell-descriptors` for structured searches. Save this query as 
 curl -i -X POST http://localhost:8082/query/shell-descriptors -H 'Content-Type: application/json' --data-binary '@query.json'
 ```
 
-Expect `200 OK` with a paged descriptor result. String values in the query JSON are unencoded. For subsequent pages, repeat the same query body and page size while supplying the returned cursor; see [Pagination](../common/pagination). See the release-pinned [query language examples](https://github.com/eclipse-basyx/basyx-go-components/blob/81324eb3aad9d63baea93d3385bc9ca7e6a6a05a/docu/query_language/examples.md) for combinations and nested descriptor filters, and the running Swagger UI for the installed version's contract.
+Expect `200 OK` with a paged descriptor result. String values in the query JSON are unencoded. For subsequent pages, repeat the same query body and page size while supplying the returned cursor; see [Pagination](../common/pagination). See the shared [Query Language](../common/query_language) for combinations, nested descriptor fields, fragment filters, and matching semantics, and use the running Swagger UI for the installed version's contract.
 
 ## Bulk Operations
 
