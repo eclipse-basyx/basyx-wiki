@@ -54,7 +54,7 @@ services:
         condition: service_completed_successfully
 ```
 
-Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service.
+Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service. For reproducible deployments, replace `latest` with the same concrete BaSyx version tag for all of these services. Alternatively, pin each service image to the corresponding immutable image digest from the same release. The `latest` tag is mutable and advances when a new release is published.
 
 ```{warning}
 This minimal local Compose setup does not declare a named PostgreSQL volume. An image-created anonymous volume is not automatically reused after `docker compose down`, so recreating the containers can make previously stored data appear to be lost. Add a correctly mounted named volume before storing persistent data, and migrate existing data explicitly rather than expecting a new volume declaration to copy it. See [Persistent State](../common/deployment.md#persistent-state).
@@ -117,12 +117,17 @@ Environment variables use uppercase configuration paths with dots replaced by un
 | `ABAC_MODELPATH` | Path to the mounted access-rule model. |
 | `ABAC_POLICY_FILE_IMPORT` | Policy import mode. The default is `if_missing`. |
 | `OIDC_TRUSTLISTPATH` | Path to the mounted OIDC trust list. |
+| `REBAC_ENABLED` | Enables experimental ReBAC. Default: `false`; requires ABAC and a readable OIDC trust list. |
 
 An explicitly configured reader may be eventually consistent. Omit it when requests must immediately read their own writes.
 
-### Secured Setup
+### Security Configuration
 
-The Compose example is unsecured. To enable the supported security middleware, set `ABAC_ENABLED=true`, mount the access-rule and OIDC trust-list files, and set their container paths. A mounted policy is not automatically re-imported on every restart: the effective default import mode is `if_missing`. See the [`oidc` and `abac`](../common/configuration.md#oidc-and-abac) and [Security Files](../common/configuration.md#security-files) sections in General Configuration before exposing the service.
+The Compose example is unsecured. To enable OIDC-based ABAC, set `ABAC_ENABLED=true`, mount the access-rule and OIDC trust-list files, and set their container paths. A mounted policy is not automatically re-imported on every restart: the effective default import mode is `if_missing`. See the [`oidc` and `abac`](../common/configuration.md#oidc-and-abac) and [Security Files](../common/configuration.md#security-files) sections in General Configuration before exposing the service.
+
+The Concept Description Repository also supports experimental relationship-based access control (ReBAC). ReBAC is disabled by default, requires ABAC and a readable OIDC trust list, and can be enabled with `REBAC_ENABLED=true`. Concept Descriptions are covered by ReBAC. For authenticated callers on these routes, access can be granted by either ABAC or ReBAC. Anonymous callers and endpoints outside the ReBAC-covered routes remain ABAC-only. In particular, `$recent-changes` remains ABAC-only.
+
+If multiple ReBAC-capable BaSyx services share the same database, enable ReBAC consistently across them. A service running without ReBAC ignores ReBAC grants, does not assign owners to resources it creates, and does not remove ReBAC grants for resources it deletes. See [Relationship-Based Access Control](../common/rebac) for configuration and administration details.
 
 ## Running without Docker
 

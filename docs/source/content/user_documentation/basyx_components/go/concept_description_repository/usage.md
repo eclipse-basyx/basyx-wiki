@@ -34,7 +34,7 @@ Expect `201 Created`. Repeating POST with the same identifier returns `409 Confl
 
 ## Retrieve It by Identifier
 
-The URL uses the Base64URL encoding of the Concept Description identifier, without padding:
+Path identifiers use the Base64URL encoding of the identifier's UTF-8 bytes. BaSyx Go accepts valid padded and unpadded Base64URL values. The examples below use the unpadded form. Identifiers in JSON request bodies remain unencoded:
 
 | Original identifier | Path value |
 | --- | --- |
@@ -44,7 +44,7 @@ The URL uses the Base64URL encoding of the Concept Description identifier, witho
 curl -i http://localhost:8086/concept-descriptions/dXJuOmV4YW1wbGU6Y2Q6bW90b3Itc3BlZWQ
 ```
 
-Expect `200 OK` and the stored object. Keep the identifier in JSON unencoded; encode only the path value. For another identifier, encode its UTF-8 bytes with Base64URL without padding.
+Expect `200 OK` and the stored object. For another identifier, Base64URL-encode its UTF-8 bytes using either a valid padded or unpadded form.
 
 ## List and Filter Concept Descriptions
 
@@ -55,7 +55,7 @@ curl -i -G http://localhost:8086/concept-descriptions --data-urlencode 'idShort=
 
 The collection response contains a `result` array and `paging_metadata`. If `paging_metadata.cursor` is present, pass it unchanged as the `cursor` parameter of the next request. See [Pagination](../common/pagination).
 
-The `idShort` filter is plain text. The optional `isCaseOf` and `dataSpecificationRef` filters are Base64URL-encoded reference values. Consult the running Swagger UI for their schemas instead of guessing an encoding.
+The `idShort` filter is plain text. The optional `isCaseOf` and `dataSpecificationRef` filters are Base64URL-encoded reference values. Valid padded and unpadded forms are accepted. Consult the running Swagger UI for their schemas instead of guessing an encoding.
 
 `createdFrom` and `updatedFrom` are inclusive RFC 3339 lower-bound filters for the Concept Description's `administration.createdAt` and `administration.updatedAt` values. They are not repository POST or PUT timestamps, and the Repository does not generate or advance these fields when it writes a resource. If both filters are provided, a Concept Description matches when either `createdAt >= createdFrom` or `updatedAt >= updatedFrom`. A missing or invalid timestamp does not satisfy its comparison.
 
@@ -86,6 +86,8 @@ curl -i -X PUT http://localhost:8086/concept-descriptions/dXJuOmV4YW1wbGU6Y2Q6bW
 ```
 
 Expect `204 No Content` for an existing resource. PUT creates a missing resource with `201 Created`. The body `id` must equal the decoded path identifier, and fields omitted from a replacement are not retained.
+
+When authorization relies on ReBAC, creating a Concept Description that is missing when authorization is checked requires repository `creator` or `admin` access; one that already exists requires update permission.
 
 ## Delete the Example
 

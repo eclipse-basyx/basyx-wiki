@@ -17,7 +17,7 @@ Use the [AAS Environment](../aas_environment/index) when AASs, Submodels, Concep
 
 ## Important Behavior
 
-The identifier in a resource URL is UTF-8 Base64URL-encoded without padding. Identifiers in JSON request bodies remain unencoded. A PUT creates a missing Concept Description or replaces an existing one; its body identifier must match the decoded path identifier.
+The identifier in a resource URL is the Base64URL encoding of its UTF-8 bytes. BaSyx Go accepts valid padded and unpadded Base64URL values. Identifiers in JSON request bodies remain unencoded. A PUT creates a missing Concept Description or replaces an existing one; its body identifier must match the decoded path identifier.
 
 The Repository stores Concept Descriptions independently of the AAS and Submodel resources that reference them. It does not validate or synchronize semantic references in those resources.
 
@@ -27,7 +27,7 @@ The Repository uses PostgreSQL. The BaSyx Configuration Service must initialize 
 
 ## Configuration and Security
 
-See [General Configuration](../common/configuration) for server, database, environment-variable, reader-pool, OIDC, and ABAC settings. Authentication and authorization are disabled in the local example.
+See [General Configuration](../common/configuration) for server, database, environment-variable, reader-pool, OIDC, and ABAC settings, and [Relationship-Based Access Control](../common/rebac) for the optional experimental ReBAC model. Authentication and authorization are disabled in the local example.
 
 ## API Documentation
 
@@ -43,6 +43,7 @@ The standalone Concept Description Repository does not provide `/serialization` 
 - [Using the Concept Description Repository](usage)
 - [AAS Environment](../aas_environment/index)
 - [General Configuration](../common/configuration)
+- [Relationship-Based Access Control](../common/rebac)
 
 ```{toctree}
 :hidden:
