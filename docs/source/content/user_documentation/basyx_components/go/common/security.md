@@ -61,8 +61,9 @@ environment-variable names, startup import modes, and file-mount guidance.
 
 For the database-backed policy services, authorization uses the active ABAC
 policy stored in PostgreSQL. `abac.policyFileImport` controls whether
-`abac.modelPath` is imported and activated at startup. Policy administration
-is intentionally outside the scope of this page.
+`abac.modelPath` is imported and activated at startup. See
+[ABAC Policy Management](abac_policy_management) for policy scopes, versioning,
+staged changes, activation, and multi-replica operation.
 
 ## OIDC Authentication
 
