@@ -107,7 +107,7 @@ Change the serial number in `asset-links.json` to `SN-002`, retaining the global
 ]
 ```
 
-The example retains the `globalAssetId` link so that lookup by the descriptor's global asset identifier remains available after the replacement.
+In a Registry-integrated deployment, retaining the `globalAssetId` link keeps lookup by the descriptor's global asset identifier available after the replacement.
 
 Submit the complete replacement:
 
