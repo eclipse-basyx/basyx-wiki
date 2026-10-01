@@ -23,8 +23,8 @@ Key benefits include:
 
 - **Safer updates**: Database schema changes are applied centrally before regular BaSyx services start, reducing the risk of competing containers modifying the schema at the same time.
 - **Version-aware patches**: Registered patches are skipped when the recorded schema version has already reached their target version.
-- **Clear database state**: The current schema version and schema state are stored in the `basyxsystem` table. BaSyx services can verify that the database is compatible and clean before serving requests.
-- **Fail-fast protection**: If the database schema is missing, outdated, or incompatible, services fail during startup instead of running against an unsafe database state.
+- **Clear database state**: The current schema version and schema state are stored in the `basyxsystem` table. DB-backed BaSyx services verify the recorded version and require a `clean` state before serving requests.
+- **Fail-fast protection**: DB-backed BaSyx services fail during startup if the schema metadata is unavailable, the recorded schema version does not exactly match the version expected by the service, or the recorded schema state is not `clean`.
 - **Traceable errors**: Startup failures include BaSyx error codes such as `BASYXCFG-DB-CONNECT`, `BASYXCFG-SCHEMA-EXECUTE`, and `BASYXCFG-PATCH-EXECUTE`, making troubleshooting easier in container logs and CI pipelines.
 - **Repeatable deployments**: The same initialization flow can be used for local development, Docker Compose examples, CI environments, and containerized deployments.
 - **Simpler service containers**: Regular BaSyx services no longer need to own schema initialization. They can focus on their runtime responsibilities and rely on a prepared database.
