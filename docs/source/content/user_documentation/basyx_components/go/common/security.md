@@ -3,8 +3,9 @@
 This page describes runtime API access security in BaSyx Go v1.1.0. BaSyx
 validates signed JWT bearer access tokens against configured OpenID Connect
 (OIDC) providers, checks required scopes, and normalizes the resulting claims.
-Attribute-based access control (ABAC) then decides which API operations and
-resources the caller may use. Requests without credentials can continue as
+Attribute-based access control (ABAC) then determines which API operations and
+resources the caller may use. Experimental ReBAC can additionally grant access
+on supported services and routes. Requests without credentials can continue as
 anonymous; ABAC still decides whether they are allowed. This is separate from
 [Supply Chain Security](../supply_chain_security), which covers container
 images, signatures, provenance, and SBOMs.
@@ -288,7 +289,7 @@ This policy does not grant access to any other route or right.
 
 | Situation | Response |
 | --- | --- |
-| A token sent as `Authorization: Bearer <token>` is malformed, has an untrusted issuer, or fails signature, issuer, expiration, or configured audience validation | `401 Unauthorized` |
+| A token sent as `Authorization: Bearer <token>` is malformed, has an untrusted issuer, fails token validation, or contains claims that BaSyx cannot normalize | `401 Unauthorized` |
 | An authenticated token does not contain every scope required by its trustlist entry | `403 Forbidden` |
 | ABAC denies an otherwise valid request on an ABAC-only route outside `/security/abac`, whether authenticated or anonymous | `403 Forbidden` |
 | After OIDC processing, ABAC denies access below `/security/abac`; policy-management resources are deliberately hidden | `404 Not Found` |
