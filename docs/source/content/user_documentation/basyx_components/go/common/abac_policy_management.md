@@ -99,16 +99,17 @@ mechanically by HTTP method:
 | Validate, activate, or reject a version; replace, merge-patch, move, enable, or disable a rule; replace or merge-patch a definition | `UPDATE` |
 | Delete a rule or definition | `DELETE` |
 
-ABAC-denied requests below `/security/abac` return `404 Not Found` rather than
-`403 Forbidden`, which avoids exposing policy and rule identifiers through
-probing. A disabled management API also has no routes and therefore returns
+For authenticated requests, an ABAC denial below `/security/abac` returns
+`404 Not Found` rather than `403 Forbidden`, which avoids exposing policy and
+rule identifiers through probing. OIDC authentication failures are handled
+separately. A disabled management API also has no routes and therefore returns
 not found.
 
 ## Managing Policies
 
 Paths below are relative to the service base URL, including any configured
-`server.contextPath`. JSON management request bodies are limited to 10 MiB
-(`10485760` bytes). A larger body is rejected with `400 Bad Request`.
+`server.contextPath`. JSON management request bodies are limited to 10 MiB. A
+larger body is rejected with `400 Bad Request`.
 
 | Versions | Method and path |
 | --- | --- |
@@ -273,7 +274,9 @@ also have an empty body. Enable or disable a rule with
 `{ "enabled": true }` or `{ "enabled": false }`. Definition create and
 replace bodies contain one definition of the `{kind}` named in the path,
 including its `name` and kind-specific `attributes`, `acl`, `objects`, or
-`formula` member.
+`formula` member. For `PUT`, the body name must match `{name}` in the path. A
+`PATCH` may omit the name, but cannot change it. To rename a definition, delete
+the old definition and create a new one.
 
 Every edit rematerializes the complete staged policy within its database
 transaction. A malformed change or unresolved reference is rejected without
@@ -291,9 +294,7 @@ position is inserted immediately after its source. An explicit out-of-range
 duplicate position appends. Moving requires a position from `1` through the
 current rule count and otherwise returns `400 Bad Request`. Deleting the only
 remaining rule is also rejected with `400 Bad Request`. Successful insert,
-delete, duplicate, and move operations recompute rule order. Order is
-security-relevant, and reordering can change the order-derived prefix in
-`matched_rule_id`.
+delete, duplicate, and move operations recompute rule order.
 
 ```{warning}
 Enabling or disabling a rule that uses `USEACL` resolves the referenced ACL,
@@ -353,6 +354,8 @@ when this audit trail is required.
 
 Normal mutation history can record `policy_id` and `matched_rule_id`, allowing
 an authorization decision to be related to the stored policy version and rule.
+Rule positions are part of the generated `matched_rule_id`, so reordering rules
+changes their audit identifiers even when their content is unchanged.
 See [Recent Changes, History, and Signed Reads](history_and_changes) for the
 separate resource-history feature.
 
