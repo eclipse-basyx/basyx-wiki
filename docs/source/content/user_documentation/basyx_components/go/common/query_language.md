@@ -1,6 +1,6 @@
 # Query Language
 
-BaSyx Go v1.1.0 implements the [AAS Query Language defined by IDTA-01002 v3.2](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/query-language.html) for selecting repository resources and Registry descriptors and filtering fragments inside returned objects. This page documents the actual BaSyx Go v1.1.0 runtime behavior, including its extensions and deviations from the standard. Use the component's Swagger UI to check endpoint availability, URL parameters, and general request and response shapes. Use this page for the runtime-specific query grammar and semantics.
+BaSyx Go v1.1.0 supports the [AAS Query Language defined by IDTA-01002 v3.2](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/query-language.html) for selecting repository resources and Registry descriptors and filtering fragments inside returned objects. This page documents the actual BaSyx Go v1.1.0 runtime behavior, including its extensions and deviations from the standard. Use the component's Swagger UI to check endpoint availability, URL parameters, and general request and response shapes. Use this page for the runtime-specific query grammar and semantics.
 
 ## Supported Endpoints
 
@@ -32,7 +32,7 @@ Every request requires a top-level `$condition`. It determines which parent obje
 }
 ```
 
-Each `$filters` entry requires both `$fragment` and `$condition` and may set the Boolean `$match` flag:
+Each `$filters` entry requires both `$fragment` and `$condition`. The standard defines only those members. BaSyx Go v1.1.0 additionally supports a Boolean `$match` extension for row-local fragment filtering. This flag is distinct from the logical `$match` expression used inside `$condition`:
 
 ```json
 {
@@ -55,7 +55,7 @@ Each `$filters` entry requires both `$fragment` and `$condition` and may set the
 Unknown members, a missing `$condition`, malformed expressions, unsupported field paths, and roots that are invalid for the endpoint result in `400 Bad Request`.
 
 ```{note}
-IDTA-01002 v3.2 defines `$select: "id"` as a projection that returns identifiers. BaSyx Go v1.1.0 does not implement that projection: the runtime instead expects `$select`, if present, as an array of field paths and does not use the accepted array to project the response. The standardized string form is rejected, so omit `$select` in normal v1.1.0 query requests. `$filters` are not a replacement for projection. They conditionally retain or prune supported fragments of otherwise returned objects.
+IDTA-01002 v3.2 defines `$select: "id"` as a projection that returns identifiers. BaSyx Go v1.1.0 does not implement this projection and rejects the standardized string form. Omit `$select` in v1.1.0 query requests. Although the runtime accepts a non-standard array form, it does not project the response and should not be relied on. `$filters` serve a different purpose: they conditionally retain or prune supported fragments.
 ```
 
 For example, query a local AAS Repository for shells whose `idShort` is `MotorAAS`:
@@ -234,7 +234,7 @@ The selected root must also be valid for the query endpoint.
 
 When the filter's Boolean `$match` is omitted or `false`, its condition is evaluated at parent scope. If any relevant nested entry satisfies the condition, the complete fragment is preserved. For a Submodel with ten `supplementalSemanticIds`, if one has the requested key value, all ten remain in the response.
 
-When the filter sets `$match: true`, the condition is evaluated against each current fragment row. Only matching rows remain. With the same ten references, the response retains only those whose own data satisfies the condition. If no row matches, the fragment is empty or omitted as appropriate for that representation, but the parent can still remain in `result` because parent selection is controlled by the top-level `$condition`.
+When the BaSyx-specific `$match` flag is `true`, the condition is evaluated against each current fragment row. Only matching rows remain. With the same ten references, the response retains only those whose own data satisfies the condition. If no row matches, the fragment is empty or omitted as appropriate for that representation, but the parent can still remain in `result` because parent selection is controlled by the top-level `$condition`.
 
 Multiple filters for the same fragment are combined with `AND`. Filters for different fragments are applied independently. Explicit indices restrict filtering to the selected position. Unselected siblings remain unchanged.
 
