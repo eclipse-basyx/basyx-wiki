@@ -290,8 +290,6 @@ objects. `null` removes a field. It is not RFC 6902 JSON Patch. The result must
 still satisfy the policy grammar, including the mutually exclusive pairs
 `ACL`/`USEACL`, `FORMULA`/`USEFORMULA`, and `OBJECTS`/`USEOBJECTS`.
 
-Rule order is security-relevant because rules are evaluated in order.
-
 Rule indices and positions are 1-based. For creation, an omitted position or a
 position outside `1` through the new list length appends. A duplicate without a
 position is inserted immediately after its source. An explicit out-of-range
