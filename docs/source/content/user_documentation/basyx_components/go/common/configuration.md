@@ -544,13 +544,12 @@ The startup modes have these exact effects:
 
 An empty mode is service-specific: Digital Twin Registry resolves it to
 `always`. The other participating services resolve it to `if_missing`.
-behavior.
 
 When set, `policyScope` is trimmed, must not exceed 255 characters, and may contain ASCII letters, digits, `_`, `-`, `.`, and `:`.
 
 ### `rebac`
 
-Relationship-based access control (ReBAC) is experimental. It lets users share their own resources with other users or groups without editing the ABAC policy. ReBAC extends ABAC as a strict union: a request is allowed when ABAC or ReBAC allows it. See [Relationship-Based Access Control](rebac) for setup and operation.
+Relationship-based access control (ReBAC) is experimental. It lets users share their own resources with other users or groups without editing the ABAC policy. On supported routes for authenticated callers, ReBAC can grant a right that ABAC has not granted unconditionally; that ReBAC grant is not restricted by ABAC's conditional filter for the same right. See [Relationship-Based Access Control](rebac) for setup and operation.
 
 | Key | Default | Purpose |
 | --- | --- | --- |
@@ -561,7 +560,7 @@ Relationship-based access control (ReBAC) is experimental. It lets users share t
 
 With `rebac.enabled=false`, no ReBAC code is wired and services behave exactly as before. When ReBAC is enabled, `subjectClaim` and `groupClaim` must not be empty, and every `administrators` entry must contain an issuer and a subject or a non-empty group name separated by `|`. A service with ReBAC enabled refuses to start without ABAC (`REBAC-SETUP-ABACREQUIRED`) or OIDC (`REBAC-SETUP-OIDCREQUIRED`).
 
-Relationships are stored in the BaSyx PostgreSQL database, and all services sharing a database share them. Enable ReBAC consistently on all services that share the database. Company Lookup and Digital Twin Registry do not support ReBAC and always run with ReBAC disabled.
+Relationships are stored in the BaSyx PostgreSQL database. If multiple ReBAC-capable BaSyx services share that database, enable ReBAC consistently across them. Company Lookup and Digital Twin Registry do not support ReBAC and always run with ReBAC disabled.
 
 #### OIDC trustlist provider fields
 
@@ -608,7 +607,7 @@ Each `claimMappings` entry contains:
 | `aasPreconfigPaths` | `[]` | AAS Environment startup import sources. Supports files or folders with `.aasx`, `.json`, or `.xml` files. |
 | `bulkBatchLimit` | `1000` | Maximum row count per generated bulk SQL statement. Must be greater than `0`. |
 
-`uploadMaxSizeBytes` limits the transmitted file part, not the complete multipart HTTP request. The request parser separately allows bounded space for multipart metadata and framing. The AASX settings independently limit expanded package content to protect against packages whose contents are much larger than the uploaded file. All six size/count values must be greater than `0`. In addition, `aasxMaxTotalExpandedSizeBytes` must be greater than or equal to `aasxMaxPartExpandedSizeBytes`, which must be greater than or equal to `aasxMaxThumbnailSizeBytes`.
+`uploadMaxSizeBytes` limits the transmitted file part, not the complete multipart HTTP request. The request parser separately allows bounded space for multipart metadata and framing. The AASX settings independently limit expanded package content to protect against packages whose contents are much larger than the uploaded file. `uploadMaxSizeBytes` and all five `aasxMax*` values must be greater than `0`. In addition, `aasxMaxTotalExpandedSizeBytes` must be greater than or equal to `aasxMaxPartExpandedSizeBytes`, which must be greater than or equal to `aasxMaxThumbnailSizeBytes`.
 
 `delegatedOperationResponseMaxSizeBytes` defaults to 1 MiB. Set a larger positive byte count when a delegated Operation returns more data, such as records. The response is buffered in memory, so size the limit for the available memory. File element attachment downloads are unaffected.
 

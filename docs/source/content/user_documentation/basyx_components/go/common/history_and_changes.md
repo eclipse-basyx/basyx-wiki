@@ -118,7 +118,7 @@ The guard belongs to the PostgreSQL database, not to an individual BaSyx process
 
 `postgres_guarded` is not an absolute WORM boundary. A sufficiently privileged PostgreSQL administrator can alter or remove the database mechanisms that enforce it. Use independent mutation evidence when the database administrator must not be the sole trust boundary.
 
-See the [configuration caveat](configuration.md#history) and [upgrading an existing database](../configuration_service/operations.md#upgrading-an-existing-database) for operational guidance.
+See the [configuration caveat](configuration.md#history) and [Configuration Service operational considerations](../configuration_service/operations) for operational guidance.
 
 ## Mutation Evidence
 
@@ -132,11 +132,9 @@ See [General Configuration](configuration) for storage settings and [History Evi
 
 ## Signed Reads
 
-Signed reads let a client verify that the returned AAS or Submodel representation was signed by the BaSyx service and has not been altered since it was signed. Instead of returning the resource directly as JSON, the signed endpoint returns it as a compact RS256 JSON Web Signature (JWS).
+Signed reads let a client verify that the returned AAS or Submodel representation was signed by the BaSyx service and has not been altered since it was signed. Instead of returning the resource directly, the signed endpoint returns a JSON string containing a compact RS256 JSON Web Signature (JWS).
 
-A signed read does not make the data confidential. Its purpose is to provide integrity and authenticity for the returned representation. Signed reads use the same read authorization rules as the corresponding normal read endpoints.
-
-A signed read returns the requested AAS or Submodel as a compact RS256 JWS. Signed reads use the same read authorization rules as the corresponding normal read endpoints.
+A signed read does not make the data confidential. Its purpose is to provide integrity and authenticity for the returned representation. Signed reads require the same ABAC `READ` right as the corresponding normal read endpoints. The `$signed` routes are outside experimental ReBAC coverage, so a ReBAC grant that authorizes a normal read does not authorize its signed form.
 
 Configure a mounted RSA private key with `jws.privateKeyPath`. Optionally, `jws.certificateChainPath` can point to a PEM-encoded X.509 certificate chain that BaSyx includes in the JWS `x5c` header. Restart the service after configuring the signing material.
 
@@ -146,10 +144,10 @@ jws:
   certificateChainPath: /keys/signing-chain.pem
 ```
 
-After creating the example AAS:
+After creating the example AAS, use `jq` to extract the compact JWS from the JSON string returned by the endpoint:
 
 ```bash
-curl --fail-with-body -sS 'http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/$signed' -o aas.jws
+curl --fail-with-body -sS 'http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/$signed' | jq -r . > aas.jws
 ```
 
 Missing signing configuration produces an error rather than an unsigned fallback. Use a JWS verification library with a trusted public key or validated certificate chain to verify the signature before using the payload. Decoding the JWS alone does not verify it.

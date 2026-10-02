@@ -14,7 +14,7 @@ It returns HTTP `200` with:
 {"status":"UP"}
 ```
 
-The basic health handler confirms that the HTTP process can respond. It does not probe PostgreSQL or guarantee that API operations will succeed. For example:
+The basic health handler confirms that the HTTP process can respond. It does not probe PostgreSQL or guarantee that API operations will succeed. The AAS Environment adds a startup-readiness check and returns `503 Service Unavailable` with status `DOWN` until its startup preconfiguration has completed. For example:
 
 ```bash
 curl -i http://localhost:8084/health

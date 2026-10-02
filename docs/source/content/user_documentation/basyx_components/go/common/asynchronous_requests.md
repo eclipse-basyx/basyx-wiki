@@ -46,10 +46,10 @@ Resolve relative `Location` values against the service's public base URL and pre
 
 | Behavior | Registry bulk operations | Operation invocation | AASX asynchronous upload |
 | --- | --- | --- | --- |
-| Submission | `POST`, `PUT`, or `DELETE /bulk/shell-descriptors` or `/bulk/submodel-descriptors` | `POST .../submodel-elements/{idShortPath}/invoke-async` | `POST /packages-async` with a multipart AASX file |
+| Submission | `POST`, `PUT`, or `DELETE /bulk/shell-descriptors` or `/bulk/submodel-descriptors` | `POST .../submodel-elements/{idShortPath}/invoke-async` or `.../invoke-async/$value` | `POST /packages-async` with a multipart AASX file |
 | Status | `GET /bulk/status/{handleId}` | `GET .../submodel-elements/{idShortPath}/operation-status/{handleId}` | `GET /packages-async/status/{handleId}` |
-| Result | `GET /bulk/result/{handleId}` | `GET .../submodel-elements/{idShortPath}/operation-results/{handleId}` | `GET /packages-async/result/{handleId}` |
-| Successful result | `204 No Content` | `200 OK` with the Operation result | `200 OK` with a completed `BaseOperationResult` |
+| Result | `GET /bulk/result/{handleId}` | `GET .../submodel-elements/{idShortPath}/operation-results/{handleId}` or `.../operation-results/{handleId}/$value` | `GET /packages-async/result/{handleId}` |
+| Successful result | `204 No Content` | `200 OK` with the normal or ValueOnly Operation result | `200 OK` with a completed `BaseOperationResult` |
 | Failed result | Stored failure status and body | Delegated operation's failure status and body, or a BaSyx gateway error | `200 OK` with a failed `BaseOperationResult` |
 | Result retrieval consumes the handle | Yes | No | No |
 | Default terminal-result retention | 15 minutes, or until the result is retrieved | 15 minutes | 15 minutes |
@@ -74,9 +74,9 @@ Retrieving a terminal Registry bulk result deletes that job record, whether the 
 
 ### Asynchronous Operation Invocation
 
-This API invokes an AAS `Operation` through the configured delegation endpoint. `clientTimeoutDuration` is required for asynchronous invocation. The returned status and result routes remain below the invoked Submodel Element, and the handle is valid only with the same Submodel identifier and `idShortPath`.
+This API invokes an AAS `Operation` through the configured delegation endpoint. Both the normal and `$value` asynchronous invocation requests require a non-empty `clientTimeoutDuration`. The returned status and result routes remain below the invoked Submodel Element, and the handle is valid only with the same Submodel identifier and `idShortPath`. Use the `$value` result route for a ValueOnly result.
 
-Result retrieval does not delete the handle. Completed and failed records are retained for 15 minutes by default; set `SMREPO_DELEGATION_ASYNC_TTL` to a positive Go duration to change that period. In the stable release, delegated asynchronous invocation through the `$value` representation is not supported.
+Result retrieval does not delete the handle. Completed and failed records are retained for 15 minutes by default; set `SMREPO_DELEGATION_ASYNC_TTL` to a positive Go duration to change that period.
 
 ### Asynchronous AASX Upload
 
@@ -99,4 +99,4 @@ When AASX File Server security is enabled, submission, status, and result reques
 - [Asynchronous Operation invocation and result retrieval](../submodel_repository/operations.md#asynchronous-invocation-and-result-retrieval)
 - [AASX File Server usage](../aasx_file_server/usage) for package format, upload validation, and limits; the asynchronous endpoint lifecycle is documented above and in the component's Swagger/OpenAPI UI
 
-Implementation references: [shared asynchronous job manager](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.0.12/internal/common/asyncjob/manager.go), [AAS Registry bulk service](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.0.12/internal/aasregistry/api/bulk_api_service.go), [Submodel Repository operation service](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.0.12/internal/submodelrepository/api/api_submodel_repository_api_service.go), and [AASX File Server service](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.0.12/internal/aasxfileserver/api/api_aasx_file_server_api_service.go).
+Implementation references: [shared asynchronous job manager](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.0/internal/common/asyncjob/manager.go), [AAS Registry bulk service](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.0/internal/aasregistry/api/bulk_api_service.go), [Submodel Repository operation service](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.0/internal/submodelrepository/api/api_submodel_repository_api_service.go), and [AASX File Server service](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.0/internal/aasxfileserver/api/api_aasx_file_server_api_service.go).

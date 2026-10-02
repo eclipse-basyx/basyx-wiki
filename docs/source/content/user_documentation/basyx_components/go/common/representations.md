@@ -175,6 +175,8 @@ PATCH .../submodel-elements/{idShortPath}/$metadata
 PATCH .../submodel-elements/{idShortPath}/$value
 ```
 
+For a normal Submodel Element `PATCH`, supplying a container's child-bearing field replaces its stored children rather than merging them. This applies to `value` for `SubmodelElementCollection` and `SubmodelElementList`, `statements` for `Entity`, and `annotations` for `AnnotatedRelationshipElement`: omitted children are removed, and an empty array removes all children. If the request omits the child-bearing field, existing children remain unchanged. A `$metadata` PATCH does not replace child content.
+
 BaSyx Submodel `PATCH` endpoints use partial AAS representations, not RFC 6902 JSON Patch documents. Send the fields to update in the representation expected by the endpoint instead of an array of `op`, `path`, and `value` operations.
 
 Write support and field-level restrictions are operation-specific. Check the running [Swagger UI](swagger) for the exact request schema and see [Submodel Repository Usage](../submodel_repository/usage.md#representations-and-partial-updates) for concrete PATCH examples.

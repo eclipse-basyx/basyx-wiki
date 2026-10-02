@@ -24,7 +24,9 @@ The equivalent variables are `SERVER_STRICTVERIFICATION=strict` and `SERVER_VERI
 
 ## Check a Payload Before Writing It
 
-The Go HTTP services, including both Repositories and both Registries, can expose `POST {contextPath}/verify` when `server.verificationEndpointAvailable` is enabled. This shared endpoint verifies AAS model content; it is not a Registry descriptor-validation endpoint. It accepts JSON, XML, and AASX payloads. Supported model content includes AAS Environments and individual AAS model objects accepted by the parser.
+Except for the standalone DPP API, the BaSyx Go HTTP services can expose `POST {contextPath}/verify` when `server.verificationEndpointAvailable` is enabled. The DPP API does not register this endpoint in v1.1.0. This shared endpoint verifies AAS model content; it is not a Registry descriptor-validation endpoint. It accepts JSON, XML, and AASX payloads. Supported model content includes AAS Environments and individual AAS model objects accepted by the parser.
+
+Verification payloads use `general.uploadMaxSizeBytes`, which defaults to 128 MiB. A request that exceeds the applicable payload limit is rejected with `413 Request Entity Too Large`.
 
 Save this as `verify-submodel.json`:
 
