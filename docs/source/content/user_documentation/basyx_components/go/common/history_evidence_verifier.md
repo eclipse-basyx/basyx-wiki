@@ -142,7 +142,7 @@ For verification, use the retained sequence as `-to` and its hash as `-expected-
   -expected-head-hash '<64-character-sha256-for-sequence-42>'
 ```
 
-The verifier locates the nearest snapshot checkpoint at or before `-from`, verifies the sequence and predecessor hashes through `-to`, reconstructs snapshots and diffs, and compares the terminal event hash with `-expected-head-hash`. A missing requested terminal event or a different terminal hash is an error, so the externally retained sequence/hash pair detects a removed tail.
+The verifier locates the nearest snapshot checkpoint at or before `-from`, verifies the sequence and predecessor hashes through `-to`, reconstructs snapshots and diffs, and compares the terminal event hash with `-expected-head-hash`. A missing requested terminal event or a different terminal hash is an error, so the externally retained sequence/hash pair detects removal or alteration that prevents the chain from reaching that trusted terminal state
 
 For each event, the CLI checks the immutable object hash, event and payload hashes, reconstructed content hash, receipt retention metadata, and the current Object Lock retention and legal-hold state. When a mutation declares internal attachment or thumbnail evidence, it also checks the binary-reference object, its binding to the mutation, the referenced immutable binary receipt and bytes, digest and size, and live retention.
 
