@@ -4,6 +4,8 @@ This walkthrough creates one passport, reads both representations, looks it up b
 
 Start the [Compose setup](setup) and wait for `http://localhost:8088/health` to return HTTP `200`. The example identifiers must not already exist in the database. The examples use Bourne-shell syntax. In Windows PowerShell, use `curl.exe` and supply the recorded timestamp explicitly.
 
+JSON request bodies for DPP creation, whole-DPP `PATCH`, element `PATCH`, and bulk product-ID lookup are limited to 10 MiB. A larger body returns `413 Request Entity Too Large`.
+
 ## Create a Passport
 
 Save the following compressed DPP document as `dpp.json`:
@@ -41,9 +43,11 @@ Expect `201 Created` and:
 }
 ```
 
-Creation is atomic. A duplicate DPP identifier returns `409 Conflict`. The request body is limited to 10 MiB and must use the compressed representation. `POST /v1/dpps?representation=full` returns `501 Not Implemented`.
+Creation is atomic. A duplicate DPP identifier returns `409 Conflict`. The request must use the compressed representation. `POST /v1/dpps?representation=full` returns `501 Not Implemented`.
 
-The required `granularity` values are `Item`, `Model`, and `Batch`. `lastUpdate` must be an RFC 3339 timestamp. `facilityId` and `contentSpecificationIds` are optional. A missing or empty `contentSpecificationIds` list produces a metadata-only passport. Each submitted content section must be a JSON object.
+The required `granularity` values are `Item`, `Model`, and `Batch`. `lastUpdate` must be an RFC 3339 timestamp. `facilityId` and `contentSpecificationIds` are optional. Each submitted content section must be a JSON object and is persisted as a content Submodel. `contentSpecificationIds` selects which matching content Submodels are included in the composed DPP representation. If the list is omitted or empty, reads contain only the header metadata even though submitted content sections may remain persisted as Submodels.
+
+Name each compressed top-level content section after the corresponding entry in `contentSpecificationIds`. This keeps the relationship unambiguous when a passport uses several content specifications.
 
 ## Encode Path Identifiers
 
@@ -64,7 +68,7 @@ Read the default compressed representation:
 curl -i 'http://localhost:8088/v1/dpps/https%3A%2F%2Fexample.org%2Fdpp%2F1'
 ```
 
-The response has the same general shape as the create body: DPP header fields and named content sections with ordinary JSON values.
+The response has the same general shape as the create body: DPP header fields and named content sections with compressed JSON values.
 
 Request the expanded full representation:
 
@@ -81,6 +85,20 @@ curl -i 'http://localhost:8088/v1/dppsByProductId/https%3A%2F%2Fexample.org%2Fpr
 ```
 
 This returns `404 Not Found` when no passport has that product identifier and `409 Conflict` when more than one does. Product identifiers are therefore lookup keys, not unique DPP identifiers.
+
+### Compressed Value Mapping
+
+BaSyx maps compressed JSON content to AAS Submodel Elements as follows:
+
+| JSON value | Persisted AAS element |
+| --- | --- |
+| String, Boolean, or number | `Property` |
+| Object containing string `url` and `contentType` values | `File`, serialized in the DPP as a related resource |
+| Other object | `SubmodelElementCollection` |
+| Non-empty array of compatible values | `SubmodelElementList` |
+| Array of `{ "language": "...", "value": "..." }` objects | `MultiLanguageProperty` |
+
+Empty arrays are rejected because their element type cannot be inferred. Arrays containing incompatible element types are also rejected. In v1.1.0, a JSON `null` content value is stored as an empty-string `Property` and does not round-trip as JSON `null`, although the OpenAPI schema permits null compressed values. In a whole-DPP JSON Merge Patch, `null` instead retains its deletion meaning described below.
 
 ## Read and Replace One Element
 

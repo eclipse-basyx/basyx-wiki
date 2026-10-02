@@ -2,7 +2,7 @@
 
 [![GitHub](https://img.shields.io/badge/GitHub-BaSyx_Go-black?logo=github)](https://github.com/eclipse-basyx/basyx-go-components)
 ![AAS Metamodel](https://img.shields.io/badge/AAS_Metamodel-v3.2-yellow)
-![API](https://img.shields.io/badge/DPP_API-v1.0.0-blue)
+![DPP API specification](https://img.shields.io/badge/DPP_API_spec-v1.0.0-blue)
 
 The BaSyx Go Digital Product Passport (DPP) API creates, retrieves, updates, and deletes Digital Product Passports through a dedicated HTTP API. The OpenAPI document shipped with BaSyx Go v1.1.0 identifies the API as aligned with the DPP annexes of IDTA-01001 and IDTA-01002 v3.2. This documentation describes the behavior of that released implementation, including its representation and lifecycle rules.
 
@@ -13,7 +13,9 @@ The DPP API maps each passport to AAS data in PostgreSQL:
 - the DPP identifier is also the identifier of the owning AAS;
 - the unique product identifier is stored as the AAS `globalAssetId`;
 - DPP header fields are stored in a dedicated metadata Submodel;
-- each selected content specification contributes a content Submodel.
+- each submitted content section is persisted as a content Submodel.
+
+`contentSpecificationIds` determines which content specifications, and therefore which matching content Submodels, are included when the API composes a DPP representation. An empty list can therefore produce a response containing only header metadata even though submitted content sections remain persisted as Submodels.
 
 The DPP service accesses this shared persistence directly. It does not require a separately running AAS Environment, AAS Repository, or Submodel Repository. PostgreSQL must first be initialized or migrated by a release-compatible [Configuration Service](../configuration_service/index).
 
@@ -35,7 +37,7 @@ The write APIs accept only the compressed representation. Full representation wr
 
 ## Lifecycle Boundaries
 
-Deleting a DPP removes its owning AAS and DPP metadata Submodel. Content Submodels are retained because they can be shared or managed independently. If history was enabled before the mutations, states recorded before deletion remain available through the historical DPP endpoint.
+Deleting a DPP removes its owning AAS and DPP metadata Submodel. Content Submodels are retained. If history was enabled before the mutations, states recorded before deletion remain available through the historical DPP endpoint.
 
 The API does not determine whether legal or organizational retention requirements permit deletion. Apply those controls in the deployment and authorization policy.
 
