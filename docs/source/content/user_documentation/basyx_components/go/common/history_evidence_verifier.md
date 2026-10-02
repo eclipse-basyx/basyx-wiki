@@ -1,12 +1,14 @@
 # History Evidence Verifier
 
-`historyevidenceverifier` is an operator CLI for checking BaSyx history and evidence artifacts. It can verify PostgreSQL history ranges, independently retained mutation evidence, and the ReBAC administration audit trail. For history-range evidence, it can also export a recovery catalog and reconstruct verified history rows as JSON.
+`historyevidenceverifier` is an operator CLI for checking BaSyx history and evidence artifacts. It can verify PostgreSQL history ranges, separately retained mutation-evidence artifacts, and the ReBAC administration audit trail. For history-range evidence, it can also export a recovery catalog and reconstruct verified history rows as JSON.
 
 The verifier does not restore PostgreSQL. A successful run confirms only the selected evidence and trust inputs. It does not prove that the business data is correct, that evidence outside the selected range exists, that backups can be restored, or that a deployment meets a legal or regulatory requirement.
 
 ## Build and Configure the CLI
 
 BaSyx Go v1.1.0 includes the command source but no dedicated `historyevidenceverifier` container image or release binary. Build it from the matching source tag:
+
+Building BaSyx Go v1.1.0 requires Go 1.27.1 or a compatible newer Go toolchain.
 
 ```bash
 git checkout v1.1.0
@@ -20,7 +22,8 @@ Use `-config` to supply a normal BaSyx YAML configuration. Depending on the sele
 - the PostgreSQL writer connection;
 - `history.evidence` S3 endpoint, bucket, prefix, credentials, and Object Lock settings;
 - `history.evidence.signing.publicKeyPath` for signed-manifest verification;
-- a private manifest-signing key only when `-write` publishes a signed manifest.
+- `history.evidence.signing.privateKeyPath` when `-write` signs a manifest,
+  falling back to `jws.privateKeyPath` when the history-specific path is empty.
 
 The CLI validates the BaSyx database schema before database-backed operations. Recovery from an exported catalog is the exception: it does not connect to PostgreSQL, but still needs the configured S3 evidence store. See [General Configuration](configuration) for the configuration keys and [History and Changes](history_and_changes) for the history modes.
 
@@ -31,25 +34,25 @@ The CLI supports three distinct checks:
 | Check | What is checked | Independent input |
 | --- | --- | --- |
 | History range | PostgreSQL row hashes and chains, `history_event` receipts, optional stored objects, and an optional range manifest | A separately retained manifest object hash, and optionally a trusted manifest public key |
-| Mutation evidence | The per-resource `mutation_event` sequence and hash chain, immutable objects, reconstructed content, live retention, and referenced binary evidence | The expected terminal event hash for the requested sequence |
-| ReBAC audit | The ReBAC administration audit chain and, when S3 is configured, archived audit objects | An optional expected audit head hash |
+| Mutation evidence | PostgreSQL mutation-evidence metadata, the per-resource `mutation_event` sequence and hash chain, immutable objects, reconstructed content, live retention, and referenced binary evidence | The expected terminal event hash for the requested sequence |
+| ReBAC audit | The ReBAC administration audit chain currently present and, when S3 is configured, archived audit objects | An optional expected audit head hash |
 
-PostgreSQL supplies object locations and receipts for normal and mutation verification. It is therefore not an independent trust source by itself. Keep expected terminal hashes and manifest hashes outside the database under verification. A value read only from that database immediately before a check cannot detect an attacker who removed both a chain tail and its catalog rows.
+Mutation evidence artifacts are retained separately from the ordinary PostgreSQL history tables. In v1.1.0, however, normal mutation verification still uses PostgreSQL mutation-evidence metadata to locate and verify the corresponding immutable objects. It cannot run after PostgreSQL has been lost.
 
-The first externally retained sequence/hash pair is a trust-on-first-use baseline. After a later range verifies successfully, an operator can advance the protected baseline to that verified terminal sequence and hash. Store the pair in an operator-controlled monitoring, SIEM, or evidence-preservation system. The CLI does not manage this external anchor.
+PostgreSQL supplies object locations and receipts for normal history and mutation verification, so it is not an independent trust source by itself. Keep expected terminal hashes and manifest hashes outside the database under verification. A value read only from that database immediately before a check cannot detect an attacker who removed both a chain tail and its catalog rows.
 
-## Modes and Selectors
+## Operations and Verification Targets
 
-`-write`, `-recover`, and `-catalog-export` are mutually exclusive. The default, with none of those flags, is verification.
+`-write`, `-recover`, and `-catalog-export` select mutually exclusive operations. With none of them, the CLI verifies evidence. `-mutation` and `-rebac-audit` select a different verification target rather than another operation in that group.
 
-| Mode | Required selection | Result |
+| Selection | Required input | Result |
 | --- | --- | --- |
 | Default history verification | `-table`, `-from`, `-to`; `-identifier` is optional | Verifies a PostgreSQL `history_id` range and its `history_event` receipts. |
 | `-write` | Same history range | Verifies the PostgreSQL range, then publishes event, checkpoint, and manifest artifacts and records their receipts. |
 | `-catalog-export` | Same history range | Exports recovery metadata from PostgreSQL. |
 | `-recover` | Same history range, or `-recovery-catalog` | Verifies and reconstructs `history_event` artifacts as JSON. |
-| `-mutation` | `-table`, `-identifier`, `-from`, `-to`, `-expected-head-hash` | Verifies and reconstructs one independent mutation-evidence chain. |
-| `-rebac-audit` | No history table or range | Verifies the complete ReBAC administration audit trail. An expected head is optional. |
+| `-mutation` target | `-table`, `-identifier`, `-from`, `-to`, `-expected-head-hash` | Verifies and reconstructs one mutation-evidence chain. |
+| `-rebac-audit` target | No history table or range | Verifies the ReBAC administration audit chain currently present. An expected head is optional. |
 
 The supported history table/entity names are:
 
@@ -61,7 +64,7 @@ The supported history table/entity names are:
 
 For ordinary history operations, `-from` and `-to` are inclusive `history_id` bounds. An optional `-identifier` restricts the selected rows to one resource. In mutation mode, `-table` identifies the entity type using the same names, while `-from` and `-to` are inclusive per-resource evidence sequence numbers.
 
-`-out <file>` writes the formatted JSON result to that file instead of standard output. Where supported by the platform, the file is created with owner-only permissions. Operational logs and errors go to standard error.
+`-out <file>` writes the formatted JSON result to that file instead of standard output. On platforms that support Unix-style permissions, newly created files use mode `0600`. An existing file keeps its current permissions. Operational logs and errors go to standard error.
 
 ## Verify History-Range Evidence
 
@@ -120,7 +123,15 @@ Publication spans PostgreSQL and object storage rather than one cross-system tra
 
 ## Verify Mutation Evidence
 
-Mutation evidence exists independently of PostgreSQL history when `history.evidence.enabled` was active for the mutation. Verification requires S3 evidence configuration, an identifier, a valid sequence range, and the independently retained SHA-256 event hash for the requested terminal sequence:
+Mutation-evidence artifacts are stored separately from ordinary PostgreSQL history when `history.evidence.enabled` was active for the mutation. Verification nevertheless requires the PostgreSQL mutation-evidence metadata, S3 evidence configuration, an identifier, a valid sequence range, and the independently retained SHA-256 event hash for the requested terminal sequence.
+
+### Establish an External Mutation Head
+
+The expected sequence and event hash form the trust anchor for mutation verification. Capture a known-good pair while the system is in a trusted state and retain it outside the BaSyx database and evidence infrastructure being checked, for example in an operator-controlled monitoring, SIEM, or evidence-preservation system.
+
+BaSyx Go v1.1.0 has no dedicated CLI operation for exporting the initial anchor. The current sequence and head are maintained in PostgreSQL mutation-evidence state. Obtain them through controlled operational access and immediately protect the pair externally. This first pair is a trust-on-first-use baseline unless another trusted process authenticates it. Keeping the only copy in the database being verified does not provide an external check against consistent tail removal.
+
+Use the retained sequence as `-to` and its hash as `-expected-head-hash`. After a later range verifies successfully, advance the external anchor to the valid report's `last_sequence` and `event_hash`:
 
 ```bash
 ./historyevidenceverifier \
@@ -137,13 +148,13 @@ The verifier locates the nearest snapshot checkpoint at or before `-from`, verif
 
 For each event, the CLI checks the immutable object hash, event and payload hashes, reconstructed content hash, receipt retention metadata, and the current Object Lock retention and legal-hold state. When a mutation declares internal attachment or thumbnail evidence, it also checks the binary-reference object, its binding to the mutation, the referenced immutable binary receipt and bytes, digest and size, and live retention.
 
-The JSON report includes the reconstructed terminal `snapshot`, `event_hash`, change and deletion state, operation time, audit context, and any findings. `-mutation -recover` is accepted in v1.1.0, but follows this same verification path and produces the same report. It is not a separate restore or export mode. Mutation mode cannot be combined with `-write`, `-catalog-export`, or `-recovery-catalog`.
+The JSON report includes the reconstructed terminal `snapshot`, `event_hash`, change and deletion state, operation time, audit context, and any findings. `-mutation -recover` is accepted in v1.1.0, but follows this same verification path and produces the same report. It is not a separate restore or export operation. `-mutation` cannot be combined with `-write`, `-catalog-export`, or `-recovery-catalog`.
 
 ## Recover History-Range Evidence
 
 Ordinary `-recover` reconstructs verified history rows from stored `history_event` objects and emits a JSON report containing `recovered_rows`. It never writes to PostgreSQL. Importing those rows or restoring an application database remains part of the operator's disaster-recovery procedure.
 
-Recovery starts at the nearest cataloged full snapshot required by the selected range and replays subsequent diff artifacts. Consequently, recoverability depends on the checkpoint and every required diff still being available. With `history.fullSnapshotInterval: 1`, each row is a full snapshot; larger values trade smaller evidence for bounded diff replay.
+Recovery starts at the nearest cataloged full snapshot required by the selected range and replays subsequent diff artifacts. Consequently, recoverability depends on the checkpoint and every required diff still being available. With `history.fullSnapshotInterval: 1`, each row is a full snapshot. Larger values trade smaller evidence for bounded diff replay.
 
 ### Export a Recovery Catalog
 
@@ -182,7 +193,7 @@ Without `-recovery-catalog`, `-recover` obtains the catalog from live PostgreSQL
 
 ## Verify the ReBAC Audit Trail
 
-`-rebac-audit` verifies the complete hash chain for ReBAC administration events. It is separate from AAS, Submodel, and descriptor history:
+`-rebac-audit` verifies the hash chain of the ReBAC administration audit events currently present. It is separate from AAS, Submodel, and descriptor history:
 
 ```bash
 ./historyevidenceverifier \
@@ -191,11 +202,11 @@ Without `-recovery-catalog`, `-recover` obtains the catalog from live PostgreSQL
   -expected-head-hash '<independently-retained-64-character-sha256>'
 ```
 
-The expected head is optional, but without it the command cannot detect removal of a locally consistent tail. The report contains `headHash` and `lastId`. Retain that pair independently after a successful check.
+The expected head is optional, but an independently retained expected head is required to detect removal of a locally consistent tail. The report contains `headHash` and `lastId`. Retain that pair independently after a successful check.
 
 When an S3 evidence store is configured, the command verifies archived audit objects referenced by the events. An event without archived evidence increments `evidenceMissing` but does not invalidate an otherwise valid audit chain. Inspect `evidenceVerified` and `evidenceMissing` as well as `valid` when archived evidence is required by your operating policy.
 
-This mode cannot be combined with `-write`, `-recover`, `-catalog-export`, `-mutation`, or `-table`. It does not use history-range selectors. See [Relationship-Based Access Control](rebac) for the ReBAC audit-trail model.
+This target cannot be combined with `-write`, `-recover`, `-catalog-export`, `-mutation`, or `-table`. Do not pass `-identifier`, `-from`, `-to`, or manifest/signing selectors with `-rebac-audit`. v1.1.0 does not use them for ReBAC audit verification. See [Relationship-Based Access Control](rebac) for the ReBAC audit-trail model.
 
 ## Results, Exit Status, and Scheduling
 
