@@ -12,6 +12,7 @@ The features on this page serve different purposes. Recent-change APIs find curr
 | AAS Registry / Digital Twin Registry | `createdFrom` and `updatedFrom` on `/shell-descriptors` | None | None |
 | Submodel Registry | `createdFrom` and `updatedFrom` on `/submodel-descriptors` | None | None |
 | AAS Environment | `/shells/$recent-changes`; `/submodels/$recent-changes`; `/concept-descriptions/$recent-changes`; descriptor collections use `createdFrom` and `updatedFrom` | `/shells/{aasIdentifier}/$history`; `/submodels/{submodelIdentifier}/$history` | Corresponding AAS and Submodel signed reads |
+| Digital Product Passport API | None | `/v1/dppsByIdAndDate/{dppId}` | None |
 
 Paths are relative to the service base URL, including any configured context path. See the component API documentation for the endpoints available in your installed BaSyx version.
 

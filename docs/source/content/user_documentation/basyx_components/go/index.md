@@ -12,6 +12,7 @@ Repositories store the AAS model content that clients read and change. Registrie
 | User goal | Component | Manages or stores | Required dependencies | Optional integration | Next page |
 | --- | --- | --- | --- | --- | --- |
 | Use AAS, Submodel, Concept Description, Registry, Discovery, upload, and serialization APIs in one runtime | AAS Environment | AAS, Submodel, and Concept Description content; AAS and Submodel descriptors; asset-identifier mappings | PostgreSQL initialized by the BaSyx Configuration Service | Repository-to-Registry synchronization is controlled by explicit flags and maintains descriptors in the same PostgreSQL database; Discovery functionality is included | [AAS Environment](aas_environment/index) |
+| Create and manage Digital Product Passports through the IDTA-aligned DPP API | Digital Product Passport API | DPP metadata and content represented as an AAS and Submodels | PostgreSQL initialized by the BaSyx Configuration Service | Can record historical passport states and maintain Registry descriptors in the shared database | [Digital Product Passport API](dpp_api/index) |
 | Store and modify AAS content | AAS Repository | AAS content and its references to Submodels | PostgreSQL initialized by the BaSyx Configuration Service | When AAS Registry integration is enabled, Repository changes also maintain AAS Descriptors in the Repository's PostgreSQL database. A separately deployed AAS Registry can expose them only when it uses the same database | [AAS Repository](aas_repository/index) |
 | Store and modify Submodel content | Submodel Repository | Submodels and Submodel Elements | PostgreSQL initialized by the BaSyx Configuration Service | When Submodel Registry integration is enabled, Repository changes also maintain Submodel Descriptors in the Repository's PostgreSQL database. A separately deployed Submodel Registry can expose them only when it uses the same database | [Submodel Repository](submodel_repository/index) |
 | Store and expose Concept Descriptions independently | Concept Description Repository | Concept Description content | PostgreSQL initialized by the BaSyx Configuration Service | The AAS Environment provides the same API area when a combined runtime is preferred | [Concept Description Repository](concept_description_repository/index) |
@@ -54,6 +55,7 @@ submodel_repository/index
 concept_description_repository/index
 aasx_file_server/index
 aas_environment/index
+dpp_api/index
 company_lookup/index
 configuration_service/index
 supply_chain_security
