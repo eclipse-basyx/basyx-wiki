@@ -45,7 +45,7 @@ Expect `201 Created` and:
 
 Creation is atomic. A duplicate DPP identifier returns `409 Conflict`. The request must use the compressed representation. `POST /v1/dpps?representation=full` returns `501 Not Implemented`.
 
-The required `granularity` values are `Item`, `Model`, and `Batch`. `lastUpdate` must be an RFC 3339 timestamp. `facilityId` and `contentSpecificationIds` are optional. Each submitted content section must be a JSON object and is persisted as a content Submodel. `contentSpecificationIds` selects which matching content Submodels are included in the composed DPP representation. If the list is omitted or empty, reads contain only the header metadata even though submitted content sections may remain persisted as Submodels.
+The required `granularity` values are `Item`, `Model`, and `Batch`. `lastUpdate` must be an RFC 3339 timestamp. `facilityId` and `contentSpecificationIds` are optional. Each submitted content section must be a JSON object and is persisted as a content Submodel. `contentSpecificationIds` selects which matching content Submodels are included in the composed DPP representation. If the list is omitted or empty, DPP reads contain only the header metadata even though submitted content sections are still persisted as Submodels.
 
 Name each compressed top-level content section after the corresponding entry in `contentSpecificationIds`. This keeps the relationship unambiguous when a passport uses several content specifications.
 
@@ -93,7 +93,7 @@ BaSyx maps compressed JSON content to AAS Submodel Elements as follows:
 | JSON value | Persisted AAS element |
 | --- | --- |
 | String, Boolean, or number | `Property` |
-| Object containing string `url` and `contentType` values | `File`, serialized in the DPP as a related resource |
+| Object containing string `url` and `contentType` values | `File`; compressed reads return the resource object, while full reads represent it as `RelatedResource` |
 | Other object | `SubmodelElementCollection` |
 | Non-empty array of compatible values | `SubmodelElementList` |
 | Array of `{ "language": "...", "value": "..." }` objects | `MultiLanguageProperty` |
