@@ -1,17 +1,19 @@
 # Runtime Security
 
-This page describes runtime API access security in BaSyx Go v1.1.0. OpenID
-Connect (OIDC) authenticates presented bearer access tokens. Attribute-based
-access control (ABAC) decides which API operations and resources a caller may
-use. This is separate from [Supply Chain Security](../supply_chain_security),
-which covers container images, signatures, provenance, and SBOMs.
+This page describes runtime API access security in BaSyx Go v1.1.0. BaSyx
+validates signed JWT bearer access tokens against configured OpenID Connect
+(OIDC) providers, checks required scopes, and normalizes the resulting claims.
+Attribute-based access control (ABAC) then decides which API operations and
+resources the caller may use. Requests without credentials can continue as
+anonymous; ABAC still decides whether they are allowed. This is separate from
+[Supply Chain Security](../supply_chain_security), which covers container
+images, signatures, provenance, and SBOMs.
 
 ## What Runtime Security Does
 
 `abac.enabled` is the switch for the shared security stack. When it is `true`,
-the service initializes OIDC from the configured trustlist and applies OIDC
-before ABAC on its API routes. OIDC validates a presented token and normalizes
-its claims. ABAC evaluates the request method, route, required right, claims,
+the service reads the configured trustlist and installs OIDC before ABAC on its
+API routes. ABAC evaluates the request method, route, required right, claims,
 target objects, and policy formula.
 
 When `abac.enabled` is `false` (the default), the service does not read the
@@ -50,18 +52,20 @@ oidc:
 abac:
   enabled: true
   modelPath: /security/access-rules.json
-  policyFileImport: if_missing
 ```
 
 The equivalent enable switch is `ABAC_ENABLED=true`. The trustlist must be
-readable. Database-backed policy services must read `modelPath` when startup
-import is required. The DPP API reads it directly. See
+readable, and `modelPath` must be readable when the component loads or imports
+the file. See
 [General Configuration](configuration.md#oidc-and-abac) for all keys, defaults,
 environment-variable names, startup import modes, and file-mount guidance.
 
-For the database-backed policy services, authorization uses the active ABAC
-policy stored in PostgreSQL. `abac.policyFileImport` controls whether
-`abac.modelPath` is imported and activated at startup. See
+For components with PostgreSQL-backed ABAC policy storage, authorization uses
+the active database policy. `abac.policyFileImport` controls whether
+`abac.modelPath` is imported and activated at startup. When the setting is
+omitted, the default is `if_missing` for these components except the Digital
+Twin Registry, whose default is `always`. The DPP API instead loads the file
+directly and does not use this database-backed import lifecycle. See
 [ABAC Policy Management](abac_policy_management) for policy scopes, versioning,
 staged changes, activation, and multi-replica operation.
 
@@ -78,17 +82,20 @@ tokens or token introspection. Provider-specific token-type indicators are
 ordinary claims. Map and require them in the ABAC policy if they must be
 enforced. The token's `iss` value must identify a configured trustlist entry.
 For that issuer, BaSyx obtains OpenID Provider metadata and keys, then verifies
-the signature, issuer, expiration, and the configured audience. An invalid
-bearer token is rejected before ABAC.
+the signature, issuer, expiration, and the configured audience. A malformed or
+unverifiable token sent using the header above is rejected before ABAC.
 
 Audience validation is optional. If a trustlist entry has an empty or omitted
 `audience`, BaSyx skips the audience check and logs a startup warning for that
 issuer. Configure an audience when the identity provider supplies one for the
 BaSyx API.
 
-Each configured value in `scopes` is required. By default, scopes are collected
-from `/scope` and `/scp`. A value may be a whitespace-separated string or a
-string array. Missing required scopes produce `403 Forbidden` before ABAC.
+The trustlist entry's `scopes` list names the scopes that the token must grant.
+Every configured scope is required. BaSyx reads granted scopes from the JSON
+claim paths in `scopeClaims`, which default to `/scope` and `/scp`. At those
+paths, a JWT claim may be a whitespace-separated string or a string array.
+BaSyx splits and deduplicates these values before checking the required scopes.
+A missing required scope produces `403 Forbidden` before ABAC authorization.
 
 ### Trustlist Format
 
@@ -151,9 +158,9 @@ To make an operation public, an ACL can declare the subject attribute:
 
 Its rights, objects, and formula must also match. `ANONYMOUS` marks a public
 rule and also matches authenticated callers. If the ACL additionally declares
-a `CLAIM` or `CLAIMPATH`, that claim must still be present. A malformed, empty,
-untrusted, or otherwise invalid `Bearer` token is rejected with `401` rather
-than treated as anonymous.
+a `CLAIM` or `CLAIMPATH`, that claim must still be present. A malformed or
+otherwise invalid token sent using the documented header is rejected with
+`401` rather than treated as anonymous.
 
 ## ABAC Authorization
 
@@ -277,6 +284,16 @@ read the service description:
 
 This policy does not grant access to any other route or right.
 
+## Common Authorization Responses
+
+| Situation | Response |
+| --- | --- |
+| A token sent as `Authorization: Bearer <token>` is malformed, has an untrusted issuer, or fails signature, issuer, expiration, or configured audience validation | `401 Unauthorized` |
+| An authenticated token does not contain every scope required by its trustlist entry | `403 Forbidden` |
+| ABAC denies an otherwise valid request on an ABAC-only route outside `/security/abac`, whether authenticated or anonymous | `403 Forbidden` |
+| After OIDC processing, ABAC denies access below `/security/abac`; policy-management resources are deliberately hidden | `404 Not Found` |
+| An authenticated request on a covered route needs a ReBAC decision, but that decision cannot be obtained | `503 Service Unavailable` |
+
 ## Component-Specific Behavior
 
 The Digital Twin Registry and standalone Submodel Repository can optionally
@@ -296,9 +313,16 @@ remain the source for those differences.
 
 Experimental ReBAC is an optional authorization extension. It does not replace
 OIDC or ABAC and requires `abac.enabled=true` plus a readable trustlist. For an
-authenticated caller on a ReBAC-covered route, ABAC and ReBAC grants form a
-strict union: either can grant access. Anonymous requests and routes outside
-ReBAC coverage remain ABAC-only. See
+authenticated caller on a covered route, BaSyx consults ReBAC for relevant
+rights that ABAC has not granted unconditionally. A matching ReBAC grant can
+therefore widen access beyond ABAC alone. For the resource covered by the
+grant, ABAC policy fragment filters and update conditions do not restrict that
+grant; caller-supplied query and fragment filters still apply.
+
+If a required ReBAC decision cannot be obtained, the request fails closed with
+`503 Service Unavailable` instead of falling back to ABAC-only behavior.
+Anonymous requests and routes or services outside ReBAC coverage remain
+ABAC-only. The Digital Twin Registry does not enable ReBAC in v1.1.0. See
 [Relationship-Based Access Control](rebac) for supported components, roles,
 sharing, inheritance, and administration.
 
