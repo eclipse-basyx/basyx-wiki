@@ -1,6 +1,6 @@
 # Setting Up the Digital Product Passport API
 
-This setup runs BaSyx Go v1.1.0 of the DPP API and Configuration Service with PostgreSQL 18. It exposes the DPP API at `http://localhost:8088` and enables history so that the complete [usage walkthrough](usage) can retrieve an earlier passport state.
+This setup runs the DPP API and Configuration Service with PostgreSQL 18. It exposes the DPP API at `http://localhost:8088` and enables history so that the complete [usage walkthrough](usage) can retrieve an earlier passport state.
 
 ## Prerequisites and Security Posture
 
@@ -95,7 +95,7 @@ The service can maintain AAS and Submodel descriptors in the same PostgreSQL dat
 
 The standalone DPP API does not expose the Submodel Repository attachment endpoint. If DPP content refers to database-managed `File` attachments, configure `general.externalUrl` with an externally reachable base URL for a deployment that exposes the corresponding `/submodels/.../attachment` route. Generated related-resource URLs use that route. If a managed attachment must be serialized without a valid `general.externalUrl`, the DPP read fails with `500 Internal Server Error`.
 
-The DPP API uses the file-backed ABAC policy setup rather than the database-backed ABAC policy-management API. In v1.1.0, experimental ReBAC covers current-state DPP routes when enabled. Historical reads remain subject to the configured authentication and ABAC policies, but ReBAC does not cover the historical route. Historical resolution cannot apply a backend authorization filter to stored snapshots; when ABAC requires such a filter, the historical DPP is not returned. See [Runtime Security](../common/security) and [Relationship-Based Access Control](../common/rebac) before securing the service.
+The DPP API uses the file-backed ABAC policy setup rather than the database-backed ABAC policy-management API. Experimental ReBAC covers current-state DPP routes when enabled. Historical reads remain subject to the configured authentication and ABAC policies, but ReBAC does not cover the historical route. Historical resolution cannot apply a backend authorization filter to stored snapshots; when ABAC requires such a filter, the historical DPP is not returned. See [Runtime Security](../common/security) and [Relationship-Based Access Control](../common/rebac) before securing the service.
 
 ## Persistent State and Stopping
 

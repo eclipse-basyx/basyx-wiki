@@ -94,10 +94,6 @@ Multiple components reuse the same PostgreSQL configuration structure and connec
 - `postgres.connMaxLifetimeMinutes`
 - `postgres.connMaxIdleTimeMinutes`
 
-```{note}
-The pool behavior in this section requires BaSyx Go 1.0.5 or later.
-```
-
 Each service process or Kubernetes pod owns a separate pool. The common defaults are:
 
 | Setting | Default | Zero value |
@@ -115,8 +111,8 @@ See [General Configuration](configuration) for the full PostgreSQL configuration
 
 ## Optional PostgreSQL Reader Routing
 
-BaSyx Go 1.0.7 and later can open an independent PostgreSQL reader pool for
-eligible reads. Without reader configuration, the writer pool is reused and
+BaSyx Go can open an independent PostgreSQL reader pool for eligible reads.
+Without reader configuration, the writer pool is reused and
 the behavior remains unchanged. With a reader configured, mutations and
 consistency-sensitive work stay on the writer while eligible reads can be
 served by a standby or other read endpoint.

@@ -1,6 +1,6 @@
 # Query Language
 
-BaSyx Go v1.1.0 supports the [AAS Query Language defined by IDTA-01002 v3.2](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/query-language.html) for selecting repository resources and Registry descriptors and filtering fragments inside returned objects. This page documents the actual BaSyx Go v1.1.0 runtime behavior, including its extensions and deviations from the standard. Use the component's Swagger UI to check endpoint availability, URL parameters, and general request and response shapes. Use this page for the runtime-specific query grammar and semantics.
+BaSyx Go supports the [AAS Query Language defined by IDTA-01002 v3.2](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/query-language.html) for selecting repository resources and Registry descriptors and filtering fragments inside returned objects. This page covers the BaSyx Go extensions and deviations from the standard. Use the component's Swagger UI to check endpoint availability, URL parameters, and general request and response shapes. Use this page for the runtime-specific query grammar and semantics.
 
 ## Supported Endpoints
 
@@ -32,7 +32,7 @@ Every request requires a top-level `$condition`. It determines which parent obje
 }
 ```
 
-Each `$filters` entry requires both `$fragment` and `$condition`. The standard defines only those members. BaSyx Go v1.1.0 additionally supports a Boolean `$match` extension for row-local fragment filtering. This flag is distinct from the logical `$match` expression used inside `$condition`:
+Each `$filters` entry requires both `$fragment` and `$condition`. The standard defines only those members. BaSyx Go additionally supports a Boolean `$match` extension for row-local fragment filtering. This flag is distinct from the logical `$match` expression used inside `$condition`:
 
 ```json
 {
@@ -55,7 +55,7 @@ Each `$filters` entry requires both `$fragment` and `$condition`. The standard d
 Unknown members, a missing `$condition`, malformed expressions, unsupported field paths, and roots that are invalid for the endpoint result in `400 Bad Request`.
 
 ```{note}
-IDTA-01002 v3.2 defines `$select: "id"` as a projection that returns identifiers. BaSyx Go v1.1.0 does not implement this projection and rejects the standardized string form. Omit `$select` in v1.1.0 query requests. Although the runtime accepts a non-standard array form, it does not project the response and should not be relied on. `$filters` serve a different purpose: they conditionally retain or prune supported fragments.
+IDTA-01002 v3.2 defines `$select: "id"` as a projection that returns identifiers. BaSyx Go does not implement this projection and rejects the standardized string form. Omit `$select` in query requests. Although the runtime accepts a non-standard array form, it does not project the response and should not be relied on. `$filters` serve a different purpose: they conditionally retain or prune supported fragments.
 ```
 
 For example, query a local AAS Repository for shells whose `idShort` is `MotorAAS`:
@@ -111,7 +111,7 @@ $cd#idShort
 
 Use dots for nested object members. For supported list paths, `[]` addresses any entry and `[0]`, `[1]`, and so on address one zero-based position. The part between `$sme.` and `#` is the dot-separated `idShort` path of the element and may also contain list selectors. Omitting that path, as in `$sme#value`, searches matching Submodel Elements recursively across the relevant Submodel Element hierarchy. `$sme.Metrics.Temperature#value` targets the explicit path.
 
-Field names and roots are case-sensitive. For descriptor endpoint URLs, the v1.1.0 query token is `protocolinformation.href` with a lowercase `i`, even though the regular AAS JSON property is `protocolInformation`. The accepted paths are an explicit subset of the model, so a field that exists in an AAS JSON document is not automatically queryable.
+Field names and roots are case-sensitive. For descriptor endpoint URLs, the query token is `protocolinformation.href` with a lowercase `i`, even though the regular AAS JSON property is `protocolInformation`. The accepted paths are an explicit subset of the model, so a field that exists in an AAS JSON document is not automatically queryable.
 
 ### Values and Types
 
@@ -146,7 +146,7 @@ For example:
 }
 ```
 
-With the default `general.enableImplicitCasts: true`, BaSyx can convert a field operand to the type of the other operand where the conversion is supported. Explicit casts make the intended interpretation clear and remain useful when values such as Property `value` are stored as text. The public query language has no null or list literal and no membership operator in v1.1.0.
+With the default `general.enableImplicitCasts: true`, BaSyx can convert a field operand to the type of the other operand where the conversion is supported. Explicit casts make the intended interpretation clear and remain useful when values such as Property `value` are stored as text. The public query language has no null or list literal and no membership operator.
 
 ## Conditions and Operators
 
@@ -288,11 +288,11 @@ Successful query responses contain the endpoint's top-level objects in `result` 
 
 Query endpoints accept `limit` and `cursor` as URL query parameters. Omit the cursor for the first page, then send the returned opaque cursor with the same request body and `limit` for the next page. See [Pagination](pagination) for the shared response and cursor rules.
 
-v1.1.0 provides no caller-controlled sort expression. Results use the endpoint's server-defined cursor order. Clients should not rely on another ordering.
+The query language provides no caller-controlled sort expression. Results use the endpoint's server-defined cursor order. Clients should not rely on another ordering.
 
 ## Limits
 
-BaSyx Go v1.1.0 accepts at most 64 JSON container nesting levels and 8192 JSON tokens in a query. Queries that exceed either complexity limit are rejected with `400 Bad Request`.
+BaSyx Go accepts at most 64 JSON container nesting levels and 8192 JSON tokens in a query. Queries that exceed either complexity limit are rejected with `400 Bad Request`.
 
 ## Authorization Filters
 

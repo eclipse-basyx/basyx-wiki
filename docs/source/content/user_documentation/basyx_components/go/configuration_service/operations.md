@@ -42,7 +42,7 @@ Rerunning the Configuration Service does not always clear `dirty`. If the record
 
 ## Idempotency Expectations
 
-The base schema uses idempotent SQL where possible, such as `CREATE TABLE IF NOT EXISTS` and `CREATE INDEX IF NOT EXISTS`. Whether it runs is decided from `basyxsystem.schema_version`; the service does not first verify every base table. In v1.1.0, `base.sql` is skipped when the recorded version is `v1.0.2` or newer.
+The base schema uses idempotent SQL where possible, such as `CREATE TABLE IF NOT EXISTS` and `CREATE INDEX IF NOT EXISTS`. Whether it runs is decided from `basyxsystem.schema_version`. The service does not first verify every base table. `base.sql` is skipped when the recorded version is `v1.0.2` or newer.
 
 For every registered patch, the service compares the recorded schema version with the patch target and skips a target that has already been reached. When a patch is required, its SQL runs in a transaction; after it succeeds, the Configuration Service updates `basyxsystem.schema_version` to the registered target and sets the state to `clean` in that same transaction. The patch SQL is not responsible for advancing this metadata.
 
@@ -50,7 +50,7 @@ For every registered patch, the service compares the recorded schema version wit
 
 The database schema version is stored in `basyxsystem.schema_version`. The schema state is stored in `basyxsystem.state`.
 
-Regular BaSyx services validate both values during startup. If the schema version does not match the database schema version expected by that release, or if the state is `dirty`, the service fails fast instead of serving requests. The BaSyx application or image version and the database schema version are separate values. BaSyx Go v1.1.0 expects database schema version `v1.2.2`.
+Regular BaSyx services validate both values during startup. If the schema version does not match the database schema version expected by that release, or if the state is `dirty`, the service fails fast instead of serving requests. The BaSyx application or image version and the database schema version are separate values. BaSyx Go expects database schema version `v1.2.2`.
 
 ```{warning}
 Use the same BaSyx version or build for `basyxconfigurationservice` and the DB-backed runtime services. A newer runtime service may require schema changes that an older Configuration Service image cannot apply.

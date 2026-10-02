@@ -55,7 +55,7 @@ The Configuration Service owns its own pool while the job is running. Include it
 
 ## Patch Execution
 
-Schema patches are explicitly registered by the Configuration Service. Each registered patch has a filename and target schema version. For example, the v1.1.0 release registers `1_0_1.sql` for target version `v1.0.1`. `-customPatchPath` changes the directory used to resolve those registered filenames. It does not discover arbitrary additional SQL files, and a registered patch file that is required but missing from that directory causes migration to fail.
+Schema patches are explicitly registered by the Configuration Service. Each registered patch has a filename and target schema version. For example, `1_0_1.sql` targets schema version `v1.0.1`. `-customPatchPath` changes the directory used to resolve those registered filenames. It does not discover arbitrary additional SQL files, and a registered patch file that is required but missing from that directory causes migration to fail.
 
 A patch is executed only if the current value in `basyxsystem.schema_version` is lower than the registered target version. After a required patch succeeds, the Configuration Service records its target version and `clean` state. A skipped patch does not modify the database state.
 

@@ -15,7 +15,7 @@ Application releases, source revisions, Go toolchain requirements, database sche
 
 ## First Startup
 
-BaSyx Go v1.1.0 requires PostgreSQL 16 or newer. Upgrade PostgreSQL itself before running the Configuration Service when an existing deployment uses an older version.
+BaSyx Go requires PostgreSQL 16 or newer. Upgrade PostgreSQL itself before running the Configuration Service when an existing deployment uses an older version.
 
 A database-backed BaSyx deployment starts in this order:
 

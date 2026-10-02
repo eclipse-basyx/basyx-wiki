@@ -76,7 +76,7 @@ Request the expanded full representation:
 curl -i 'http://localhost:8088/v1/dpps/https%3A%2F%2Fexample.org%2Fdpp%2F1?representation=full'
 ```
 
-The full response keeps the header fields and returns content in an `elements` array with DPP element types and metadata. It is read-only in v1.1.0. If stored AAS content cannot be converted to a supported full DPP element, a full passport read returns `422 Unprocessable Entity`. The compressed representation may still be readable.
+The full response keeps the header fields and returns content in an `elements` array with DPP element types and metadata. It is read-only. If stored AAS content cannot be converted to a supported full DPP element, a full passport read returns `422 Unprocessable Entity`. The compressed representation may still be readable.
 
 Read by unique product identifier:
 
@@ -98,7 +98,7 @@ BaSyx maps compressed JSON content to AAS Submodel Elements as follows:
 | Non-empty array of compatible values | `SubmodelElementList` |
 | Array of `{ "language": "...", "value": "..." }` objects | `MultiLanguageProperty` |
 
-Empty arrays are rejected because their element type cannot be inferred. Arrays containing incompatible element types are also rejected. In v1.1.0, a JSON `null` content value is stored as an empty-string `Property` and does not round-trip as JSON `null`, although the OpenAPI schema permits null compressed values. In a whole-DPP JSON Merge Patch, `null` instead retains its deletion meaning described below.
+Empty arrays are rejected because their element type cannot be inferred. Arrays containing incompatible element types are also rejected. A JSON `null` content value is stored as an empty-string `Property` and does not round-trip as JSON `null`, although the OpenAPI schema permits null compressed values. In a whole-DPP JSON Merge Patch, `null` instead retains its deletion meaning described below.
 
 ## Read and Replace One Element
 
@@ -180,7 +180,7 @@ Expect a paged response such as:
 }
 ```
 
-The request accepts between 1 and 100 non-empty product identifiers. Unknown values are omitted, duplicate DPP identifiers are removed, and results are sorted by DPP identifier. The default `limit` is 100. v1.1.0 requires a positive value but does not impose a separate maximum. If the response contains a `cursor`, repeat the same request body and `limit` with that cursor to retrieve the next page. See [Pagination](../common/pagination) for opaque-cursor guidance.
+The request accepts between 1 and 100 non-empty product identifiers. Unknown values are omitted, duplicate DPP identifiers are removed, and results are sorted by DPP identifier. The default `limit` is 100. The runtime requires a positive value but does not impose a separate maximum. If the response contains a `cursor`, repeat the same request body and `limit` with that cursor to retrieve the next page. See [Pagination](../common/pagination) for opaque-cursor guidance.
 
 ## Delete the Passport
 

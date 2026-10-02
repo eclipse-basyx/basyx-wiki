@@ -1,7 +1,6 @@
 # Runtime Security
 
-This page describes runtime API access security in BaSyx Go v1.1.0. BaSyx
-validates signed JWT bearer access tokens against configured OpenID Connect
+BaSyx validates signed JWT bearer access tokens against configured OpenID Connect
 (OIDC) providers, checks required scopes, and normalizes the resulting claims.
 Attribute-based access control (ABAC) then determines which API operations and
 resources the caller may use. Experimental ReBAC can additionally grant access
@@ -24,7 +23,7 @@ gateway if access control is still required.
 
 ## Supported Components and Default Posture
 
-The v1.1.0 entry points install the shared OIDC and ABAC stack for:
+The following entry points install the shared OIDC and ABAC stack:
 
 - AAS Environment
 - AAS Repository and Submodel Repository
@@ -35,7 +34,7 @@ The v1.1.0 entry points install the shared OIDC and ABAC stack for:
 - Digital Twin Registry
 - DPP API
 
-The Company Lookup service does not install this stack in v1.1.0. Sharing the
+The Company Lookup service does not install this stack. Sharing the
 common configuration structure does not by itself make a service secured.
 
 In the standard entry points, health and Swagger/OpenAPI endpoints are
@@ -192,7 +191,7 @@ BaSyx maps each registered HTTP method and route to a required right:
 | `EXECUTE` | Invoke Operations and use their status/results, or call `/verify`. |
 | `ALL` | ACL wildcard that satisfies any mapped right. |
 
-The policy grammar also accepts `VIEW`, but no shared v1.1.0 runtime route is
+The policy grammar also accepts `VIEW`, but no shared runtime route is
 mapped to that right. Do not use it as a substitute for `READ`.
 
 When a route is mapped to more than one right, those rights are alternatives,
@@ -323,7 +322,7 @@ grant; caller-supplied query and fragment filters still apply.
 If a required ReBAC decision cannot be obtained, the request fails closed with
 `503 Service Unavailable` instead of falling back to ABAC-only behavior.
 Anonymous requests and routes or services outside ReBAC coverage remain
-ABAC-only. The Digital Twin Registry does not enable ReBAC in v1.1.0. See
+ABAC-only. The Digital Twin Registry does not enable ReBAC. See
 [Relationship-Based Access Control](rebac) for supported components, roles,
 sharing, inheritance, and administration.
 

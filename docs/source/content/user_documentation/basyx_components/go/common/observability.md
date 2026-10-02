@@ -2,8 +2,7 @@
 
 BaSyx Go provides structured application logging, request correlation, optional
 OpenTelemetry tracing, and PostgreSQL connection-pool metrics through shared
-runtime infrastructure. Logging and tracing are available in BaSyx Go `1.0.4`
-or newer. The pool metrics require BaSyx Go `1.0.6` or newer.
+runtime infrastructure.
 
 The application remains independent of a particular observability backend:
 
@@ -254,8 +253,8 @@ telemetry:
   metricsExportTimeout: "30000"
 ```
 
-These metric values require BaSyx Helm chart `3.7.0` and BaSyx Go `1.0.6` or
-newer. `metricsExporter`, `metricsExportInterval`, and
+These metric values require BaSyx Helm chart `3.7.0` and BaSyx Go release
+`1.0.6` or newer. `metricsExporter`, `metricsExportInterval`, and
 `metricsExportTimeout` render `OTEL_METRICS_EXPORTER`,
 `OTEL_METRIC_EXPORT_INTERVAL`, and `OTEL_METRIC_EXPORT_TIMEOUT` respectively.
 Their defaults are `none`, an empty interval, and an empty timeout. Empty

@@ -6,16 +6,16 @@ The verifier does not restore PostgreSQL. A successful run confirms only the sel
 
 ## Build and Configure the CLI
 
-BaSyx Go v1.1.0 includes the command source but no dedicated `historyevidenceverifier` container image or release binary. Build it from the matching source tag:
+BaSyx Go includes the command source but no dedicated `historyevidenceverifier` container image or release binary. Build it from the matching source tag:
 
-Building BaSyx Go v1.1.0 requires Go 1.27.1 or a compatible newer Go toolchain.
+Building the verifier requires Go 1.27.1 or a compatible newer Go toolchain.
 
 ```bash
 git checkout v1.1.0
 go build -o historyevidenceverifier ./cmd/historyevidenceverifier
 ```
 
-The examples below use `./historyevidenceverifier`. From a v1.1.0 source checkout, `go run ./cmd/historyevidenceverifier` is equivalent.
+The examples below use `./historyevidenceverifier`. From the same source checkout, `go run ./cmd/historyevidenceverifier` is equivalent.
 
 Use `-config` to supply a normal BaSyx YAML configuration. Depending on the selected operation or verification target, the CLI reads:
 
@@ -37,7 +37,7 @@ The CLI supports three distinct checks:
 | Mutation evidence | PostgreSQL mutation-evidence metadata, the per-resource `mutation_event` sequence and hash chain, immutable objects, reconstructed content, live retention, and referenced binary evidence | The expected terminal event hash for the requested sequence |
 | ReBAC audit | The ReBAC administration audit chain currently present and, when S3 is configured, archived audit objects | An optional expected audit head hash |
 
-Mutation evidence artifacts are retained separately from the ordinary PostgreSQL history tables. In v1.1.0, however, normal mutation verification still uses PostgreSQL mutation-evidence metadata to locate and verify the corresponding immutable objects. It cannot run after PostgreSQL has been lost.
+Mutation evidence artifacts are retained separately from the ordinary PostgreSQL history tables. Normal mutation verification still uses PostgreSQL mutation-evidence metadata to locate and verify the corresponding immutable objects, so it cannot run after PostgreSQL has been lost.
 
 PostgreSQL supplies object locations and receipts for normal history and mutation verification, so it is not an independent trust source by itself. Keep expected terminal hashes and manifest hashes outside the database under verification. A value read only from that database immediately before a check cannot detect an attacker who removed both a chain tail and its catalog rows.
 
@@ -127,7 +127,7 @@ Mutation-evidence artifacts are stored separately from ordinary PostgreSQL histo
 
 ### Establish an External Mutation Head
 
-The expected sequence and event hash form the input trust anchor for mutation verification. BaSyx Go v1.1.0 has no dedicated CLI operation for exporting or advancing that anchor. The current sequence and head are maintained in PostgreSQL mutation-evidence state. While the system is known to be trustworthy, obtain a known-good pair through controlled operational access and protect it outside the BaSyx database and evidence infrastructure being checked. This establishes an initial trust-on-first-use baseline. Reading a later value from the same database does not independently authenticate that later head.
+The expected sequence and event hash form the input trust anchor for mutation verification. BaSyx Go has no dedicated CLI operation for exporting or advancing that anchor. The current sequence and head are maintained in PostgreSQL mutation-evidence state. While the system is known to be trustworthy, obtain a known-good pair through controlled operational access and protect it outside the BaSyx database and evidence infrastructure being checked. This establishes an initial trust-on-first-use baseline. Reading a later value from the same database does not independently authenticate that later head.
 
 For verification, use the retained sequence as `-to` and its hash as `-expected-head-hash`. For example, a retained pair for sequence 42 verifies a range ending at sequence 42. That hash cannot be used with `-to 50`; a run ending at sequence 50 requires an independently authenticated hash for sequence 50 as input. The verifier confirms that the evidence chain ends in the supplied hash. It does not authenticate a newer head. To move the trust anchor to a later sequence, obtain or authenticate that later sequence/hash pair through a trusted process outside the database being verified, then verify it in the same way:
 
@@ -146,7 +146,7 @@ The verifier locates the nearest snapshot checkpoint at or before `-from`, verif
 
 For each event, the CLI checks the immutable object hash, event and payload hashes, reconstructed content hash, receipt retention metadata, and the current Object Lock retention and legal-hold state. When a mutation declares internal attachment or thumbnail evidence, it also checks the binary-reference object, its binding to the mutation, the referenced immutable binary receipt and bytes, digest and size, and live retention.
 
-The JSON report includes the reconstructed terminal `snapshot`, `event_hash`, change and deletion state, operation time, audit context, and any findings. `-mutation -recover` is accepted in v1.1.0, but follows this same verification path and produces the same report. It is not a separate restore or export operation. `-mutation` cannot be combined with `-write`, `-catalog-export`, or `-recovery-catalog`.
+The JSON report includes the reconstructed terminal `snapshot`, `event_hash`, change and deletion state, operation time, audit context, and any findings. `-mutation -recover` is accepted, but follows this same verification path and produces the same report. It is not a separate restore or export operation. `-mutation` cannot be combined with `-write`, `-catalog-export`, or `-recovery-catalog`.
 
 ## Recover History-Range Evidence
 
@@ -204,11 +204,11 @@ The expected head is optional, but an independently retained expected head is re
 
 When an S3 evidence store is configured, the command verifies archived audit objects referenced by the events. An event without archived evidence increments `evidenceMissing` but does not invalidate an otherwise valid audit chain. Inspect `evidenceVerified` and `evidenceMissing` as well as `valid` when archived evidence is required by your operating policy.
 
-This target cannot be combined with `-write`, `-recover`, `-catalog-export`, `-mutation`, or `-table`. Do not pass `-identifier`, `-from`, `-to`, or manifest/signing selectors with `-rebac-audit`. v1.1.0 does not use them for ReBAC audit verification. See [Relationship-Based Access Control](rebac) for the ReBAC audit-trail model.
+This target cannot be combined with `-write`, `-recover`, `-catalog-export`, `-mutation`, or `-table`. Do not pass `-identifier`, `-from`, `-to`, or manifest/signing selectors with `-rebac-audit`; they are not used for ReBAC audit verification. See [Relationship-Based Access Control](rebac) for the ReBAC audit-trail model.
 
 ## Results, Exit Status, and Scheduling
 
-Results are formatted JSON. History, mutation, and recovery reports use `valid` and an optional `findings` array. Findings emitted by v1.1.0 have `severity: "error"`. Any finding makes the report invalid. ReBAC reports use `valid` and `reason`, together with the verified head and evidence counts.
+Results are formatted JSON. History, mutation, and recovery reports use `valid` and an optional `findings` array. Findings have `severity: "error"`. Any finding makes the report invalid. ReBAC reports use `valid` and `reason`, together with the verified head and evidence counts.
 
 | Exit code | Meaning |
 | --- | --- |

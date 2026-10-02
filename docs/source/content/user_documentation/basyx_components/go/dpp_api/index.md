@@ -4,7 +4,7 @@
 ![AAS Metamodel](https://img.shields.io/badge/AAS_Metamodel-v3.2-yellow)
 ![DPP API specification](https://img.shields.io/badge/DPP_API_spec-v1.0.0-blue)
 
-The BaSyx Go Digital Product Passport (DPP) API creates, retrieves, updates, and deletes Digital Product Passports through a dedicated HTTP API. The OpenAPI document shipped with BaSyx Go v1.1.0 identifies the API as aligned with the DPP annexes of IDTA-01001 and IDTA-01002 v3.2. This documentation describes the behavior of that released implementation, including its representation and lifecycle rules.
+The BaSyx Go Digital Product Passport (DPP) API creates, retrieves, updates, and deletes Digital Product Passports through a dedicated HTTP API. Its OpenAPI document identifies the API as aligned with the DPP annexes of IDTA-01001 and IDTA-01002 v3.2.
 
 ## Data Model and Persistence
 
@@ -23,7 +23,7 @@ The DPP identifier uniquely identifies a passport. Each passport carries one uni
 
 ## Capabilities
 
-BaSyx Go v1.1.0 provides:
+BaSyx Go provides:
 
 - atomic creation and partial update of a DPP;
 - compressed and expanded full read representations;

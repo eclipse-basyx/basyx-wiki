@@ -50,10 +50,6 @@ All HTTP timeout values must be greater than `0`. When a service receives an int
 
 ### `postgres`
 
-```{note}
-The pool defaults, `connMaxIdleTimeMinutes`, zero-value handling, validation rules, and automatic service-name fallback described below require BaSyx Go 1.0.5 or later.
-```
-
 | Key | Default | Purpose |
 | --- | --- | --- |
 | `dsn` | `""` | Complete PostgreSQL connection string. It is mutually exclusive with the individual connection fields listed below; mixing both forms causes startup to fail. |
@@ -82,10 +78,6 @@ When `postgres.dsn` is non-empty, do not explicitly configure `host`, `port`, `u
 If no primary `application_name` is supplied through `applicationName` or the DSN, the component sets it to its service name. An explicitly configured value is preserved. This identifies each BaSyx service in PostgreSQL views such as `pg_stat_activity`.
 
 #### Optional PostgreSQL reader
-
-```{note}
-The `postgres.reader` configuration requires BaSyx Go 1.0.7 or later.
-```
 
 PostgreSQL-backed BaSyx HTTP services can use a separate reader connection for
 eligible, eventually consistent reads. Configure it as a nested
@@ -362,7 +354,7 @@ saturation, rolling updates, and a PostgreSQL switchover.
 Both the chart-managed reader and its read-only Pooler are disabled by default.
 These `database.reader.*` values are Helm chart values, not the application's
 `postgres.reader.*` YAML settings. The `database.reader.*` values require BaSyx Helm chart `3.9.0` and BaSyx Go
-`1.0.7` or newer.
+release `1.0.7` or newer.
 ```
 
 For a database managed by the chart, enabling the global reader routes

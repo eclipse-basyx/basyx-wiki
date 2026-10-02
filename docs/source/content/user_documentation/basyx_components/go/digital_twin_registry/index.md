@@ -72,7 +72,7 @@ The standard Submodel Descriptor field is `supplementalSemanticIds` (plural). Fo
 
 ## Security and Visibility Semantics
 
-The Digital Twin Registry does not support ReBAC in BaSyx Go v1.1.0. It uses ABAC for authorization; `rebac.*` settings are ignored, and the DTR does not expose the ReBAC management API or advertise a ReBAC service profile.
+The Digital Twin Registry does not support ReBAC. It uses ABAC for authorization. `rebac.*` settings are ignored, and the DTR does not expose the ReBAC management API or advertise a ReBAC service profile.
 
 ### AssetLink Visibility and `Edc-Bpn`
 

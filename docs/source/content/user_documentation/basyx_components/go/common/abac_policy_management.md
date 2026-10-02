@@ -1,6 +1,6 @@
 # ABAC Policy Management
 
-BaSyx Go v1.1.0 can store ABAC policies as versioned PostgreSQL records. An
+BaSyx Go can store ABAC policies as versioned PostgreSQL records. An
 operator can prepare, inspect, and validate a staged policy before it replaces
 the policy currently used for authorization. See [Runtime Security](security)
 for OIDC and ABAC request-processing semantics.
@@ -340,7 +340,7 @@ restart followers with `never` after an active policy exists, or use
 files with `always` on replicas sharing a scope: a later successful startup can
 supersede the policy imported by another replica.
 
-In v1.1.0 each process keeps its own in-memory evaluator cache. Activation or
+Each process keeps its own in-memory evaluator cache. Activation or
 startup import updates only the instance performing that operation. There is no
 cross-replica cache invalidation. Coordinate a restart or rollout of the other
 replicas after activation so all instances evaluate the same database policy.
@@ -350,7 +350,7 @@ replicas after activation so all instances evaluate the same database policy.
 Policy events in PostgreSQL record imports, edits, validation attempts,
 activations, supersessions, and rejections. Records include available actor,
 issuer, client, request/correlation, source, operation, endpoint, and before/after
-hash information. The v1.1.0 management API does not expose a policy-event list.
+hash information. The management API does not expose a policy-event list.
 Retain and inspect the database records through controlled operational tooling
 when this audit trail is required.
 
@@ -371,7 +371,7 @@ object even though the active policy was not changed.
 
 ## Component Support
 
-The following v1.1.0 services wire PostgreSQL-backed startup import and the
+The following services wire PostgreSQL-backed startup import and the
 optional management routes:
 
 - AAS Environment
@@ -387,7 +387,7 @@ entry points. Management is disabled by default for all of them. For startup
 policy import, Digital Twin Registry is the exception: it defaults to `always`,
 while the others default to `if_missing`.
 
-The DPP API uses a file-backed policy directly in v1.1.0 and does not expose
+The DPP API uses a file-backed policy directly and does not expose
 this PostgreSQL policy-management API. Company Lookup does not wire the shared
 OIDC/ABAC stack.
 

@@ -2,6 +2,8 @@
 
 BaSyx Go provides Go-based BaSyx backend components and shared libraries for running registries, repositories, and related infrastructure services.
 
+Unless stated otherwise, this user documentation describes the latest stable BaSyx Go release.
+
 - [GitHub Repository (basyx-go-components)](https://github.com/eclipse-basyx/basyx-go-components)
 - [DockerHub (Eclipse BaSyx images)](https://hub.docker.com/u/eclipsebasyx)
 

@@ -98,7 +98,7 @@ For a secured example with Keycloak, see [`examples/BaSyxDigitalTwinRegistryExam
 
 The local Compose example is unsecured: `ABAC_ENABLED=false`, and custom header injection is explicitly disabled. Mounted security files have no effect unless OIDC/ABAC is enabled and configured with a matching policy. See [OIDC and ABAC configuration](../common/configuration.md#oidc-and-abac) and [Security Configuration Files](../common/configuration.md#security-files).
 
-The Digital Twin Registry uses ABAC only in BaSyx Go v1.1.0; `rebac.*` settings are ignored. See [Security and Visibility Semantics](index.md#security-and-visibility-semantics).
+The Digital Twin Registry uses ABAC only. `rebac.*` settings are ignored. See [Security and Visibility Semantics](index.md#security-and-visibility-semantics).
 
 For DTR, an omitted `abac.policyFileImport` uses `always`: the access-rules file is imported on every startup and supersedes the active database policy. Set `ABAC_POLICY_FILE_IMPORT` to `always`, `if_missing`, or `never` deliberately for the required policy lifecycle.
 
