@@ -17,7 +17,7 @@ go build -o historyevidenceverifier ./cmd/historyevidenceverifier
 
 The examples below use `./historyevidenceverifier`. From a v1.1.0 source checkout, `go run ./cmd/historyevidenceverifier` is equivalent.
 
-Use `-config` to supply a normal BaSyx YAML configuration. Depending on the selected mode, the CLI reads:
+Use `-config` to supply a normal BaSyx YAML configuration. Depending on the selected operation or verification target, the CLI reads:
 
 - the PostgreSQL writer connection;
 - `history.evidence` S3 endpoint, bucket, prefix, credentials, and Object Lock settings;
@@ -127,11 +127,9 @@ Mutation-evidence artifacts are stored separately from ordinary PostgreSQL histo
 
 ### Establish an External Mutation Head
 
-The expected sequence and event hash form the trust anchor for mutation verification. Capture a known-good pair while the system is in a trusted state and retain it outside the BaSyx database and evidence infrastructure being checked, for example in an operator-controlled monitoring, SIEM, or evidence-preservation system.
+The expected sequence and event hash form the input trust anchor for mutation verification. BaSyx Go v1.1.0 has no dedicated CLI operation for exporting or advancing that anchor. The current sequence and head are maintained in PostgreSQL mutation-evidence state. While the system is known to be trustworthy, obtain a known-good pair through controlled operational access and protect it outside the BaSyx database and evidence infrastructure being checked. This establishes an initial trust-on-first-use baseline. Reading a later value from the same database does not independently authenticate that later head.
 
-BaSyx Go v1.1.0 has no dedicated CLI operation for exporting the initial anchor. The current sequence and head are maintained in PostgreSQL mutation-evidence state. Obtain them through controlled operational access and immediately protect the pair externally. This first pair is a trust-on-first-use baseline unless another trusted process authenticates it. Keeping the only copy in the database being verified does not provide an external check against consistent tail removal.
-
-Use the retained sequence as `-to` and its hash as `-expected-head-hash`. After a later range verifies successfully, advance the external anchor to the valid report's `last_sequence` and `event_hash`:
+For verification, use the retained sequence as `-to` and its hash as `-expected-head-hash`. For example, a retained pair for sequence 42 verifies a range ending at sequence 42. That hash cannot be used with `-to 50`; a run ending at sequence 50 requires an independently authenticated hash for sequence 50 as input. The verifier confirms that the evidence chain ends in the supplied hash. It does not authenticate a newer head. To move the trust anchor to a later sequence, obtain or authenticate that later sequence/hash pair through a trusted process outside the database being verified, then verify it in the same way:
 
 ```bash
 ./historyevidenceverifier \
@@ -220,7 +218,7 @@ Results are formatted JSON. History, mutation, and recovery reports use `valid` 
 
 `SIGINT` and `SIGTERM` cancel in-progress database or object-store work and result in a failed operation. Do not treat interrupted output or a failed `-write` as a completed verification cycle.
 
-Run the verifier from cron, a Kubernetes CronJob, or another operator scheduler at a frequency appropriate to the deployment's evidence-retention and recovery objectives. Alert on non-zero exit status and on invalid JSON reports. Advance an independently retained head only after the corresponding newer sequence has verified successfully.
+Run the verifier from cron, a Kubernetes CronJob, or another operator scheduler at a frequency appropriate to the deployment's evidence-retention and recovery objectives. Alert on non-zero exit status and on invalid JSON reports. Keep expected heads outside the system being verified and use only independently authenticated sequence/hash pairs as new mutation trust anchors.
 
 ## Limits and Security Considerations
 
