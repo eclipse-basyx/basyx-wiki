@@ -1,13 +1,17 @@
 # Setting Up the Basic Discovery Component
-We provide example Set-Ups to get you started with the BaSyx Go Components on our [GitHub Repository](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples).
-But if you need to configure the service yourself, this page will guide you through.
+
+Additional deployment examples are available in the [BaSyx Go repository](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples). Use examples from the same release as the BaSyx components you deploy. The configuration below provides a minimal standalone Basic Discovery service with PostgreSQL and the BaSyx Configuration Service.
+
+The Docker example uses `latest` for both BaSyx Go images. For native builds, use one stable source release and its matching database assets as described in [Version Scope](../common/deployment.md#version-scope).
 
 ## Using Docker Compose
-The easiest way to use and set-up the Basic Discovery component is Docker Compose.
+The easiest way to use and set up the Basic Discovery component is Docker Compose.
 
-The minimal configuration includes two services:
-1. PostgreSQL (>=15)
-2. BaSyx Basic Discovery (Go)
+The minimal configuration includes three services:
+
+1. PostgreSQL
+2. BaSyx Configuration Service (Go), which initializes the database
+3. BaSyx Basic Discovery (Go)
 
 ```yaml
 services:
@@ -25,54 +29,152 @@ services:
       timeout: 5s
       retries: 5
 
-  aas_discovery:
-    image: eclipsebasyx/aasdiscovery-go:SNAPSHOT
+  basyx_configuration:
+    container_name: basyx_configuration
+    image: eclipsebasyx/basyxconfigurationservice-go:latest
+    pull_policy: always
     environment:
-      - SERVER_PORT=5004
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin123
+      - POSTGRES_DBNAME=basyxTestDB
+      - POSTGRES_MAXOPENCONNECTIONS=50
+      - POSTGRES_MAXIDLECONNECTIONS=25
+      - POSTGRES_CONNMAXLIFETIMEMINUTES=5
+      - POSTGRES_CONNMAXIDLETIMEMINUTES=0
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  aas_discovery:
+    container_name: aas_discovery
+    image: eclipsebasyx/aasdiscovery-go:latest
+    pull_policy: always
+    environment:
+      - SERVER_PORT=8086
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin123
       - POSTGRES_DBNAME=basyxTestDB
     ports:
-      - "YOURPORT:5004"
+      - "8086:8086"
     depends_on:
-      postgres:
-        condition: service_healthy
+      basyx_configuration:
+        condition: service_completed_successfully
 ```
-*docker-compose.yml including PostgreSQL 18 and BaSyx Go Basic Discovery*
+*docker-compose.yml including PostgreSQL 18, the BaSyx Configuration Service, and BaSyx Go Basic Discovery*
 
-### Access Rules and Trustlist Files (Secured Setup)
+Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service. For reproducible deployments, replace `latest` with the same concrete BaSyx version tag for all of these services. Alternatively, pin each service image to the corresponding immutable image digest from the same release. The `latest` tag is mutable and advances when a new release is published.
 
-For general handling of OIDC trustlist and ABAC access-rules files (config keys, env vars, startup behavior), see [Security Configuration Files (Common)](../common/configuration#security-files-oidc-trustlist-and-abac-access-rules).
+### Start and Check the Discovery Service
+
+```{warning}
+This minimal local Compose setup does not declare a named PostgreSQL volume. An image-created anonymous volume is not automatically reused after `docker compose down`, so recreating the containers can make previously stored data appear to be lost. Add a correctly mounted named volume before storing persistent data, and migrate existing data explicitly rather than expecting a new volume declaration to copy it. See [Persistent State](../common/deployment.md#persistent-state).
+```
+
+Save the example as `docker-compose.yml`, then run the following command in the same directory:
+
+```bash
+docker compose up -d
+```
+
+The Configuration Service is a one-time initialization/migration job. An exit code of `0` is expected. The Discovery Service starts only after that job completes successfully.
+
+Once the Discovery Service is ready, check its health:
+
+```bash
+curl -i http://localhost:8086/health
+```
+
+Expect HTTP `200` with `{"status":"UP"}`. In Windows PowerShell, use `curl.exe` instead of `curl`. Open [Swagger UI](http://localhost:8086/swagger) to explore the API, then follow [Using Basic Discovery](usage) to register your first asset links.
+
+The Compose example explicitly selects port `8086`. When using a context path, include it in health, Swagger, and API URLs. For example, `SERVER_CONTEXTPATH=/api/v3` makes the health URL `http://localhost:8086/api/v3/health`.
+
+### Security
+
+The local Compose example is unsecured because it does not enable authorization. For secured deployments, configure OIDC together with the authorization mechanism required for your deployment. See [OIDC and ABAC Configuration](../common/configuration.md#oidc-and-abac) and [Security Files](../common/configuration.md#security-files).
+
+For Basic Discovery, an omitted `abac.policyFileImport` defaults to `if_missing`. Once an active policy exists in PostgreSQL, editing the file and restarting does not replace it.
 
 For this component in Docker Compose, mount the security files into the container and configure `ABAC_ENABLED=true`, `ABAC_MODELPATH`, and `OIDC_TRUSTLISTPATH` if you enable ABAC.
+
+### Relationship-Based Access Control
+
+Basic Discovery also supports experimental relationship-based access control (ReBAC) for Discovery registrations. ReBAC is disabled by default and requires OIDC and ABAC to be enabled.
+
+For ReBAC-covered Discovery routes, an authenticated request is allowed when either ABAC or ReBAC grants access. Anonymous requests and endpoints outside the ReBAC-covered Discovery routes remain governed by ABAC. The `/verify` endpoint, when enabled, remains ABAC-only.
+
+Enable ReBAC with `rebac.enabled: true` or `REBAC_ENABLED=true`. If multiple ReBAC-capable BaSyx services share the same database, enable ReBAC consistently across them. A service running without ReBAC ignores ReBAC grants, does not assign owners to resources it creates, and does not remove ReBAC grants for resources it deletes.
+
+Discovery registrations can be shared through ReBAC. Registrations created through AAS Registry Discovery integration inherit access from their source descriptor. See [Relationship-Based Access Control](../common/rebac) for configuration and access-management details.
+
+```{note}
+ReBAC support described here applies to the standalone Basic Discovery component. The Digital Twin Registry uses ABAC only.
+```
 
 ## Using BaSyx Go Components without Docker
 If you need to run the Basic Discovery component without Docker, build the binary from source for your target platform.
 
-```{warning}
-We recommend using the Docker Images for production use-cases, as they are pre-configured and optimized for production environments.
-```
+Published container images are the normal deployment artifacts. A native build should use the same source release as the Configuration Service and database assets.
 
 ### Prerequisites
-- [Go (>=1.20; 1.25 recommended)](https://golang.org/dl/)
+- [Go](https://go.dev/dl/) at the version declared by the selected release's `go.mod`.
+- PostgreSQL 16 or newer, initialized by a Configuration Service built from the same source revision as the HTTP service.
 - [Git](https://git-scm.com/)
 
 ### Cloning the Repository
 ```bash
-git clone https://github.com/eclipse-basyx/basyx-go-components
+git clone https://github.com/eclipse-basyx/basyx-go-components.git
+git -C basyx-go-components checkout RELEASE_TAG
 ```
 
+Replace `RELEASE_TAG` with the stable release you intend to build. Use the Configuration Service and SQL assets from this same checkout.
+
 ### Building the Binary
+
+Change to the Basic Discovery service directory:
 ```bash
 cd basyx-go-components/cmd/discoveryservice
+```
+
+#### Linux / macOS
+
+Build the executable with:
+```bash
 go build -o discoveryservice
 ```
 
-### Running the Service
-Before running the service, ensure PostgreSQL is available and configure the connection via environment variables or a `config.yaml`.
+#### Windows
 
-```bash
-./discoveryservice -config ./config.yaml -databaseSchema ../../basyxschema.sql
+Build the executable with the `.exe` extension:
+```powershell
+go build -o discoveryservice.exe
 ```
+
+### Running the Service
+Before running the service, ensure PostgreSQL is available and that the BaSyx database schema has already been initialized by the [BaSyx Configuration Service](../configuration_service/index). Configure the PostgreSQL connection through environment variables or the provided `config.yaml`.
+
+Set the Discovery port explicitly in `config.yaml`:
+
+```yaml
+server:
+  port: 8086
+```
+
+#### Linux / macOS
+
+Run the service with:
+```bash
+./discoveryservice -config ./config.yaml
+```
+
+#### Windows PowerShell
+
+Run the service with:
+```powershell
+.\discoveryservice.exe -config .\config.yaml
+```
+
+The Basic Discovery component does not initialize the database schema itself. Database initialization and migrations are handled by the BaSyx Configuration Service.

@@ -1,0 +1,146 @@
+# Setting Up the Concept Description Repository
+
+The Docker example uses `latest` for both BaSyx Go images. For native builds, use one stable source release and its matching database assets as described in [Version Scope](../common/deployment.md#version-scope).
+
+## Using Docker Compose
+
+The minimal setup contains PostgreSQL, the one-time BaSyx Configuration Service database initializer, and the Concept Description Repository:
+
+```yaml
+services:
+  postgres:
+    image: postgres:18
+    container_name: postgres_basyx_cd
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: basyxTestDB
+    command: ["postgres", "-c", "listen_addresses=*"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d basyxTestDB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  basyx_configuration:
+    container_name: basyx_configuration_cd
+    image: eclipsebasyx/basyxconfigurationservice-go:latest
+    pull_policy: always
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin123
+      - POSTGRES_DBNAME=basyxTestDB
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  concept_description_repository:
+    container_name: concept_description_repository
+    image: eclipsebasyx/conceptdescriptionrepository-go:latest
+    pull_policy: always
+    environment:
+      - SERVER_PORT=8086
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin123
+      - POSTGRES_DBNAME=basyxTestDB
+    ports:
+      - "8086:8086"
+    depends_on:
+      basyx_configuration:
+        condition: service_completed_successfully
+```
+
+Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service. For reproducible deployments, replace `latest` with the same concrete BaSyx version tag for all of these services. Alternatively, pin each service image to the corresponding immutable image digest from the same release. The `latest` tag is mutable and advances when a new release is published.
+
+```{warning}
+This minimal local Compose setup does not declare a named PostgreSQL volume. An image-created anonymous volume is not automatically reused after `docker compose down`, so recreating the containers can make previously stored data appear to be lost. Add a correctly mounted named volume before storing persistent data, and migrate existing data explicitly rather than expecting a new volume declaration to copy it. See [Persistent State](../common/deployment.md#persistent-state).
+```
+
+Save the example as `docker-compose.yml`, then start it:
+
+```bash
+docker compose up -d
+curl -i http://localhost:8086/health
+```
+
+The Configuration Service is expected to exit with code `0` after initializing or migrating the schema. The Repository starts only after it succeeds. A ready Repository returns HTTP `200` with `{"status":"UP"}`. Swagger UI is available at [http://localhost:8086/swagger](http://localhost:8086/swagger).
+
+## Configuration File
+
+The image contains a configuration file at `/config/config.yaml`. To supply your own file, mount it at that path. This representative configuration uses the same values as the Compose example:
+
+```yaml
+server:
+  port: 8086
+  contextPath: ""
+  host: 0.0.0.0
+  strictVerification: permissive
+
+postgres:
+  host: postgres
+  port: 5432
+  user: admin
+  password: admin123
+  dbname: basyxTestDB
+  maxOpenConnections: 50
+  maxIdleConnections: 25
+  connMaxLifetimeMinutes: 5
+  connMaxIdleTimeMinutes: 0
+
+oidc:
+  trustlistPath: "config/trustlist.json"
+
+abac:
+  enabled: false
+  modelPath: "config/access_rules/access-rules.json"
+```
+
+Do not combine `postgres.dsn` with the individual host, port, user, password, database, or SSL settings. See [General Configuration](../common/configuration) for the complete shared configuration model.
+
+### Environment Variables
+
+Environment variables use uppercase configuration paths with dots replaced by underscores:
+
+| Environment variable | Purpose |
+| --- | --- |
+| `SERVER_PORT` | HTTP listen port. Set this explicitly. |
+| `SERVER_CONTEXTPATH` | Optional prefix for every service route. |
+| `SERVER_STRICTVERIFICATION` | Model verification mode: `off`, `permissive`, or `strict`. |
+| `POSTGRES_HOST`, `POSTGRES_PORT`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DBNAME` | Writer database connection. |
+| `POSTGRES_DSN` | Alternative complete writer connection string. Do not mix it with the individual connection fields. |
+| `POSTGRES_READER_HOST`, `POSTGRES_READER_PORT`, `POSTGRES_READER_USER`, `POSTGRES_READER_PASSWORD`, `POSTGRES_READER_DBNAME` | Optional read-replica connection. Omit all reader settings to reuse the writer pool. |
+| `ABAC_ENABLED` | Enables ABAC enforcement. Default: `false`. |
+| `ABAC_MODELPATH` | Path to the mounted access-rule model. |
+| `ABAC_POLICY_FILE_IMPORT` | Policy import mode. The default is `if_missing`. |
+| `OIDC_TRUSTLISTPATH` | Path to the mounted OIDC trust list. |
+| `REBAC_ENABLED` | Enables experimental ReBAC. Default: `false`; requires ABAC and a readable OIDC trust list. |
+
+An explicitly configured reader may be eventually consistent. Omit it when requests must immediately read their own writes.
+
+### Security Configuration
+
+The Compose example is unsecured. To enable OIDC-based ABAC, set `ABAC_ENABLED=true`, mount the access-rule and OIDC trust-list files, and set their container paths. A mounted policy is not automatically re-imported on every restart: the effective default import mode is `if_missing`. See the [`oidc` and `abac`](../common/configuration.md#oidc-and-abac) and [Security Files](../common/configuration.md#security-files) sections in General Configuration before exposing the service.
+
+The Concept Description Repository also supports experimental relationship-based access control (ReBAC). ReBAC is disabled by default, requires ABAC and a readable OIDC trust list, and can be enabled with `REBAC_ENABLED=true`. Concept Descriptions are covered by ReBAC. For authenticated callers on these routes, access can be granted by either ABAC or ReBAC. Anonymous callers and endpoints outside the ReBAC-covered routes remain ABAC-only. In particular, `$recent-changes` remains ABAC-only.
+
+If multiple ReBAC-capable BaSyx services share the same database, enable ReBAC consistently across them. A service running without ReBAC ignores ReBAC grants, does not assign owners to resources it creates, and does not remove ReBAC grants for resources it deletes. See [Relationship-Based Access Control](../common/rebac) for configuration and administration details.
+
+## Running without Docker
+
+Use PostgreSQL initialized by a Configuration Service from the same release, then build the service from the release checkout:
+
+```bash
+git clone https://github.com/eclipse-basyx/basyx-go-components
+git -C basyx-go-components checkout RELEASE_TAG
+cd basyx-go-components/cmd/conceptdescriptionrepositoryservice
+go build -o conceptdescriptionrepositoryservice
+./conceptdescriptionrepositoryservice -config ./config.yaml
+```
+
+Replace `RELEASE_TAG` with the stable release you intend to build, and use the Configuration Service and SQL assets from that same checkout.
+
+On Windows, build `conceptdescriptionrepositoryservice.exe` and run `./conceptdescriptionrepositoryservice.exe -config ./config.yaml` in PowerShell. The service validates the existing database schema; it does not initialize that schema itself.

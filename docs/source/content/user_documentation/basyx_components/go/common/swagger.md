@@ -1,6 +1,6 @@
-# Swagger UI Docs
+# Swagger UI and OpenAPI
 
-All BaSyx Go components can expose a Swagger UI and the corresponding OpenAPI specification via shared infrastructure in `internal/common`.
+BaSyx Go HTTP services can expose a Swagger UI and the corresponding OpenAPI specification. Set `swagger.enabled: false` to leave the UI, specification endpoint, and base-path redirect unregistered.
 
 ## Default Endpoints
 
