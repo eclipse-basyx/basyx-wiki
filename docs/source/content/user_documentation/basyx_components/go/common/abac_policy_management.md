@@ -132,8 +132,8 @@ larger body is rejected with `400 Bad Request`.
 | List or create by kind | `GET` or `POST /security/abac/policy-versions/{versionID}/definitions/{kind}` |
 | Read, replace, merge-patch, or delete by name | `GET`, `PUT`, `PATCH`, or `DELETE /security/abac/policy-versions/{versionID}/definitions/{kind}/{name}` |
 
-The supported `{kind}` values are `attributes`, `acls`, `objects`, and
-`formulas`. The API also accepts their source-document names `DEFATTRIBUTES`,
+Use `attributes`, `acls`, `objects`, or `formulas` for `{kind}`. The API also
+accepts their source-document names `DEFATTRIBUTES`,
 `DEFACLS`, `DEFOBJECTS`, and `DEFFORMULAS`.
 
 ### Recommended Workflow
@@ -275,8 +275,10 @@ also have an empty body. Enable or disable a rule with
 replace bodies contain one definition of the `{kind}` named in the path,
 including its `name` and kind-specific `attributes`, `acl`, `objects`, or
 `formula` member. For `PUT`, the body name must match `{name}` in the path. A
-`PATCH` may omit the name, but cannot change it. To rename a definition, delete
-the old definition and create a new one.
+`PATCH` may omit the name, but cannot change it. Definitions cannot be renamed
+with `PUT` or `PATCH`. To rename a referenced definition, create the new
+definition, update all references to use the new name, and then delete the old
+definition.
 
 Every edit rematerializes the complete staged policy within its database
 transaction. A malformed change or unresolved reference is rejected without
@@ -287,6 +289,8 @@ mutation operations.
 objects. `null` removes a field. It is not RFC 6902 JSON Patch. The result must
 still satisfy the policy grammar, including the mutually exclusive pairs
 `ACL`/`USEACL`, `FORMULA`/`USEFORMULA`, and `OBJECTS`/`USEOBJECTS`.
+
+Rule order is security-relevant because rules are evaluated in order.
 
 Rule indices and positions are 1-based. For creation, an omitted position or a
 position outside `1` through the new list length appends. A duplicate without a
