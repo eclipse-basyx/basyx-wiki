@@ -1,6 +1,6 @@
 # Query Language
 
-BaSyx Go query endpoints use a shared JSON query language to select repository resources and Registry descriptors and to filter fragments inside returned objects. This page describes the behavior released in BaSyx Go v1.1.0. Use the component's Swagger UI for the exact endpoint request and response schemas.
+BaSyx Go v1.1.0 implements the [AAS Query Language defined by IDTA-01002 v3.2](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/query-language.html) for selecting repository resources and Registry descriptors and filtering fragments inside returned objects. This page documents the actual BaSyx Go v1.1.0 runtime behavior, including its extensions and deviations from the standard. Use the component's Swagger UI to check endpoint availability, URL parameters, and general request and response shapes. Use this page for the runtime-specific query grammar and semantics.
 
 ## Supported Endpoints
 
@@ -55,7 +55,29 @@ Each `$filters` entry requires both `$fragment` and `$condition` and may set the
 Unknown members, a missing `$condition`, malformed expressions, unsupported field paths, and roots that are invalid for the endpoint result in `400 Bad Request`.
 
 ```{note}
-The v1.1.0 runtime accepts a `$select` member in the shared query model, but it does not apply `$select` as a response projection. Use `$filters` to control supported result fragments.
+IDTA-01002 v3.2 defines `$select: "id"` as a projection that returns identifiers. BaSyx Go v1.1.0 does not implement that projection: the runtime instead expects `$select`, if present, as an array of field paths and does not use the accepted array to project the response. The standardized string form is rejected, so omit `$select` in normal v1.1.0 query requests. `$filters` are not a replacement for projection. They conditionally retain or prune supported fragments of otherwise returned objects.
+```
+
+For example, query a local AAS Repository for shells whose `idShort` is `MotorAAS`:
+
+```bash
+curl -sS -X POST 'http://localhost:8084/query/shells?limit=1' -H 'Content-Type: application/json' -d '{"$condition":{"$eq":[{"$field":"$aas#idShort"},{"$strVal":"MotorAAS"}]}}'
+```
+
+A successful response uses the endpoint's normal paging envelope:
+
+```json
+{
+  "paging_metadata": {},
+  "result": [
+    {
+      "modelType": "AssetAdministrationShell",
+      "id": "urn:example:aas:motor",
+      "idShort": "MotorAAS",
+      "assetInformation": { "assetKind": "Instance" }
+    }
+  ]
+}
 ```
 
 ## Fields
@@ -73,8 +95,6 @@ The root identifies the model being addressed:
 | `$smdesc` | A Submodel Descriptor |
 | `$cd` | A Concept Description |
 
-`$bd` also exists in the shared grammar for Basic Discovery authorization filters, but v1.1.0 does not expose a public Basic Discovery query-language endpoint.
-
 ### Field Paths
 
 A field reference uses `$field` and separates its model selector from its field with `#`:
@@ -82,13 +102,16 @@ A field reference uses `$field` and separates its model selector from its field 
 ```text
 $aas#assetInformation.globalAssetId
 $sm#semanticId.keys[].value
+$sme#value
 $sme.Metrics.Temperature#value
 $aasdesc#submodelDescriptors[].idShort
 $smdesc#endpoints[0].protocolinformation.href
 $cd#idShort
 ```
 
-Use dots for nested object members. For supported list paths, `[]` addresses any entry and `[0]`, `[1]`, and so on address one zero-based position. The part between `$sme.` and `#` is the dot-separated `idShort` path of the element. It may also contain list selectors. Field names and roots are case-sensitive. The accepted paths are an explicit subset of the model, so a field that exists in an AAS JSON document is not automatically queryable. Consult the endpoint's v1.1.0 Swagger schema and use the patterns above rather than arbitrary JSON paths.
+Use dots for nested object members. For supported list paths, `[]` addresses any entry and `[0]`, `[1]`, and so on address one zero-based position. The part between `$sme.` and `#` is the dot-separated `idShort` path of the element and may also contain list selectors. Omitting that path, as in `$sme#value`, searches matching Submodel Elements recursively across the relevant Submodel Element hierarchy. `$sme.Metrics.Temperature#value` targets the explicit path.
+
+Field names and roots are case-sensitive. For descriptor endpoint URLs, the v1.1.0 query token is `protocolinformation.href` with a lowercase `i`, even though the regular AAS JSON property is `protocolInformation`. The accepted paths are an explicit subset of the model, so a field that exists in an AAS JSON document is not automatically queryable.
 
 ### Values and Types
 
@@ -103,7 +126,16 @@ Values are typed expressions rather than bare JSON scalars:
 | `{ "$timeVal": "10:30:00Z" }` | RFC 3339 full-time |
 | `{ "$hexVal": "16#FF" }` | Uppercase hexadecimal literal |
 
-The language also provides explicit `$strCast`, `$numCast`, `$boolCast`, `$dateTimeCast`, `$timeCast`, and `$hexCast` wrappers. `$year`, `$month`, `$dayOfMonth`, and `$dayOfWeek` extract a numeric part from a date-time expression. For example:
+The language also provides explicit cast and date-part expressions:
+
+| Expression | Accepted operand |
+| --- | --- |
+| `$strCast`, `$numCast`, `$boolCast`, `$hexCast` | Any valid value expression |
+| `$dateTimeCast` | A string-valued expression, including a field, string literal, or `$strCast` |
+| `$timeCast` | A string-valued or date-time expression |
+| `$year`, `$month`, `$dayOfMonth`, `$dayOfWeek` | A date-time expression, such as `$dateTimeVal` or `$dateTimeCast` |
+
+For example:
 
 ```json
 {
@@ -144,6 +176,8 @@ String matching is case-sensitive. Field-to-field comparisons and field-to-field
 
 `$match` is not simply another spelling of `$and`. It correlates predicates that address nested data. The separate Boolean `$match` inside a fragment filter has a different purpose, described below.
 
+Direct children of a logical `$match` are limited to comparison expressions, string expressions, or another `$match`. They cannot be arbitrary `$and`, `$or`, `$not`, or `$boolean` expressions.
+
 ## Querying Nested Data
 
 ### Parent Selection
@@ -177,7 +211,24 @@ For example, this AAS Environment query requires one referenced `CarbonFootprint
 
 With `$and` instead, one referenced Submodel could satisfy the `idShort` condition while another supplies the matching element.
 
-### Fragments and Fragment Filters
+### Fragment Paths
+
+`$fragment` identifies a part of the returned representation, while `$field` identifies a scalar value used by a condition. The two therefore use different allowed path sets: a valid `$field` path is not automatically a valid `$fragment` path.
+
+In the table below, `[i]` means either a wildcard `[]` or one non-negative index such as `[0]`.
+
+| Root | Supported fragment forms |
+| --- | --- |
+| `$aas` | `#idShort`; `#assetInformation.assetType`; `#assetInformation.globalAssetId`; `#assetInformation.specificAssetIds[i]`, optionally followed by `.externalSubjectId` or `.externalSubjectId.keys[i]`; `#submodels[i]`, optionally followed by `.keys[i]` |
+| `$sm` | `#id`, `#idShort`; `#semanticId` or `#semanticId.keys[i]`; `#supplementalSemanticIds` or `#supplementalSemanticIds[i]`, with optional `.keys[i]` |
+| `$sme` | `$sme` or `$sme.<idShortPath>` for an element; either form may select `#idShort`, `#value`, `#valueType`, `#language`, `#semanticId`, `#semanticId.keys[i]`, `#supplementalSemanticIds` or `#supplementalSemanticIds[i]`, with optional `.keys[i]` |
+| `$cd` | `#idShort` |
+| `$aasdesc` | `#idShort`, `#description`, `#displayName`, `#extension`, `#administration`, `#assetKind`, `#assetType`, `#globalAssetId`; `#specificAssetIds[i]` forms as above; `#endpoints[i]`; `#submodelDescriptors[i]`, optionally followed by `.idShort`, `.semanticId`, `.semanticId.keys[i]`, `.supplementalSemanticIds` or `.supplementalSemanticIds[i]` with optional `.keys[i]`, or `.endpoints[i]` |
+| `$smdesc` | `#idShort`; `#semanticId` or `#semanticId.keys[i]`; `#supplementalSemanticIds` or `#supplementalSemanticIds[i]`, with optional `.keys[i]`; `#endpoints[i]` |
+
+The selected root must also be valid for the query endpoint.
+
+### Fragment Filters
 
 `$fragment` identifies a supported field, object, or list within the returned parent. Its `$condition` determines whether that fragment remains visible. It does not determine whether the parent is included in `result`.
 
@@ -238,6 +289,10 @@ Successful query responses contain the endpoint's top-level objects in `result` 
 Query endpoints accept `limit` and `cursor` as URL query parameters. Omit the cursor for the first page, then send the returned opaque cursor with the same request body and `limit` for the next page. See [Pagination](pagination) for the shared response and cursor rules.
 
 v1.1.0 provides no caller-controlled sort expression. Results use the endpoint's server-defined cursor order. Clients should not rely on another ordering.
+
+## Limits
+
+BaSyx Go v1.1.0 accepts at most 64 JSON container nesting levels and 8192 JSON tokens in a query. Queries that exceed either complexity limit are rejected with `400 Bad Request`.
 
 ## Authorization Filters
 
