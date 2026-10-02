@@ -102,5 +102,5 @@ The DPP API uses the file-backed ABAC policy setup rather than the database-back
 The named volume `dpp_postgres` stores the PostgreSQL data. `docker compose down` retains it; `docker compose down -v` deletes the database, including passports, recorded history, and Configuration Service state.
 
 ```{warning}
-Do not remove the volume when the data must be retained. Back up PostgreSQL before upgrades or destructive operations and follow the [Configuration Service upgrade guidance](../configuration_service/operations.md#upgrading-an-existing-database).
+Do not remove the volume when the data must be retained. Back up PostgreSQL before upgrades or destructive operations and follow the [existing-database guidance](../common/deployment.md#existing-databases).
 ```

@@ -14,7 +14,7 @@ The JSON body uses original identifiers. Identifier path parameters and the `/se
 | Submodel | `urn:example:submodel:environment:1` | `dXJuOmV4YW1wbGU6c3VibW9kZWw6ZW52aXJvbm1lbnQ6MQ` |
 | Concept Description | `urn:example:concept:serial-number` | `dXJuOmV4YW1wbGU6Y29uY2VwdDpzZXJpYWwtbnVtYmVy` |
 
-See [Identifiers and Encoding](../common/encoding.md#encode-your-own-identifier) when substituting your own identifiers.
+When substituting your own identifiers, use the same UTF-8 Base64URL encoding.
 
 ## Import an Environment
 
@@ -189,4 +189,4 @@ Uploading the same identifiers again uses replace-on-upload behavior: existing C
 An upload is not one atomic package transaction. The service processes Concept Descriptions, then Submodels, then AASs; a later failure can leave earlier objects stored. AASX attachments are processed afterward and can also fail after model content was written. The success counts describe the parsed input, not an all-or-nothing commit guarantee. After any error, inspect the affected resources before retrying.
 ```
 
-For shared error handling and validation behavior, see [API Errors](../common/api_errors) and [Validation](../common/validation).
+For shared payload-validation behavior, see [Validation](../common/validation).

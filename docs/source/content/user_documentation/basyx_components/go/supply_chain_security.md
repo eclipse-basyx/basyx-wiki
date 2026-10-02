@@ -67,7 +67,7 @@ Verify by digest, not by tag. A tag such as `latest` or `v1.2.3` can be moved by
 
 ## Verify Image Signatures
 
-Install [Cosign](https://docs.sigstore.dev/cosign/installation/) and verify the immutable image digest.
+Install [Cosign](https://docs.sigstore.dev/cosign/system_config/installation/) and verify the immutable image digest.
 
 ```bash
 IMAGE="eclipsebasyx/aasregistry-go@sha256:<digest>"

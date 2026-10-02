@@ -102,7 +102,7 @@ The [BaSyx Helm chart](https://github.com/eclipse-basyx/charts) exposes the sett
 
 The BaSyx Go repository contains the complete guides:
 
-- [ReBAC overview](https://github.com/eclipse-basyx/basyx-go-components/blob/main/docu/security/rebac/README.md)
-- [Administration guide](https://github.com/eclipse-basyx/basyx-go-components/blob/main/docu/security/rebac/administration.md) for operations, audit trail, monitoring, and troubleshooting
-- [Sharing API](https://github.com/eclipse-basyx/basyx-go-components/blob/main/docu/security/rebac/sharing-api.md)
+- [ReBAC overview](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.0/docu/security/rebac/README.md)
+- [Administration guide](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.0/docu/security/rebac/administration.md) for operations, audit trail, monitoring, and troubleshooting
+- [Sharing API](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.0/docu/security/rebac/sharing-api.md)
 - [ReBAC example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxReBACExample)

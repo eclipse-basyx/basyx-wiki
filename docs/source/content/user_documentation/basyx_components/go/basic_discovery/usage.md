@@ -82,7 +82,7 @@ The `limit` and `cursor` parameters apply to the POST lookup endpoint. For addit
 curl -i -X POST 'http://localhost:8086/lookup/shellsByAssetLink?limit=10&cursor=RETURNED_CURSOR' -H 'Content-Type: application/json' --data-binary '@lookup.json'
 ```
 
-Replace `RETURNED_CURSOR` with the server-provided value, URL-escaped as needed. The single registration above has no next page. See [Keep the Same Search](../common/pagination.md#keep-the-same-search) for the shared continuation rules. An unmatched lookup returns `200 OK` with an empty `result`; it does not return `404`.
+Replace `RETURNED_CURSOR` with the server-provided value, URL-escaped as needed. The single registration above has no next page. See [Follow the Next Cursor](../common/pagination.md#follow-the-next-cursor) for the shared continuation rules. An unmatched lookup returns `200 OK` with an empty `result`; it does not return `404`.
 
 ### Deprecated GET Lookup
 

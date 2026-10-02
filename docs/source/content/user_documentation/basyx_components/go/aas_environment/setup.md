@@ -2,7 +2,7 @@
 
 This setup runs the `latest` AAS Environment and Configuration Service images with PostgreSQL 18. It exposes one application URL, `http://localhost:8090`, and is sufficient for the complete [first-use walkthrough](usage). No separate Registry, Discovery, or UI container is required.
 
-Review the [version distinctions](../common/deployment.md#version-scope) before mixing images or source builds. For an existing database, do not treat startup as an upgrade procedure: follow [Upgrading an Existing Database](../configuration_service/operations.md#upgrading-an-existing-database) first.
+Review the [version distinctions](../common/deployment.md#version-scope) before mixing images or source builds. For an existing database, do not treat startup as an upgrade procedure: follow the [existing-database guidance](../common/deployment.md#existing-databases) first.
 
 ## Prerequisites and Security Posture
 
@@ -93,7 +93,7 @@ Start the project:
 docker compose up -d
 ```
 
-The Configuration Service container completing with exit code `0` is expected. If it fails against a previously used database, inspect its logs and follow the [database upgrade guidance](../configuration_service/operations.md#upgrading-an-existing-database) rather than deleting persistent data.
+The Configuration Service container completing with exit code `0` is expected. If it fails against a previously used database, inspect its logs and follow the [existing-database guidance](../common/deployment.md#existing-databases) rather than deleting persistent data.
 
 Wait until the Environment is ready:
 
