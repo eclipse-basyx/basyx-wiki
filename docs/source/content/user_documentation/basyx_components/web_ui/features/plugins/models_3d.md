@@ -12,9 +12,9 @@ This plugin is activated when a Submodel has the following semantic ID:
 
 ## Feature Overview
 
-The Models 3D plugin visualizes Submodels based on the IDTA Submodel Template *Provision of 3D Models*. It lists the 3D models of the Submodel with their format, status, level of detail and preview image, and embeds an interactive 3D viewer for the selected model. The model file can be downloaded from the viewer.
+The Models 3D plugin visualizes Submodels based on the IDTA Submodel Template *Provision of 3D Models*. It embeds an interactive 3D viewer for the model and shows the most important information about it right next to the viewer: status, version, level of detail, intended use and key properties. All remaining metadata is available in a collapsible *Technical details* section.
 
-The look and layout follow the rest of the UI. The plugin adapts to the width of the Visualization pane, so it works side by side with the AAS Treeview as well as in full screen.
+The plugin adapts to the width of the Visualization pane. In a narrow pane (for example side by side with the AAS Treeview) the information is shown below the viewer, in a wide pane (for example in full screen) next to it.
 
 ```{figure} ./images/models_3d.png
 ---
@@ -22,20 +22,47 @@ width: 60%
 alt: Models 3D Plugin
 name: models_3d_plugin
 ---
-Models 3D Plugin showing the 3D viewer and the model details
+Models 3D Plugin showing a single model
 ```
 
 ## Key Features
 
 - **Interactive 3D viewer**: Rotate, pan and zoom the model; a view cube in the corner snaps the camera to the main axes
-- **Automatic framing**: The model is centered and scaled to the viewer, independent of its unit; the *Reset view* button restores this view
+- **Automatic framing**: The model is centered and scaled to the viewer, independent of its unit
 - **Original materials**: glTF/GLB models keep their own colors and textures
-- **Preview image**: Switch between the 3D model and the preview image of the Submodel
-- **Download**: Download the 3D file directly from the viewer
-- **Model list**: If a Submodel contains several models, a list with preview thumbnail, format, status and level of detail lets you select the model to show
-- **Versions**: If a model has several file versions, they can be switched in the header of the viewer; the most recent version (by `SetDate`) is shown first
-- **Details**: Format, version, status, level of detail, object type, origin, geometry, intended and unsuitable purposes, creating and consuming applications and classifications are shown in grouped tiles
+- **Viewer buttons**: *Reset view*, switch between the 3D model and the preview image of the Submodel, and *Download* the 3D file. The format of the file (for example `glTF 2.0 · .glb`) is shown as a badge in the corner of the viewer
+- **Status**: The status of the selected version (for example `Released`) is shown next to the title and colored accordingly
+- **Level of detail**: The description of the simplification and, if given, the elements that were reduced
+- **Intended use**: Purposes the model is suitable for (green, with a check mark) and not suitable for (red, with a cross)
+- **Key facts**: Object type, origin, representation, length unit and bounding box
+- **Technical details**: File name, format, version, date, providing organization, the applications the model was created with and is used by, and classifications
 - **External files**: If a version only references an external file (`ExternalFile`), a link to it is offered instead of the viewer
+
+### Several Models
+
+If the Submodel contains more than one model, a scrollable row of cards with preview image, title, format and object type is shown above the viewer. Select a card to show the model. If only one model exists, the row is not shown.
+
+```{figure} ./images/models_3d_multiple.png
+---
+width: 100%
+alt: Models 3D Plugin with several models
+name: models_3d_plugin_multiple
+---
+Several models in a wide Visualization pane: viewer and summary are shown side by side
+```
+
+### Several Versions
+
+If a model has more than one file version, a version menu appears next to the title. It lists the versions of the file, the newest first, with their date and status. The most recent version (by `SetDate`) is selected by default and marked as *Latest*. If a model has only one version, the version is shown as a plain label.
+
+```{figure} ./images/models_3d_versions.png
+---
+width: 60%
+alt: Version menu of the Models 3D Plugin
+name: models_3d_plugin_versions
+---
+Version menu of a model with three versions
+```
 
 ## Usage
 
@@ -43,7 +70,8 @@ Models 3D Plugin showing the 3D viewer and the model details
 2. Open the **Visualization** tab
 3. Rotate the model with the left mouse button, pan with the right mouse button and zoom with the mouse wheel
 4. Use the buttons in the upper right corner of the viewer to reset the view, switch to the preview image or download the model
-5. Scroll down for the details of the selected model
+5. If there are several models or versions, select them with the cards above the viewer or the version menu
+6. Expand **Technical details** for the remaining metadata
 
 ## Supported File Formats
 
@@ -88,7 +116,7 @@ The entries of the `Model3D` list do not have an idShort and are identified by t
 
 | idShort | Type | Description |
 |---------|------|-------------|
-| `Title` | `MultiLanguageProperty` | Title shown in the list and above the viewer |
+| `Title` | `MultiLanguageProperty` | Title shown on the model card and above the viewer |
 | `FileName` | `Property` | Name of the file; used as title if no `Title` is given |
 | `FileVersionId` | `Property` | Version of the file |
 | `StatusValue` | `Property` | Status, for example `Released` |
@@ -109,7 +137,7 @@ The entries of the `Model3D` list do not have an idShort and are identified by t
 | `ObjectType`, `Origin` | `Property` | Type of the modeled object and how the model was created |
 | `EmbeddedInfo`, `State` | `SubmodelElementList` | Additional information embedded in the model and the state it shows |
 
-The **Level of Detail** tile shows the description of the `Simplification`; if the model is not marked as simplified, the `Representation` of the `Geometry` is shown instead.
+The **Level of detail** shows the description of the `Simplification`; if the model is not marked as simplified, the `Representation` of the `Geometry` is shown instead.
 
 ### Geometry
 
