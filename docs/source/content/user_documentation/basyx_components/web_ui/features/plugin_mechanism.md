@@ -70,6 +70,13 @@ The BaSyx AAS Web UI includes a growing list of plugins for various IDTA Submode
 - Lists the 3D models of a Submodel with format, level of detail and preview image
 - Embeds an interactive viewer for glTF/GLB, STL and OBJ files with a download button
 
+**[Production Calendar](plugins/production_calendar.md)**
+
+- **Semantic ID**: `https://admin-shell.io/idta/SubmodelTemplate/ProductionCalendar/1/0`
+- Displays the iCalendar (`.ics`) file of a Production Calendar Submodel in a day (timeline), week and month view
+- Shows shifts with their break and maintenance periods (`X-BREAK`, `X-MAINTENANCE`, `X-PRODUCTION-DAY`) including recurring events, exception dates and time zones
+- Lists the specification extension variables with their specification texts
+
 ### Custom & Development Plugins
 
 **[File Explorer](plugins/file_explorer.md)**
@@ -120,6 +127,7 @@ plugins/contact_information
 plugins/technical_data
 plugins/carbon_footprint
 plugins/models_3d
+plugins/production_calendar
 plugins/file_explorer
 plugins/helloworld_plugin
 plugins/jsonarray_property
