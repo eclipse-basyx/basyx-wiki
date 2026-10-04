@@ -31,7 +31,7 @@ Handover Documentation Plugin
 - **Multi-format Support**:
   - PDF documents
   - Images (PNG, JPG, SVG, etc.)
-  - CAD files (STL, glTF, OBJ)
+  - CAD files (STL, glTF/GLB, OBJ)
 - **Document Metadata**: View document properties, versions, and classifications
 - **Download Options**: Download documents
 
