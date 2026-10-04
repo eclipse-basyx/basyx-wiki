@@ -73,7 +73,7 @@ The BaSyx AAS Web UI includes a growing list of plugins for various IDTA Submode
 **[Production Calendar](plugins/production_calendar.md)**
 
 - **Semantic ID**: `https://admin-shell.io/idta/SubmodelTemplate/ProductionCalendar/1/0`
-- Displays the iCalendar (`.ics`) file of a Production Calendar Submodel in a week and month view
+- Displays the iCalendar (`.ics`) file of a Production Calendar Submodel in a day (timeline), week and month view
 - Shows shifts with their break and maintenance periods (`X-BREAK`, `X-MAINTENANCE`, `X-PRODUCTION-DAY`) including recurring events, exception dates and time zones
 - Lists the specification extension variables with their specification texts
 
