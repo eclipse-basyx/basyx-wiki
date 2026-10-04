@@ -12,9 +12,9 @@ This plugin is activated when a Submodel has the following semantic ID:
 
 ## Feature Overview
 
-The Production Calendar plugin visualizes Submodels based on the IDTA Submodel Template *Production Calendar*. The Submodel stores the calendar as an iCalendar file (RFC 5545, `.ics`). The plugin loads this file, expands its events (including recurring ones) and shows them in a week or month view. Below the calendar, the specification extension variables that give the `X-` properties of the file their meaning are listed.
+The Production Calendar plugin visualizes Submodels based on the IDTA Submodel Template *Production Calendar* (IDTA 02067). The Submodel stores the calendar as an iCalendar file (RFC 5545, `.ics`). The plugin loads this file, expands its events (including recurring ones) and shows them in a week or month view. Below the calendar, the specification extension variables that give the `X-` properties of the file their meaning are listed.
 
-All times are shown as wall-clock time of the time zone of the calendar (for example `Europe/Berlin`), independent of the time zone of the browser. The time zone is shown as a badge next to the title.
+All times are shown as wall-clock time of the time zone of the calendar (for example `Europe/Berlin`), independent of the time zone of the browser. The time zone is shown as a badge in the header. The current day and, in the week view, the current time are marked, also in the time zone of the calendar.
 
 ```{figure} ./images/production_calendar_week.png
 ---
@@ -28,11 +28,11 @@ Production Calendar Plugin in the week view
 ## Key Features
 
 - **Week and month view**: Switch between both views with the toggle in the upper right corner. The arrows and *Today* navigate through time. The week view starts on Monday and shows only the hours in which events occur
+- **Shifts, breaks and maintenance**: Shifts are shown in green. Break periods (orange) and maintenance periods (red) are drawn inside the shift they belong to. A legend below the calendar lists the kinds that occur
 - **Recurring events**: Recurrence rules (`RRULE`, for example *every weekday* or *first Saturday of the month*), exception dates (`EXDATE`, for example public holidays), single changed occurrences (`RECURRENCE-ID`), `RDATE`, `DURATION` and all-day events are supported
 - **Time zones**: Events with a `TZID` (and the embedded `VTIMEZONE`), in UTC or without a time zone (floating) are displayed correctly, also across the change to and from daylight saving time
-- **Color coding**: Events are colored by their `CATEGORIES` or `X-` property: production (green), break (orange), maintenance (red) and all other events (grey). A legend below the calendar lists the kinds that occur in the visible period
-- **Event details**: Select an event to see its name, time, description, location, categories and `X-` properties
-- **Specification extension variables**: Each `X-` property that is defined in the Submodel (for example `X-PRODUCTION-DAY`, `X-BREAK`, `X-MAINTENANCE`) is listed with its specification text. A badge shows whether the property is used in the calendar
+- **Event details**: Select an event to see its name, time, production day, description, location, categories and `X-` properties
+- **Extension variables**: The `X-` properties that are defined in the Submodel (`X-PRODUCTION-DAY`, `X-BREAK`, `X-MAINTENANCE`) are listed in a collapsible section with their role and a *in use* badge if the calendar uses them. The specification text of each variable can be opened
 
 ```{figure} ./images/production_calendar_month.png
 ---
@@ -87,19 +87,30 @@ Each entry of `specificationExtensionVariables` is a `SubmodelElementCollection`
 
 The elements are found by their semantic ID or by their idShort.
 
-## Classification of Events
+## How Events are Displayed
 
-An event is assigned to one of the following kinds. The `CATEGORIES` of the event are checked first, then the names of its `X-` properties (a property with the value `FALSE` is ignored):
+The plugin follows the event model of the IDTA template:
 
-| Kind | Color | Matches (case-insensitive) |
-|------|-------|----------------------------|
-| Break | orange | `break`, `pause` |
-| Maintenance | red | `maint`, `service` |
-| Production | green | `production`, `shift` |
-| Other | grey | everything else |
+| Calendar content | Display |
+|------------------|---------|
+| `VEVENT` | A production time slot (shift), shown in green |
+| `X-BREAK` | One or more periods inside the shift, shown as breaks (orange). Value: comma separated `PERIOD`s such as `20250310T100000Z/PT30M` or `20250310T100000Z/20250310T103000Z` |
+| `X-MAINTENANCE` | Maintenance periods inside the shift (red), same value format as `X-BREAK` |
+| `X-PRODUCTION-DAY` | `-1`, `0` or `1`: the shift belongs to the previous, the same or the following production day. Shown in the event details |
+
+The periods of `X-BREAK` and `X-MAINTENANCE` are given for the first occurrence of the event. For recurring events they apply to every occurrence at the same offset from its start.
+
+The month view shows shifts and maintenance. Breaks are shown in the week view and in the details of the shift.
+
+Calendars that do not follow the template are still displayed: An event with `X-BREAK:TRUE` or `X-MAINTENANCE:TRUE`, or with a category containing *break*, *pause*, *maintenance* or *service*, is shown as a break or maintenance event of its own. Events with the category *production* or *shift* are shown as shifts, all-day events without any of these hints as other (grey).
+
+```{note}
+The template names the variables `X-BREAK`, `X-PRODUCTION-DAY` and `X-MAINTENANCE` in its text and `X_BREAK`, `X_PRODUCTION_DAY` and `X_MAINTENANCE` in its tables. The plugin accepts both spellings.
+```
 
 ## Limitations
 
 - The file must be a valid iCalendar document. Otherwise an error message is shown instead of the calendar
 - If the time zone of the calendar cannot be resolved to an IANA time zone (`X-WR-TIMEZONE` or the `TZID` of the first `VTIMEZONE`), the calendar is shown in UTC
 - The calendar is read-only. Editing events is not supported
+- The `inheritedFrom` reference of the template is not followed. A Submodel without own `calendar` file shows an error
