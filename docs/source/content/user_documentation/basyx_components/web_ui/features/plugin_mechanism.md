@@ -64,6 +64,12 @@ The BaSyx AAS Web UI includes a growing list of plugins for various IDTA Submode
 - Displays timeline of PCF values
 - V1.0 adds pie chart visualization when PCF values share the same reference
 
+**[Models 3D](plugins/models_3d.md)**
+
+- **Semantic ID**: `https://admin-shell.io/idta/Models3D/1/0`
+- Lists the 3D models of a Submodel with format, level of detail and preview image
+- Embeds an interactive viewer for glTF/GLB, STL and OBJ files with a download button
+
 ### Custom & Development Plugins
 
 **[File Explorer](plugins/file_explorer.md)**
@@ -113,6 +119,7 @@ plugins/handover_documentation
 plugins/contact_information
 plugins/technical_data
 plugins/carbon_footprint
+plugins/models_3d
 plugins/file_explorer
 plugins/helloworld_plugin
 plugins/jsonarray_property
