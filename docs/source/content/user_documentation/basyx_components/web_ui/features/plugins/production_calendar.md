@@ -98,7 +98,7 @@ The plugin follows the event model of the IDTA template:
 | `X-MAINTENANCE` | Maintenance periods inside the shift (red), same value format as `X-BREAK` |
 | `X-PRODUCTION-DAY` | `-1`, `0` or `1`: the shift belongs to the previous, the same or the following production day. Shown in the event details |
 
-The periods of `X-BREAK` and `X-MAINTENANCE` are given for the first occurrence of the event. For recurring events they apply to every occurrence at the same offset from its start.
+The periods of `X-BREAK` and `X-MAINTENANCE` are given for the first occurrence of the event. For recurring events they apply to every occurrence at the same offset from its start. If a period covers the whole event (for example a maintenance window that lasts as long as the event), only the period is shown, as one event with the name and details of the original event.
 
 The month view shows shifts and maintenance. Breaks are shown in the week view and in the details of the shift.
 
