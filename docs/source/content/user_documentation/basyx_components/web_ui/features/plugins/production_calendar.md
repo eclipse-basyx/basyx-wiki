@@ -32,7 +32,7 @@ Production Calendar Plugin in the week view
 - **Recurring events**: Recurrence rules (`RRULE`, for example *every weekday* or *first Saturday of the month*), exception dates (`EXDATE`, for example public holidays), single changed occurrences (`RECURRENCE-ID`), `RDATE`, `DURATION` and all-day events are supported
 - **Time zones**: Events with a `TZID` (and the embedded `VTIMEZONE`), in UTC or without a time zone (floating) are displayed correctly, also across the change to and from daylight saving time
 - **Event details**: Select an event to see its name, time, production day, description, location, categories and `X-` properties
-- **Extension variables**: The `X-` properties that are defined in the Submodel (`X-PRODUCTION-DAY`, `X-BREAK`, `X-MAINTENANCE`) are listed in a collapsible section with their role and a *in use* badge if the calendar uses them. The specification text of each variable can be opened
+- **Extension variables**: The `X-` properties that are defined in the Submodel (`X-PRODUCTION-DAY`, `X-BREAK`, `X-MAINTENANCE`) are listed in a collapsible section with their role and a *in use* badge if the calendar uses them. Select a variable to open its specification text
 
 ```{figure} ./images/production_calendar_month.png
 ---
