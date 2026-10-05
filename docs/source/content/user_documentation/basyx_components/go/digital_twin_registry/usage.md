@@ -154,7 +154,7 @@ curl -i -G http://localhost:5004/shell-descriptors --data-urlencode 'assetIds=ey
 
 Expect `200 OK` with the example descriptor in `result`. DTR resolves the decoded `name` and `value` through Discovery and applies **AND** semantics to repeated selectors. Stored AssetLink visibility applies. An `externalSubjectId` included in the query object does not change matching or visibility. Invalid Base64URL, decoded text, JSON, or `SpecificAssetId` content returns `400 Bad Request`.
 
-For the generated global-asset link, encode `{"name":"globalAssetId","value":"urn:example:asset:dtr:1"}`. That exact name selects the DTR's public global-asset-ID discovery behavior described in [Security and Visibility Semantics](index.md#globalassetid-is-a-public-discovery-key).
+For the generated global-asset link, encode `{"name":"globalAssetId","value":"urn:example:asset:dtr:1"}`. When ABAC is enabled and `READ` is restricted, this Registry filter returns a matching descriptor only if that descriptor also has at least one non-`globalAssetId` AssetLink visible through the caller's `Edc-Bpn` or `PUBLIC_READABLE`. Normal descriptor authorization still applies afterward. The additional AssetLink condition is not applied when ABAC is disabled or `READ` is unrestricted, and it does not apply to the public `globalAssetId` Discovery lookup described above.
 
 ## Filter by DTR Creation Time
 
