@@ -7,14 +7,14 @@ Unless stated otherwise, this user documentation describes the latest stable BaS
 - [GitHub Repository (basyx-go-components)](https://github.com/eclipse-basyx/basyx-go-components)
 - [DockerHub (Eclipse BaSyx images)](https://hub.docker.com/u/eclipsebasyx)
 
-Repositories store the AAS model content that clients read and change. Registries store descriptors that advertise where content can be reached, while Discovery stores mappings from asset identifiers to AAS identifiers. The following table provides an overview of the available BaSyx Go components and their roles, dependencies, and integrations. Using a Repository and Registry together does not by itself enable synchronization.
+Repositories store the AAS model content that clients read and change. Registries store descriptors that advertise where content can be reached, while Discovery stores mappings from asset identifiers to AAS identifiers. The following table provides an overview of the BaSyx Go services and their roles, dependencies, and integrations. Using a Repository and Registry together does not by itself enable synchronization.
 
 ## Component Overview
 
 | User goal | Component | Manages or stores | Required dependencies | Optional integration | Next page |
 | --- | --- | --- | --- | --- | --- |
 | Use AAS, Submodel, Concept Description, Registry, Discovery, upload, and serialization APIs in one runtime | AAS Environment | AAS, Submodel, and Concept Description content; AAS and Submodel descriptors; asset-identifier mappings | PostgreSQL initialized by the BaSyx Configuration Service | Repository-to-Registry synchronization is controlled by explicit flags and maintains descriptors in the same PostgreSQL database; Discovery functionality is included | [AAS Environment](aas_environment/index) |
-| Create and manage Digital Product Passports through the IDTA-aligned DPP API | Digital Product Passport API | DPP metadata and content represented as an AAS and Submodels | PostgreSQL initialized by the BaSyx Configuration Service | Can record historical passport states and maintain Registry descriptors in the shared database | [Digital Product Passport API](dpp_api/index) |
+| Create and manage Digital Product Passports through the IDTA-aligned DPP API | Digital Product Passport API | DPP metadata and content represented as an AAS and Submodels | PostgreSQL initialized by the BaSyx Configuration Service | Can record historical passport states and, when the respective integrations are enabled, maintain AAS/Submodel descriptors and product Discovery mappings in the shared database | [Digital Product Passport API](dpp_api/index) |
 | Store and modify AAS content | AAS Repository | AAS content and its references to Submodels | PostgreSQL initialized by the BaSyx Configuration Service | When AAS Registry integration is enabled, Repository changes also maintain AAS Descriptors in the Repository's PostgreSQL database. A separately deployed AAS Registry can expose them only when it uses the same database | [AAS Repository](aas_repository/index) |
 | Store and modify Submodel content | Submodel Repository | Submodels and Submodel Elements | PostgreSQL initialized by the BaSyx Configuration Service | When Submodel Registry integration is enabled, Repository changes also maintain Submodel Descriptors in the Repository's PostgreSQL database. A separately deployed Submodel Registry can expose them only when it uses the same database | [Submodel Repository](submodel_repository/index) |
 | Store and expose Concept Descriptions independently | Concept Description Repository | Concept Description content | PostgreSQL initialized by the BaSyx Configuration Service | The AAS Environment provides the same API area when a combined runtime is preferred | [Concept Description Repository](concept_description_repository/index) |
@@ -30,18 +30,7 @@ For separate Repository and Registry processes, read [Repository-to-Registry Int
 
 ## Shared Guidance
 
-- [Eventing](common/eventing) — Describes the experimental CloudEvents-based change notifications available through the REST Event Feed, MQTT 5, Kafka, and AMQP 1.0.
-- [Deployment and Versions](common/deployment) — Covers version alignment, database initialization, persistent state, and deployment considerations shared across BaSyx Go components.
-- [Swagger UI and OpenAPI](common/swagger) — Describes the Swagger UI and OpenAPI documents exposed by BaSyx Go components.
-- [General Configuration](common/configuration) — Provides the common YAML configuration options and their environment-variable mappings.
-- [Shared Runtime Features](common/shared_features) — Describes runtime functionality implemented in shared BaSyx Go code and identifies where those features are available.
-- [Observability](common/observability) — Covers the common logging, metrics, tracing, and health-related capabilities provided by BaSyx Go components.
-- [Pagination](common/pagination) — Describes paged API responses, pagination parameters, and continuation cursors.
-- [Validation and Verification](common/validation) — Describes model validation, verification behavior, and the handling of invalid resources.
-- [Repository-to-Registry Integration](common/registry_integration) — Describes how repositories can create, update, and remove corresponding descriptors in registries.
-- [Asynchronous API Operations](common/asynchronous_requests) — Describes the API operations that BaSyx Go provides asynchronously and how their results are retrieved.
-- [Response Representations](common/representations) — Explains the supported AAS response representations, including normal, `$value`, `$metadata`, `$reference`, and `$path`.
-- [Recent Changes, History, and Signed Reads](common/history_and_changes) — Covers recent-change queries, historical states, integrity and mutation evidence, and cryptographically signed reads.
+See [Common](common/index) for shared deployment, configuration, security, query, observability, pagination, history and evidence, ReBAC, eventing, and API behavior.
 
 ```{toctree}
 :hidden:
