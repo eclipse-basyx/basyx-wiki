@@ -9,6 +9,51 @@ anonymous; ABAC still decides whether they are allowed. This is separate from
 [Supply Chain Security](../supply_chain_security), which covers container
 images, signatures, provenance, and SBOMs.
 
+## Security Model
+
+With `abac.enabled=true`, OIDC validates a supplied bearer token, checks its
+required scopes, and normalizes its claims. A request without credentials
+continues as anonymous; a supplied token that cannot be accepted is rejected
+before authorization. ABAC then evaluates the authenticated claims or
+anonymous subject against the requested operation, resource, and active
+policy. An ABAC allow can include resource, fragment, or update restrictions
+that the protected API enforces.
+
+```{mermaid}
+flowchart TD
+    REQUEST[API request] --> TOKEN{Bearer token supplied?}
+    TOKEN -- No --> ANONYMOUS[Anonymous caller]
+    TOKEN -- Yes --> OIDC[OIDC validates the token and scopes<br/>and normalizes claims]
+    OIDC -- Rejected --> REJECTED[Reject request]
+    OIDC -- Accepted --> AUTHENTICATED[Authenticated caller and claims]
+    ANONYMOUS --> ABAC[ABAC evaluates the active policy]
+    AUTHENTICATED --> ABAC
+
+    MANAGEMENT[Optional ABAC Policy Management] -. activates .-> POLICY[Active ABAC policy]
+    POLICY --> ABAC
+
+    ABAC --> UNCONDITIONAL{Does ABAC grant the required<br/>right unconditionally?}
+    UNCONDITIONAL -- Yes --> RESULT[Use the ABAC result]
+    UNCONDITIONAL -- No --> ELIGIBLE{Authenticated caller on a<br/>ReBAC-covered route?}
+    ELIGIBLE -- No --> RESULT
+    ELIGIBLE -- Yes --> REBAC[ReBAC evaluates relationships]
+    REBAC -- Grant --> GRANT[Allow the granted resource]
+    REBAC -- No grant --> NO_GRANT[Keep ABAC restrictions<br/>or return no visible list entries]
+    REBAC -- Unavailable --> UNAVAILABLE[503 Service Unavailable]
+```
+
+ReBAC is therefore an additional way to grant access, not a second gate that
+every request must pass. ABAC can allow a request without ReBAC, while a ReBAC
+grant can widen access for its covered resource. Without such a grant, ABAC
+restrictions remain; a covered list that neither mechanism grants returns no
+visible entries. Anonymous requests and routes outside ReBAC coverage remain
+ABAC-only. See [Relationship-Based Access Control](rebac) for the covered
+services, resources, and sharing semantics.
+
+[ABAC Policy Management](abac_policy_management) is not another request-time
+authorization mechanism. Where supported, it stages, validates, and activates
+policy versions; the active version supplies the policy evaluated by ABAC.
+
 ## What Runtime Security Does
 
 `abac.enabled` is the switch for the shared security stack. When it is `true`,
