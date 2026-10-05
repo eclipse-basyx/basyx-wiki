@@ -17,6 +17,7 @@ Environment variables override YAML values. Nested keys use underscore notation,
 These sections are part of the shared configuration model. Components consume only settings relevant to their feature set, but the shared loader still parses and validates configured values.
 
 The defaults below are built into the shared configuration loader. A component's bundled `config.yaml` can override them.
+
 ### `logging`
 
 | Key | Default | Purpose |

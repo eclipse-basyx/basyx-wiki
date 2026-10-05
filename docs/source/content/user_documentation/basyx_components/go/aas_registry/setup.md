@@ -64,6 +64,7 @@ services:
       basyx_configuration:
         condition: service_completed_successfully
 ```
+
 *docker-compose.yml including PostgreSQL 18, the BaSyx Go Configuration Service, and BaSyx Go AAS Registry*
 
 Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service. For reproducible deployments, replace `latest` with the same concrete BaSyx version tag for all of these services. Alternatively, pin each service image to the corresponding immutable image digest from the same release. The `latest` tag is mutable and advances when a new release is published.
@@ -98,11 +99,13 @@ The local Compose example does not enable authorization and is not a secured dep
 The standalone AAS Registry also supports experimental relationship-based access control (ReBAC). ReBAC is disabled by default, requires OIDC and ABAC, and can be enabled with `REBAC_ENABLED=true`. For ReBAC-covered Registry routes, an authenticated request is allowed when either ABAC or ReBAC grants access; anonymous requests and endpoints outside those routes remain ABAC-only. See [Relationship-Based Access Control](../common/rebac) for configuration and access-management details.
 
 ## Using BaSyx Go Components without Docker
+
 If you need to run the AAS Registry without Docker, build the binary from source for your target platform.
 
 Published BaSyx container images provide a ready-to-run distribution of the service. The minimal Compose example above is intentionally unsecured and is not, by itself, a production-ready deployment configuration.
 
 ### Prerequisites
+
 - [Go](https://go.dev/dl/) at the version declared by the selected release's `go.mod`.
 - PostgreSQL 16 or newer, initialized by a Configuration Service built from the same source revision as the HTTP service.
 - [Git](https://git-scm.com/)
@@ -120,6 +123,7 @@ Replace `RELEASE_TAG` with the stable release you intend to build. Initialize Po
 ### Building the Binary
 
 Change to the AAS Registry service directory:
+
 ```bash
 cd basyx-go-components/cmd/aasregistryservice
 ```
@@ -127,6 +131,7 @@ cd basyx-go-components/cmd/aasregistryservice
 #### Linux / macOS
 
 Build the executable with:
+
 ```bash
 go build -o aasregistryservice
 ```
@@ -134,16 +139,19 @@ go build -o aasregistryservice
 #### Windows
 
 Build the executable with the `.exe` extension:
+
 ```powershell
 go build -o aasregistryservice.exe
 ```
 
 ### Running the Service
+
 Before running the service, ensure PostgreSQL is available and that the BaSyx database schema has already been initialized by the [BaSyx Configuration Service](../configuration_service/index). Configure the PostgreSQL connection through environment variables or the provided `config.yaml`.
 
 #### Linux / macOS
 
 Run the service with:
+
 ```bash
 ./aasregistryservice -config ./config.yaml
 ```
@@ -151,6 +159,7 @@ Run the service with:
 #### Windows PowerShell
 
 Run the service with:
+
 ```powershell
 .\aasregistryservice.exe -config .\config.yaml
 ```
