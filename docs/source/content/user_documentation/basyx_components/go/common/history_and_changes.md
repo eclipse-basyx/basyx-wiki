@@ -14,7 +14,7 @@ The features on this page serve different purposes. Recent-change APIs find curr
 | AAS Environment | `/shells/$recent-changes`; `/submodels/$recent-changes`; `/concept-descriptions/$recent-changes`; descriptor collections use `createdFrom` and `updatedFrom` | `/shells/{aasIdentifier}/$history`; `/submodels/{submodelIdentifier}/$history` | Corresponding AAS and Submodel signed reads |
 | Digital Product Passport API | None | `/v1/dppsByIdAndDate/{dppId}` | None |
 
-Paths are relative to the service base URL, including any configured context path. See the component API documentation for the endpoints available in your installed BaSyx version.
+Paths are relative to the service base URL, including any configured context path. See the component API documentation for the endpoints available in the deployed component.
 
 ## Current Changes and Client Timestamps
 
@@ -73,7 +73,7 @@ History is recorded for the identifiable resource that owns the changed content:
 
 Submodel Elements and attachments do not have independent history timelines.
 
-Recording history internally does not imply that a public `$history` endpoint exists for that resource type. In the current stable release, public `$history` reads are available for AAS and Submodels, as shown in [Availability](#availability).
+Recording history internally does not imply that a public `$history` endpoint exists for that resource type. Public `$history` reads are available for AAS and Submodels, as shown in [Availability](#availability).
 
 ### Read a Historical State
 

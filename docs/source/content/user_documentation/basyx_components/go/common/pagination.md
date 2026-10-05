@@ -11,6 +11,8 @@ Many BaSyx Go collection endpoints return results in pages using `limit` and `cu
 
 A cursor is not a page number or offset. Treat it as an opaque string: do not construct, decode, increment, or Base64-encode it. Normal URL escaping still applies when placing it in a query string.
 
+Omit `cursor` when no continuation value is available. An explicitly empty or malformed cursor is rejected with `400 Bad Request` by endpoints using the shared pagination parser.
+
 There is no single page-size default or maximum documented here for every component. Use a positive `limit` supported by the operation and consult its API contract for omitted-value behavior and restrictions.
 
 ## Read the First Page

@@ -14,7 +14,7 @@ Environment variables override YAML values. Nested keys use underscore notation,
 
 ## Application Configuration: Core and Database
 
-These sections are part of the shared configuration model. Components ignore settings that are not relevant to their feature set.
+These sections are part of the shared configuration model. Components consume only settings relevant to their feature set, but the shared loader still parses and validates configured values.
 
 The defaults below are built into the shared configuration loader. A component's bundled `config.yaml` can override them.
 ### `logging`
@@ -37,7 +37,7 @@ configuration model.
 | `host` | `0.0.0.0` | Host used for the HTTP server and generated Swagger server URL. |
 | `port` | `5004` | HTTP server port. |
 | `contextPath` | `""` | Base path for API, Swagger, and health endpoints. |
-| `cacheEnabled` | `false` | Reserved cache switch passed to AAS Descriptor and Company Lookup persistence backends. The current stable release does not implement cache behavior for this setting. |
+| `cacheEnabled` | `false` | Reserved switch. It does not currently enable runtime caching. |
 | `strictVerification` | `permissive` | Semantic verification mode: `off`, `permissive`, or `strict`. |
 | `verificationEndpointAvailable` | `true` | Enables the `/verify` endpoint and Swagger entry where supported. |
 | `readHeaderTimeoutSeconds` | `15` | Maximum time in seconds to read HTTP request headers. |
@@ -139,7 +139,7 @@ The reader supports the same connection and pool keys as the writer:
 Use either `postgres.reader.dsn` or the individual reader connection fields,
 not both. Reader settings do not inherit connection fields or pool limits from
 the writer. Omitting the complete reader configuration reuses the writer pool
-and preserves the behavior of earlier releases. Pointing both configurations
+and leaves reader routing disabled. Pointing both configurations
 to the same PostgreSQL endpoint is also supported, but does not add database
 read capacity and both pools then consume the same server connection budget.
 A physical standby is a separate PostgreSQL instance that replicates the same
@@ -519,12 +519,12 @@ activated through `abac.enabled`.
 | --- | --- | --- |
 | `oidc.trustlistPath` | `config/trustlist.json` | Path to the JSON trustlist of accepted OIDC providers. Required by participating services when ABAC is enabled. |
 | `abac.enabled` | `false` | Enables OIDC authentication and ABAC authorization middleware. |
-| `abac.modelPath` | `config/access_rules/access-rules.json` | Path to the ABAC access-rules file used when `policyFileImport` imports a policy at startup. |
-| `abac.policyFileImport` | `""` | Controls startup import of `modelPath`: `always`, `if_missing`, or `never`. An empty value lets the service choose its default behavior. |
-| `abac.policyScope` | `""` | Optional database namespace for stored ABAC policies. An empty value uses the service's built-in scope. |
-| `abac.managementApi.enabled` | `false` | Enables the protected API for managing the active ABAC policy at runtime. |
+| `abac.modelPath` | `config/access_rules/access-rules.json` | Path to the ABAC access-rules file. PostgreSQL-backed policy services use it for startup imports; the DPP API reads it directly. |
+| `abac.policyFileImport` | `""` | For PostgreSQL-backed policy services, controls startup import of `modelPath`: `always`, `if_missing`, or `never`. An empty value lets the service choose its default behavior. |
+| `abac.policyScope` | `""` | Optional database namespace for stored ABAC policies. An empty value uses the service's built-in scope. It does not apply to the file-backed DPP policy. |
+| `abac.managementApi.enabled` | `false` | Enables the protected API for managing the active PostgreSQL-backed ABAC policy. It does not apply to the DPP API. |
 
-If `abac.enabled` is `false`, the shared security setup is skipped. If it is `true`, the trustlist is required. `policyFileImport` determines whether the policy file is loaded on every start, only if the database has no active policy, or never. `policyScope` controls the database-backed ABAC policy namespace; use different scopes to isolate deployments that share a database, and share a scope only when services should intentionally use the same active policy.
+If `abac.enabled` is `false`, the shared security setup is skipped. If it is `true`, the trustlist is required. On services with PostgreSQL-backed policy storage, `policyFileImport` determines whether the policy file is loaded on every start, only if the database has no active policy, or never. `policyScope` controls that stored policy's namespace; use different scopes to isolate deployments that share a database, and share a scope only when services should intentionally use the same active policy. The DPP API instead loads `modelPath` as its active file-backed policy and does not use `policyFileImport`, `policyScope`, or the policy-management API.
 
 The startup modes have these exact effects:
 
@@ -534,8 +534,9 @@ The startup modes have these exact effects:
 | `if_missing` | Import only when the effective scope has no active policy; otherwise continue using the active PostgreSQL policy. A file edit plus restart is therefore not sufficient once a policy exists. |
 | `never` | Never import `modelPath`; an existing active policy is required or startup fails closed. |
 
-An empty mode is service-specific: Digital Twin Registry resolves it to
-`always`. The other participating services resolve it to `if_missing`.
+For PostgreSQL-backed policy services, an empty mode is service-specific:
+Digital Twin Registry resolves it to `always`; the others resolve it to
+`if_missing`.
 
 When set, `policyScope` is trimmed, must not exceed 255 characters, and may contain ASCII letters, digits, `_`, `-`, `.`, and `:`.
 
@@ -556,7 +557,7 @@ Relationships are stored in the BaSyx PostgreSQL database. If multiple ReBAC-cap
 
 #### OIDC trustlist provider fields
 
-The source also defines the following provider fields for entries read from the JSON file at `oidc.trustlistPath`. They are not additional keys in the main YAML `oidc` section.
+Entries in the JSON file at `oidc.trustlistPath` support the following fields. They are not additional keys in the main YAML `oidc` section.
 
 | Field | Purpose |
 | --- | --- |
@@ -589,7 +590,7 @@ Each `claimMappings` entry contains:
 | `externalUrl` | `""` | Comma-separated public base URL(s). All entries generate endpoints in synchronized Registry descriptors; the first entry is also used for externally reachable resource and `Location` URLs, including DPP managed-attachment URLs. |
 | `trustProxyHeaders` | `false` | Allows `Forwarded` or `X-Forwarded-*` values to determine public scheme, host, and client IP, but only for requests received from an address in `trustedProxyCIDRs`. |
 | `trustedProxyCIDRs` | `[]` | CIDR allowlist for proxies whose forwarded headers may be trusted. An empty list means forwarded headers are never trusted, even when `trustProxyHeaders` is enabled. |
-| `uploadMaxSizeBytes` | `134217728` | Maximum uploaded file-content size in bytes for binary upload endpoints. Multipart requests additionally allow up to 2 MiB of form metadata and 1 MiB of framing overhead. |
+| `uploadMaxSizeBytes` | `134217728` | Maximum content size in bytes for shared binary uploads and the `/verify` endpoint where exposed. Multipart requests additionally allow up to 2 MiB of form metadata and 1 MiB of framing overhead. |
 | `delegatedOperationResponseMaxSizeBytes` | `1048576` | Maximum JSON response size in bytes from a delegated Submodel Operation. Applies to synchronous and asynchronous invocation in the Submodel Repository and AAS Environment. |
 | `aasxMaxPartCount` | `10000` | Maximum number of non-directory entries in an AASX package. |
 | `aasxMaxOPCMetadataSizeBytes` | `16777216` | Maximum combined expanded size of AASX OPC metadata. |

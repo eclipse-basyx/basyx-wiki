@@ -13,7 +13,7 @@ This section covers features and configuration that are shared across multiple B
 - [ABAC Policy Management](abac_policy_management) — Explains PostgreSQL-backed policy versions, startup import, staged changes, activation, and operation across replicas.
 - [Query Language](query_language) — Explains structured query conditions, field roots, nested matching, fragment filters, and authorization-filter interaction.
 - [Shared Runtime Features](shared_features) — Describes runtime functionality implemented in shared BaSyx Go code and identifies where those features are available.
-- [Observability](observability) — Covers the common logging, metrics, tracing, and health-related capabilities provided by BaSyx Go components.
+- [Observability](observability) — Covers common logging, request correlation, tracing, and PostgreSQL connection-pool metrics.
 - [Pagination](pagination) — Describes paged API responses, pagination parameters, and continuation cursors.
 - [Validation and Verification](validation) — Describes model validation, verification behavior, and the handling of invalid resources.
 - [Repository-to-Registry Integration](registry_integration) — Describes how repositories can create, update, and remove corresponding descriptors in registries.
