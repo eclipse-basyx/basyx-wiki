@@ -15,11 +15,11 @@ BaSyx Go supports the [AAS Query Language defined by IDTA-01002 v3.2](https://in
 
 The standalone AAS Repository rejects `$sm` and `$sme` fields on `/query/shells` with `400 Bad Request`. Only the AAS Environment follows the candidate AAS's model references into locally stored Submodels and Submodel Elements. Registry roots address descriptors, not Repository resources: `$aasdesc` is not interchangeable with `$aas`, and `$smdesc` is not interchangeable with `$sm`.
 
-The Digital Twin Registry exposes the same `/query/shell-descriptors` language as the standalone AAS Registry API. Query support is not a DTR-specific extension.
+The Digital Twin Registry exposes the same `/query/shell-descriptors` language as the standalone AAS Registry.
 
 ## Query Structure
 
-Every request requires a top-level `$condition`. It determines which parent objects appear in `result`. Optional `$filters` entries control fragments inside those returned objects.
+Every request requires a top-level `$condition`. It determines which parent objects appear in `result`. Optional `$filters` entries control fragments inside those returned objects. A **fragment** is a nested part of a returned resource, such as a field, contained object, or entry in a list. Fragment filters control whether those nested parts are retained in the returned representation. They do not determine whether the parent resource itself appears in `result`.
 
 ```json
 {
@@ -281,6 +281,8 @@ Select AAS Descriptors by an embedded Submodel Descriptor field:
 ```
 
 The first request is valid for `/query/submodels`. The second is valid for `/query/shell-descriptors`. A field root valid for one endpoint is not automatically valid for another.
+
+For additional query examples, see the [Query Language Examples](https://github.com/eclipse-basyx/basyx-go-components/blob/main/docu/query_language/examples.md) in the BaSyx Go repository.
 
 ## Results and Pagination
 
