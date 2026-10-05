@@ -26,7 +26,7 @@ Repositories store AAS model content that clients read and change. Registries st
 | Discover company-provided service endpoints | Company Lookup | Company Descriptors containing company identity and service endpoints | PostgreSQL initialized by the BaSyx Configuration Service | Describes external services; it does not automatically connect or synchronize them | [Company Lookup](company_lookup/index) |
 | Initialize or migrate the shared BaSyx database | Configuration Service | Database schema, schema version, and schema state; it is a one-shot job | PostgreSQL | Must complete successfully before database-backed BaSyx runtimes start | [Configuration Service](configuration_service/index) |
 
-For separate Repository and Registry processes, read [Repository-to-Registry Integration](common/registry_integration) before enabling synchronization. The integration writes descriptor tables in their shared database. Merely starting both HTTP services does not connect them.
+For separate Repository and Registry processes, see [Repository-to-Registry Integration](common/registry_integration) for the required setup and configuration. Synchronization uses their shared database. Simply starting both HTTP services does not connect them.
 
 ## Shared Guidance
 
