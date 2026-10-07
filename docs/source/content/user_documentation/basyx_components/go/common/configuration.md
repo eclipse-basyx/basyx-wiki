@@ -44,8 +44,12 @@ configuration model.
 | `writeTimeoutSeconds` | `300` | Maximum time in seconds to write an HTTP response. |
 | `idleTimeoutSeconds` | `60` | Maximum time in seconds to wait for the next request on an idle keep-alive connection. |
 | `shutdownTimeoutSeconds` | `10` | Maximum time in seconds to wait for in-flight requests during graceful shutdown. |
+| `pagination.defaultLimit` | `100` | Page size used when a request omits the `limit` query parameter. |
+| `pagination.maxLimit` | `1000` | Largest accepted `limit`. A larger value is rejected with HTTP `400`. |
 
 All HTTP timeout values must be greater than `0`. When a service receives an interrupt or termination signal, it stops accepting new connections and allows in-flight requests to finish for up to `shutdownTimeoutSeconds`.
+
+The pagination limits apply to every paginated endpoint of every BaSyx Go service, including the REST Event Feed (`GET /events`). A request without `limit` returns at most `pagination.defaultLimit` items; the response carries a cursor when more items exist. A `limit` above `pagination.maxLimit` is rejected, not clamped, so clients never receive a shorter page than they asked for. Both values must be greater than `0`, `maxLimit` must not be smaller than `defaultLimit`, and `maxLimit` must not exceed `2147483647`. Lower `maxLimit` to bound the memory a single request can use on large datasets.
 
 ### `postgres`
 
@@ -706,13 +710,12 @@ The REST Event Feed is independent of `eventing.enabled` and the broker transpor
 | `enabled` | `false` | Enables the REST Event Feed. |
 | `maxAgeDays` | `30` | Visible retention window in days, measured from the mutation time. |
 | `hardDeleteGraceDays` | `10` | Additional days before expired events are physically deleted. `0` disables the delay. |
-| `maxPageSize` | `100` | Default and maximum page size. |
 | `sourceBaseUrl` | `""` | Compatible alias of `eventing.sourceBaseUrl`. If both are set, they must match. |
 | `schemaBaseUrl` | `""` | Compatible alias of `eventing.schemaBaseUrl`. If both are set, they must match. |
 | `cleanupIntervalHours` | `24` | Interval of the physical cleanup. Cleanup also runs at startup. |
 | `publishIntervalMillis` | `250` | Interval before checking for committed events to publish to the feed. |
 
-`maxAgeDays`, `hardDeleteGraceDays`, `maxPageSize`, and `publishIntervalMillis` must not be negative. Running the feed requires database schema v1.2.0 or later, and broker transports require v1.2.1 or later. Run the Configuration Service before starting the updated services.
+`maxAgeDays`, `hardDeleteGraceDays`, and `publishIntervalMillis` must not be negative. The page size of `GET /events` follows `server.pagination.defaultLimit` and `server.pagination.maxLimit`; the former `eventing.feed.maxPageSize` setting no longer exists and is ignored if present. Running the feed requires database schema v1.2.0 or later, and broker transports require v1.2.1 or later. Run the Configuration Service before starting the updated services.
 
 ## Example YAML
 
@@ -733,6 +736,9 @@ server:
   writeTimeoutSeconds: 300
   idleTimeoutSeconds: 60
   shutdownTimeoutSeconds: 10
+  pagination:
+    defaultLimit: 100
+    maxLimit: 1000
 
 postgres:
   dsn: ""
@@ -888,7 +894,6 @@ eventing:
     enabled: false
     maxAgeDays: 30
     hardDeleteGraceDays: 10
-    maxPageSize: 100
     sourceBaseUrl: ""
     schemaBaseUrl: ""
     cleanupIntervalHours: 24
@@ -910,6 +915,8 @@ SERVER_READ_TIMEOUT_SECONDS=300
 SERVER_WRITE_TIMEOUT_SECONDS=300
 SERVER_IDLE_TIMEOUT_SECONDS=60
 SERVER_SHUTDOWN_TIMEOUT_SECONDS=10
+SERVER_PAGINATION_DEFAULT_LIMIT=100
+SERVER_PAGINATION_MAX_LIMIT=1000
 POSTGRES_HOST=db
 POSTGRES_PORT=5432
 POSTGRES_USER=admin
@@ -957,6 +964,8 @@ The following explicit aliases are also supported:
 | `server.writeTimeoutSeconds` | `SERVER_WRITE_TIMEOUT_SECONDS` or `BASYX_SERVER_WRITE_TIMEOUT_SECONDS` |
 | `server.idleTimeoutSeconds` | `SERVER_IDLE_TIMEOUT_SECONDS` or `BASYX_SERVER_IDLE_TIMEOUT_SECONDS` |
 | `server.shutdownTimeoutSeconds` | `SERVER_SHUTDOWN_TIMEOUT_SECONDS` or `BASYX_SERVER_SHUTDOWN_TIMEOUT_SECONDS` |
+| `server.pagination.defaultLimit` | `SERVER_PAGINATION_DEFAULT_LIMIT` or `BASYX_SERVER_PAGINATION_DEFAULT_LIMIT` |
+| `server.pagination.maxLimit` | `SERVER_PAGINATION_MAX_LIMIT` or `BASYX_SERVER_PAGINATION_MAX_LIMIT` |
 | `abac.policyFileImport` | `ABAC_POLICY_FILE_IMPORT` or `BASYX_ABAC_POLICY_FILE_IMPORT` |
 | `abac.policyScope` | `ABAC_POLICY_SCOPE` or `BASYX_ABAC_POLICY_SCOPE` |
 | `abac.managementApi.enabled` | `ABAC_MANAGEMENT_API_ENABLED`, `ABAC_MANAGEMENTAPI_ENABLED`, or `BASYX_ABAC_MANAGEMENT_API_ENABLED` |
@@ -1029,7 +1038,6 @@ The following explicit aliases are also supported:
 | `eventing.feed.enabled` | `BASYX_EVENTING_FEED_ENABLED` |
 | `eventing.feed.maxAgeDays` | `BASYX_EVENTING_FEED_MAX_AGE_DAYS` |
 | `eventing.feed.hardDeleteGraceDays` | `BASYX_EVENTING_FEED_HARD_DELETE_GRACE_DAYS` |
-| `eventing.feed.maxPageSize` | `BASYX_EVENTING_FEED_MAX_PAGE_SIZE` |
 | `eventing.feed.sourceBaseUrl` | `BASYX_EVENTING_FEED_SOURCE_BASE_URL` |
 | `eventing.feed.schemaBaseUrl` | `BASYX_EVENTING_FEED_SCHEMA_BASE_URL` |
 | `eventing.feed.cleanupIntervalHours` | `BASYX_EVENTING_FEED_CLEANUP_INTERVAL_HOURS` |
