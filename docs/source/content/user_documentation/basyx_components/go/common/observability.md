@@ -2,8 +2,7 @@
 
 BaSyx Go provides structured application logging, request correlation, optional
 OpenTelemetry tracing, and PostgreSQL connection-pool metrics through shared
-runtime infrastructure. Logging and tracing are available in BaSyx Go `1.0.4`
-or newer. The pool metrics require BaSyx Go `1.0.6` or newer.
+runtime infrastructure.
 
 The application remains independent of a particular observability backend:
 
@@ -158,9 +157,9 @@ the backend is unavailable. Shutdown uses a bounded flush period.
 
 ### PostgreSQL Connection-Pool Metrics
 
-Each supported HTTP service registers its shared PostgreSQL writer pool once.
-Metric collection reads Go's in-process `database/sql.DBStats()` and does not
-run additional database queries.
+Each supported HTTP service registers its shared PostgreSQL writer pool and,
+when configured, its independent reader pool. Metric collection reads Go's
+in-process pool statistics and does not run additional database queries.
 
 | Metric | Type | Meaning |
 | --- | --- | --- |
@@ -176,7 +175,8 @@ run additional database queries.
 Open connections are the sum of the `used` and `idle` points on
 `db.client.connection.count`. Every point has
 `db.system.name=postgresql` and
-`db.client.connection.pool.name=writer`. The `service.name` resource attribute
+`db.client.connection.pool.name=writer` or `reader`. Use this attribute to
+distinguish pressure on the two pools. The `service.name` resource attribute
 identifies the BaSyx service, not an individual replica. For per-pod diagnosis
 in a horizontally scaled deployment, configure the Collector to attach bounded
 Kubernetes resource attributes such as `k8s.pod.name` or `k8s.pod.uid`.
@@ -232,7 +232,7 @@ path segments.
 ## Examples and Helm
 
 The [BaSyx Go observability
-example](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxObservabilityExample)
+example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxObservabilityExample)
 provides a local development stack with an AAS Environment, BaSyx Web UI,
 OpenTelemetry Collector, Tempo, Loki, Alloy, and Grafana. It verifies trace
 and metric export, structured-log ingestion, trace-to-log correlation, and
@@ -253,8 +253,8 @@ telemetry:
   metricsExportTimeout: "30000"
 ```
 
-These metric values require BaSyx Helm chart `3.7.0` and BaSyx Go `1.0.6` or
-newer. `metricsExporter`, `metricsExportInterval`, and
+These metric values require BaSyx Helm chart `3.7.0` and BaSyx Go release
+`1.0.6` or newer. `metricsExporter`, `metricsExportInterval`, and
 `metricsExportTimeout` render `OTEL_METRICS_EXPORTER`,
 `OTEL_METRIC_EXPORT_INTERVAL`, and `OTEL_METRIC_EXPORT_TIMEOUT` respectively.
 Their defaults are `none`, an empty interval, and an empty timeout. Empty
