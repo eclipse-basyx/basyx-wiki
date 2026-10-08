@@ -49,7 +49,7 @@ configuration model.
 
 All HTTP timeout values must be greater than `0`. When a service receives an interrupt or termination signal, it stops accepting new connections and allows in-flight requests to finish for up to `shutdownTimeoutSeconds`.
 
-The pagination limits apply to every paginated endpoint of every BaSyx Go service, including the REST Event Feed (`GET /events`). A request without `limit` returns at most `pagination.defaultLimit` items; the response carries a cursor when more items exist. A `limit` above `pagination.maxLimit` is rejected, not clamped, so clients never receive a shorter page than they asked for. Both values must be greater than `0`, `maxLimit` must not be smaller than `defaultLimit`, and `maxLimit` must not exceed `2147483647`. Lower `maxLimit` to bound the memory a single request can use on large datasets.
+The pagination limits apply to every paginated endpoint of every BaSyx Go service, including the REST Event Feed (`GET /events`). A request without `limit` returns at most `pagination.defaultLimit` items; the response carries a cursor when more items exist. A `limit` above `pagination.maxLimit` is rejected, not clamped, so clients never receive a shorter page than they asked for. Both values must be greater than `0`, `maxLimit` must not be smaller than `defaultLimit`, and `maxLimit` must not exceed `2147483646`. Lower `maxLimit` to bound the memory a single request can use on large datasets.
 
 ### `postgres`
 
