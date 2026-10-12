@@ -1,10 +1,15 @@
 # Setting Up the AAS Repository
-We provide example setups to get you started with the BaSyx Go Components in the [example directory](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples).
-But if you need to configure the service yourself, this page will guide you through.
+
+The configuration below provides a minimal standalone deployment.
+
+```{note}
+For a standalone AAS Repository with Keycloak and ABAC, see the [BaSyx Secured Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxSecuredExample).
+```
 
 The Docker example uses `latest` for both BaSyx Go images. For native builds, use one stable source release and its matching database assets as described in [Version Scope](../common/deployment.md#version-scope).
 
 ## Using Docker Compose
+
 The easiest way to use and set up the AAS Repository is Docker Compose.
 
 The minimal configuration includes three services:
@@ -64,6 +69,7 @@ services:
       basyx_configuration:
         condition: service_completed_successfully
 ```
+
 *docker-compose.yml including PostgreSQL 18, the BaSyx Configuration Service, and BaSyx Go AAS Repository*
 
 Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service. For reproducible deployments, replace `latest` with the same concrete BaSyx version tag for all of these services. Alternatively, pin each service image to the corresponding immutable image digest from the same release. The `latest` tag is mutable and advances when a new release is published.
@@ -98,11 +104,13 @@ The local Compose example does not enable authorization and is not a secured dep
 The AAS Repository also supports experimental relationship-based access control (ReBAC). ReBAC is disabled by default, requires OIDC and ABAC, and can be enabled with `REBAC_ENABLED=true`. For ReBAC-covered Repository routes, an authenticated request is allowed when either ABAC or ReBAC grants access; anonymous requests and endpoints outside those routes remain ABAC-only. In particular, `$history`, `$recent-changes`, and event feed endpoints remain ABAC-only. If multiple ReBAC-capable BaSyx services share the same database, enable ReBAC consistently across them. Services running without ReBAC do not apply ReBAC grants or ownership semantics. See [Relationship-Based Access Control](../common/rebac) for configuration and access-management details.
 
 ## Using BaSyx Go Components without Docker
+
 If you need to run the AAS Repository without Docker, build the binary from source for your target platform.
 
 Published BaSyx container images provide a ready-to-run distribution of the service. The minimal Compose example above is intentionally unsecured and is not, by itself, a production-ready deployment configuration.
 
 ### Prerequisites
+
 - [Go](https://go.dev/dl/) at the version declared by the selected release's `go.mod`.
 - PostgreSQL 16 or newer, initialized by a Configuration Service built from the same source revision as the HTTP service.
 - [Git](https://git-scm.com/)
@@ -120,6 +128,7 @@ Replace `RELEASE_TAG` with the stable release you intend to build. Initialize Po
 ### Building the Binary
 
 Change to the AAS Repository service directory:
+
 ```bash
 cd basyx-go-components/cmd/aasrepositoryservice
 ```
@@ -127,6 +136,7 @@ cd basyx-go-components/cmd/aasrepositoryservice
 #### Linux / macOS
 
 Build the executable with:
+
 ```bash
 go build -o aasrepositoryservice
 ```
@@ -134,16 +144,19 @@ go build -o aasrepositoryservice
 #### Windows
 
 Build the executable with the `.exe` extension:
+
 ```powershell
 go build -o aasrepositoryservice.exe
 ```
 
 ### Running the Service
+
 Before running the service, ensure PostgreSQL is available and that the BaSyx database schema has already been initialized by the [BaSyx Configuration Service](../configuration_service/index). Configure the PostgreSQL connection through environment variables or the provided `config.yaml`.
 
 #### Linux / macOS
 
 Run the service with:
+
 ```bash
 ./aasrepositoryservice -config ./config.yaml
 ```
@@ -151,6 +164,7 @@ Run the service with:
 #### Windows PowerShell
 
 Run the service with:
+
 ```powershell
 .\aasrepositoryservice.exe -config .\config.yaml
 ```

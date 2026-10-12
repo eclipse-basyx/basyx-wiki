@@ -1,10 +1,15 @@
 # Setting Up the Basic Discovery Component
 
-Additional deployment examples are available in the [BaSyx Go repository](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples). Use examples from the same release as the BaSyx components you deploy. The configuration below provides a minimal standalone Basic Discovery service with PostgreSQL and the BaSyx Configuration Service.
+The configuration below provides a minimal standalone Basic Discovery service with PostgreSQL and the BaSyx Configuration Service.
+
+```{note}
+For standalone Discovery with Keycloak and ABAC, see the [BaSyx Secured Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxSecuredExample).
+```
 
 The Docker example uses `latest` for both BaSyx Go images. For native builds, use one stable source release and its matching database assets as described in [Version Scope](../common/deployment.md#version-scope).
 
 ## Using Docker Compose
+
 The easiest way to use and set up the Basic Discovery component is Docker Compose.
 
 The minimal configuration includes three services:
@@ -64,6 +69,7 @@ services:
       basyx_configuration:
         condition: service_completed_successfully
 ```
+
 *docker-compose.yml including PostgreSQL 18, the BaSyx Configuration Service, and BaSyx Go Basic Discovery*
 
 Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service. For reproducible deployments, replace `latest` with the same concrete BaSyx version tag for all of these services. Alternatively, pin each service image to the corresponding immutable image digest from the same release. The `latest` tag is mutable and advances when a new release is published.
@@ -115,16 +121,19 @@ ReBAC support described here applies to the standalone Basic Discovery component
 ```
 
 ## Using BaSyx Go Components without Docker
+
 If you need to run the Basic Discovery component without Docker, build the binary from source for your target platform.
 
 Published container images are the normal deployment artifacts. A native build should use the same source release as the Configuration Service and database assets.
 
 ### Prerequisites
+
 - [Go](https://go.dev/dl/) at the version declared by the selected release's `go.mod`.
 - PostgreSQL 16 or newer, initialized by a Configuration Service built from the same source revision as the HTTP service.
 - [Git](https://git-scm.com/)
 
 ### Cloning the Repository
+
 ```bash
 git clone https://github.com/eclipse-basyx/basyx-go-components.git
 git -C basyx-go-components checkout RELEASE_TAG
@@ -135,6 +144,7 @@ Replace `RELEASE_TAG` with the stable release you intend to build. Use the Confi
 ### Building the Binary
 
 Change to the Basic Discovery service directory:
+
 ```bash
 cd basyx-go-components/cmd/discoveryservice
 ```
@@ -142,6 +152,7 @@ cd basyx-go-components/cmd/discoveryservice
 #### Linux / macOS
 
 Build the executable with:
+
 ```bash
 go build -o discoveryservice
 ```
@@ -149,11 +160,13 @@ go build -o discoveryservice
 #### Windows
 
 Build the executable with the `.exe` extension:
+
 ```powershell
 go build -o discoveryservice.exe
 ```
 
 ### Running the Service
+
 Before running the service, ensure PostgreSQL is available and that the BaSyx database schema has already been initialized by the [BaSyx Configuration Service](../configuration_service/index). Configure the PostgreSQL connection through environment variables or the provided `config.yaml`.
 
 Set the Discovery port explicitly in `config.yaml`:
@@ -166,6 +179,7 @@ server:
 #### Linux / macOS
 
 Run the service with:
+
 ```bash
 ./discoveryservice -config ./config.yaml
 ```
@@ -173,6 +187,7 @@ Run the service with:
 #### Windows PowerShell
 
 Run the service with:
+
 ```powershell
 .\discoveryservice.exe -config .\config.yaml
 ```

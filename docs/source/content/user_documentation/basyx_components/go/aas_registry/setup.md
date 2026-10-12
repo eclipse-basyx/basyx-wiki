@@ -1,10 +1,15 @@
 # Setting Up the AAS Registry
-We provide example setups to get you started with the BaSyx Go Components in the [example directory](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples).
-But if you need to configure the service yourself, this page will guide you through.
+
+The configuration below provides a minimal standalone deployment.
+
+```{note}
+For a standalone AAS Registry with Keycloak and ABAC, see the [BaSyx Secured Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxSecuredExample).
+```
 
 The Docker example uses `latest` for both BaSyx Go images. For native builds, use one stable source release and its matching database assets as described in [Version Scope](../common/deployment.md#version-scope).
 
 ## Using Docker Compose
+
 The easiest way to use and set up the AAS Registry is Docker Compose.
 
 The minimal configuration includes three services:

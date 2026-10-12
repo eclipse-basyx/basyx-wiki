@@ -2,6 +2,10 @@
 
 The following local setup runs the AASX File Server with PostgreSQL and the BaSyx Configuration Service.
 
+```{note}
+For uploading, listing, and downloading AASX packages through Swagger UI, see the [BaSyx AASX File Server Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxAASXFileServerExample).
+```
+
 ## Using Docker Compose
 
 The minimal setup contains PostgreSQL, the one-time BaSyx Configuration Service database initializer, and the AASX File Server:

@@ -2,6 +2,10 @@
 
 This walkthrough creates one passport, reads both representations, looks it up by product identifier, updates one element and the passport, retrieves an earlier recorded state, performs a bulk lookup, and deletes the passport.
 
+```{note}
+For passport creation, updates, and history using curl or Postman, see the [BaSyx DPP API Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxDPPAPIExample). Follow its endpoint URLs.
+```
+
 Start the [Compose setup](setup) and wait for `http://localhost:8088/health` to return HTTP `200`. The example identifiers must not already exist in the database. The examples use Bourne-shell syntax. In Windows PowerShell, use `curl.exe` and supply the recorded timestamp explicitly.
 
 JSON request bodies for DPP creation, whole-DPP `PATCH`, element `PATCH`, and bulk product-ID lookup are limited to 10 MiB. A larger body returns `413 Request Entity Too Large`.

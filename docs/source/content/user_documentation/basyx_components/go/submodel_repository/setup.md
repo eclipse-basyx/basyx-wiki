@@ -1,6 +1,10 @@
 # Setting Up the Submodel Repository
 
-The selected release's `examples/` directory contains additional deployment setups. The configuration below provides a minimal standalone Submodel Repository with PostgreSQL and the BaSyx Configuration Service.
+The configuration below provides a minimal standalone Submodel Repository with PostgreSQL and the BaSyx Configuration Service.
+
+```{note}
+For a standalone Submodel Repository with Keycloak and ABAC, see the [BaSyx Secured Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxSecuredExample).
+```
 
 The Docker example uses `latest` for both BaSyx Go images. For native builds, use one stable source release and its matching database assets as described in [Version Scope](../common/deployment.md#version-scope).
 
@@ -64,6 +68,7 @@ services:
       basyx_configuration:
         condition: service_completed_successfully
 ```
+
 *docker-compose.yml including PostgreSQL 18, the BaSyx Configuration Service, and BaSyx Go Submodel Repository*
 
 Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service. For reproducible deployments, replace `latest` with the same concrete BaSyx version tag for all of these services. Alternatively, pin each service image to the corresponding immutable image digest from the same release. The `latest` tag is mutable and advances when a new release is published.
@@ -99,11 +104,13 @@ The local Compose example does not enable authorization and is not a secured dep
 The Submodel Repository also supports experimental relationship-based access control (ReBAC). ReBAC is disabled by default, requires ABAC and a readable OIDC trust list, and can be enabled with `REBAC_ENABLED=true`. For ReBAC-covered routes—including Submodels, Submodel Elements, attachments, and synchronous and asynchronous Operation invocation, status, and results—an authenticated request is allowed when either ABAC or ReBAC grants access. Anonymous requests and endpoints outside the ReBAC-covered routes remain ABAC-only. In particular, `$history`, `$recent-changes`, event feed endpoints, and `$signed` representations remain ABAC-only. If multiple ReBAC-capable BaSyx services share the same database, enable ReBAC consistently across them; services running without ReBAC do not apply ReBAC grants or ownership semantics. See [Relationship-Based Access Control](../common/rebac) for configuration and access-management details.
 
 ## Using BaSyx Go Components without Docker
+
 If you need to run the Submodel Repository without Docker, build the binary from source for your target platform.
 
 Published BaSyx container images provide a ready-to-run distribution of the service. The minimal Compose example above is intentionally unsecured and is not, by itself, a production-ready deployment configuration.
 
 ### Prerequisites
+
 - [Go](https://go.dev/dl/) at the version declared by the selected release's `go.mod`.
 - PostgreSQL 16 or newer, initialized by a Configuration Service built from the same source revision as the HTTP service.
 - [Git](https://git-scm.com/)
@@ -111,6 +118,7 @@ Published BaSyx container images provide a ready-to-run distribution of the serv
 ### Cloning the Repository
 
 Download the source code:
+
 ```bash
 git clone https://github.com/eclipse-basyx/basyx-go-components
 git -C basyx-go-components checkout RELEASE_TAG
@@ -121,6 +129,7 @@ Replace `RELEASE_TAG` with the stable release you intend to build. Use the Confi
 ### Building the Binary
 
 Change to the Submodel Repository service directory:
+
 ```bash
 cd basyx-go-components/cmd/submodelrepositoryservice
 ```
@@ -128,6 +137,7 @@ cd basyx-go-components/cmd/submodelrepositoryservice
 #### Linux / macOS
 
 Build the executable with:
+
 ```bash
 go build -o submodelrepositoryservice
 ```
@@ -135,16 +145,19 @@ go build -o submodelrepositoryservice
 #### Windows
 
 Build the executable with the `.exe` extension:
+
 ```powershell
 go build -o submodelrepositoryservice.exe
 ```
 
 ### Running the Service
+
 Before running the service, ensure PostgreSQL is available and that the BaSyx database schema has already been initialized by the [BaSyx Configuration Service](../configuration_service/index). Configure the PostgreSQL connection through environment variables or the provided `config.yaml`.
 
 #### Linux / macOS
 
 Run the service with:
+
 ```bash
 ./submodelrepositoryservice -config ./config.yaml
 ```
@@ -152,6 +165,7 @@ Run the service with:
 #### Windows PowerShell
 
 Run the service with:
+
 ```powershell
 .\submodelrepositoryservice.exe -config .\config.yaml
 ```
