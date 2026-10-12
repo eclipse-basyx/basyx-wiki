@@ -5,9 +5,19 @@ BaSyx validates signed JWT bearer access tokens against configured OpenID Connec
 Attribute-based access control (ABAC) then determines which API operations and
 resources the caller may use. Experimental ReBAC can additionally grant access
 on supported services and routes. Requests without credentials can continue as
-anonymous; ABAC still decides whether they are allowed. This is separate from
+anonymou. ABAC still decides whether they are allowed. This is separate from
 [Supply Chain Security](../supply_chain_security), which covers container
 images, signatures, provenance, and SBOMs.
+
+```{note}
+To try BaSyx authentication and access control, choose an example setup:
+
+| Example | Identity provider and setup |
+| --- | --- |
+| [BaSyx Secured Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxSecuredExample) | Local Keycloak with separate BaSyx components, ABAC rules, and admin, read-only, and anonymous access scenarios. |
+| [BaSyx Ory Hydra Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxOryHydraExample) | Local Hydra and Kratos with the combined AAS Environment, JWT access tokens, and provider claim mappings. |
+| [BaSyx Entra ID Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxEntraIDExample) | An external Microsoft Entra ID tenant with app registrations, API audiences, and delegated or app-only permissions. |
+```
 
 ## Security Model
 

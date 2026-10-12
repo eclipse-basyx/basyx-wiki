@@ -1,6 +1,10 @@
 # Asynchronous API Operations
 
-BaSyx Go does not provide a generic way to make an arbitrary HTTP request asynchronous. Only specific IDTA API operations support asynchronous execution. A submission returns a handle and a status location that the client can use to track the work. `202 Accepted` means that the server accepted the work; it does not mean that the operation completed successfully.
+BaSyx Go does not provide a generic way to make an arbitrary HTTP request asynchronous. Only specific IDTA API operations support asynchronous execution. A submission returns a handle and a status location that the client can use to track the work. `202 Accepted` means that the server accepted the work. It does not mean that the operation completed successfully.
+
+```{note}
+The [BaSyx Delegated Operations Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxDelegatedOperationsExample) provides a runnable AAS Environment and delegated service, with requests for asynchronous submission, status polling, and result retrieval in normal and ValueOnly form.
+```
 
 ## Where Asynchronous Operations Are Supported
 

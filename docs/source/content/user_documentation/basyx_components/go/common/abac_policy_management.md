@@ -43,6 +43,10 @@ The service also needs a readable OIDC trustlist. See
 [General Configuration](configuration.md#oidc-and-abac) for all properties,
 defaults, environment-variable aliases, and file-mount guidance.
 
+```{note}
+The [BaSyx History Audit Guarded Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxHistoryAuditGuardedExample) provides a runnable AAS Environment with the protected ABAC management API enabled, startup policy import, and policy-activation evidence in a local MinIO Object Lock backend.
+```
+
 ### Policy Scope
 
 `abac.policyScope` selects the `service_scope` under which policy versions,
