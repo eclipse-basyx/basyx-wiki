@@ -97,7 +97,7 @@ The root identifies the model being addressed:
 
 ### Field Paths
 
-A field reference uses `$field` and separates its model selector from its field with `#`:
+A field reference uses `$field` and separates its model selector from its field with `#`. See the specification's [Identification of Fields](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/query-language.html#_identification_of_fields) for the standard notation. Examples:
 
 ```text
 $aas#assetInformation.globalAssetId
@@ -231,18 +231,20 @@ With `$and` instead, the AAS must still have `idShort` equal to `MotorAAS`, but 
 
 `$fragment` identifies a part of the returned representation, while `$field` identifies a scalar value used by a condition. The two therefore use different allowed path sets: a valid `$field` path is not automatically a valid `$fragment` path.
 
-In the table below, `[i]` means either a wildcard `[]` or one non-negative index such as `[0]`.
+For the standard fragment paths, see the `FieldIdentifierFragment` productions in the specification's [Query Grammar](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/query-language.html#query-grammar). These examples illustrate the distinction:
 
-| Root | Supported fragment forms |
+| `$field` for a condition | `$fragment` for filtering returned content |
 | --- | --- |
-| `$aas` | `#idShort`; `#assetInformation.assetType`; `#assetInformation.globalAssetId`; `#assetInformation.specificAssetIds[i]`, optionally followed by `.externalSubjectId` or `.externalSubjectId.keys[i]`; `#submodels[i]`, optionally followed by `.keys[i]` |
-| `$sm` | `#id`, `#idShort`; `#semanticId` or `#semanticId.keys[i]`; `#supplementalSemanticIds` or `#supplementalSemanticIds[i]`, with optional `.keys[i]` |
-| `$sme` | `$sme` or `$sme.<idShortPath>` for an element; either form may select `#idShort`, `#value`, `#valueType`, `#language`, `#semanticId`, `#semanticId.keys[i]`, `#supplementalSemanticIds` or `#supplementalSemanticIds[i]`, with optional `.keys[i]` |
-| `$cd` | `#idShort` |
-| `$aasdesc` | `#idShort`, `#description`, `#displayName`, `#extension`, `#administration`, `#assetKind`, `#assetType`, `#globalAssetId`; `#specificAssetIds[i]` forms as above; `#endpoints[i]`; `#submodelDescriptors[i]`, optionally followed by `.idShort`, `.semanticId`, `.semanticId.keys[i]`, `.supplementalSemanticIds` or `.supplementalSemanticIds[i]` with optional `.keys[i]`, or `.endpoints[i]` |
-| `$smdesc` | `#idShort`; `#semanticId` or `#semanticId.keys[i]`; `#supplementalSemanticIds` or `#supplementalSemanticIds[i]`, with optional `.keys[i]`; `#endpoints[i]` |
+| `$sm#semanticId.keys[].value` | `$sm#semanticId.keys[]` selects key entries. |
+| `$aasdesc#endpoints[].protocolinformation.href` | `$aasdesc#endpoints[]` selects endpoint objects. |
+| `$sme.Metrics.Temperature#value` | `$sme.Metrics.Temperature` selects the complete element. |
 
-The selected root must also be valid for the query endpoint.
+BaSyx Go differs from the standard fragment grammar in these ways:
+
+- `$sm#id` is additionally accepted as a fragment.
+- Fragments selecting `specificAssetIds`, `submodels`, `submodelDescriptors`, `endpoints`, or reference `keys` require brackets: use `[]` for any entry or a zero-based index such as `[0]` for one position. For example, use `$aas#submodels[]` and `$smdesc#endpoints[]`. The bare forms `$aas#submodels` and `$smdesc#endpoints` are rejected.
+
+The selected root must also be valid for the query endpoint; see [Supported Endpoints](#supported-endpoints).
 
 ### Fragment Filters
 
