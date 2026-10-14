@@ -230,12 +230,16 @@ It contains reusable definitions and the rules that combine them:
 | `DEFFORMULAS` | Names reusable logical conditions over claims, time globals, constants, and resource fields. |
 | `rules` | Combines an ACL, objects, a formula, and optional fragment filters, either inline or through the definitions above. |
 
+For detailed syntax and constraints, see the [IDTA-01004 v3.1 Access Rule Model](https://industrialdigitaltwin.io/aas-specifications/IDTA-01004/v3.1/access-rule-model.html)
+and the [AAS Query Language grammar](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/query-language.html#query-grammar).
+The [example below](#minimal-access-policy) shows a complete JSON policy.
+
 Rules grant access. A disabled rule is skipped, and no matching allow rule
 means denial. When several rules match, their grants are alternatives.
 
 ### Rights and Request Matching
 
-BaSyx maps each registered HTTP method and route to a required right:
+BaSyx maps each registered HTTP method and route to required rights:
 
 | Right | Typical use |
 | --- | --- |
