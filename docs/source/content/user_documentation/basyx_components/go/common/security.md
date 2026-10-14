@@ -269,6 +269,30 @@ is taken from the validated token claim of that name when present. Time globals
 can participate in formulas, but they do not by themselves identify an
 eligible subject. The ACL also needs a claim attribute or `ANONYMOUS`.
 
+### Claim Array Membership
+
+In ABAC formulas, `$contains` can check membership in an array of claim values.
+Use a direct `$attribute` with `CLAIMPATH` as the first operand and a scalar
+string expression (`$strVal` or `$strCast`) as the second. `CLAIMPATH` uses a
+JSON Pointer into the token claims. For example, this formula checks for the
+role `admin` in the nested `realm_access.roles` array:
+
+```json
+{
+  "$contains": [
+    { "$attribute": { "CLAIMPATH": "/realm_access/roles" } },
+    { "$strVal": "admin" }
+  ]
+}
+```
+
+The array must contain only strings. Membership uses exact, case-sensitive
+equality: `["viewer", "admin"]` matches, while `["administrator"]` does not.
+An empty array returns false. A missing claim, a scalar or object value, or
+an array containing any non-string entry makes the condition indeterminate,
+so it does not grant access. This membership form requires `CLAIMPATH`.
+Ordinary `$contains` comparisons between strings use substring matching.
+
 ### Authorization Outcomes and Resource Filtering
 
 ABAC evaluation has three user-visible outcomes:

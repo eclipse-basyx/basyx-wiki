@@ -152,7 +152,7 @@ For example:
 
 Implicit casting of field operands is part of the [standard AAS Query Language](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/query-language.html). BaSyx Go enables it by default with `general.enableImplicitCasts: true`, converting a field operand to the type of the other operand where the conversion is supported. In the example above, `$numCast` can therefore be omitted: comparing the field directly with `$numVal` automatically applies the numeric cast. Explicit casts make the intended interpretation clear and remain useful when `general.enableImplicitCasts` is `false`.
 
-The public query language has no null or list literal and no membership operator.
+The public query language has no null or list literal and no dedicated membership operator.
 
 ## Conditions and Operators
 
@@ -164,9 +164,11 @@ Every expression object contains exactly one operator.
 | --- | --- | --- |
 | `$eq`, `$ne` | Equal, not equal | Exactly two compatible values; booleans are supported |
 | `$gt`, `$ge`, `$lt`, `$le` | Greater than, greater than or equal, less than, less than or equal | Exactly two compatible ordered values |
-| `$contains` | Contains | Exactly two string expressions |
+| `$contains` | Substring matching | Exactly two string expressions |
 | `$starts-with`, `$ends-with` | Starts or ends with | Exactly two string expressions |
 | `$regex` | Matches a regular expression | Exactly two string expressions |
+
+ABAC policies additionally support claim-array membership through `$contains`; see [Claim Array Membership](security.md#claim-array-membership).
 
 String matching is case-sensitive. Field-to-field comparisons and field-to-field string operations are not supported. Use a field and an appropriately typed literal or cast in normal API queries.
 
