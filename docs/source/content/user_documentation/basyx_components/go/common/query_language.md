@@ -126,6 +126,10 @@ Values are typed expressions rather than bare JSON scalars:
 | `{ "$timeVal": "10:30:00Z" }` | RFC 3339 full-time |
 | `{ "$hexVal": "16#FF" }` | Uppercase hexadecimal literal |
 
+```{note}
+The AAS metamodel uses the XML Schema types `xs:dateTime` and `xs:time`, which also allow values without a time zone; see the [AAS data types](https://industrialdigitaltwin.io/aas-specifications/IDTA-01001/v3.3/spec-metamodel/datatypes.html). BaSyx Go query literals `$dateTimeVal` and `$timeVal` use RFC 3339 formats instead: seconds and an explicit time zone (`Z` or an offset such as `+01:00`) are required, and fractional seconds are supported. Date-time literals also require the `T` separator. For example, `2026-01-15T10:30:00` and `10:30:00` are rejected because they omit the time zone.
+```
+
 The language also provides explicit cast and date-part expressions:
 
 | Expression | Accepted operand |
