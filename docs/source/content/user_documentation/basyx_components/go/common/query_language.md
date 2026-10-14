@@ -194,12 +194,20 @@ A condition on a wildcard list path is existential: the parent qualifies when at
 
 Predicates inside `$and` have independent nested scopes. They may therefore be satisfied by different list entries or, in an AAS Environment hierarchy query, different referenced Submodels. Use the logical `$match` operator when the predicates must describe the same entry or hierarchy branch.
 
-For example, this AAS Environment query requires one referenced `CarbonFootprint` Submodel to contain a matching element value:
+On the AAS Environment's `POST /query/shells` endpoint, a logical `$match` can combine `$aas`, `$sm`, and `$sme` predicates across related models. The Submodels and their elements need not be embedded in the AAS JSON: BaSyx follows the candidate AAS's model references into locally stored Submodels and their element hierarchies. The `$sm` and `$sme` predicates must hold within the same referenced Submodel. This does not fetch data from remote endpoints. The standalone AAS Repository rejects `$sm` and `$sme` fields on this endpoint.
+
+For example, this AAS Environment query selects shells whose `idShort` is `MotorAAS` and that reference a locally stored `CarbonFootprint` Submodel containing an `AggregatedCarbonFootprint` element with a numeric value below 48:
 
 ```json
 {
   "$condition": {
     "$match": [
+      {
+        "$eq": [
+          { "$field": "$aas#idShort" },
+          { "$strVal": "MotorAAS" }
+        ]
+      },
       {
         "$eq": [
           { "$field": "$sm#idShort" },
@@ -217,7 +225,7 @@ For example, this AAS Environment query requires one referenced `CarbonFootprint
 }
 ```
 
-With `$and` instead, one referenced Submodel could satisfy the `idShort` condition while another supplies the matching element.
+With `$and` instead, the AAS must still have `idShort` equal to `MotorAAS`, but one referenced Submodel could satisfy the `$sm#idShort` condition while another supplies the matching element.
 
 ### Fragment Paths
 
