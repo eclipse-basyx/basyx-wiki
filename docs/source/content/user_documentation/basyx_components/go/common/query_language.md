@@ -150,7 +150,9 @@ For example:
 }
 ```
 
-With the default `general.enableImplicitCasts: true`, BaSyx can convert a field operand to the type of the other operand where the conversion is supported. Explicit casts make the intended interpretation clear and remain useful when values such as Property `value` are stored as text. The public query language has no null or list literal and no membership operator.
+Implicit casting of field operands is part of the [standard AAS Query Language](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.2/query-language.html). BaSyx Go enables it by default with `general.enableImplicitCasts: true`, converting a field operand to the type of the other operand where the conversion is supported. In the example above, `$numCast` can therefore be omitted: comparing the field directly with `$numVal` automatically applies the numeric cast. Explicit casts make the intended interpretation clear and remain useful when `general.enableImplicitCasts` is `false`.
+
+The public query language has no null or list literal and no membership operator.
 
 ## Conditions and Operators
 
