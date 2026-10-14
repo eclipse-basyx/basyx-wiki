@@ -256,10 +256,6 @@ When the BaSyx-specific `$match` flag is `true`, the condition is evaluated agai
 
 Multiple filters for the same fragment are combined with `AND`. Filters for different fragments are applied independently. Explicit indices restrict filtering to the selected position. Unselected siblings remain unchanged.
 
-### MultiLanguageProperty Entries
-
-For a `MultiLanguageProperty`, `$sme.<path>#value` addresses language-string text and `$sme.<path>#language` addresses the language. With `$and`, the text and language predicates may be satisfied by different entries. Put both predicates in a logical `$match` when they must refer to the same language-string entry. The top-level condition still returns the complete property. Use a fragment filter only when returned nested data should also be reduced.
-
 ## More Examples
 
 Combine conditions with `$and`:
