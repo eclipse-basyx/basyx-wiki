@@ -65,13 +65,13 @@ Regular BaSyx workloads should start only after the Configuration Service Job co
 Common approaches include:
 
 - Running the Job as part of a deployment pipeline before applying BaSyx service manifests.
-- Using Helm hooks to run the Job before installing or upgrading BaSyx services.
+- Using lifecycle-appropriate Helm hooks. The official BaSyx chart uses `post-install` for fresh installations, after its PostgreSQL resources have been created, and `pre-upgrade` before release resources are updated. By default, its Configuration Service Job also uses an init container to wait for PostgreSQL readiness. A `pre-install` hook can still be appropriate when PostgreSQL is managed independently and is already available.
 - Using an init container or external deployment controller to wait for the Job completion before starting dependent services.
 
 ## Operational Notes
 
-- Use `restartPolicy: OnFailure` so Kubernetes retries the pod if initialization fails.
-- Use `backoffLimit` to control how many retries Kubernetes should attempt.
+- Use `restartPolicy: OnFailure` so a failed Configuration Service container can be restarted within the same Job Pod.
+- Use `backoffLimit` to limit retries before Kubernetes marks the Job as failed.
 - Store database credentials in a Kubernetes `Secret` instead of plain environment variables.
 - Use the same BaSyx version or build for `basyxconfigurationservice` and the runtime services.
 - Avoid mutable image tags such as `latest` and `SNAPSHOT` for reproducible deployments. Pin exact image versions or image digests where possible.

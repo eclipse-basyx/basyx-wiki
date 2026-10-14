@@ -73,6 +73,10 @@ Recommended ordering:
 
 Use `condition: service_completed_successfully` for services that depend on the database schema being initialized.
 
+```{note}
+For a complete setup that applies this ordering, see the [BaSyx Minimal Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxMinimalExample). Its combined AAS Environment starts after database initialization succeeds, imports sample AASX data, and exposes the content through the Web UI.
+```
+
 Each container process has its own PostgreSQL pool. In this example, the Configuration Service exits before the Submodel Repository starts, so their configured limits do not normally overlap. Account for both during manual restarts or upgrades where they may run at the same time, and add the limits of all concurrently running service replicas when sizing PostgreSQL.
 
 ```{warning}

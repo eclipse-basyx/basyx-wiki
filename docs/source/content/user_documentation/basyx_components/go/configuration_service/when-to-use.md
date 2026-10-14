@@ -1,12 +1,10 @@
 # When to Start the Service
 
-**TL;DR:** Essentially, every time a BaSyx Go setup is run.
+For BaSyx deployments that use the shared PostgreSQL schema, run the Configuration Service whenever the database needs to be initialized or migrated. It is also useful as a one-shot deployment prerequisite so that this preparation happens automatically when necessary.
 
-For BaSyx deployments that use the shared PostgreSQL database schema, the BaSyx Configuration Service is a required startup component. It prepares and updates the database schema before regular BaSyx services start.
+Regular BaSyx services validate that the database state is `clean` and that its schema version exactly matches the version expected by the running release. They do not check whether the Configuration Service ran during the current startup. An ordinary restart can reuse a database that already passes those checks.
 
-Regular BaSyx services validate the database version during startup. If the Configuration Service has not initialized or updated the database first, those services can fail fast because the schema version is missing, outdated, or incompatible.
-
-## Required Startup Points
+## When Schema Preparation Is Required
 
 Start the BaSyx Configuration Service in these situations:
 
@@ -28,10 +26,10 @@ In Docker Compose, dependent services should use `service_completed_successfully
 
 ## Existing Databases
 
-The Configuration Service should also be part of deployments with existing databases. It detects already initialized schemas and skips work that is not required. Registered patches are executed only when the current database version is older than the patch target version.
+The Configuration Service can remain part of deployment sequencing for existing databases. It uses the recorded schema version to skip the base upload and registered patches that are no longer required. It does not verify the presence of every expected table before skipping the base schema.
 
-This makes it suitable for both fresh installations and upgrades.
+This idempotent deployment pattern is suitable for fresh installations and upgrades, but it is not a technical requirement for every ordinary restart.
 
 ## When It Does Not Apply
 
-The Configuration Service is not relevant only for deployments that do not use the BaSyx PostgreSQL schema at all. For BaSyx services running with PostgreSQL persistence, it should be treated as part of the required startup process.
+The Configuration Service is not relevant for deployments that do not use the BaSyx PostgreSQL schema. A PostgreSQL-backed deployment whose database is already `clean` and at the exact schema version expected by its runtime services does not require another Configuration Service run solely because those services restart.

@@ -1,4 +1,4 @@
-# Common / Shared Features
+# Shared Runtime Features
 
 This page summarizes runtime features that are implemented in shared code and reused by multiple BaSyx Go components.
 
@@ -13,6 +13,14 @@ It returns HTTP `200` with:
 ```json
 {"status":"UP"}
 ```
+
+The basic health handler confirms that the HTTP process can respond. It does not probe PostgreSQL or guarantee that API operations will succeed. The AAS Environment adds a startup-readiness check and returns `503 Service Unavailable` with status `DOWN` until its startup preconfiguration has completed. For example:
+
+```bash
+curl -i http://localhost:8084/health
+```
+
+Use the component's port and prefix `/health` with its configured context path. Use `curl.exe` in PowerShell.
 
 ## CORS Middleware
 
@@ -51,6 +59,14 @@ default and configured through standard OpenTelemetry environment variables.
 See [Observability](observability) for activation, propagation, sampling,
 metric interpretation, and backend integration.
 
+## Experimental Eventing
+
+The AAS Repository, Submodel Repository, and AAS Environment can emit
+CloudEvents for model changes through a retained REST Event Feed, MQTT 5,
+Kafka, or AMQP 1.0. Event capture and broker outbox writes participate in the
+model mutation transaction. See [Eventing](eventing) for supported mutations,
+configuration, delivery guarantees, and security boundaries.
+
 ## Shared Security Building Blocks
 
 The common configuration and security packages provide reusable building blocks for:
@@ -59,6 +75,9 @@ The common configuration and security packages provide reusable building blocks 
 - ABAC enablement and model configuration (`abac.*`)
 - startup security middleware setup that reads trustlist / access-rules files when ABAC is enabled
 - experimental relationship-based access control on top of ABAC (`rebac.*`, see [ReBAC](rebac))
+
+See [Runtime Security](security) for token validation, claim mapping, anonymous
+requests, ABAC evaluation, and resource-filtering behavior.
 
 ## Shared PostgreSQL Configuration Pattern
 
@@ -74,10 +93,6 @@ Multiple components reuse the same PostgreSQL configuration structure and connec
 - `postgres.maxIdleConnections`
 - `postgres.connMaxLifetimeMinutes`
 - `postgres.connMaxIdleTimeMinutes`
-
-```{note}
-The pool behavior in this section requires BaSyx Go 1.0.5 or later.
-```
 
 Each service process or Kubernetes pod owns a separate pool. The common defaults are:
 
@@ -96,8 +111,8 @@ See [General Configuration](configuration) for the full PostgreSQL configuration
 
 ## Optional PostgreSQL Reader Routing
 
-BaSyx Go 1.0.7 and later can open an independent PostgreSQL reader pool for
-eligible reads. Without reader configuration, the writer pool is reused and
+BaSyx Go can open an independent PostgreSQL reader pool for eligible reads.
+Without reader configuration, the writer pool is reused and
 the behavior remains unchanged. With a reader configured, mutations and
 consistency-sensitive work stay on the writer while eligible reads can be
 served by a standby or other read endpoint.
@@ -108,6 +123,6 @@ consistent between requests, including authorization-relevant resource changes.
 When one response requires multiple SQL queries, those queries use one
 read-only repeatable-read transaction so that the response is assembled from
 one reader snapshot. See
-[General Configuration](configuration#optional-postgresql-reader) for the
+[General Configuration](configuration.md#optional-postgresql-reader) for the
 supported components, routing guarantees, security considerations, connection
 variables, and independent pool-sizing guidance.

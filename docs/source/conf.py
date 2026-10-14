@@ -46,10 +46,13 @@ myst_enable_extensions = [
     "attrs_block",
     "linkify",
     "deflist",
-    "attrs",
+    "attrs_inline",
     "dollarmath",
     "amsmath",
 ]
+
+# Generate stable heading anchors for Markdown fragment links.
+myst_heading_anchors = 6
 
 # Configure MyST to recognize diagram directives
 myst_fence_as_directive = ["mermaid", "uml"]

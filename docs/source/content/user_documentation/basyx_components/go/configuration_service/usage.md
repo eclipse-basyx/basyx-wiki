@@ -4,18 +4,15 @@ The BaSyx Configuration Service is designed as a run-once startup job. It execut
 
 ## Command-Line Options
 
-```{hint}
-These command-line options are only relevant when the service is not run as part of a Docker container.
-```
-
-The service binary supports these options:
+The service binary supports these options for native and containerized execution. In Docker Compose or Kubernetes, pass them through the container command or arguments.
 
 ```bash
 /app/basyxconfigurationservice \
-  -config /app/config.yaml \
   -databaseSchema /app/base.sql \
   -customPatchPath /app/patches
 ```
+
+This example uses paths included in the official image. The image contains the default schema and registered patch files, but it does not contain `/app/config.yaml`. To use `-config`, provide the referenced file, for example by mounting it into the container. Schema and patch path overrides are normally needed only when custom files have been mounted or packaged.
 
 | Option | Purpose | Default |
 | --- | --- | --- |
@@ -58,8 +55,8 @@ The Configuration Service owns its own pool while the job is running. Include it
 
 ## Patch Execution
 
-Patches are registered by the service implementation. The current service registers `101.sql` with target schema version `v1.0.1`.
+Schema patches are explicitly registered by the Configuration Service. Each registered patch has a filename and target schema version. For example, `1_0_1.sql` targets schema version `v1.0.1`. `-customPatchPath` changes the directory used to resolve those registered filenames. It does not discover arbitrary additional SQL files, and a registered patch file that is required but missing from that directory causes migration to fail.
 
-A patch is executed only if the current value in `basyxsystem.schema_version` is lower than the registered target version. Successful initialization and patching leaves `basyxsystem.state` as `clean`.
+A patch is executed only if the current value in `basyxsystem.schema_version` is lower than the registered target version. After a required patch succeeds, the Configuration Service records its target version and `clean` state. A skipped patch does not modify the database state.
 
 See the developer documentation for details about creating new patches.

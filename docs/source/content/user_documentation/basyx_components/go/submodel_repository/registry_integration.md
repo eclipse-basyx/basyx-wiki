@@ -1,0 +1,65 @@
+# Submodel Registry Integration
+
+When Submodel Registry integration is enabled, Submodel Repository writes also update the corresponding descriptors in the shared BaSyx database. Repository content and descriptor changes are applied in the same transaction.
+
+This is database-backed integration inside the BaSyx components; the Repository does not synchronize descriptors by calling a separately running Registry over HTTP. The [AAS Environment](../aas_environment/index) provides the same Submodel APIs and integration behavior. In either executable, synchronization must be enabled explicitly. Sharing a process or database is not enough by itself.
+
+## Shared Behavior
+
+See [Repository-to-Registry Integration](../common/registry_integration) for database prerequisites, transaction behavior, public URL configuration, and handling existing data.
+
+The standalone Submodel Repository also refreshes embedded Submodel Descriptors in existing AAS Descriptors that reference the Submodel. Missing AAS Descriptors are skipped.
+
+When ReBAC is enabled, the standalone Submodel Descriptor created by Repository-to-Registry synchronization inherits access from its source Submodel. An embedded Submodel Descriptor remains part of its enclosing AAS Descriptor. See [Relationship-Based Access Control](../common/rebac) for the sharing and inheritance model.
+
+## Configuration
+
+For a native configuration file:
+
+```yaml
+server:
+  port: 8085
+general:
+  submodelRegistryIntegration: true
+  aasRegistryIntegration: false
+  externalUrl: "http://localhost:8085"
+```
+
+For the [Compose setup](setup), append these entries to the Submodel Repository's existing environment list, retaining the server and PostgreSQL settings:
+
+```yaml
+      - GENERAL_SUBMODELREGISTRYINTEGRATION=true
+      - GENERAL_EXTERNALURL=http://localhost:8085
+```
+
+The default is disabled. The standalone Submodel Repository rejects `general.aasRegistryIntegration=true` at startup. Its embedded descriptor synchronization is already enabled by `submodelRegistryIntegration`; enabling the AAS flag is not required for that behavior.
+
+Set `externalUrl` to the client-facing Repository base URL, following [Advertise a Reachable Repository URL](../common/registry_integration.md#advertise-a-reachable-repository-url).
+
+## Generated Descriptors and Lifecycle
+
+| Repository change | Registry effect |
+| --- | --- |
+| Create a Submodel | Create its standalone Submodel Descriptor and update applicable embedded descriptors. |
+| Replace a Submodel | Refresh descriptors when descriptor-relevant content changes. |
+| Patch Submodel metadata | Update descriptor metadata through the supported Submodel patch routes. |
+| Change an element value | No descriptor payload change is normally needed: element values are not included in descriptors. |
+| Delete a Submodel | Remove the standalone descriptor and applicable embedded registrations. |
+
+The generated descriptor includes the Submodel identifier, short name, semantic references, administrative information, and descriptive metadata. It does not contain `submodelElements` or their values.
+
+## Check the Integration
+
+1. Enable integration and restart the Repository. Configure a Submodel Registry for the same database and a different HTTP port, for example `8083`.
+2. Create a new Submodel using the [usage example](usage.md#create-a-submodel).
+3. Retrieve its descriptor:
+
+```bash
+curl -i http://localhost:8083/submodel-descriptors/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ
+```
+
+Expect `200 OK`. Check the advertised endpoint, change the Submodel short name through the Repository, and retrieve the descriptor again to verify the update. After deleting the Submodel, its standalone descriptor should return `404`. Use `curl.exe` in PowerShell and adjust the Registry URL for its configured port/context path.
+
+For embedded descriptors, also create an AAS reference and an AAS Descriptor in the same database, then verify the corresponding entry through the [AAS Registry API](../aas_registry/usage). Keep each generated endpoint reachable from the clients that use it.
+
+See [General Configuration](../common/configuration.md#general) and [Submodel Registry Usage](../submodel_registry/usage) for further configuration and descriptor requests.
