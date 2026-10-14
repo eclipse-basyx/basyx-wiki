@@ -381,10 +381,17 @@ This policy does not grant access to any other route or right.
 
 The Digital Twin Registry and standalone Submodel Repository can optionally
 copy the caller-supplied `Edc-Bpn` header into the claims evaluated by ABAC when
-`general.enableCustomMiddlewareHeaderInjection` is enabled. The header is not
-authenticated by BaSyx and, when present, replaces a token claim with the same
-name. Keep this option behind a trusted intermediary that strips or overwrites
-client input. See the Digital Twin Registry's
+`general.enableCustomMiddlewareHeaderInjection` is enabled.
+
+For Catena-X deployments that supply the caller's Business Partner Number (BPN)
+through the `Edc-Bpn` HTTP header, set
+`general.enableCustomMiddlewareHeaderInjection: true` so ABAC can evaluate that
+value. If the BPN is instead supplied as a signed token claim named `Edc-Bpn`,
+header injection can remain disabled.
+
+The header is not authenticated by BaSyx. A non-empty header value replaces
+a token claim with the same name. Keep this option behind a trusted intermediary
+that strips or overwrites client input. See the Digital Twin Registry's
 [Security and Visibility Semantics](../digital_twin_registry/index.md#security-and-visibility-semantics)
 for the DTR-specific behavior.
 
