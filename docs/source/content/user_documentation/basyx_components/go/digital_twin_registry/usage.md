@@ -3,7 +3,7 @@
 This walkthrough registers a motor AAS Descriptor, verifies automatic Discovery synchronization, resolves the AAS from asset information, retrieves its descriptor, and exercises the DTR-specific AssetLink and filtering behavior.
 
 ```{note}
-For a secured DTR walkthrough with asset lookup and BPN-based visibility, see the [BaSyx Digital Twin Registry Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxDigitalTwinRegistryExample).
+For a secured DTR walkthrough with asset lookup and BPN-based visibility, see the [BaSyx Digital Twin Registry Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxDigitalTwinRegistryExample).
 ```
 
 The examples use the unsecured [Docker Compose setup](setup) at `http://localhost:5004` with an empty context path. Run them in order against an example database and save the JSON files in your working directory. The curl commands are single-line commands usable in Bash. In Windows PowerShell, invoke `curl.exe` instead of `curl`.

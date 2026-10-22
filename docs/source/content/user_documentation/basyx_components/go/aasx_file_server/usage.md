@@ -32,7 +32,7 @@ Package descriptions use unpadded Base64URL representations for `packageId` and 
 curl -i -G http://localhost:8087/packages --data-urlencode 'limit=10'
 ```
 
-The response contains package descriptions in `result` and pagination information in `pagingMetadata`. The default `limit` is `100`; accepted values range from `1` to `500`. If `pagingMetadata.cursor` is present, treat it as opaque and pass it unchanged in the next request:
+The response contains package descriptions in `result` and pagination information in `pagingMetadata`. Page sizes follow `server.pagination.defaultLimit` (default `100`) and `server.pagination.maxLimit` (default `1000`). A non-positive or excessive `limit` returns `400 Bad Request`. If `pagingMetadata.cursor` is present, treat it as opaque and pass it unchanged in the next request:
 
 ```bash
 curl -i -G http://localhost:8087/packages --data-urlencode 'limit=10' --data-urlencode 'cursor=RETURNED_CURSOR'

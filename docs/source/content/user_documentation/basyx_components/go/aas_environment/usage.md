@@ -166,7 +166,9 @@ curl -G http://localhost:8090/serialization \
   -o exported-environment.json
 ```
 
-Open `exported-environment.json` and verify the same three original identifiers. `aasIds` and `submodelIds` accept Base64URL-encoded identifiers and may be repeated to select several resources. `includeConceptDescriptions` defaults to `true`; set it to `false` to omit all Concept Descriptions. When `aasIds` is omitted, all stored AASs are selected, and when `submodelIds` is omitted, all stored Submodels are selected. An omitted selector does not mean "only objects referenced by the other selector."
+Open `exported-environment.json` and verify the same three original identifiers. `aasIds` and `submodelIds` accept Base64URL-encoded identifiers and may be repeated to select several resources. **Only explicitly selected AASs and Submodels are exported.** An omitted selector selects no objects of that type. Selecting an AAS does not automatically include its referenced Submodels. Supplying neither selector returns `400 Bad Request`.
+
+`includeConceptDescriptions` defaults to `true`. It includes only readable Concept Descriptions referenced directly or indirectly by the serialized Submodels, including semantic IDs, inherited `semanticIdListElement` values, value IDs, and references from included Concept Descriptions such as IEC 61360 value-list entries. Set it to `false` to omit all Concept Descriptions. Unreferenced Concept Descriptions are not exported.
 
 To export an AASX package with a JSON specification part, change the media type and output filename while keeping the same query parameters:
 
@@ -180,6 +182,18 @@ curl -G http://localhost:8090/serialization \
 ```
 
 The resulting AASX can be imported through `/upload` with `-F 'file=@exported-environment.aasx;type=application/aasx+json'`. Plain XML and XML-based AASX representations are also available; always send an explicit `Accept` header so the chosen representation is unambiguous.
+
+### Export Limits
+
+The JSON or XML environment specification, including inside an AASX package, is limited by `general.aasxMaxPartExpandedSizeBytes` (default 128 MiB). Exceeding an export limit returns `413 Request Entity Too Large`. See [General Configuration](../common/configuration.md#general) for all export limits.
+
+### Import and Export Permissions
+
+With runtime security enabled, permissions are type-specific: access to an AAS does not automatically include its Submodels or Concept Descriptions.
+
+Explicitly selecting a missing or inaccessible AAS or Submodel aborts the export with `404`, without returning a partial selection. A caller without permission to use the import or export endpoint receives `403`.
+
+Imports require CREATE for new content and UPDATE for existing content, including attachments and thumbnails. See [Runtime Security](../common/security.md#environment-import-and-export) for grant syntax, filtering rules, binary-content permissions, and a policy example.
 
 ## Re-import and Failure Behavior
 
