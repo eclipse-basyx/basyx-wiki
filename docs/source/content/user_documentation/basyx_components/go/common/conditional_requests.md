@@ -56,7 +56,11 @@ server:
     requireIfMatch: true
 ```
 
-The equivalent environment variable is `SERVER_CONDITIONALREQUESTS_REQUIREIFMATCH=true`. The default is `false`. When enabled, a missing `If-Match` header returns `428 Precondition Required`. Creation, including create-only PUT, requires no `If-Match`. The wildcard `If-Match: *` satisfies the header requirement but does not prevent concurrent overwrites.
+The equivalent environment variable is `SERVER_CONDITIONALREQUESTS_REQUIREIFMATCH=true`. The default is `false`. When enabled, covered writes to existing revisioned resources without conditional headers return `428 Precondition Required`.
+
+Creating a new top-level resource requires no `If-Match`. Adding a child within an existing resource can require a precondition: an ordinary PUT creating a missing Submodel Element under an existing Submodel returns `428` without conditional headers. Send the owning resource's ETag in `If-Match`, or use `If-None-Match: *` on a supported create-only PUT.
+
+The wildcard `If-Match: *` satisfies the header requirement but does not prevent concurrent overwrites.
 
 ## Resource Revisions
 
