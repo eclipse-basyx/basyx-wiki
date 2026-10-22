@@ -1,13 +1,13 @@
 # Setting Up the Digital Twin Registry
 
-Example deployments are available in the BaSyx Go Components [examples directory](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples). This page provides a small standalone setup and the requirements for building from source.
+Example deployments are available in the BaSyx Go Components [examples directory](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples). This page provides a small standalone setup and the requirements for building from source.
 
 ## Using Docker Compose
 
 The minimal setup contains PostgreSQL, the BaSyx Configuration Service that initializes the database, and the Digital Twin Registry.
 
 ```{warning}
-The Compose file below is for local evaluation and development. It uses demo database credentials, disables ABAC, publishes the API without TLS, has no named PostgreSQL volume, and defaults to the mutable `latest` BaSyx image tag. Do not expose it to an untrusted network or use it unchanged for production.
+The Compose file below is for local evaluation and development. It uses demo database credentials, disables ABAC, publishes the API without TLS, and has no named PostgreSQL volume. It uses the `latest` BaSyx image tag. Do not expose it to an untrusted network or use it unchanged for production.
 ```
 
 ```yaml
@@ -28,7 +28,7 @@ services:
 
   basyx_configuration:
     container_name: basyx_configuration
-    image: eclipsebasyx/basyxconfigurationservice-go:${BASYX_VERSION:-latest}
+    image: eclipsebasyx/basyxconfigurationservice-go:latest
     pull_policy: always
     environment:
       - POSTGRES_HOST=postgres
@@ -46,7 +46,7 @@ services:
 
   digital_twin_registry:
     container_name: digital_twin_registry
-    image: eclipsebasyx/digitaltwinregistry-go:${BASYX_VERSION:-latest}
+    image: eclipsebasyx/digitaltwinregistry-go:latest
     pull_policy: always
     environment:
       - SERVER_PORT=5004
@@ -92,7 +92,7 @@ Expect HTTP `200` with `{"status":"UP"}`. Open [Swagger UI](http://localhost:500
 
 The Compose example explicitly selects port `5004`. When using a context path, include it in health, Swagger, and API URLs. For example, `SERVER_CONTEXTPATH=/api/v3` makes the health URL `http://localhost:5004/api/v3/health`.
 
-For a secured example with Keycloak, see [`examples/BaSyxDigitalTwinRegistryExample`](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxDigitalTwinRegistryExample). Before enabling custom `Edc-Bpn` header injection, read [AssetLink Visibility and `Edc-Bpn`](index.md#assetlink-visibility-and-edc-bpn).
+For a secured example with Keycloak, see [`examples/BaSyxDigitalTwinRegistryExample`](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxDigitalTwinRegistryExample). Before enabling custom `Edc-Bpn` header injection, read [AssetLink Visibility and `Edc-Bpn`](index.md#assetlink-visibility-and-edc-bpn).
 
 ### Access Rules and Trust-List Files
 
