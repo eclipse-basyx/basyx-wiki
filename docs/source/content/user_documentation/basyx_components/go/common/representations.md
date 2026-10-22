@@ -74,6 +74,24 @@ For this Property, the ValueOnly response is a JSON string:
 
 `$value` reduces the AAS model structure and focuses on values. It is not always a scalar: collections, lists, ranges, files, blobs, and other complex elements have structured ValueOnly JSON.
 
+#### ValueOnly Types and Validation
+
+Property values and Range bounds use the JSON types defined by their stored `valueType`:
+
+| Stored type or value | ValueOnly JSON |
+| --- | --- |
+| Numeric XSD type, such as `xs:integer` or `xs:double` | Number, for example `42` or `21.5`. All stored digits are retained. |
+| `xs:boolean` | Boolean, for example `true`. |
+| Other XSD types, including `xs:string` and date/time types | String. |
+| Property without a value, or an unset Range bound | `null`. |
+| `INF`, `-INF`, `NaN`, or a stored value inconsistent with its `valueType` | String, because it has no valid JSON number/boolean representation. |
+
+Normal model JSON uses lexical strings: an `xs:integer` Property with `"value": "42"` reads as `42` through `$value`. Preserve numeric precision when parsing large numbers.
+
+A `$value` PATCH validates the complete payload against the **stored element types** before writing. Numeric and boolean types also accept valid lexical strings such as `"42"` or `"true"`. Other types require strings. Invalid values, incompatible JSON types, and unsupported fields in an element's ValueOnly object return `400 Bad Request`. Nonexistent elements return `404 Not Found`. Use creation routes to add them.
+
+Omitted members remain unchanged. `null` clears a Property value or Range bound. For an existing numeric Range, `{"min": null, "max": 42}` clears its lower bound and sets its upper bound.
+
 ### `$metadata`
 
 ```text
@@ -152,6 +170,8 @@ Where the read operation exposes them:
 | `extent=withBlobValue` | Include Blob payload values. |
 
 These modifiers change the response, not the stored resource. `extent` only controls inline `Blob` values. It does not include the binary content referenced by a `File` element. Retrieve that content through the corresponding `/attachment` endpoint.
+
+Encode a Blob’s binary content as a standard Base64 string in the JSON value field when creating or updating it.
 
 ## Writing Representations
 

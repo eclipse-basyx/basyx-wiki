@@ -50,7 +50,7 @@ For every registered patch, the service compares the recorded schema version wit
 
 The database schema version is stored in `basyxsystem.schema_version`. The schema state is stored in `basyxsystem.state`.
 
-Regular BaSyx services validate both values during startup. If the schema version does not match the database schema version expected by that release, or if the state is `dirty`, the service fails fast instead of serving requests. The BaSyx application or image version and the database schema version are separate values. BaSyx Go expects database schema version `v1.2.2`.
+Regular BaSyx services validate both values during startup. If the schema version does not match the database schema version expected by that release, or if the state is `dirty`, the service fails fast instead of serving requests. The BaSyx application or image version and the database schema version are separate values. For example, BaSyx Go **1.1.2** expects database schema **`v1.2.3`**.
 
 ```{warning}
 Use the same BaSyx version or build for `basyxconfigurationservice` and the DB-backed runtime services. A newer runtime service may require schema changes that an older Configuration Service image cannot apply.

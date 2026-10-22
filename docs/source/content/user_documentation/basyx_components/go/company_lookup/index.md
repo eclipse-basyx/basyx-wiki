@@ -94,7 +94,7 @@ The `name` filter performs an exact, case-insensitive match against `name` and e
 
 For example, `Fraunhofer IESE` is encoded as `RnJhdW5ob2ZlciBJRVNF`:
 
-```http
+```text
 GET /companies?name=RnJhdW5ob2ZlciBJRVNF
 ```
 
@@ -104,7 +104,7 @@ The `assetId` filter returns descriptors for which the decoded asset ID matches 
 
 For example, the asset ID `https://i.iese.fraunhofer.de/assetId/assets/4711` is encoded as `aHR0cHM6Ly9pLmllc2UuZnJhdW5ob2Zlci5kZS9hc3NldElkL2Fzc2V0cy80NzEx` and matches the asset ID regular expression pattern `^https://i\\.iese\\.fraunhofer\\.de/assetId/`:
 
-```http
+```text
 GET /companies?assetId=aHR0cHM6Ly9pLmllc2UuZnJhdW5ob2Zlci5kZS9hc3NldElkL2Fzc2V0cy80NzEx
 ```
 
@@ -117,6 +117,7 @@ Company Lookup uses the shared BaSyx Go infrastructure for configuration, Swagge
 - [General Configuration](../common/configuration)
 - [Swagger UI Docs](../common/swagger)
 - [Common / Shared Features](../common/shared_features)
+- [Conditional Requests](../common/conditional_requests) for ETags and protected company updates
 
 ```{toctree}
 :hidden:

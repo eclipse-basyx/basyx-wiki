@@ -3,7 +3,7 @@
 BaSyx Go does not provide a generic way to make an arbitrary HTTP request asynchronous. Only specific IDTA API operations support asynchronous execution. A submission returns a handle and a status location that the client can use to track the work. `202 Accepted` means that the server accepted the work. It does not mean that the operation completed successfully.
 
 ```{note}
-The [BaSyx Delegated Operations Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxDelegatedOperationsExample) provides a runnable AAS Environment and delegated service, with requests for asynchronous submission, status polling, and result retrieval in normal and ValueOnly form.
+The [BaSyx Delegated Operations Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxDelegatedOperationsExample) provides a runnable AAS Environment and delegated service, with requests for asynchronous submission, status polling, and result retrieval in normal and ValueOnly form.
 ```
 
 ## Where Asynchronous Operations Are Supported
@@ -54,7 +54,7 @@ Resolve relative `Location` values against the service's public base URL and pre
 | Status | `GET /bulk/status/{handleId}` | `GET .../submodel-elements/{idShortPath}/operation-status/{handleId}` | `GET /packages-async/status/{handleId}` |
 | Result | `GET /bulk/result/{handleId}` | `GET .../submodel-elements/{idShortPath}/operation-results/{handleId}` or `.../operation-results/{handleId}/$value` | `GET /packages-async/result/{handleId}` |
 | Successful result | `204 No Content` | `200 OK` with the normal or ValueOnly Operation result | `200 OK` with a completed `BaseOperationResult` |
-| Failed result | Stored failure status and body | Delegated operation's failure status and body, or a BaSyx gateway error | `200 OK` with a failed `BaseOperationResult` |
+| Failed result | Stored failure status and error response | `502` Result for an error status from the delegation endpoint; other failures use the applicable BaSyx error | `200 OK` with a failed `BaseOperationResult` |
 | Result retrieval consumes the handle | Yes | No | No |
 | Default terminal-result retention | 15 minutes, or until the result is retrieved | 15 minutes | 15 minutes |
 | Retention configurable | No | Yes, with `SMREPO_DELEGATION_ASYNC_TTL` using a Go duration such as `30m` | No |
@@ -81,6 +81,8 @@ Retrieving a terminal Registry bulk result deletes that job record, whether the 
 This API invokes an AAS `Operation` through the configured delegation endpoint. Both the normal and `$value` asynchronous invocation requests require a non-empty `clientTimeoutDuration`. The returned status and result routes remain below the invoked Submodel Element, and the handle is valid only with the same Submodel identifier and `idShortPath`. Use the `$value` result route for a ValueOnly result.
 
 Result retrieval does not delete the handle. Completed and failed records are retained for 15 minutes by default; set `SMREPO_DELEGATION_ASYNC_TTL` to a positive Go duration to change that period.
+
+If the delegated endpoint returns an error status, BaSyx responds with `502 Bad Gateway` and an AAS `Result` identifying that status. This also applies to `$value` result routes. The endpoint's body is not forwarded. Older stored delegated failures return a generic `502` Result. See [Error Responses](shared_features.md#error-responses) and [Operation failure diagnosis](../submodel_repository/operations.md#failure-diagnosis).
 
 ### Asynchronous AASX Upload
 

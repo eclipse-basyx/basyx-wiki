@@ -54,9 +54,7 @@ Each `$filters` entry requires both `$fragment` and `$condition`. The standard d
 
 Unknown members, a missing `$condition`, malformed expressions, unsupported field paths, and roots that are invalid for the endpoint result in `400 Bad Request`.
 
-```{note}
-IDTA-01002 v3.2 defines `$select: "id"` as a projection that returns identifiers. BaSyx Go does not implement this projection and rejects the standardized string form. Omit `$select` in query requests. Although the runtime accepts a non-standard array form, it does not project the response and should not be relied on. `$filters` serve a different purpose: they conditionally retain or prune supported fragments.
-```
+Omit `$select` to return objects, or use [Identifier Projection](#identifier-projection) to return identifiers. `$filters` serve a different purpose: they conditionally retain or prune supported fragments.
 
 For example, query a local AAS Repository for shells whose `idShort` is `MotorAAS`:
 
@@ -127,7 +125,7 @@ Values are typed expressions rather than bare JSON scalars:
 | `{ "$hexVal": "16#FF" }` | Uppercase hexadecimal literal |
 
 ```{note}
-The AAS metamodel uses the XML Schema types `xs:dateTime` and `xs:time`, which also allow values without a time zone; see the [AAS data types](https://industrialdigitaltwin.io/aas-specifications/IDTA-01001/v3.3/spec-metamodel/datatypes.html). BaSyx Go query literals `$dateTimeVal` and `$timeVal` use RFC 3339 formats instead: seconds and an explicit time zone (`Z` or an offset such as `+01:00`) are required, and fractional seconds are supported. Date-time literals also require the `T` separator. For example, `2026-01-15T10:30:00` and `10:30:00` are rejected because they omit the time zone.
+The AAS metamodel uses the XML Schema types `xs:dateTime` and `xs:time`, which also allow values without a time zone; see the [AAS data types](https://industrialdigitaltwin.io/aas-specifications/IDTA-01001/v3.2/spec-metamodel/datatypes.html). BaSyx Go query literals `$dateTimeVal` and `$timeVal` use RFC 3339 formats instead: seconds and an explicit time zone (`Z` or an offset such as `+01:00`) are required, and fractional seconds are supported. Date-time literals also require the `T` separator. For example, `2026-01-15T10:30:00` and `10:30:00` are rejected because they omit the time zone.
 ```
 
 The language also provides explicit cast and date-part expressions:
@@ -296,7 +294,7 @@ Select AAS Descriptors by an embedded Submodel Descriptor field:
 
 The first request is valid for `/query/submodels`. The second is valid for `/query/shell-descriptors`. A field root valid for one endpoint is not automatically valid for another.
 
-For additional query examples, see the [Query Language Examples](https://github.com/eclipse-basyx/basyx-go-components/blob/main/docu/query_language/examples.md) in the BaSyx Go repository.
+For additional query examples, see the [Query Language Examples](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.2/docu/query_language/examples.md) in the BaSyx Go repository.
 
 ## Results and Pagination
 
@@ -305,6 +303,28 @@ Successful query responses contain the endpoint's top-level objects in `result` 
 Query endpoints accept `limit` and `cursor` as URL query parameters. Omit the cursor for the first page, then send the returned opaque cursor with the same request body and `limit` for the next page. See [Pagination](pagination) for the shared response and cursor rules.
 
 The query language provides no caller-controlled sort expression. Results use the endpoint's server-defined cursor order. Clients should not rely on another ordering.
+
+### Identifier Projection
+
+Every query endpoint listed above supports `"$select": "id"`, including the descriptor queries and the corresponding AAS Environment routes:
+
+```json
+{
+  "$condition": { "$boolean": true },
+  "$select": "id"
+}
+```
+
+The response contains original, unencoded identifiers rather than objects:
+
+```json
+{
+  "paging_metadata": { "resultType": "Identifier" },
+  "result": ["urn:example:submodel:1"]
+}
+```
+
+The same access rules apply as for object results. Projection does not reveal identifiers of hidden resources. Continue with `paging_metadata.cursor` when present and keep the query body unchanged. All other `$select` values, including arrays, return `400 Bad Request`.
 
 ## Limits
 

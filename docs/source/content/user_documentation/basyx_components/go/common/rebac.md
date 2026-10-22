@@ -40,7 +40,7 @@ A ReBAC grant on a resource is not limited by ABAC fragment filters, masks, or u
 
 | Service | Covered resources |
 | --- | --- |
-| AAS Repository | Shells, asset information, thumbnails, Submodel references, Submodel superpaths, `/serialization`. |
+| AAS Repository | Shells, asset information, thumbnails, Submodel references, AAS-scoped Submodel routes, and `/serialization` (returns `501 Not Implemented`). |
 | Submodel Repository | Submodels and all representations, SubmodelElements, attachments, operations. |
 | Concept Description Repository | Concept Descriptions. |
 | AAS Registry, Submodel Registry | Shell descriptors, Submodel descriptors, bulk API. |
@@ -89,10 +89,12 @@ The BaSyx Web UI detects ReBAC automatically and offers sharing and access manag
 
 ```bash
 CORS_ALLOWEDORIGINS=https://ui.example.com
-CORS_ALLOWEDHEADERS=Authorization,Content-Type,If-Match
+CORS_ALLOWEDHEADERS=Authorization,Content-Type
 CORS_ALLOWCREDENTIALS=true
 CORS_ALLOWEDMETHODS=GET,POST,PUT,PATCH,DELETE,OPTIONS
 ```
+
+`If-Match` and `If-None-Match` are always allowed by CORS. Resource ETags are covered in [Conditional Requests](conditional_requests). ReBAC management routes use their own access-management contract.
 
 ## Kubernetes
 
@@ -102,7 +104,7 @@ The [BaSyx Helm chart](https://github.com/eclipse-basyx/charts) exposes the sett
 
 The BaSyx Go repository contains the complete guides:
 
-- [ReBAC overview](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.0/docu/security/rebac/README.md)
-- [Administration guide](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.0/docu/security/rebac/administration.md) for operations, audit trail, monitoring, and troubleshooting
-- [Sharing API](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.0/docu/security/rebac/sharing-api.md)
-- [ReBAC example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxReBACExample)
+- [ReBAC overview](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.2/docu/security/rebac/README.md)
+- [Administration guide](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.2/docu/security/rebac/administration.md) for operations, audit trail, monitoring, and troubleshooting
+- [Sharing API](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.2/docu/security/rebac/sharing-api.md)
+- [ReBAC example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxReBACExample)

@@ -35,6 +35,32 @@ Shared CORS middleware is configured from the `cors` config block:
 
 Components can be served below a configurable `server.contextPath`. Shared helpers use this base path when registering common endpoints (for example Swagger UI and health).
 
+## Conditional Requests
+
+Single-resource reads provide ETags. Clients can use `If-Match` to protect writes and `If-None-Match` to revalidate cached reads or make a PUT create-only. See [Conditional Requests](conditional_requests) for route coverage, `412` and `428` responses, and configuration.
+
+## Error Responses
+
+API errors use the AAS `Result` object with a `messages` array:
+
+```json
+{
+  "messages": [
+    {
+      "messageType": "Error",
+      "text": "Explanation of the failure",
+      "code": "400",
+      "correlationId": "example-correlation-id",
+      "timestamp": "2026-10-16T08:00:00Z"
+    }
+  ]
+}
+```
+
+Message timestamps are UTC and `correlationId` is limited to 128 characters. DPP API errors also supply a non-empty correlation ID.
+
+`correlationId` helps identify the component and operation associated with an error. Include it with the error message and timestamp when reporting a problem. It is not necessarily unique to a request.
+
 ## Shared Configuration Loading
 
 All components using `internal/common` benefit from:

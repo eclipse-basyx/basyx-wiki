@@ -48,6 +48,7 @@ configuration model.
 | `shutdownTimeoutSeconds` | `10` | Maximum time in seconds to wait for in-flight requests during graceful shutdown. |
 | `pagination.defaultLimit` | `100` | Page size used when a request omits the `limit` query parameter. |
 | `pagination.maxLimit` | `1000` | Largest accepted `limit`. A larger value is rejected with HTTP `400`. |
+| `conditionalRequests.requireIfMatch` | `false` | Require `If-Match` for writes to existing resources. Missing headers return `428`. See [Conditional Requests](conditional_requests) for covered routes and create-only writes. |
 
 All HTTP timeout values must be greater than `0`. When a service receives an interrupt or termination signal, it stops accepting new connections and allows in-flight requests to finish for up to `shutdownTimeoutSeconds`.
 
@@ -85,7 +86,7 @@ If no primary `application_name` is supplied through `applicationName` or the DS
 #### Optional PostgreSQL reader
 
 ```{note}
-The [BaSyx Read Replica Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxReadReplicaExample) runs the combined AAS Environment with a PostgreSQL primary and a real streaming standby. It includes checks for replication and writer/reader connection routing.
+The [BaSyx Read Replica Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxReadReplicaExample) runs the combined AAS Environment with a PostgreSQL primary and a real streaming standby. It includes checks for replication and writer/reader connection routing.
 ```
 
 PostgreSQL-backed BaSyx HTTP services can use a separate reader connection for
@@ -233,11 +234,10 @@ All four pool values must be non-negative. An explicitly configured `maxIdleConn
 ## Helm Chart Configuration
 
 ```{note}
-The `database.*` values in this section are BaSyx Helm chart values. They are
-not keys in the Go application's `config.yaml` and do not follow the
-application environment-variable rules described later on this page.
-The chart's [`values.yaml`](https://github.com/eclipse-basyx/charts/blob/main/charts/basyx/values.yaml)
-is the authoritative reference for the complete set of deployment values.
+The `database.*` values in this section are BaSyx Helm chart values, not Go
+application configuration keys. Consult the chart's
+[`values.yaml`](https://github.com/eclipse-basyx/charts/blob/main/charts/basyx/values.yaml)
+for the available settings and defaults in your installed chart version.
 ```
 
 ### Optional CloudNativePG read-write connection pooler
@@ -518,6 +518,8 @@ The DSN and database credentials are sensitive and should normally be supplied t
 | `allowedHeaders` | `[]` | Allowed request headers. |
 | `allowCredentials` | `false` | Enables credentialed CORS requests. |
 
+`If-Match` and `If-None-Match` are always allowed request headers, and `ETag` is exposed to browser clients, independently of `allowedHeaders`.
+
 ### `oidc` and `abac`
 
 These fields are shared configuration; their presence does not mean every
@@ -539,7 +541,7 @@ The startup modes have these exact effects:
 
 | Mode | Startup import and persisted-policy behavior |
 | --- | --- |
-| `always` | Import and activate `modelPath` on every startup, superseding the preceding active version after a successful import. |
+| `always` | Read and import `modelPath` on every startup. Reuse the active version when the policy is identical; otherwise activate a new version and supersede the preceding one. |
 | `if_missing` | Import only when the effective scope has no active policy; otherwise continue using the active PostgreSQL policy. A file edit plus restart is therefore not sufficient once a policy exists. |
 | `never` | Never import `modelPath`; an existing active policy is required or startup fails closed. |
 
@@ -603,13 +605,15 @@ Each `claimMappings` entry contains:
 | `delegatedOperationResponseMaxSizeBytes` | `1048576` | Maximum JSON response size in bytes from a delegated Submodel Operation. Applies to synchronous and asynchronous invocation in the Submodel Repository and AAS Environment. |
 | `aasxMaxPartCount` | `10000` | Maximum number of non-directory entries in an AASX package. |
 | `aasxMaxOPCMetadataSizeBytes` | `16777216` | Maximum combined expanded size of AASX OPC metadata. |
-| `aasxMaxPartExpandedSizeBytes` | `134217728` | Maximum expanded size of one AASX payload part. |
+| `aasxMaxPartExpandedSizeBytes` | `134217728` | Maximum expanded size of one AASX payload part; also limits the JSON or XML specification produced by Environment serialization, including plain JSON/XML exports. |
 | `aasxMaxTotalExpandedSizeBytes` | `536870912` | Maximum combined expanded size of all AASX payload parts. |
 | `aasxMaxThumbnailSizeBytes` | `16777216` | Maximum expanded size of an AASX thumbnail. |
 | `aasPreconfigPaths` | `[]` | AAS Environment startup import sources. Supports files or folders with `.aasx`, `.json`, or `.xml` files. |
 | `bulkBatchLimit` | `1000` | Maximum row count per generated bulk SQL statement. Must be greater than `0`. |
 
 `uploadMaxSizeBytes` limits the transmitted file part, not the complete multipart HTTP request. The request parser separately allows bounded space for multipart metadata and framing. The AASX settings independently limit expanded package content to protect against packages whose contents are much larger than the uploaded file. `uploadMaxSizeBytes` and all five `aasxMax*` values must be greater than `0`. In addition, `aasxMaxTotalExpandedSizeBytes` must be greater than or equal to `aasxMaxPartExpandedSizeBytes`, which must be greater than or equal to `aasxMaxThumbnailSizeBytes`.
+
+Environment exports limit the JSON or XML specification, including the specification part inside an AASX package, using `aasxMaxPartExpandedSizeBytes` (default 128 MiB). AASX exports also enforce the package-part count, expanded-total, OPC metadata, and thumbnail limits listed above. Exceeding an export limit returns `413 Request Entity Too Large`. The same response applies when the estimated storage for referenced Concept Description identifiers exceeds a fixed 16 MiB limit, which is not configurable.
 
 `delegatedOperationResponseMaxSizeBytes` defaults to 1 MiB. Set a larger positive byte count when a delegated Operation returns more data, such as records. The response is buffered in memory, so size the limit for the available memory. File element attachment downloads are unaffected.
 
@@ -752,7 +756,7 @@ The REST Event Feed is independent of `eventing.enabled` and the broker transpor
 | `cleanupIntervalHours` | `24` | Interval of the physical cleanup. Cleanup also runs at startup. |
 | `publishIntervalMillis` | `250` | Interval before checking for committed events to publish to the feed. |
 
-`maxAgeDays`, `hardDeleteGraceDays`, and `publishIntervalMillis` must not be negative. The page size of `GET /events` follows `server.pagination.defaultLimit` and `server.pagination.maxLimit`; the former `eventing.feed.maxPageSize` setting no longer exists and is ignored if present. Running the feed requires database schema v1.2.0 or later, and broker transports require v1.2.1 or later. Run the Configuration Service before starting the updated services.
+`maxAgeDays`, `hardDeleteGraceDays`, and `publishIntervalMillis` must not be negative. The page size of `GET /events` follows `server.pagination.defaultLimit` and `server.pagination.maxLimit`; the former `eventing.feed.maxPageSize` setting no longer exists and is ignored if present.
 
 ## Example YAML
 
@@ -776,6 +780,8 @@ server:
   pagination:
     defaultLimit: 100
     maxLimit: 1000
+  conditionalRequests:
+    requireIfMatch: false
 
 postgres:
   dsn: ""
@@ -954,6 +960,7 @@ SERVER_IDLE_TIMEOUT_SECONDS=60
 SERVER_SHUTDOWN_TIMEOUT_SECONDS=10
 SERVER_PAGINATION_DEFAULT_LIMIT=100
 SERVER_PAGINATION_MAX_LIMIT=1000
+SERVER_CONDITIONALREQUESTS_REQUIREIFMATCH=false
 POSTGRES_HOST=db
 POSTGRES_PORT=5432
 POSTGRES_USER=admin

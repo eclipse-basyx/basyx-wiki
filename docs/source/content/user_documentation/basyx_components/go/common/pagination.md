@@ -13,7 +13,9 @@ A cursor is not a page number or offset. Treat it as an opaque string: do not co
 
 Omit `cursor` when no continuation value is available. An explicitly empty or malformed cursor is rejected with `400 Bad Request` by endpoints using the shared pagination parser.
 
-There is no single page-size default or maximum documented here for every component. Use a positive `limit` supported by the operation and consult its API contract for omitted-value behavior and restrictions.
+Page sizes follow `server.pagination.defaultLimit` (default `100`) and `server.pagination.maxLimit` (default `1000`) across the HTTP services, including the Event Feed. Supply a positive `limit`. Values above the configured maximum return `400 Bad Request` rather than being clamped. See [General Configuration](configuration.md#server).
+
+Use the returned cursor to request the next page. Do not infer that pagination is complete from the number of returned results.
 
 ## Read the First Page
 
