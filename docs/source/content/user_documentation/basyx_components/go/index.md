@@ -6,6 +6,7 @@ Unless stated otherwise, this user documentation describes the latest stable BaS
 
 - [GitHub Repository (basyx-go-components)](https://github.com/eclipse-basyx/basyx-go-components)
 - [DockerHub (Eclipse BaSyx images)](https://hub.docker.com/u/eclipsebasyx)
+- [Releases and release notes](https://github.com/eclipse-basyx/basyx-go-components/releases)
 
 Repositories store AAS model content that clients read and change. Registries store descriptors that advertise where content can be reached, while Discovery stores mappings from asset identifiers to AAS identifiers. Other BaSyx Go services provide combined runtimes, package storage, configuration, Digital Product Passport functionality, and related capabilities. The following table provides an overview of the BaSyx Go services and their roles, dependencies, and integrations.
 
