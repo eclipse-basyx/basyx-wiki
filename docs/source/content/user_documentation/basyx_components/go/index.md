@@ -30,6 +30,8 @@ For separate Repository and Registry processes, see [Repository-to-Registry Inte
 
 ## Shared Guidance
 
+For Kubernetes installations, see [Deploy BaSyx Go with Helm](../../helm/index.md): a learning path from Kubernetes basics and a step-by-step installation in an existing cluster to configuration, security, and operations.
+
 See [Common](common/index) for shared deployment, configuration, security, query, observability, pagination, history and evidence, ReBAC, eventing, and API behavior.
 
 ```{toctree}

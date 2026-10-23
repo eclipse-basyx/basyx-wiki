@@ -1,0 +1,44 @@
+# Environment-specific overlay for the published BaSyx Go chart 3.15.3.
+# Use AFTER values.cluster-base.yaml, downloaded in the installation guide.
+# The base profile is unauthenticated: restrict access to evaluation users.
+instanceName: evaluation
+fullnameOverride: basyx
+
+# Replace with the DNS hostname assigned by your cluster administrator.
+host: basyx.example.com
+tls:
+  enabled: true
+  hosts:
+    - basyx.example.com
+
+ingress:
+  # Replace with the installed IngressClass name.
+  className: YOUR_INGRESS_CLASS
+  # Replace with an existing cert-manager ClusterIssuer that can issue a
+  # certificate for the hostname and whose CA your browser trusts.
+  clusterIssuer: YOUR_CLUSTER_ISSUER
+  issuer: ""
+
+database:
+  clusterName: basyx-database
+  instances: 1
+  storage:
+    size: 10Gi
+    # Empty selects the cluster's default StorageClass. Set the assigned
+    # StorageClass name here if your platform has no suitable default.
+    storageClass: ""
+
+# Keep descriptors/discovery mappings in sync with content created or imported
+# through the combined AAS Environment.
+general:
+  aasRegistryIntegration: true
+  submodelRegistryIntegration: true
+  discoveryIntegration: true
+
+# Browser access goes through Ingress; Kubernetes Services stay internal.
+aasEnvironment:
+  service:
+    type: ClusterIP
+aasWebGui:
+  service:
+    type: ClusterIP
