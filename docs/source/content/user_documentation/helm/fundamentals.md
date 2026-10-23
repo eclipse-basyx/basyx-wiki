@@ -46,13 +46,13 @@ The Configuration Service Job uses `post-install` on first installation and `pre
 
 ## Versions and releases
 
-For the tutorial's published chart:
+These are separate identifiers; their actual values depend on your selected release:
 
 | Example | What it identifies |
 | --- | --- |
-| Chart `3.15.3` | The Kubernetes templates and default values. Select it with Helm's `--version`. |
-| Chart `appVersion: 1.1.1` | The default image tag for Go services whose image tag is empty, including the Configuration Service in this chart. |
-| Web UI `v2-261013` | A separate application image version selected by the chart. It does not share the Go service version number. |
+| `BASYX_CHART_VERSION` | The Kubernetes templates and default values. Select it with Helm's `--version` and keep it fixed for the deployment. |
+| Chart `appVersion` | The default image tag for Go services whose image tag is empty, including the Configuration Service. Inspect it with `helm show chart`. |
+| Web UI or Studio image tag | A separate application image version selected by the chart. Inspect it with `helm show values`; it does not share the Go service version number. |
 | Release revision `1`, `2`, … | Helm's history for one installed release, not an application version. |
 
 Do not substitute a chart version for a container image tag. Keep Configuration Service and database-backed runtime images compatible. A Helm rollback restores Kubernetes configuration; it does not reverse a database migration. Read [operation and upgrade guidance](operations.md) before changing an existing installation.

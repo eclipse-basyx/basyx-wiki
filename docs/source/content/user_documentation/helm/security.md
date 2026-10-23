@@ -37,7 +37,7 @@ TLS identity must match the public hostname. An existing certificate that does n
 
 ## Authentication and authorization
 
-Start by reviewing the chart release's [secured example](https://github.com/eclipse-basyx/charts/blob/basyx-3.15.3/values/values.secured.example.yaml). It enables Keycloak and ABAC and includes demonstration users. It is an example, not a production identity policy.
+Start by reviewing `values/values.secured.example.yaml` from the selected release in the [chart repository](https://github.com/eclipse-basyx/charts). Use tag `basyx-<your chart version>`, as described under [version-matched examples](configuration.md#inspect-the-version-you-actually-install). It enables Keycloak and ABAC and includes demonstration users. It is an example, not a production identity policy.
 
 Before using it in a shared environment:
 
@@ -49,7 +49,7 @@ Before using it in a shared environment:
 
 The chart provides structured `oidc.providers` configuration and per-service ABAC overrides. See [Go security documentation](../basyx_components/go/common/security.md) and the selected chart's reference rather than assuming that all BaSyx implementations use identical claims or policy files.
 
-ReBAC is experimental in this release. Where supported, it is a union with ABAC: either mechanism may grant a request. It is not an additional restriction applied after ABAC. Do not enable it as a presumed way to narrow existing grants.
+Review the selected release's ReBAC support and policy semantics before enabling it. In the documented Go authorization model, ReBAC is a union with ABAC: either mechanism may grant a request. It is not an additional restriction applied after ABAC. Do not enable it as a presumed way to narrow existing grants.
 
 ## Secrets and network access
 

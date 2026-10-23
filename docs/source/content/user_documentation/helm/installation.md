@@ -2,7 +2,7 @@
 
 This walkthrough takes you from cluster access to a working AAS Web UI. **You can follow it even if this is your first Helm installation.** It assumes an existing Kubernetes cluster; the [prerequisites page](prerequisites.md) explains what to request from its administrator.
 
-Experienced users can jump to [the values files](#prepare-the-values-files), [validation](#check-the-configuration), or [installation](#install-the-release). All commands use the **BaSyx Go chart** `basyx/basyx`, version **3.15.3**.
+Experienced users can jump to {ref}`version selection <select-the-chart-version>`, {ref}`the values files <prepare-the-values-files>`, {ref}`validation <check-the-configuration>`, or {ref}`installation <install-the-release>`. All commands use the **BaSyx Go chart** `basyx/basyx` and the version you select as `BASYX_CHART_VERSION`.
 
 ## What you will deploy
 
@@ -96,19 +96,29 @@ What to look for:
 
 A `Forbidden` response to these cluster-wide checks may simply mean your application account cannot list platform resources. Ask the administrator to verify them; do not install another operator to work around missing inspection rights.
 
-## 4. Add the Helm repository
+(select-the-chart-version)=
+## 4. Select the chart version
 
 Run these commands from a working directory where you will keep your values files:
 
 ```bash
 helm repo add basyx https://eclipse-basyx.github.io/charts
 helm repo update
-helm show chart basyx/basyx --version 3.15.3
+helm search repo basyx/basyx --versions
 ```
 
 `helm repo add` registers a download location on your workstation. It does not install anything in Kubernetes. In `basyx/basyx`, the first `basyx` is your repository alias; the second is the chart name.
 
-The metadata should include `version: 3.15.3` and `appVersion: 1.1.1`. Pinning `--version` makes the examples independent of later repository updates.
+Review the [release notes](https://github.com/eclipse-basyx/charts/releases), then enter the exact published chart version you have chosen, without the `basyx-` prefix:
+
+```bash
+printf 'Chart version to install: '
+read -r BASYX_CHART_VERSION
+export BASYX_CHART_VERSION
+helm show chart basyx/basyx --version "${BASYX_CHART_VERSION:?Select a chart version first}"
+```
+
+The metadata's `version` must match your selection. Its `appVersion` identifies the default Go application version; it need not equal the chart version. Record `BASYX_CHART_VERSION` with your non-secret deployment configuration. In a new shell, restore it along with `BASYX_CONTEXT`, `BASYX_NAMESPACE`, and `BASYX_HOST` before continuing. All later downloads and commands use this same selection, even after a newer chart is published.
 
 (prepare-the-values-files)=
 ## 5. Prepare the values files
@@ -117,9 +127,10 @@ Values are the configuration inputs Helm uses to generate Kubernetes resources. 
 
 First, download the chart release's minimal profile:
 
+<!-- helm-docs-check: download -->
 ```bash
 curl --fail --location \
-  https://raw.githubusercontent.com/eclipse-basyx/charts/basyx-3.15.3/values/values.minimal.yaml \
+  "https://raw.githubusercontent.com/eclipse-basyx/charts/basyx-${BASYX_CHART_VERSION:?Select a chart version first}/values/values.minimal.yaml" \
   --output values.cluster-base.yaml
 ```
 
@@ -155,9 +166,10 @@ YAML indentation is significant: use spaces, not tabs. The overlay contains plac
 
 Render the intended resources without changing the cluster:
 
+<!-- helm-docs-check: render -->
 ```bash
 helm template basyx basyx/basyx \
-  --version 3.15.3 --namespace "$BASYX_NAMESPACE" \
+  --version "${BASYX_CHART_VERSION:?Select a chart version first}" --namespace "$BASYX_NAMESPACE" \
   -f values.cluster-base.yaml -f values.cluster.yaml > rendered.yaml
 ```
 
@@ -165,8 +177,9 @@ helm template basyx basyx/basyx \
 
 For an additional lint check, download the exact chart package:
 
+<!-- helm-docs-check: lint -->
 ```bash
-helm pull basyx/basyx --version 3.15.3 --untar
+helm pull basyx/basyx --version "${BASYX_CHART_VERSION:?Select a chart version first}" --untar
 helm lint ./basyx -f values.cluster-base.yaml -f values.cluster.yaml
 ```
 
@@ -181,7 +194,7 @@ After reviewing the configuration, run:
 
 ```bash
 helm install basyx basyx/basyx \
-  --version 3.15.3 \
+  --version "${BASYX_CHART_VERSION:?Select a chart version first}" \
   --kube-context "$BASYX_CONTEXT" \
   --namespace "$BASYX_NAMESPACE" --create-namespace \
   -f values.cluster-base.yaml -f values.cluster.yaml \
@@ -191,7 +204,7 @@ helm install basyx basyx/basyx \
 | Option | Meaning |
 | --- | --- |
 | `basyx` | Release name used again in status, upgrade, and uninstall commands. |
-| `--version 3.15.3` | The exact chart version. |
+| `--version "$BASYX_CHART_VERSION"` | The exact chart version selected in step 4. |
 | `--kube-context` | The cluster/user context selected in step 2. |
 | `--namespace` | Where the release resources are created. |
 | `--create-namespace` | Create the namespace if absent. This requires permission to create namespaces; if the administrator already created it, you can omit the flag. |

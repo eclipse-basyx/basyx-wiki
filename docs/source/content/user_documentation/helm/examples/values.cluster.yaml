@@ -1,4 +1,4 @@
-# Environment-specific overlay for the published BaSyx Go chart 3.15.3.
+# Environment-specific overlay for the BaSyx Go chart selected in the guide.
 # Use AFTER values.cluster-base.yaml, downloaded in the installation guide.
 # The base profile is unauthenticated: restrict access to evaluation users.
 instanceName: evaluation

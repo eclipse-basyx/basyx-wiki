@@ -36,20 +36,20 @@ Changing chart versions can change Go images and run schema migrations. Follow t
 4. Render and review the target manifests. Keep runtime images and Configuration Service compatible with the database.
 5. Apply the upgrade, require successful migration, and verify application readiness and user-visible behavior before resuming writers.
 
-For a reviewed values-only update on the same chart version:
+For a reviewed values-only update, restore `BASYX_CHART_VERSION` to the **already installed** chart version from your deployment records or `helm list` before running these commands. Do not automatically select the newest release for routine configuration changes:
 
 ```bash
 helm template basyx basyx/basyx \
-  --version 3.15.3 --namespace basyx-evaluation \
+  --version "${BASYX_CHART_VERSION:?Set the installed chart version first}" --namespace basyx-evaluation \
   -f values.cluster-base.yaml -f values.cluster.yaml > rendered-upgrade.yaml
 
 helm upgrade basyx basyx/basyx \
-  --version 3.15.3 \
+  --version "${BASYX_CHART_VERSION:?Set the installed chart version first}" \
   --kube-context "$BASYX_CONTEXT" --namespace basyx-evaluation \
   -f values.cluster-base.yaml -f values.cluster.yaml --timeout 15m
 ```
 
-These commands retain both files from the installation walkthrough, in the same order. For a version upgrade, replace `3.15.3` in **both** commands with the target version you reviewed and review the base profile against that version. Pass the complete intended overlays; avoid silently carrying obsolete settings forward with `--reuse-values`.
+These commands retain both files from the installation walkthrough, in the same order. For a version upgrade, save the previous version and values for recovery, then set `BASYX_CHART_VERSION` to the reviewed target version. Download its base profile into a separate file using the {ref}`version-matched download <prepare-the-values-files>`, compare it with the existing base, and review the selected release's README upgrade notes before replacing your deployment files. Render and apply using that same target version and the reviewed overlays. Avoid silently carrying obsolete settings forward with `--reuse-values`.
 
 The Configuration Service uses a `pre-upgrade` hook. Do not disable that hook just to make an upgrade appear successful. A failed or unclean schema requires investigation before starting incompatible runtimes.
 

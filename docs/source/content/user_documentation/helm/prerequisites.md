@@ -47,28 +47,7 @@ DNS must point the assigned hostname at the intended ingress entry point. Adding
 
 CloudNativePG and cert-manager are shared platform components. Installing them creates cluster-wide Custom Resource Definitions (CRDs) and normally requires administrator permissions. An application user should first confirm that they already exist rather than installing duplicate operators.
 
-If they are missing, the cluster administrator can use the following pinned example baseline, **after checking compatibility with the cluster**. Set `BASYX_CONTEXT` to the real target context first:
-
-```bash
-helm repo add cnpg https://cloudnative-pg.github.io/charts
-helm repo add jetstack https://charts.jetstack.io
-helm repo update
-
-helm upgrade --install cnpg cnpg/cloudnative-pg \
-  --version 0.29.1 \
-  --kube-context "$BASYX_CONTEXT" \
-  --namespace cnpg-system --create-namespace \
-  --wait --timeout 10m
-
-helm upgrade --install cert-manager jetstack/cert-manager \
-  --version v1.19.3 \
-  --kube-context "$BASYX_CONTEXT" \
-  --namespace cert-manager --create-namespace \
-  --set crds.enabled=true \
-  --wait --timeout 10m
-```
-
-These versions are explicit documentation examples, not automatically selected latest releases. Use the [CloudNativePG installation documentation](https://cloudnative-pg.io/documentation/current/installation_upgrade/) and [cert-manager Helm guide](https://cert-manager.io/docs/installation/helm/) for support policies, permissions, and operator upgrades.
+If they are missing, the cluster administrator should follow the [CloudNativePG installation documentation](https://cloudnative-pg.io/documentation/current/installation_upgrade/) and [cert-manager Helm guide](https://cert-manager.io/docs/installation/helm/). Select and pin operator versions compatible with the cluster's Kubernetes version and the database image selected by your BaSyx chart. Record those versions separately from `BASYX_CHART_VERSION`; changing the application chart does not upgrade shared operators automatically.
 
 The administrator should verify that the resource definitions and operator pods are ready:
 
@@ -87,6 +66,6 @@ kubectl --context "$BASYX_CONTEXT" -n cert-manager get pods
 
 Operator namespace names can differ on an existing platform. The Go chart still emits cert-manager Issuer resources when public TLS is disabled; disabling `tls.enabled` alone does not remove that prerequisite.
 
-The platform must also provide working persistent storage, the ingress controller, the selected ClusterIssuer, and DNS. The operator commands above do not set up those platform-specific pieces.
+The platform must also provide working persistent storage, the ingress controller, the selected ClusterIssuer, and DNS. Installing the operators alone does not set up those platform-specific pieces.
 
 Next: [Install BaSyx Go in your cluster](installation.md).
