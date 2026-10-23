@@ -109,12 +109,10 @@ helm search repo basyx/basyx --versions
 
 `helm repo add` registers a download location on your workstation. It does not install anything in Kubernetes. In `basyx/basyx`, the first `basyx` is your repository alias; the second is the chart name.
 
-Review the [release notes](https://github.com/eclipse-basyx/charts/releases), then enter the exact published chart version you have chosen, without the `basyx-` prefix:
+This guide has been validated with chart version **3.17.0**. Use that reference version for this walkthrough. To use a different release, review its [release notes](https://github.com/eclipse-basyx/charts/releases) and tagged values reference first, then replace the version below with its exact chart version, without the `basyx-` prefix:
 
 ```bash
-printf 'Chart version to install: '
-read -r BASYX_CHART_VERSION
-export BASYX_CHART_VERSION
+export BASYX_CHART_VERSION=3.17.0
 helm show chart basyx/basyx --version "${BASYX_CHART_VERSION:?Select a chart version first}"
 ```
 

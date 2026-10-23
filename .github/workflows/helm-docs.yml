@@ -28,6 +28,10 @@ jobs:
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        chart_version: ['3.17.0', '']
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -39,5 +43,5 @@ jobs:
       - run: python -m pip install PyYAML==6.0.3
       - name: Check the documented examples
         env:
-          CHART_VERSION: ${{ inputs.chart_version }}
+          CHART_VERSION: ${{ inputs.chart_version || matrix.chart_version }}
         run: python .github/scripts/check_helm_docs.py --chart-version "$CHART_VERSION"

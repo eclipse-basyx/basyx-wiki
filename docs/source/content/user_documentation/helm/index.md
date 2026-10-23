@@ -18,7 +18,7 @@ You do not need Kubernetes experience to follow the guide. Start with the concep
 
 ## The BaSyx Go chart
 
-This section documents `basyx/basyx` from the [Eclipse BaSyx chart repository](https://eclipse-basyx.github.io/charts/). It explains the deployment workflow for the Go chart. You select a published chart version once as `BASYX_CHART_VERSION`; every subsequent Helm command and example download uses that selection.
+This section documents `basyx/basyx` from the [Eclipse BaSyx chart repository](https://eclipse-basyx.github.io/charts/). **This guide has been validated with chart version 3.17.0.** The installation walkthrough sets that reference version once as `BASYX_CHART_VERSION`; every subsequent Helm command and example download uses that selection. Other releases may require different settings; review their release notes and tagged reference before changing the version.
 
 Here, `basyx/` before the chart name is the **local Helm repository alias**, not a Kubernetes namespace. Chart version, backend version, Web UI version, and Helm release revision describe different things. See [versions and releases](fundamentals.md#versions-and-releases).
 
@@ -36,7 +36,7 @@ Choose a release after reviewing its [release notes](https://github.com/eclipse-
 
 The [chart repository](https://github.com/eclipse-basyx/charts) maintains the full values reference, image defaults, component-specific examples, and upgrade notes. Select the `basyx-<chart version>` tag there to match your installation; the installation guide also shows how to download examples from that tag. The wiki describes the workflow rather than duplicating that reference.
 
-The [Helm documentation check](https://github.com/eclipse-basyx/basyx-wiki/actions/workflows/helm-docs.yml) renders and lints the installation examples against the current stable chart on a weekly schedule and when these pages change. It checks generated resources without deploying them. Historical releases can differ; use their tagged documentation when settings or lifecycle behavior do not match this guide.
+The [Helm documentation check](https://github.com/eclipse-basyx/basyx-wiki/actions/workflows/helm-docs.yml) renders and lints the installation examples against the reference chart and the latest stable chart on a weekly schedule and when these pages change. The latter is an additional compatibility check, not a change to this guide's reference version. It checks generated resources without deploying them. Historical releases can differ; use their tagged documentation when settings or lifecycle behavior do not match this guide.
 
 ## What belongs where?
 
