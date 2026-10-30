@@ -2,6 +2,7 @@
 
 
 * [Downloading and Setting up Basyx](./download/index.md)
+* [Deploying BaSyx Go on Kubernetes with Helm](../helm/index.md)
 * [Related Downloads](./relatedDownload/index.md)
 * [Databridge Automation Protocol Integration](databridge-PLC4X.md)
 * [Using BaSyx Components with Virtual Machines](./virtualmachines/alpine_virtualmachine_setup_use.md)

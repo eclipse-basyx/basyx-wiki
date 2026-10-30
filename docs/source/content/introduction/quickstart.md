@@ -9,6 +9,8 @@ The AAS is therefore a digital substitute for an entity that is relevant for a p
 
 ## Prerequisites
 
+Looking for a Kubernetes deployment of BaSyx Go? Start with [Deploy BaSyx Go with Helm](../user_documentation/helm/index.md). It includes a beginner-friendly, step-by-step installation in an existing cluster; the guide below continues with the Java V2 Docker Compose example.
+
 The introductory example uses the Basyx V2 off-the-shelf Docker components.
 Therefore, you need to have Docker installed on your machine.
 
