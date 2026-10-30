@@ -3,7 +3,7 @@
 This walkthrough creates one passport, reads both representations, looks it up by product identifier, updates one element and the passport, retrieves an earlier recorded state, performs a bulk lookup, and deletes the passport.
 
 ```{note}
-For passport creation, updates, and history using curl or Postman, see the [BaSyx DPP API Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxDPPAPIExample).
+For passport creation, updates, and history using curl or Postman, see the [BaSyx DPP API Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxDPPAPIExample).
 ```
 
 Start the [Compose setup](setup) and wait for `http://localhost:8088/health` to return HTTP `200`. The example identifiers must not already exist in the database. The examples use Bourne-shell syntax. In Windows PowerShell, use `curl.exe` and supply the recorded timestamp explicitly.
@@ -73,6 +73,8 @@ curl -i 'http://localhost:8088/v1/dpps/https%3A%2F%2Fexample.org%2Fdpp%2F1'
 ```
 
 The response has the same general shape as the create body: DPP header fields and named content sections with compressed JSON values.
+
+Compressed content uses the [ValueOnly scalar mapping](../common/representations.md#valueonly-types-and-validation): numeric Properties are JSON numbers and boolean Properties are JSON booleans. DPP and element reads also support [conditional requests](../common/conditional_requests). Their revision covers the owning AAS and all referenced Submodels.
 
 Request the expanded full representation:
 
@@ -184,7 +186,7 @@ Expect a paged response such as:
 }
 ```
 
-The request accepts between 1 and 100 non-empty product identifiers. Unknown values are omitted, duplicate DPP identifiers are removed, and results are sorted by DPP identifier. The default `limit` is 100. The runtime requires a positive value but does not impose a separate maximum. If the response contains a `cursor`, repeat the same request body and `limit` with that cursor to retrieve the next page. See [Pagination](../common/pagination) for opaque-cursor guidance.
+The request accepts between 1 and 100 non-empty product identifiers. Unknown values are omitted, duplicate DPP identifiers are removed, and results are sorted by DPP identifier. Page sizes follow `server.pagination.defaultLimit` (default `100`) and `server.pagination.maxLimit` (default `1000`). A non-positive or excessive `limit` returns `400`. If the response contains a `cursor`, repeat the same request body and `limit` with that cursor to retrieve the next page. See [Pagination](../common/pagination) for opaque-cursor guidance.
 
 ## Delete the Passport
 

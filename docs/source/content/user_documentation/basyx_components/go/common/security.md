@@ -5,7 +5,7 @@ BaSyx validates signed JWT bearer access tokens against configured OpenID Connec
 Attribute-based access control (ABAC) then determines which API operations and
 resources the caller may use. Experimental ReBAC can additionally grant access
 on supported services and routes. Requests without credentials can continue as
-anonymou. ABAC still decides whether they are allowed. This is separate from
+anonymous. ABAC still decides whether they are allowed. This is separate from
 [Supply Chain Security](../supply_chain_security), which covers container
 images, signatures, provenance, and SBOMs.
 
@@ -14,9 +14,9 @@ To try BaSyx authentication and access control, choose an example setup:
 
 | Example | Identity provider and setup |
 | --- | --- |
-| [BaSyx Secured Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxSecuredExample) | Local Keycloak with separate BaSyx components, ABAC rules, and admin, read-only, and anonymous access scenarios. |
-| [BaSyx Ory Hydra Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxOryHydraExample) | Local Hydra and Kratos with the combined AAS Environment, JWT access tokens, and provider claim mappings. |
-| [BaSyx Entra ID Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxEntraIDExample) | An external Microsoft Entra ID tenant with app registrations, API audiences, and delegated or app-only permissions. |
+| [BaSyx Secured Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxSecuredExample) | Local Keycloak with separate BaSyx components, ABAC rules, and admin, read-only, and anonymous access scenarios. |
+| [BaSyx Ory Hydra Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxOryHydraExample) | Local Hydra and Kratos with the combined AAS Environment, JWT access tokens, and provider claim mappings. |
+| [BaSyx Entra ID Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxEntraIDExample) | An external Microsoft Entra ID tenant with app registrations, API audiences, and delegated or app-only permissions. |
 ```
 
 ## Security Model
@@ -366,6 +366,30 @@ read the service description:
 ```
 
 This policy does not grant access to any other route or right.
+
+### Environment Import and Export
+
+The AAS Environment accepts type-scoped `IDENTIFIABLE` grants on `/upload` and `/serialization`. For example, add this rule to `AllAccessPermissionRules.rules` to let the authenticated subject `reader-subject` export one Submodel:
+
+```json
+{
+  "ACL": {
+    "ATTRIBUTES": [{ "CLAIM": "sub" }],
+    "RIGHTS": ["READ"],
+    "ACCESS": "ALLOW"
+  },
+  "OBJECTS": [{ "IDENTIFIABLE": "$sm(\"urn:example:submodel:1\")" }],
+  "FORMULA": {
+    "$eq": [{ "$attribute": { "CLAIM": "sub" } }, { "$strVal": "reader-subject" }]
+  }
+}
+```
+
+No additional `ROUTE` grant is required. `$sm("*")` covers only Submodels; `$aas` and `$cd` grants cover AASs and Concept Descriptions separately. Standalone `REFERABLE`, `FRAGMENT`, and `DESCRIPTOR` grants do not grant Environment import/export access. Existing route grants and per-resource ReBAC grants remain alternatives.
+
+Exports apply READ formulas and field/element filters in JSON, XML, and AASX. Attachments and thumbnails also require authorization and visible model references. Missing or inaccessible explicitly selected AASs or Submodels abort the export with `404`. Unreadable referenced Concept Descriptions are omitted. A caller without permission to use the endpoint receives `403`.
+
+Imports require CREATE for new objects and UPDATE for existing ones. New attachment or thumbnail content requires CREATE even when its AAS or Submodel already exists. Replacing stored content requires UPDATE. Denials return `403` and can leave earlier authorized imports committed. See [Re-import and Failure Behavior](../aas_environment/usage.md#re-import-and-failure-behavior).
 
 ## Common Authorization Responses
 

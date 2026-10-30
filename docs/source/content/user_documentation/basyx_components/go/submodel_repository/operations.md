@@ -5,7 +5,7 @@ This walkthrough invokes the delegated-operation example synchronously and async
 The upstream example uses the [AAS Environment](../aas_environment/index), which exposes the same Submodel Repository operation endpoints and delegation behavior. The standalone Submodel Repository uses the same operation invocation implementation.
 
 ```{note}
-The [BaSyx Delegated Operations Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxDelegatedOperationsExample) contains the Compose stack, delegated service, model fixtures, and requests for synchronous and asynchronous invocation in full-metadata and ValueOnly form.
+The [BaSyx Delegated Operations Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxDelegatedOperationsExample) contains the Compose stack, delegated service, model fixtures, and requests for synchronous and asynchronous invocation in full-metadata and ValueOnly form.
 ```
 
 ## Modeled Operation Versus Invocation
@@ -51,22 +51,19 @@ git checkout RELEASE_TAG
 cd examples/BaSyxDelegatedOperationsExample
 ```
 
-Replace `RELEASE_TAG` with the selected Git release tag. The example's Compose file uses `SNAPSHOT`. Save the following as `compose.release.yml` to select matching stable images instead:
+Replace `RELEASE_TAG` with the source tag of the latest stable BaSyx Go release. The example's Compose file uses `SNAPSHOT`. Save the following as `compose.release.yml` to use the latest stable images:
 
 ```yaml
 services:
   aas_environment:
-    image: eclipsebasyx/aasenvironment-go:${BASYX_IMAGE_TAG}
+    image: eclipsebasyx/aasenvironment-go:latest
   basyx_configuration:
-    image: eclipsebasyx/basyxconfigurationservice-go:${BASYX_IMAGE_TAG}
+    image: eclipsebasyx/basyxconfigurationservice-go:latest
 ```
-
-Set `BASYX_IMAGE_TAG` to the concrete Docker release tag matching the selected source tag. Docker release tags omit the source tag's leading `v`.
 
 Start the database, Configuration Service, AAS Environment, delegated service, and data initializer. The AAS Web UI is optional and is not started:
 
 ```bash
-export BASYX_IMAGE_TAG=IMAGE_TAG
 docker compose -f docker-compose.yml -f compose.release.yml up -d --build \
   db basyx_configuration aas_environment delegated-operation-service data-init
 docker compose -f docker-compose.yml -f compose.release.yml logs data-init
@@ -129,6 +126,8 @@ These are operation-specific resources. Do not apply Registry bulk assumptions a
 
 ## Failure Diagnosis
 
+If the delegated endpoint returns an error status, synchronous invocation and asynchronous result retrieval return `502 Bad Gateway` with an AAS `Result` object (`{"messages":[...]}`). The message identifies the endpoint's status code. Its response body is not exposed. This also applies to `$value` routes.
+
 | Symptom | Check |
 | --- | --- |
 | Invocation is not implemented | Confirm the addressed element is an `Operation` and has a non-empty `invocationDelegation` qualifier. A modeled Operation alone is not executable. |
@@ -136,7 +135,7 @@ These are operation-specific resources. Do not apply Registry bulk assumptions a
 | Delegated call fails or times out | Check the delegated service logs, container network reachability, and qualifier URL. For asynchronous calls, verify the required `clientTimeoutDuration`. For synchronous calls, check it when supplied. The URL is resolved from inside the Repository container, not from the client host. |
 | `404` for a status or result | Use the exact returned location and the same caller identity. Verify the handle belongs to the same Submodel identifier and Operation path and has not expired. |
 | Status appears to skip the pending state | Fast work can complete before the first poll. A direct `302` to the returned result location is valid; keep redirect following off to observe it. |
-| Result reports delegated failure | Inspect the stored failure body and delegated service logs. `202 Accepted` confirms submission, not successful execution. |
+| Result reports delegated failure | Read `messages` in the `502` Result and inspect the delegated service logs for its internal diagnostics. `202 Accepted` confirms submission, not successful execution. |
 
 ## API and Shared Asynchronous References
 

@@ -1,10 +1,12 @@
 # Setting Up the Company Lookup
-We provide example setups to get you started with the BaSyx Go Components in the [Company Lookup example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxCompanyLookup).
+
+We provide example setups to get you started with the BaSyx Go Components in the [Company Lookup example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxCompanyLookup).
 If you need to configure the service yourself, this page will guide you through the process.
 
 The Docker example uses `latest` for both BaSyx Go images. For native builds, use one stable source release and its matching database assets as described in [Version Scope](../common/deployment.md#version-scope).
 
 ## Using Docker Compose
+
 The easiest way to set up the Company Lookup is with Docker Compose.
 
 The minimal configuration includes three services:
@@ -68,6 +70,7 @@ services:
       basyx_configuration:
         condition: service_completed_successfully
 ```
+
 *docker-compose.yml including PostgreSQL 18, the BaSyx Configuration Service, and BaSyx Go Company Lookup*
 
 Use the same image tag for every BaSyx Go service sharing this database, including the Configuration Service.
@@ -94,6 +97,7 @@ In Windows PowerShell, use `curl.exe` instead of `curl`. Open [Swagger UI](http:
 If you need advanced configuration options, see [General Configuration](../common/configuration).
 
 ## Using BaSyx Go Components without Docker
+
 If you need to run the Company Lookup without Docker, build the binary from source for your target platform.
 
 ```{warning}
@@ -101,11 +105,13 @@ We recommend using the Docker Images for production use-cases, as they are pre-c
 ```
 
 ### Prerequisites
+
 - [Go](https://go.dev/dl/) at the version declared by the selected release's `go.mod`.
 - PostgreSQL 16 or newer, initialized by a Configuration Service built from the same source revision as the HTTP service.
 - [Git](https://git-scm.com/)
 
 ### Cloning the Repository
+
 ```bash
 git clone https://github.com/eclipse-basyx/basyx-go-components
 git -C basyx-go-components checkout RELEASE_TAG
@@ -130,16 +136,19 @@ go build -o companylookupservice
 #### Windows
 
 Build the executable with the `.exe` extension:
+
 ```powershell
 go build -o companylookupservice.exe
 ```
 
 ### Running the Service
+
 Before running the service, ensure PostgreSQL is available and that the BaSyx database schema has already been initialized by the [BaSyx Configuration Service](../configuration_service/index). Configure the PostgreSQL connection through environment variables or the provided `config.yaml`.
 
 #### Linux / macOS
 
 Run the service with:
+
 ```bash
 ./companylookupservice -config ./config.yaml
 ```
@@ -147,6 +156,7 @@ Run the service with:
 #### Windows PowerShell
 
 Run the service with:
+
 ```powershell
 .\companylookupservice.exe -config .\config.yaml
 ```

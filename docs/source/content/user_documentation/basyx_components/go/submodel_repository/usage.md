@@ -202,6 +202,8 @@ curl -i -X PATCH 'http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ
 
 Expect `204 No Content`. GET the normal Property again: `value` is now `SN-002`, while `idShort` and `valueType` are retained. This changes the existing value without replacing the collection or Submodel.
 
+ValueOnly PATCH validates the complete payload before applying changes. See [ValueOnly Types and Validation](../common/representations.md#valueonly-types-and-validation) for accepted values and error responses. To prevent overwriting another client's changes, send the resource's ETag in `If-Match`; see [Conditional Requests](../common/conditional_requests).
+
 To update metadata, save this as `serial-metadata.json`:
 
 ```json

@@ -6,7 +6,9 @@ Enable Registry integration when descriptors should follow Repository content au
 
 Synchronization writes Registry tables in the Repository's PostgreSQL database. Configure the corresponding Registry service against that same database to expose the descriptors. Initialize the database using the [Configuration Service](../configuration_service/index) as described in the component setup.
 
-The Repository does not POST descriptors to a remote Registry URL. The Registry HTTP service need not be running for synchronization to write its tables. Repository changes and required descriptor writes use the same transaction; a required descriptor-write failure rolls back the synchronized operation.
+The Repository does not POST descriptors to a remote Registry URL. The Registry HTTP service need not be running for synchronization to write its tables. Repository changes and required descriptor writes use the same transaction. Aa required descriptor-write failure rolls back the synchronized operation.
+
+Deleting an AAS or Submodel also removes its synchronized Registry descriptor. A missing descriptor does not prevent deletion of the Repository resource.
 
 ## Choose the Integration Flag
 

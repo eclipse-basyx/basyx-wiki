@@ -33,7 +33,7 @@ Reads and rolled-back transactions do not produce events. A `PUT` that does not 
 
 BaSyx recognizes Product Change Notifications Submodels by the ECLASS IRDI code `01-AHE582` used by the IDTA Product Change Notifications Submodel Template. The revision part of the semantic ID may vary.
 
-Adding one or more Product Change Notification records to an existing Submodel produces the normal Submodel update event and one `io.admin-shell.pcn.v1` event for each newly added record. Creating a PCN Submodel that already contains records produces the corresponding Submodel create event and one PCN event per record. The regular PCN payload contains the added record in Value-Only representation. Other changes to a PCN Submodel produce only the normal Submodel event.
+Adding one or more Product Change Notification records to an existing Submodel produces the normal Submodel update event and one `io.admin-shell.pcn.v1` event for each newly added record. Creating a PCN Submodel that already contains records produces the corresponding Submodel create event and one PCN event per record. The regular PCN payload contains the added record in ValueOnly representation: numeric Properties are numbers, boolean Properties are booleans, and Properties without values are omitted to match `pcnNotificationEvent.v1.schema.json`. See [ValueOnly Types](representations.md#valueonly-types-and-validation). Other changes to a PCN Submodel produce only the normal Submodel event.
 
 ## Delivery Options
 
@@ -96,7 +96,7 @@ The shared Eventing URL settings are preferred. Feed-specific compatibility sett
 
 ## REST Event Feed
 
-The Event Feed retains events in PostgreSQL and does not require an external message broker. The [Event Feed example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxEventFeedExample) provides a runnable local setup for normal Submodel changes and PCN notifications.
+The Event Feed retains events in PostgreSQL and does not require an external message broker. The [Event Feed example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxEventFeedExample) provides a runnable local setup for normal Submodel changes and PCN notifications.
 
 ### Enable the Event Feed
 
@@ -112,7 +112,12 @@ eventing:
 | --- | --- | --- |
 | `eventing.feed.enabled` | `BASYX_EVENTING_FEED_ENABLED` | `false`; enables the Event Feed and its discovery routes. |
 | `eventing.feed.maxAgeDays` | `BASYX_EVENTING_FEED_MAX_AGE_DAYS` | `30`; visible retention period measured from event time. |
-| `eventing.feed.maxPageSize` | `BASYX_EVENTING_FEED_MAX_PAGE_SIZE` | `100`; default and maximum `limit`. |
+| `server.pagination.defaultLimit` | `SERVER_PAGINATION_DEFAULT_LIMIT` | `100`; page size when `limit` is omitted. |
+| `server.pagination.maxLimit` | `SERVER_PAGINATION_MAX_LIMIT` | `1000`; maximum accepted `limit`; larger values return `400`. |
+
+The former `eventing.feed.maxPageSize` setting is ignored. Use the shared pagination settings above.
+
+When the REST Event Feed is enabled, `GET /description` lists the Event Feed profile (`https://basyx.org/aas/API/3/2/EventFeed/1.0`). Sending events only through MQTT, Kafka, or AMQP does not enable the REST Event Feed.
 
 The following routes are relative to the hosting service's configured context path:
 
@@ -223,7 +228,7 @@ eventing:
 
 The AAS Environment uses the same logical AAS Repository and Submodel Repository topic names.
 
-QoS 1 and 2 wait for broker acknowledgement. QoS 0 has no broker acknowledgement and therefore provides weaker delivery behavior. See the runnable [MQTT example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxMQTTExample).
+QoS 1 and 2 wait for broker acknowledgement. QoS 0 has no broker acknowledgement and therefore provides weaker delivery behavior. See the runnable [MQTT example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxMQTTExample).
 
 ## Kafka
 
@@ -257,7 +262,7 @@ Kafka record values contain the structured CloudEvent and use `content-type: app
 
 After Kafka acknowledges publication, the BaSyx outbox is no longer a replay store for that event. Configure Kafka topic retention for the replay period your consumers require. Log compaction can remove earlier events that use the same entity key.
 
-See the runnable [Kafka example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxKafkaExample).
+See the runnable [Kafka example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxKafkaExample).
 
 ## AMQP 1.0
 
@@ -289,7 +294,7 @@ Messages use `application/cloudevents+json` and are marked durable, but durable 
 
 Multiple consumers of the same queue share its messages. If each application must receive every event, use separate broker destinations for the applications. With RabbitMQ, publish to an exchange and provision a separate bound queue for each application.
 
-This transport implements AMQP 1.0, not AMQP 0-9-1. The runnable [AMQP/RabbitMQ example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxAMQPExample) shows the required RabbitMQ setup.
+This transport implements AMQP 1.0, not AMQP 0-9-1. The runnable [AMQP/RabbitMQ example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxAMQPExample) shows the required RabbitMQ setup.
 
 ## Security
 

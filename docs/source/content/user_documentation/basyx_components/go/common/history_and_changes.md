@@ -3,7 +3,7 @@
 The features on this page serve different purposes. Recent-change APIs find current resources by their stored timestamps, history reconstructs earlier recorded states, and signed reads and mutation evidence support verification of returned or retained data.
 
 ```{note}
-The [BaSyx History Audit Guarded Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxHistoryAuditGuardedExample) shows how to record audit history, protect PostgreSQL history from modification, and store mutation evidence.
+The [BaSyx History Audit Guarded Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxHistoryAuditGuardedExample) shows how to record audit history, protect PostgreSQL history from modification, and store mutation evidence.
 ```
 
 ## Availability
@@ -19,6 +19,16 @@ The [BaSyx History Audit Guarded Example](https://github.com/eclipse-basyx/basyx
 | Digital Product Passport API | None | `/v1/dppsByIdAndDate/{dppId}` | None |
 
 Paths are relative to the service base URL, including any configured context path. See the component API documentation for the endpoints available in the deployed component.
+
+With `history.mode` set to `api` or `audit`, `GET /description` announces historical reads through these profiles:
+
+| Component | Profile |
+| --- | --- |
+| AAS Repository | `https://admin-shell.io/aas/API/3/2/AssetAdministrationShellRepositoryServiceSpecification/SSP-006` |
+| Submodel Repository | `https://admin-shell.io/aas/API/3/2/SubmodelRepositoryServiceSpecification/SSP-007` |
+| AAS Environment | Both profiles above. |
+
+These profiles are omitted when history recording is `off`.
 
 ## Current Changes and Client Timestamps
 
@@ -135,6 +145,8 @@ Mutation evidence is not used by `$history`. When `history.mode: off`, evidence 
 See [General Configuration](configuration) for storage settings and [History Evidence Verifier](history_evidence_verifier) for verification and recovery-export workflows.
 
 ## Signed Reads
+
+Submodel `$value/$signed` payloads use the same JSON number, boolean, string, and null mapping as unsigned ValueOnly reads. See [ValueOnly Types and Validation](representations.md#valueonly-types-and-validation) for the scalar mapping rules.
 
 Signed reads let a client verify that the returned AAS or Submodel representation was signed by the BaSyx service and has not been altered since it was signed. Instead of returning the resource directly, the signed endpoint returns a JSON string containing a compact RS256 JSON Web Signature (JWS).
 

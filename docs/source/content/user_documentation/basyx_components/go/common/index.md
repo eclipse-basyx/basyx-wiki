@@ -15,6 +15,7 @@ This section covers features and configuration that are shared across multiple B
 - [Shared Runtime Features](shared_features) — Describes runtime functionality implemented in shared BaSyx Go code and identifies where those features are available.
 - [Observability](observability) — Covers common logging, request correlation, tracing, and PostgreSQL connection-pool metrics.
 - [Pagination](pagination) — Describes paged API responses, pagination parameters, and continuation cursors.
+- [Conditional Requests](conditional_requests) — Explains ETags, cache revalidation, and protection against concurrent updates.
 - [Validation and Verification](validation) — Describes model validation, verification behavior, and the handling of invalid resources.
 - [Repository-to-Registry Integration](registry_integration) — Describes how repositories can create, update, and remove corresponding descriptors in registries.
 - [Asynchronous API Operations](asynchronous_requests) — Describes the API operations that BaSyx Go provides asynchronously and how their results are retrieved.
@@ -37,6 +38,7 @@ query_language
 shared_features
 observability
 pagination
+conditional_requests
 validation
 registry_integration
 asynchronous_requests

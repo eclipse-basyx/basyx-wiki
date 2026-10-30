@@ -7,9 +7,9 @@
 The BaSyx Digital Twin Registry (DTR) combines the AAS Registry API and Basic Discovery API in one service. Registering an AAS descriptor also makes its asset identifiers available to Discovery, so clients normally do not have to maintain the same mapping through two services.
 
 ```{note}
-For descriptor operations, asset lookup, and access control, see the [BaSyx Digital Twin Registry Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/BaSyxDigitalTwinRegistryExample).
+For descriptor operations, asset lookup, and access control, see the [BaSyx Digital Twin Registry Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxDigitalTwinRegistryExample).
 
-For a DTR and Submodel Repository with BPN-based visibility, see [CatenaXample](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.0/examples/CatenaXample).
+For a DTR and Submodel Repository with BPN-based visibility, see [CatenaXample](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/CatenaXample).
 ```
 
 The API badge describes the OpenAPI document shipped with the component. The exact API for a running instance is available through its Swagger UI at `/swagger`.
