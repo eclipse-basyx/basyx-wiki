@@ -125,7 +125,6 @@ Values are the configuration inputs Helm uses to generate Kubernetes resources. 
 
 First, download the chart release's minimal profile:
 
-<!-- helm-docs-check: download -->
 ```bash
 curl --fail --location \
   "https://raw.githubusercontent.com/eclipse-basyx/charts/basyx-${BASYX_CHART_VERSION:?Select a chart version first}/values/values.minimal.yaml" \
@@ -164,7 +163,6 @@ YAML indentation is significant: use spaces, not tabs. The overlay contains plac
 
 Render the intended resources without changing the cluster:
 
-<!-- helm-docs-check: render -->
 ```bash
 helm template basyx basyx/basyx \
   --version "${BASYX_CHART_VERSION:?Select a chart version first}" --namespace "$BASYX_NAMESPACE" \
@@ -175,7 +173,6 @@ helm template basyx basyx/basyx \
 
 For an additional lint check, download the exact chart package:
 
-<!-- helm-docs-check: lint -->
 ```bash
 helm pull basyx/basyx --version "${BASYX_CHART_VERSION:?Select a chart version first}" --untar
 helm lint ./basyx -f values.cluster-base.yaml -f values.cluster.yaml

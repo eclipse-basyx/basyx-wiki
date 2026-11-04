@@ -36,7 +36,7 @@ Choose a release after reviewing its [release notes](https://github.com/eclipse-
 
 The [chart repository](https://github.com/eclipse-basyx/charts) maintains the full values reference, image defaults, component-specific examples, and upgrade notes. Select the `basyx-<chart version>` tag there to match your installation; the installation guide also shows how to download examples from that tag. The wiki describes the workflow rather than duplicating that reference.
 
-The [Helm documentation check](https://github.com/eclipse-basyx/basyx-wiki/actions/workflows/helm-docs.yml) renders and lints the installation examples against the reference chart and the latest stable chart on a weekly schedule and when these pages change. The latter is an additional compatibility check, not a change to this guide's reference version. It checks generated resources without deploying them. Historical releases can differ; use their tagged documentation when settings or lifecycle behavior do not match this guide.
+Historical releases can differ; use their tagged documentation when settings or lifecycle behavior do not match this guide.
 
 ## What belongs where?
 
