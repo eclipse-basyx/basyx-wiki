@@ -758,6 +758,19 @@ The REST Event Feed is independent of `eventing.enabled` and the broker transpor
 
 `maxAgeDays`, `hardDeleteGraceDays`, and `publishIntervalMillis` must not be negative. The page size of `GET /events` follows `server.pagination.defaultLimit` and `server.pagination.maxLimit`; the former `eventing.feed.maxPageSize` setting no longer exists and is ignored if present.
 
+### `mcp`
+
+The MCP endpoint is experimental and only served by the AAS Environment. It lets MCP clients such as AI agents read and change AAS data through the Environment's REST API. See [MCP Endpoint](../aas_environment/mcp) for tools, client setup, and sign-in.
+
+| Key | Default | Purpose |
+| --- | --- | --- |
+| `enabled` | `false` | Serves the MCP endpoint at `<general.externalUrl><mcp.path>`. |
+| `path` | `/mcp` | Endpoint path below `server.contextPath`. |
+| `writesEnabled` | `false` | Also offers the tools that create, change, and delete data. |
+| `maxResultBytes` | `262144` | Largest API response in bytes that a tool returns. Larger read results fail. |
+
+`path` must start with `/`, must not be `/` or end with `/`, and must not contain `?`, `#`, `%`, `{`, `}`, `*`, or `..`. `maxResultBytes` must be at least `1024`. With `abac.enabled=true`, every trustlist entry must define an `audience`; otherwise the AAS Environment does not start while the MCP endpoint is enabled.
+
 ## Example YAML
 
 ```yaml
@@ -941,6 +954,12 @@ eventing:
     schemaBaseUrl: ""
     cleanupIntervalHours: 24
     publishIntervalMillis: 250
+
+mcp:
+  enabled: false
+  path: /mcp
+  writesEnabled: false
+  maxResultBytes: 262144
 ```
 
 ## Environment Variables
@@ -989,6 +1008,10 @@ GENERAL_AASXMAXTOTALEXPANDEDSIZEBYTES=536870912
 GENERAL_AASXMAXTHUMBNAILSIZEBYTES=16777216
 GENERAL_BULK_BATCH_LIMIT=1000
 SWAGGER_ENABLED=true
+MCP_ENABLED=false
+MCP_PATH=/mcp
+MCP_WRITESENABLED=false
+MCP_MAXRESULTBYTES=262144
 ```
 
 `GENERAL_AAS_PRECONFIG_PATHS` is parsed as a comma-separated list and overrides `general.aasPreconfigPaths`:
@@ -1137,4 +1160,5 @@ In containers, paths are resolved inside the container filesystem. Mount the fil
 - AAS Environment additionally supports `general.aasPreconfigPaths`.
 - AAS Repository, Submodel Repository, and AAS Environment use the registry synchronization settings when enabled.
 - AAS Repository, Submodel Repository, and AAS Environment use the `eventing` settings.
+- Only the AAS Environment uses the `mcp` settings.
 - AAS Repository, Submodel Repository, Concept Description Repository, AAS Registry, Submodel Registry, Discovery, AASX File Server, AAS Environment, and DPP API use the `rebac` settings. Company Lookup and Digital Twin Registry always disable ReBAC.

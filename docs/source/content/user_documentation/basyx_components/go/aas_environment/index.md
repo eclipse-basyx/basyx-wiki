@@ -17,11 +17,14 @@ One AAS Environment process provides:
 - an [AAS Registry](../aas_registry/index) and [Submodel Registry](../submodel_registry/index) for endpoint descriptors;
 - [Basic Discovery](../basic_discovery/index) for asset-identifier-to-AAS-identifier mappings;
 - `/upload` and `/serialization` for whole-environment import and export;
-- `/description` for the AAS Environment service description and supported profiles.
+- `/description` for the AAS Environment service description and supported profiles;
+- an optional, experimental [MCP endpoint](mcp) through which AI agents read and change shells, Submodels, and Submodel Elements.
 
 All of these API areas are routes of the same runtime and use shared PostgreSQL persistence. Registry descriptors remain different resources from Repository content, and Discovery mappings remain different from both. Use the linked standalone component pages for detailed CRUD behavior and the shared [Query Language](../common/query_language) for query syntax and the Environment's hierarchy-spanning query scope. The routes behave as composed API areas here rather than as network calls between internal services.
 
 The Environment also supports experimental Eventing for AAS, asset, and Submodel changes, including dedicated notifications for newly added Product Change Notification (PCN) records. Eventing is disabled by default and must be enabled explicitly; see [Eventing](../common/eventing) for Event Feed and broker configuration.
+
+The Environment can also serve an experimental [Model Context Protocol (MCP) endpoint](mcp) for AI agents such as Claude Code or Codex. Its tools call the Environment's own REST API with the caller's token, so the same authentication, authorization, and validation apply. The endpoint is disabled by default, and its write tools must be enabled separately.
 
 `/upload` imports AAS Environment documents in JSON or XML format as well as AASX packages. For AASX input, the package is parsed into model content and supplementary files. `/serialization` creates an Environment representation from stored content. The AAS Environment does not expose the package-oriented `/packages` API. Use the standalone [AASX File Server](../aasx_file_server/index) when clients must store, list, download, replace, or delete complete AASX package files by package identifier.
 
@@ -78,4 +81,5 @@ The running service also provides Swagger UI at `http://localhost:8090/swagger` 
 
 setup
 usage
+mcp
 ```
