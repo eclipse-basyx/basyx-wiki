@@ -448,3 +448,5 @@ sharing, inheritance, and administration.
   feature set
 - [Supply Chain Security](../supply_chain_security) for image integrity,
   provenance, and SBOMs
+- [MCP Endpoint](../aas_environment/mcp.md#security-and-sign-in) for MCP
+  client sign-in and identity provider requirements

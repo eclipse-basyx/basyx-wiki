@@ -1,7 +1,7 @@
 # MCP Endpoint
 
 ```{warning}
-The MCP endpoint is an experimental feature. Its configuration, tools, tool parameters, and results may change.
+The MCP endpoint is an experimental feature, available from BaSyx Go v1.1.3. Its configuration, tools, tool parameters, and results may change.
 ```
 
 The AAS Environment can serve a [Model Context Protocol](https://modelcontextprotocol.io) (MCP) endpoint next to its REST API. AI agents and other MCP clients, such as Claude Code or Codex, use it to read and change Asset Administration Shells, Submodels, and Submodel Elements.
