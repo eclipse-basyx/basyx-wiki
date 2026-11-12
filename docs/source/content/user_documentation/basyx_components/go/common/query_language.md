@@ -239,7 +239,7 @@ For the standard fragment paths, see the `FieldIdentifierFragment` productions i
 
 BaSyx Go differs from the standard fragment grammar in these ways:
 
-- `$sm#id` is additionally accepted as a fragment.
+- Filters cannot target mandatory identifiers: `$sm#id` and the `idShort` of a named Submodel Element, such as `$sme.Nameplate.SerialNumber#idShort`, are rejected with `400 Bad Request`. An element `idShort` can be targeted only for SubmodelElementList members, with a path that ends in a list selector, such as `$sme.Items[]#idShort` or `$sme.Items[0]#idShort`. The general `$sme#idShort` fragment likewise applies only to list members.
 - Fragments selecting `specificAssetIds`, `submodels`, `submodelDescriptors`, `endpoints`, or reference `keys` require brackets: use `[]` for any entry or a zero-based index such as `[0]` for one position. For example, use `$aas#submodels[]` and `$smdesc#endpoints[]`. The bare forms `$aas#submodels` and `$smdesc#endpoints` are rejected.
 
 The selected root must also be valid for the query endpoint; see [Supported Endpoints](#supported-endpoints).
@@ -253,6 +253,8 @@ When the filter's Boolean `$match` is omitted or `false`, its condition is evalu
 When the BaSyx-specific `$match` flag is `true`, the condition is evaluated against each current fragment row. Only matching rows remain. With the same ten references, the response retains only those whose own data satisfies the condition. If no row matches, the fragment is empty or omitted as appropriate for that representation, but the parent can still remain in `result` because parent selection is controlled by the top-level `$condition`.
 
 Multiple filters for the same fragment are combined with `AND`. Filters for different fragments are applied independently. Explicit indices restrict filtering to the selected position. Unselected siblings remain unchanged.
+
+Each fragment affects only the model it names. A `$sm` fragment such as `$sm#idShort`, `$sm#semanticId`, or `$sm#supplementalSemanticIds[]` filters the Submodel's own field and leaves the same fields of its Submodel Elements unchanged; use `$sme` fragments for those.
 
 ## More Examples
 
@@ -294,7 +296,7 @@ Select AAS Descriptors by an embedded Submodel Descriptor field:
 
 The first request is valid for `/query/submodels`. The second is valid for `/query/shell-descriptors`. A field root valid for one endpoint is not automatically valid for another.
 
-For additional query examples, see the [Query Language Examples](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.2/docu/query_language/examples.md) in the BaSyx Go repository.
+For additional query examples, see the [Query Language Examples](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.3/docu/query_language/examples.md) in the BaSyx Go repository.
 
 ## Results and Pagination
 
@@ -334,7 +336,7 @@ BaSyx Go accepts at most 64 JSON container nesting levels and 8192 JSON tokens i
 
 When runtime authorization supplies an ABAC query filter, BaSyx combines the caller's top-level condition with the authorization condition using `AND`. A caller can narrow the visible result set but cannot broaden it beyond the policy. On a fragment that both the policy and caller filter, both restrictions must hold, so caller filters cannot recover rows hidden by ABAC.
 
-ABAC formulas and filters use the same condition and field syntax, with additional policy-only attribute expressions. See [Runtime Security](security) for authorization outcomes and resource filtering. The access policy, not the request, remains the upper bound on visible parent resources and fragments.
+ABAC formulas and filters use the same condition and field syntax, with additional policy-only attribute expressions. ABAC `FILTER` and `FILTERLIST` fragments are subject to the same [fragment target restrictions](#fragment-paths). See [Runtime Security](security) for authorization outcomes and resource filtering. The access policy, not the request, remains the upper bound on visible parent resources and fragments.
 
 ## See Also
 

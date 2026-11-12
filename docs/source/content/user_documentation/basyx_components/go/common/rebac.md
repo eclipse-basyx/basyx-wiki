@@ -32,6 +32,29 @@ Two more roles apply to a whole repository family, such as all shells or all Sub
 
 Roles are granted to users or groups of an OIDC issuer. There are no public or wildcard grants.
 
+## Administrative creator
+
+When an authenticated caller creates a shell, Submodel, Concept Description, shell descriptor, or Submodel descriptor (also one inside a shell descriptor) without `administration.creator`, BaSyx fills the field with the caller. This applies to POST, to PUT requests that create a resource, to environment uploads, and to bulk registration. The value is an `ExternalReference` with one `GlobalReference` key `<issuer>|<subject>`, where the subject is taken from `rebac.subjectClaim`, the same notation as `rebac.administrators`:
+
+```json
+{
+  "administration": {
+    "creator": {
+      "type": "ExternalReference",
+      "keys": [
+        { "type": "GlobalReference", "value": "https://idp.example.com/realms/basyx|8f14e45f-ceea-467f-a0d1-a3d3a1f5c7e2" }
+      ]
+    }
+  }
+}
+```
+
+A creator sent by the client is kept, and updates never change the field. Anonymous creations stay unchanged, and synchronized descriptors mirror their shell or Submodel.
+
+```{warning}
+The creator is business data and grants no access. Everyone who can read the resource sees the issuer and subject. Choose a `rebac.subjectClaim` that contains no personal data you do not want to share.
+```
+
 ## ReBAC and ABAC interplay
 
 A ReBAC grant on a resource is not limited by ABAC fragment filters, masks, or update conditions for that resource. When an owner shares a Submodel, the recipient sees the complete Submodel, including elements an ABAC filter would hide. Keep sensitive content in separate resources with their own owners instead of relying on ABAC filters inside a resource that will be shared.
@@ -46,7 +69,7 @@ A ReBAC grant on a resource is not limited by ABAC fragment filters, masks, or u
 | AAS Registry, Submodel Registry | Shell descriptors, Submodel descriptors, bulk API. |
 | Discovery | Discovery entries and lookups. |
 | AASX File Server | AASX packages and asynchronous uploads. |
-| AAS Environment | All of the above except AASX packages, plus `/upload` and `/serialization`. |
+| AAS Environment | All of the above except AASX packages, plus `/upload`, `/upload-async`, and `/serialization`. |
 | DPP API | Current state of Digital Product Passports. |
 
 History endpoints, event feeds, `$signed` representations, `/verify`, historical passports, the ABAC policy management API, the Company Lookup service, and the Digital Twin Registry stay ABAC-only. A ReBAC grant never gives access to them.
@@ -104,7 +127,7 @@ The [BaSyx Helm chart](https://github.com/eclipse-basyx/charts) exposes the sett
 
 The BaSyx Go repository contains the complete guides:
 
-- [ReBAC overview](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.2/docu/security/rebac/README.md)
-- [Administration guide](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.2/docu/security/rebac/administration.md) for operations, audit trail, monitoring, and troubleshooting
-- [Sharing API](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.2/docu/security/rebac/sharing-api.md)
-- [ReBAC example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxReBACExample)
+- [ReBAC overview](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.3/docu/security/rebac/README.md)
+- [Administration guide](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.3/docu/security/rebac/administration.md) for operations, audit trail, monitoring, and troubleshooting
+- [Sharing API](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.3/docu/security/rebac/sharing-api.md)
+- [ReBAC example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxReBACExample)

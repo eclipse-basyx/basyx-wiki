@@ -30,7 +30,7 @@ Create it:
 curl -i -X POST http://localhost:8086/concept-descriptions -H 'Content-Type: application/json' --data-binary '@concept-description.json'
 ```
 
-Expect `201 Created`. Repeating POST with the same identifier returns `409 Conflict`.
+Expect `201 Created`. Repeating POST with the same identifier returns `409 Conflict`. An invalid `idShort` returns `400 Bad Request` in every verification mode, and other semantic violations are handled according to `server.strictVerification`; see [Validation](../common/validation).
 
 ## Retrieve It by Identifier
 

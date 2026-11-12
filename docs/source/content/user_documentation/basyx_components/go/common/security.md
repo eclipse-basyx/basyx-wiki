@@ -14,9 +14,9 @@ To try BaSyx authentication and access control, choose an example setup:
 
 | Example | Identity provider and setup |
 | --- | --- |
-| [BaSyx Secured Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxSecuredExample) | Local Keycloak with separate BaSyx components, ABAC rules, and admin, read-only, and anonymous access scenarios. |
-| [BaSyx Ory Hydra Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxOryHydraExample) | Local Hydra and Kratos with the combined AAS Environment, JWT access tokens, and provider claim mappings. |
-| [BaSyx Entra ID Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxEntraIDExample) | An external Microsoft Entra ID tenant with app registrations, API audiences, and delegated or app-only permissions. |
+| [BaSyx Secured Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxSecuredExample) | Local Keycloak with separate BaSyx components, ABAC rules, and admin, read-only, and anonymous access scenarios. |
+| [BaSyx Ory Hydra Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxOryHydraExample) | Local Hydra and Kratos with the combined AAS Environment, JWT access tokens, and provider claim mappings. |
+| [BaSyx Entra ID Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxEntraIDExample) | An external Microsoft Entra ID tenant with app registrations, API audiences, and delegated or app-only permissions. |
 ```
 
 ## Security Model
@@ -367,9 +367,64 @@ read the service description:
 
 This policy does not grant access to any other route or right.
 
+### Fragment Filter Targets
+
+`FILTER` and `FILTERLIST` entries use the same fragment paths and target
+restrictions as query `$filters`; see
+[Fragment Paths](query_language.md#fragment-paths). A filter cannot target
+the mandatory `$sm#id` or the `idShort` of a named Submodel Element. A policy
+containing such a filter is rejected on import, validation, and activation,
+and an active database policy that still contains one cannot be loaded.
+Before upgrading from an earlier release, remove or change these filters in
+the policy file and in the active database policy.
+
+Submodel fragment filters apply to direct Submodel and `$metadata` reads in
+the same way as to list and query responses.
+
+### Submodel Superpaths
+
+The AAS Repository and AAS Environment serve Submodels below
+`/shells/{aasIdentifier}/submodels/{submodelIdentifier}`. Such a superpath
+request needs a rule for the requested Submodel or element and, in addition,
+access to the enclosing shell. The shell is checked with the `$aas` and
+`ROUTE` rules of `/shells/{aasIdentifier}`, including their formulas:
+
+| Superpath request | Right required on the shell |
+| --- | --- |
+| `PUT` or `DELETE /shells/{aasIdentifier}/submodels/{submodelIdentifier}`, which add or remove the shell's Submodel reference | `UPDATE` |
+| Every other superpath request | `READ` |
+
+Without a matching shell rule, the request returns `403 Forbidden`. A shell
+excluded by a formula returns `404 Not Found`, as for a direct shell request.
+A policy that grants superpaths only through `$sm` or `$sme` objects or
+`/shells/*/submodels/*` routes therefore also needs a rule for the shell. The
+formulas of the Submodel rules apply to the Submodel and its elements, not to
+the shell. ReBAC grants on the shell also satisfy the shell check.
+
+### Submodel Element Reads
+
+A `$sme` `REFERABLE` object covers the named element and its descendants. When
+READ access is granted through such objects, the element collection read
+`GET /submodels/{submodelIdentifier}/submodel-elements` and its `$value`,
+`$metadata`, `$reference`, and `$path` variants return only the covered
+elements, like the single-element reads.
+
+The `$reference` of a single Submodel Element is authorized like a read of the
+element: the formula applies to the element itself, and its parent elements
+must be visible to the caller but need not match the formula. The returned
+reference contains the model types of the parent elements.
+
+### Historical Reads
+
+Stored history versions cannot be filtered. With ABAC enabled, `$history`
+returns `404 Not Found` when the caller's matching rules restrict the resource
+with a formula or a `FILTER`/`FILTERLIST` fragment filter. Only callers allowed
+to read the complete resource receive historical versions. See
+[Read a Historical State](history_and_changes.md#read-a-historical-state).
+
 ### Environment Import and Export
 
-The AAS Environment accepts type-scoped `IDENTIFIABLE` grants on `/upload` and `/serialization`. For example, add this rule to `AllAccessPermissionRules.rules` to let the authenticated subject `reader-subject` export one Submodel:
+The AAS Environment accepts type-scoped `IDENTIFIABLE` grants on `/upload`, `/upload-async`, and `/serialization`. For example, add this rule to `AllAccessPermissionRules.rules` to let the authenticated subject `reader-subject` export one Submodel:
 
 ```json
 {
@@ -389,7 +444,7 @@ No additional `ROUTE` grant is required. `$sm("*")` covers only Submodels; `$aas
 
 Exports apply READ formulas and field/element filters in JSON, XML, and AASX. Attachments and thumbnails also require authorization and visible model references. Missing or inaccessible explicitly selected AASs or Submodels abort the export with `404`. Unreadable referenced Concept Descriptions are omitted. A caller without permission to use the endpoint receives `403`.
 
-Imports require CREATE for new objects and UPDATE for existing ones. New attachment or thumbnail content requires CREATE even when its AAS or Submodel already exists. Replacing stored content requires UPDATE. Denials return `403` and can leave earlier authorized imports committed. See [Re-import and Failure Behavior](../aas_environment/usage.md#re-import-and-failure-behavior).
+Imports require CREATE for new objects and UPDATE for existing ones. New attachment or thumbnail content requires CREATE even when its AAS or Submodel already exists. Replacing stored content requires UPDATE. A denial returns `403`, and nothing from the upload is stored. `POST /upload-async` is authorized like `/upload`, and only the uploader can read its status and result. See [Re-import and Failure Behavior](../aas_environment/usage.md#re-import-and-failure-behavior).
 
 ## Common Authorization Responses
 

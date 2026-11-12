@@ -86,7 +86,7 @@ If no primary `application_name` is supplied through `applicationName` or the DS
 #### Optional PostgreSQL reader
 
 ```{note}
-The [BaSyx Read Replica Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxReadReplicaExample) runs the combined AAS Environment with a PostgreSQL primary and a real streaming standby. It includes checks for replication and writer/reader connection routing.
+The [BaSyx Read Replica Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxReadReplicaExample) runs the combined AAS Environment with a PostgreSQL primary and a real streaming standby. It includes checks for replication and writer/reader connection routing.
 ```
 
 PostgreSQL-backed BaSyx HTTP services can use a separate reader connection for
@@ -558,7 +558,7 @@ Relationship-based access control (ReBAC) is experimental. It lets users share t
 | Key | Default | Purpose |
 | --- | --- | --- |
 | `rebac.enabled` | `false` | Enables ReBAC. Requires `abac.enabled=true` and a readable `oidc.trustlistPath`. |
-| `rebac.subjectClaim` | `sub` | Top-level access token claim with a stable user identifier. Use `oid` for Microsoft Entra ID. |
+| `rebac.subjectClaim` | `sub` | Top-level access token claim with a stable user identifier. Use `oid` for Microsoft Entra ID. Its value is also written into `administration.creator` of newly created resources and is visible to everyone who can read them; see [Administrative creator](rebac.md#administrative-creator). |
 | `rebac.groupClaim` | `groups` | Top-level access token claim with group names. Use `basyx.<target>` for a claim mapped in the trustlist. |
 | `rebac.administrators` | `[]` | Bootstrap and recovery administrators as `issuer\|subject` or `issuer\|group:<name>`. |
 

@@ -3,7 +3,7 @@
 This setup runs the DPP API and Configuration Service with PostgreSQL 18. It exposes the DPP API at `http://localhost:8088` and enables history so that the complete [usage walkthrough](usage) can retrieve an earlier passport state.
 
 ```{note}
-For unsecured and Keycloak-secured deployments, see the [BaSyx DPP API Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxDPPAPIExample).
+For unsecured and Keycloak-secured deployments, see the [BaSyx DPP API Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxDPPAPIExample).
 ```
 
 ## Prerequisites and Security Posture

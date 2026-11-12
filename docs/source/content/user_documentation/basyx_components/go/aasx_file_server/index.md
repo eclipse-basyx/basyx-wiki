@@ -23,7 +23,7 @@ The BaSyx Go AASX File Server stores and serves complete AASX packages through t
 
 ## Important Behavior
 
-Uploads use `multipart/form-data`. The service generates an opaque package identifier and returns its Base64URL form for later `/packages/{packageId}` requests. AAS identifiers associated with a package are caller-supplied metadata; the File Server does not infer them from the package contents. See [Using the AASX File Server](usage) for multipart input and identifier representation.
+Uploads use `multipart/form-data`. The service generates an opaque package identifier. Package descriptions contain only `packageId` and `aasIds` as plain identifiers; `/packages/{packageId}` requests use the Base64URL-encoded package identifier, which the `Location` header of a creating upload already contains. AAS identifiers associated with a package are caller-supplied metadata; the File Server does not infer them from the package contents. See [Using the AASX File Server](usage) for multipart input and identifier representation.
 
 Package metadata is stored in PostgreSQL and package bytes are stored as PostgreSQL Large Objects. Database backup and migration procedures must therefore include Large Objects. The BaSyx Configuration Service must initialize the database schema before startup.
 

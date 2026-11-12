@@ -7,9 +7,9 @@
 The BaSyx Digital Twin Registry (DTR) combines the AAS Registry API and Basic Discovery API in one service. Registering an AAS descriptor also makes its asset identifiers available to Discovery, so clients normally do not have to maintain the same mapping through two services.
 
 ```{note}
-For descriptor operations, asset lookup, and access control, see the [BaSyx Digital Twin Registry Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxDigitalTwinRegistryExample).
+For descriptor operations, asset lookup, and access control, see the [BaSyx Digital Twin Registry Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxDigitalTwinRegistryExample).
 
-For a DTR and Submodel Repository with BPN-based visibility, see [CatenaXample](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/CatenaXample).
+For a DTR and Submodel Repository with BPN-based visibility, see [CatenaXample](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/CatenaXample).
 ```
 
 The API badge describes the OpenAPI document shipped with the component. The exact API for a running instance is available through its Swagger UI at `/swagger`.
@@ -110,6 +110,7 @@ This public-selector behavior applies to Discovery lookup. The Registry `assetId
 | Operation or topic | Standalone service | DTR behavior | Client implication |
 | --- | --- | --- | --- |
 | `POST /lookup/shells/{aasIdentifier}` | Basic Discovery replaces the complete AssetLink set. | DTR appends the submitted links without deduplication, so repeated submissions can create duplicates. The AAS descriptor must already exist. | Create the descriptor first, send only additions, and avoid blind retries if duplicates matter. |
+| Top-level descriptor `createdAt` | Standalone AAS Registry descriptor responses, including creation responses, do not contain it. | DTR descriptor responses include the stored top-level `createdAt`. | Use [`createdAfter`](#createdat-and-createdafter) only with the DTR. |
 | Descriptor PUT path/body IDs | Standalone AAS Registry rejects an empty body ID or one that differs from the decoded path ID. | For AAS descriptors and nested Submodel Descriptors, DTR treats the decoded path identifier as authoritative and replaces the body ID. | Treat the path as the update target; a conflicting body ID does not select another resource. |
 | `GET /shell-descriptors?assetIds=...` | Registry filtering follows the standalone Registry behavior. | DTR resolves encoded `name`/`value` selectors through Discovery. Under restricted ABAC, a `globalAssetId` selector additionally requires a visible non-global AssetLink before normal descriptor authorization. | Do not assume that a public Discovery lookup guarantees the same descriptor will be returned by the Registry filter. |
 | Empty Discovery search result | Standalone Discovery returns a paged wrapper with `"result": []`. | A DTR search can omit `result` and return `{"paging_metadata": {}}`. | Treat an absent `result` as an empty page. |

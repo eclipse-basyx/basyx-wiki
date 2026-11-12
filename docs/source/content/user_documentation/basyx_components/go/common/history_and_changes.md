@@ -3,7 +3,7 @@
 The features on this page serve different purposes. Recent-change APIs find current resources by their stored timestamps, history reconstructs earlier recorded states, and signed reads and mutation evidence support verification of returned or retained data.
 
 ```{note}
-The [BaSyx History Audit Guarded Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxHistoryAuditGuardedExample) shows how to record audit history, protect PostgreSQL history from modification, and store mutation evidence.
+The [BaSyx History Audit Guarded Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxHistoryAuditGuardedExample) shows how to record audit history, protect PostgreSQL history from modification, and store mutation evidence.
 ```
 
 ## Availability
@@ -87,6 +87,8 @@ History is recorded for the identifiable resource that owns the changed content:
 
 Submodel Elements and attachments do not have independent history timelines.
 
+Each recorded version contains the complete persisted state of the resource, even when ABAC fragment filters hide parts of it from the caller who made the change.
+
 Recording history internally does not imply that a public `$history` endpoint exists for that resource type. Public `$history` reads are available for AAS and Submodels, as shown in [Availability](#availability).
 
 ### Read a Historical State
@@ -100,9 +102,11 @@ curl -i -G 'http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/$history' \
 
 The response reconstructs the version valid at that time. The requested time follows the recorded mutation timeline, not `administration.createdAt` or `administration.updatedAt`. At an exact update boundary, the newer version is selected. A time before the first recorded state or after a recorded deletion returns not found. A time before that deletion can still resolve the earlier version.
 
+Without `date`, `$history` returns the latest recorded version. If the latest recorded version is a deletion, the response is `404 Not Found`.
+
 For a complete AAS-specific example that creates, updates, and retrieves an earlier state, see [AAS Repository Usage](../aas_repository/usage.md#read-a-historical-aas-state). Submodel historical reads use the same general time-selection behavior through the Submodel `$history` endpoint.
 
-Historical reads are authorized at the route level. They do not apply current-resource ABAC filters or field redaction to stored snapshots. Grant access to `$history` only to callers permitted to read the complete retained snapshots; current-resource filtering does not restrict their contents.
+Historical reads require the ABAC `READ` right on the `$history` route. Stored versions cannot be filtered, so with ABAC enabled `$history` returns `404 Not Found` when the caller's matching rules restrict the resource with a formula or a `FILTER`/`FILTERLIST` fragment filter. Only callers allowed to read the complete resource receive historical versions. See [Historical Reads](security.md#historical-reads).
 
 ### Audit Context
 
@@ -148,7 +152,7 @@ See [General Configuration](configuration) for storage settings and [History Evi
 
 Submodel `$value/$signed` payloads use the same JSON number, boolean, string, and null mapping as unsigned ValueOnly reads. See [ValueOnly Types and Validation](representations.md#valueonly-types-and-validation) for the scalar mapping rules.
 
-Signed reads let a client verify that the returned AAS or Submodel representation was signed by the BaSyx service and has not been altered since it was signed. Instead of returning the resource directly, the signed endpoint returns a JSON string containing a compact RS256 JSON Web Signature (JWS).
+Signed reads let a client verify that the returned AAS or Submodel representation was signed by the BaSyx service and has not been altered since it was signed. Instead of returning the resource directly, the signed endpoint returns a compact RS256 JSON Web Signature (JWS) as a `text/plain` body.
 
 A signed read does not make the data confidential. Its purpose is to provide integrity and authenticity for the returned representation. Signed reads require the same ABAC `READ` right as the corresponding normal read endpoints. The `$signed` routes are outside experimental ReBAC coverage, so a ReBAC grant that authorizes a normal read does not authorize its signed form.
 
@@ -160,10 +164,10 @@ jws:
   certificateChainPath: /keys/signing-chain.pem
 ```
 
-After creating the example AAS, use `jq` to extract the compact JWS from the JSON string returned by the endpoint:
+After creating the example AAS, save the compact JWS returned by the endpoint:
 
 ```bash
-curl --fail-with-body -sS 'http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/$signed' | jq -r . > aas.jws
+curl --fail-with-body -sS 'http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/$signed' -o aas.jws
 ```
 
 Missing signing configuration produces an error rather than an unsigned fallback. Use a JWS verification library with a trusted public key or validated certificate chain to verify the signature before using the payload. Decoding the JWS alone does not verify it.

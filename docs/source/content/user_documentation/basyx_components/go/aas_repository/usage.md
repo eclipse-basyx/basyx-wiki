@@ -156,7 +156,7 @@ curl -i http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/submodels/dXJuOmV4Y
 
 Expect `200 OK` with a Property containing `idShort: "SerialNumber"`, `valueType: "xs:string"`, and `value: "SN-002"`. `Nameplate.SerialNumber` is a dot-separated `idShortPath` and is not Base64URL-encoded.
 
-See the [Submodel Element walkthrough](../submodel_repository/usage.md#submodel-element-paths) when you need additional element operations. Replace its `/submodels/{submodelIdentifier}` prefix with the AAS-scoped prefix when using these routes.
+See the [Submodel Element walkthrough](../submodel_repository/usage.md#submodel-element-paths) when you need additional element operations. Replace its `/submodels/{submodelIdentifier}` prefix with the AAS-scoped prefix when using these routes. This includes [File attachments](../submodel_repository/usage.md#file-attachments): `GET .../submodel-elements/{idShortPath}/attachment` returns the stored content with its `Content-Type` and `Content-Disposition`, or redirects with `302 Found` for a File element with an external HTTP(S) URL.
 
 Unlike removing a reference, DELETE on `/shells/{aasIdentifier}/submodels/{submodelIdentifier}` removes the reference from the addressed AAS and deletes the shared Submodel content. It does not remove references from other AASs.
 
@@ -455,17 +455,17 @@ Expect `200 OK` and the earlier AAS state:
 }
 ```
 
-The current AAS remains `HistoricalMotorV2`. `$history` returns the complete AAS representation recorded for the requested time. At an exact update boundary the newer state is selected. A timestamp before the first recorded state or after a recorded deletion returns `404 Not Found`. A timestamp before deletion can still retrieve the earlier state.
+The current AAS remains `HistoricalMotorV2`. `$history` returns the complete AAS representation recorded for the requested time. At an exact update boundary the newer state is selected. A timestamp before the first recorded state or after a recorded deletion returns `404 Not Found`. A timestamp before deletion can still retrieve the earlier state. Without `date`, `$history` returns the latest recorded state, or `404 Not Found` if that state is a deletion. With ABAC, see [Historical Reads](../common/security.md#historical-reads) for when access rules lead to `404 Not Found`.
 
 ## Asset Thumbnail
 
-Place an existing PNG image named `thumbnail.png` in your working directory. Upload it using multipart form fields `fileName` and `file`:
+Place an existing PNG image named `thumbnail.png` in your working directory. Upload it as the multipart form field `file`:
 
 ```bash
-curl -i -X PUT http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/asset-information/thumbnail -F 'fileName=thumbnail.png' -F 'file=@thumbnail.png;type=image/png'
+curl -i -X PUT http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/asset-information/thumbnail -F 'file=@thumbnail.png;type=image/png'
 ```
 
-Expect `204 No Content`. Let curl set the multipart boundary. Do not set an application/json header for this request. Download the thumbnail and save response headers separately:
+Expect `204 No Content`. The file name comes from the `filename` parameter of the file part's `Content-Disposition` header, which curl sets from the uploaded file; a `fileName` form field is not read. An upload without a file name keeps the previously stored name, or else is named `thumbnail` with an extension matching the content type. Each upload stores the content type of its file part. Let curl set the multipart boundary. Do not set an application/json header for this request. Download the thumbnail and save response headers separately:
 
 ```bash
 curl -D thumbnail-headers.txt -o downloaded-thumbnail.png http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/asset-information/thumbnail
@@ -477,7 +477,7 @@ A stored thumbnail returns `200 OK` with binary content and its response content
 curl -i -X DELETE http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/asset-information/thumbnail
 ```
 
-Expect `204 No Content`. Deleting the thumbnail does not delete the AAS.
+Expect `204 No Content`. Deleting the thumbnail also clears its content type, but does not delete the AAS.
 
 ## Delete the Example Content
 

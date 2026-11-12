@@ -1,6 +1,6 @@
 # Setting Up the Company Lookup
 
-We provide example setups to get you started with the BaSyx Go Components in the [Company Lookup example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxCompanyLookup).
+We provide example setups to get you started with the BaSyx Go Components in the [Company Lookup example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxCompanyLookup).
 If you need to configure the service yourself, this page will guide you through the process.
 
 The Docker example uses `latest` for both BaSyx Go images. For native builds, use one stable source release and its matching database assets as described in [Version Scope](../common/deployment.md#version-scope).

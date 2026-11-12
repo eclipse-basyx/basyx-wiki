@@ -78,7 +78,7 @@ The AAS Environment uses the same revisions as standalone services sharing its d
 
 ## Availability and Limitations
 
-- ETags are available on single-resource GET responses. Collections, queries, bulk operations, `/description`, `/serialization`, `/upload`, `$signed`, `$history`, `$recent-changes`, Operation status/results, and historical DPP reads provide no ETag.
+- ETags are available on single-resource GET responses. Collections, queries, bulk operations, `/description`, `/serialization`, `/upload`, `/upload-async`, `$signed`, `$history`, `$recent-changes`, Operation status/results, and historical DPP reads provide no ETag.
 - JSON responses larger than 16 MiB provide no ETag. Where available, read a smaller representation of the same resource, such as `$metadata`, to obtain a tag for a write.
 - Use GET to obtain a tag; `HEAD` is not supported.
 - For Operation invocation, the Submodel's tag is checked before calling the delegated service. This does not protect or roll back changes made by that external service.

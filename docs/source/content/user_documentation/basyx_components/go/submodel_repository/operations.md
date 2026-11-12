@@ -5,7 +5,7 @@ This walkthrough invokes the delegated-operation example synchronously and async
 The upstream example uses the [AAS Environment](../aas_environment/index), which exposes the same Submodel Repository operation endpoints and delegation behavior. The standalone Submodel Repository uses the same operation invocation implementation.
 
 ```{note}
-The [BaSyx Delegated Operations Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxDelegatedOperationsExample) contains the Compose stack, delegated service, model fixtures, and requests for synchronous and asynchronous invocation in full-metadata and ValueOnly form.
+The [BaSyx Delegated Operations Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxDelegatedOperationsExample) contains the Compose stack, delegated service, model fixtures, and requests for synchronous and asynchronous invocation in full-metadata and ValueOnly form.
 ```
 
 ## Modeled Operation Versus Invocation
@@ -126,7 +126,9 @@ These are operation-specific resources. Do not apply Registry bulk assumptions a
 
 ## Failure Diagnosis
 
-If the delegated endpoint returns an error status, synchronous invocation and asynchronous result retrieval return `502 Bad Gateway` with an AAS `Result` object (`{"messages":[...]}`). The message identifies the endpoint's status code. Its response body is not exposed. This also applies to `$value` routes.
+If the delegated endpoint returns an error status, synchronous invocation returns `502 Bad Gateway` with an AAS `Result` object (`{"messages":[...]}`). The message identifies the endpoint's status code. Its response body is not exposed. This also applies to `/invoke/$value`.
+
+When an asynchronous invocation fails, both result routes, including `$value`, return `200 OK` with an `OperationResult` whose `success` is `false`. `executionState` is `Timeout` when `clientTimeoutDuration` ran out and `Failed` for every other error. `messages` describe the error, for example `SMREPO-INVOKEOP-DELEGATEDSTATUS delegated operation endpoint returned HTTP 500`. Check `executionState`, not the HTTP status, to detect a failed asynchronous invocation.
 
 | Symptom | Check |
 | --- | --- |
@@ -135,7 +137,7 @@ If the delegated endpoint returns an error status, synchronous invocation and as
 | Delegated call fails or times out | Check the delegated service logs, container network reachability, and qualifier URL. For asynchronous calls, verify the required `clientTimeoutDuration`. For synchronous calls, check it when supplied. The URL is resolved from inside the Repository container, not from the client host. |
 | `404` for a status or result | Use the exact returned location and the same caller identity. Verify the handle belongs to the same Submodel identifier and Operation path and has not expired. |
 | Status appears to skip the pending state | Fast work can complete before the first poll. A direct `302` to the returned result location is valid; keep redirect following off to observe it. |
-| Result reports delegated failure | Read `messages` in the `502` Result and inspect the delegated service logs for its internal diagnostics. `202 Accepted` confirms submission, not successful execution. |
+| Result reports delegated failure | Read `messages` in the synchronous `502` Result or in the failed asynchronous `OperationResult`, and inspect the delegated service logs for its internal diagnostics. `202 Accepted` confirms submission, not successful execution. |
 
 ## API and Shared Asynchronous References
 

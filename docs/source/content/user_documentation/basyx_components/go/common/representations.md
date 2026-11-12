@@ -83,14 +83,16 @@ Property values and Range bounds use the JSON types defined by their stored `val
 | Numeric XSD type, such as `xs:integer` or `xs:double` | Number, for example `42` or `21.5`. All stored digits are retained. |
 | `xs:boolean` | Boolean, for example `true`. |
 | Other XSD types, including `xs:string` and date/time types | String. |
-| Property without a value, or an unset Range bound | `null`. |
+| Property without a value, addressed directly or as a list member | `null`. |
 | `INF`, `-INF`, `NaN`, or a stored value inconsistent with its `valueType` | String, because it has no valid JSON number/boolean representation. |
 
 Normal model JSON uses lexical strings: an `xs:integer` Property with `"value": "42"` reads as `42` through `$value`. Preserve numeric precision when parsing large numbers.
 
+Elements and optional fields without a value are omitted instead of being returned as `null` or empty values. This applies to members of Submodels, collections, Entity statements, and annotations, to the Submodel Element listing, to Operation result arguments, and to fields such as an unset Range bound or a Blob's `contentType`. `SubmodelElementList` members are always kept so that indices match the normal representation. Operations and Capabilities have no ValueOnly form: they are omitted, and a list that contains them is omitted as a whole.
+
 A `$value` PATCH validates the complete payload against the **stored element types** before writing. Numeric and boolean types also accept valid lexical strings such as `"42"` or `"true"`. Other types require strings. Invalid values, incompatible JSON types, and unsupported fields in an element's ValueOnly object return `400 Bad Request`. Nonexistent elements return `404 Not Found`. Use creation routes to add them.
 
-Omitted members remain unchanged. `null` clears a Property value or Range bound. For an existing numeric Range, `{"min": null, "max": 42}` clears its lower bound and sets its upper bound.
+Omitted members remain unchanged. `null` clears a Property value, a Range bound, or the reference of a ReferenceElement. For an existing numeric Range, `{"min": null, "max": 42}` clears its lower bound and sets its upper bound.
 
 ### `$metadata`
 
@@ -108,7 +110,7 @@ The metadata response retains the Property's model information but omits its run
 }
 ```
 
-For structured elements, the metadata representation retains the nested model hierarchy while removing values according to each element type's metadata rules.
+A Submodel Element's metadata contains only the fields of the Part 2 metadata schema for its type. Child elements of collections, lists, Entities, and annotated relationships are not included, and neither are value fields such as `valueId`, `contentType`, `first`, `second`, `observed`, `entityType`, `globalAssetId`, `specificAssetIds`, or Operation variables. `GET .../submodel-elements/$metadata` therefore returns only top-level elements.
 
 ### `$reference`
 
@@ -138,6 +140,8 @@ The response is a ModelReference to the Property, including the containing Submo
 }
 ```
 
+Each key uses the model type of the element it refers to. The key of a `SubmodelElementList` member therefore has the member's type, such as `Property` or `SubmodelElementCollection`, and its index as value.
+
 ### `$path`
 
 Use `level=deep` on the collection to include its descendants:
@@ -156,7 +160,7 @@ The response is an array of addressable `idShort` paths. It includes the request
 ]
 ```
 
-These entries identify elements. They are not AAS model objects or References.
+These entries identify elements. They are not AAS model objects or References. With `level=core`, the response contains the path of the requested element and of its direct children.
 
 ## Depth and Blob Content
 
@@ -165,7 +169,7 @@ Where the read operation exposes them:
 | Modifier | Effect |
 | --- | --- |
 | `level=deep` | Include nested content. |
-| `level=core` | Limit the representation to its core level. |
+| `level=core` | Include only direct children. A Submodel or list of Submodels contains its top-level elements without their children; in `$value`, those collections and lists are returned as `{}` and `[]`. |
 | `extent=withoutBlobValue` | Omit Blob payload values. |
 | `extent=withBlobValue` | Include Blob payload values. |
 
