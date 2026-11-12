@@ -5,7 +5,7 @@
 The verifier does not restore PostgreSQL. A successful run confirms only the selected evidence and trust inputs. It does not prove that the business data is correct, that evidence outside the selected range exists, that backups can be restored, or that a deployment meets a legal or regulatory requirement.
 
 ```{note}
-The [BaSyx History Audit Guarded Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxHistoryAuditGuardedExample) shows how to use the verifier CLI to publish and verify evidence and export verified recovery data.
+The [BaSyx History Audit Guarded Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxHistoryAuditGuardedExample) shows how to use the verifier CLI to publish and verify evidence and export verified recovery data.
 ```
 
 ## Build and Configure the CLI
@@ -15,7 +15,7 @@ BaSyx Go includes the command source but no dedicated `historyevidenceverifier` 
 Building the verifier requires Go 1.27.2 or a compatible newer Go toolchain.
 
 ```bash
-git checkout v1.1.2
+git checkout v1.1.3
 go build -o historyevidenceverifier ./cmd/historyevidenceverifier
 ```
 

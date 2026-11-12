@@ -86,7 +86,7 @@ If no primary `application_name` is supplied through `applicationName` or the DS
 #### Optional PostgreSQL reader
 
 ```{note}
-The [BaSyx Read Replica Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxReadReplicaExample) runs the combined AAS Environment with a PostgreSQL primary and a real streaming standby. It includes checks for replication and writer/reader connection routing.
+The [BaSyx Read Replica Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxReadReplicaExample) runs the combined AAS Environment with a PostgreSQL primary and a real streaming standby. It includes checks for replication and writer/reader connection routing.
 ```
 
 PostgreSQL-backed BaSyx HTTP services can use a separate reader connection for

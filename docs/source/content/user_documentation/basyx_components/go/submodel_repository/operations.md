@@ -5,7 +5,7 @@ This walkthrough invokes the delegated-operation example synchronously and async
 The upstream example uses the [AAS Environment](../aas_environment/index), which exposes the same Submodel Repository operation endpoints and delegation behavior. The standalone Submodel Repository uses the same operation invocation implementation.
 
 ```{note}
-The [BaSyx Delegated Operations Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxDelegatedOperationsExample) contains the Compose stack, delegated service, model fixtures, and requests for synchronous and asynchronous invocation in full-metadata and ValueOnly form.
+The [BaSyx Delegated Operations Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxDelegatedOperationsExample) contains the Compose stack, delegated service, model fixtures, and requests for synchronous and asynchronous invocation in full-metadata and ValueOnly form.
 ```
 
 ## Modeled Operation Versus Invocation

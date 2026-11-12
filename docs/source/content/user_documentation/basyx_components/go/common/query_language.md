@@ -294,7 +294,7 @@ Select AAS Descriptors by an embedded Submodel Descriptor field:
 
 The first request is valid for `/query/submodels`. The second is valid for `/query/shell-descriptors`. A field root valid for one endpoint is not automatically valid for another.
 
-For additional query examples, see the [Query Language Examples](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.2/docu/query_language/examples.md) in the BaSyx Go repository.
+For additional query examples, see the [Query Language Examples](https://github.com/eclipse-basyx/basyx-go-components/blob/v1.1.3/docu/query_language/examples.md) in the BaSyx Go repository.
 
 ## Results and Pagination
 

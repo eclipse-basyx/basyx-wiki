@@ -3,7 +3,7 @@
 The features on this page serve different purposes. Recent-change APIs find current resources by their stored timestamps, history reconstructs earlier recorded states, and signed reads and mutation evidence support verification of returned or retained data.
 
 ```{note}
-The [BaSyx History Audit Guarded Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxHistoryAuditGuardedExample) shows how to record audit history, protect PostgreSQL history from modification, and store mutation evidence.
+The [BaSyx History Audit Guarded Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxHistoryAuditGuardedExample) shows how to record audit history, protect PostgreSQL history from modification, and store mutation evidence.
 ```
 
 ## Availability

@@ -14,9 +14,9 @@ To try BaSyx authentication and access control, choose an example setup:
 
 | Example | Identity provider and setup |
 | --- | --- |
-| [BaSyx Secured Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxSecuredExample) | Local Keycloak with separate BaSyx components, ABAC rules, and admin, read-only, and anonymous access scenarios. |
-| [BaSyx Ory Hydra Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxOryHydraExample) | Local Hydra and Kratos with the combined AAS Environment, JWT access tokens, and provider claim mappings. |
-| [BaSyx Entra ID Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.2/examples/BaSyxEntraIDExample) | An external Microsoft Entra ID tenant with app registrations, API audiences, and delegated or app-only permissions. |
+| [BaSyx Secured Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxSecuredExample) | Local Keycloak with separate BaSyx components, ABAC rules, and admin, read-only, and anonymous access scenarios. |
+| [BaSyx Ory Hydra Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxOryHydraExample) | Local Hydra and Kratos with the combined AAS Environment, JWT access tokens, and provider claim mappings. |
+| [BaSyx Entra ID Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxEntraIDExample) | An external Microsoft Entra ID tenant with app registrations, API audiences, and delegated or app-only permissions. |
 ```
 
 ## Security Model
