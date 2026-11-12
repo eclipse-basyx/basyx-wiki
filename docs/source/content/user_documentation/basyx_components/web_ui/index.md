@@ -69,6 +69,17 @@ Docker must be installed on your system to run the AAS Web UI.
 Dockers official documentation provides a [detailed installation guide](https://docs.docker.com/get-docker/) for Windows, Mac and Linux.
 ```
 
+```{note}
+The AAS Web UI is the frontend. Starting the `eclipsebasyx/aas-gui` container does not start any AAS repositories, registries, or discovery services.
+
+To browse or edit AAS data, connect the Web UI to an existing AAS infrastructure or deploy backend services separately. For a local setup, follow one of these examples first:
+
+* [BaSyx Go minimal example](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxMinimalExample)
+* [BaSyx Java minimal example](https://github.com/eclipse-basyx/basyx-java-server-sdk/tree/main/examples/BaSyxMinimal)
+
+The services you need depend on your backend topology and the infrastructure template you select in the Web UI. Configure endpoints that are reachable from your browser, and ensure that the backend's CORS settings allow the Web UI's origin (for the command below, `http://localhost:3000`).
+```
+
 The container for the AAS Web UI can be started by executing the following command:
 
 ```bash
