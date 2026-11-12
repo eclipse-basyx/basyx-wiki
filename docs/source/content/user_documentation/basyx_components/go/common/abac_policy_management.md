@@ -319,6 +319,12 @@ and `error` without replacing the stored materialization. Validation does not
 activate the version or prove that route coverage and organizational
 authorization intent are complete.
 
+A `FILTER` or `FILTERLIST` fragment that targets `$sm#id` or the `idShort` of
+a named Submodel Element is a policy-content failure; see
+[Fragment Filter Targets](security.md#fragment-filter-targets). An active
+version that contains such a filter cannot be loaded, so clone it, change the
+filter, and activate the clone before upgrading from an earlier release.
+
 Activation repeats validation. Superseding the current active version, marking
 the staged version active, and recording the corresponding policy events use one
 database transaction. When evidence is enabled, it must be written before that

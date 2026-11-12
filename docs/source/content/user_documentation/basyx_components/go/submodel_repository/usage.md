@@ -158,10 +158,10 @@ curl -i -X POST http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ/s
 Place a file named `manual.pdf` in the working directory, then upload it as multipart form data:
 
 ```bash
-curl -i -X PUT http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ/submodel-elements/Manual/attachment -F 'fileName=manual.pdf' -F 'file=@manual.pdf;type=application/pdf'
+curl -i -X PUT http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ/submodel-elements/Manual/attachment -F 'file=@manual.pdf;type=application/pdf'
 ```
 
-Expect `204 No Content`. Download the stored content with `GET` on the same attachment resource:
+Expect `204 No Content`. The stored file name comes from the `filename` parameter of the file part's `Content-Disposition` header, which curl sets from the uploaded file. A separate `fileName` form field is not read. An upload without a file name keeps the previously stored name, or else is named after the element's `idShort` (`file` for a list member) with an extension matching the content type, for example `Manual.pdf`. Download the stored content with `GET` on the same attachment resource:
 
 ```bash
 curl --fail-with-body --output downloaded-manual.pdf http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ/submodel-elements/Manual/attachment
@@ -220,7 +220,17 @@ To update metadata, save this as `serial-metadata.json`:
 curl -i -X PATCH 'http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ/submodel-elements/Nameplate.SerialNumber/$metadata' -H 'Content-Type: application/json' --data-binary '@serial-metadata.json'
 ```
 
-Expect `204 No Content`. The normal Property now includes the description and retains the previously stored `SN-002` value and `xs:string` datatype. This implementation accepts common metadata fields in a Submodel Element `$metadata` PATCH, but rejects `valueType`; omit it from this payload.
+Expect `204 No Content`. The normal Property now includes the description and retains the previously stored `SN-002` value and `xs:string` datatype. Fields omitted from a `$metadata` PATCH, the element's value, and its children remain unchanged. `modelType` is required and must match the stored element.
+
+Besides the common metadata fields, a `$metadata` PATCH accepts the type-specific fields of the Part 2 metadata schemas:
+
+| Element type | Additional fields |
+| --- | --- |
+| `Property`, `Range` | `valueType` |
+| `SubmodelElementList` | `orderRelevant`, `semanticIdListElement`, `typeValueListElement`, `valueTypeListElement` |
+| `BasicEventElement` | `direction`, `state`, `messageTopic`, `messageBroker`, `lastUpdate`, `minInterval`, `maxInterval` |
+
+Other fields are rejected with `400 Bad Request`. A `valueType` that the stored value cannot be converted to is rejected as well. The updated element is verified according to the configured [verification mode](../common/validation.md#submodel-element-lists-and-patch), including its list members or enclosing list.
 
 PATCH on normal, metadata, and value endpoints expects the corresponding representation, not an RFC 6902 array of `op`/`path` instructions. Use element creation routes to add elements, complete PUT bodies to replace resources, and the relevant PATCH representation to update existing content. A `$metadata` update changes metadata while retaining values. Follow its schema in Swagger rather than including value fields in that payload.
 
@@ -264,7 +274,7 @@ Request the collection without filters so both Submodels are eligible. Set `limi
 curl -i -G http://localhost:8085/submodels --data-urlencode 'limit=1'
 ```
 
-Expect `200 OK`. The body contains one Submodel in `result` and a non-empty `paging_metadata.cursor` indicating that another page is available. Copy that cursor string into the next request:
+Expect `200 OK`. The body contains one Submodel in `result` and a non-empty `paging_metadata.cursor` indicating that another page is available. A Submodel without elements, such as `PumpNameplate`, is returned without `submodelElements`. Copy that cursor string into the next request:
 
 ```bash
 curl -i -G http://localhost:8085/submodels --data-urlencode 'limit=1' --data-urlencode 'cursor=RETURNED_CURSOR'

@@ -53,6 +53,8 @@ The required `granularity` values are `Item`, `Model`, and `Batch`. `lastUpdate`
 
 Name each compressed top-level content section after the corresponding entry in `contentSpecificationIds`. This keeps the relationship unambiguous when a passport uses several content specifications.
 
+The idShort of each content Submodel is derived from its section name: for an IRI or URN, from the last segment that contains a letter, reduced to letters, digits, and `_`. A section name that does not give a valid idShort, such as `urn:example:1a`, is rejected with `400 Bad Request`. Object keys that name elements within a content section become idShorts and must match the AAS idShort type: 2 to 128 characters, only letters, digits, `-`, and `_`, starting with a letter and not ending with `-`. Keys that do not match, including empty and single-letter keys, are rejected with `400 Bad Request` on creation and on updates.
+
 ## Encode Path Identifiers
 
 DPP and product identifiers are placed directly in URL path parameters after percent-encoding their UTF-8 form exactly once. The examples use:
@@ -199,3 +201,19 @@ curl -i -X DELETE 'http://localhost:8088/v1/dpps/https%3A%2F%2Fexample.org%2Fdpp
 Expect `204 No Content`. Current reads by DPP or product identifier now return `404 Not Found`.
 
 Deletion removes the owning AAS and DPP metadata Submodel. Content Submodels and their attachments remain stored. When Registry synchronization is enabled, the corresponding DPP-owned AAS and metadata descriptors are also removed; retained content Submodels are not. If history recorded the earlier states, a historical request for a time before deletion remains available.
+
+## Error Responses
+
+Errors reported by the underlying repositories keep their HTTP status:
+
+| Status | Typical cause |
+| --- | --- |
+| `400 Bad Request` | Malformed body or query parameter, or invalid content such as a key or section name that does not give a valid idShort |
+| `403 Forbidden` | Access denied by the authorization rules |
+| `404 Not Found` | Unknown DPP, product identifier, or element |
+| `409 Conflict` | Duplicate DPP identifier, or several passports for a product identifier |
+| `413 Request Entity Too Large` | Request body or stored content exceeds a configured limit |
+| `422 Unprocessable Entity` | Stored content cannot be expressed in the full representation |
+| `500 Internal Server Error` | Internal error, including a stored DPP that cannot be composed |
+| `501 Not Implemented` | Write with `representation=full` |
+| `503 Service Unavailable` | A required dependency, such as the object store, is unavailable |

@@ -558,7 +558,7 @@ Relationship-based access control (ReBAC) is experimental. It lets users share t
 | Key | Default | Purpose |
 | --- | --- | --- |
 | `rebac.enabled` | `false` | Enables ReBAC. Requires `abac.enabled=true` and a readable `oidc.trustlistPath`. |
-| `rebac.subjectClaim` | `sub` | Top-level access token claim with a stable user identifier. Use `oid` for Microsoft Entra ID. |
+| `rebac.subjectClaim` | `sub` | Top-level access token claim with a stable user identifier. Use `oid` for Microsoft Entra ID. Its value is also written into `administration.creator` of newly created resources and is visible to everyone who can read them; see [Administrative creator](rebac.md#administrative-creator). |
 | `rebac.groupClaim` | `groups` | Top-level access token claim with group names. Use `basyx.<target>` for a claim mapped in the trustlist. |
 | `rebac.administrators` | `[]` | Bootstrap and recovery administrators as `issuer\|subject` or `issuer\|group:<name>`. |
 

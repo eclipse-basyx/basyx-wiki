@@ -224,7 +224,7 @@ While running, the response is `200 OK` with `executionState: Running` and a `Re
 curl -i http://localhost:8082/bulk/result/HANDLE_ID
 ```
 
-Success returns `204 No Content`. A descriptor-operation failure returns `400` with failure details. Execution failures can return another error status. Completion alone does not indicate success. Bulk descriptor mutations are atomic: if an operation fails, all descriptor changes in that job are rolled back.
+Success returns `204 No Content`. If a descriptor operation fails, the result is `400 Bad Request` with an AAS `Result` that contains only `messages`: one `Error` message per submitted item, with the item's status code as `code`, `bulk-item-<index>` as `correlationId`, and the item's index, identifier, and failure reason in `text`. Execution failures can return another error status. Completion alone does not indicate success. Bulk descriptor mutations are atomic: if an operation fails, all descriptor changes in that job are rolled back.
 
 Retrieving a completed result consumes the handle, including for failed jobs. Save the response if it is needed later; subsequent status/result requests return `404`. Fetching a result while the job is still running returns `400` and does not consume the running handle. Do not automatically follow the status redirect unless you intend to consume the result.
 

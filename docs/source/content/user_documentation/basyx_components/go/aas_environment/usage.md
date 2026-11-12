@@ -105,9 +105,11 @@ Expect HTTP `200` and a response containing:
 }
 ```
 
-The endpoint accepts plain AAS Environment documents using `application/json`, `application/xml`, or `text/xml`. AASX packages use `application/aasx+json`, `application/aasx+xml`, `application/asset-administration-shell+json`, or `application/asset-administration-shell+xml`. Supply the actual format as the `file` part's media type, for example `-F 'file=@environment.aasx;type=application/aasx+json'`.
+The endpoint accepts plain AAS Environment documents using `application/json`, `application/xml`, or `text/xml`. AASX packages use `application/aasx+json`, `application/aasx+xml`, `application/asset-administration-shell+json`, or `application/asset-administration-shell+xml`. Supply the actual format as the `file` part's media type, for example `-F 'file=@environment.aasx;type=application/aasx+json'`. If the part has no media type or `application/octet-stream`, the format is inferred from the extension (`.aasx`, `.json`, or `.xml`) of the optional `fileName` form field or of the file part's filename, and otherwise from the content.
 
 Uploads are size-limited. The default maximum uploaded file-content size is 128 MiB (`134217728` bytes), and AASX packages are subject to additional limits on package parts, OPC metadata, individual expanded parts, total expanded content, and thumbnails. See [General Configuration](../common/configuration.md#general) when larger uploads require different limits.
+
+A File element in an AASX package is imported with its attachment only when the referenced package part is related to the AAS specification part as `aas-suppl` (IDTA-01005). If it references another part of the package, for example the package thumbnail, no attachment is imported for it, and the service logs the warning `AASENV-UPLDSUPPL-NOSUPPLREL` with the Submodel, idShort path, and part.
 
 ## Retrieve the Imported Content
 
@@ -183,6 +185,8 @@ curl -G http://localhost:8090/serialization \
 
 The resulting AASX can be imported through `/upload` with `-F 'file=@exported-environment.aasx;type=application/aasx+json'`. Plain XML and XML-based AASX representations are also available; always send an explicit `Accept` header so the chosen representation is unambiguous.
 
+`Accept: application/aas+zip`, the AASX media type of the IDTA OpenAPI and Part 5, returns an AASX package with an XML specification part and the response `Content-Type` `application/aas+zip`. To import such a package through `/upload`, declare the file part as `application/aasx+xml`.
+
 ### Export Limits
 
 The JSON or XML environment specification, including inside an AASX package, is limited by `general.aasxMaxPartExpandedSizeBytes` (default 128 MiB). Exceeding an export limit returns `413 Request Entity Too Large`. See [General Configuration](../common/configuration.md#general) for all export limits.
@@ -193,14 +197,49 @@ With runtime security enabled, permissions are type-specific: access to an AAS d
 
 Explicitly selecting a missing or inaccessible AAS or Submodel aborts the export with `404`, without returning a partial selection. A caller without permission to use the import or export endpoint receives `403`.
 
-Imports require CREATE for new content and UPDATE for existing content, including attachments and thumbnails. See [Runtime Security](../common/security.md#environment-import-and-export) for grant syntax, filtering rules, binary-content permissions, and a policy example.
+Imports through `/upload` and `/upload-async` require CREATE for new content and UPDATE for existing content, including attachments and thumbnails. See [Runtime Security](../common/security.md#environment-import-and-export) for grant syntax, filtering rules, binary-content permissions, and a policy example.
 
 ## Re-import and Failure Behavior
 
 Uploading the same identifiers again uses replace-on-upload behavior: existing Concept Descriptions, Submodels, and AASs are updated rather than rejected as package-level duplicates. Treat the submitted objects as complete replacements and preserve every field that should remain.
 
-```{warning}
-An upload is not one atomic package transaction. The service processes Concept Descriptions, then Submodels, then AASs; a later failure can leave earlier objects stored. AASX attachments are processed afterward and can also fail after model content was written. The success counts describe the parsed input, not an all-or-nothing commit guarantee. After any error, inspect the affected resources before retrying.
+An upload is all-or-nothing. Its Concept Descriptions, Submodels, and AASs, the AASX thumbnails and supplementary files, and the synchronized Registry descriptors are stored in one transaction, together with their history and Eventing outbox entries. If any of them is rejected, nothing from the upload is stored. The error message starts with `AASENV-PROCESSENV-ROLLEDBACK`, states that nothing was stored, and names the rejected resource or package part, for example:
+
+```text
+AASENV-PROCESSENV-ROLLEDBACK upload rejected, nothing from the uploaded environment was stored: AASENV-PROCESSENV-PUTSM failed to store Submodel "urn:example:submodel": 403 Denied: ...
 ```
+
+The HTTP status reflects the rejection, for example `400`, `403`, or `409`. Correct the rejected resource and upload the complete file again.
+
+## Import Asynchronously
+
+`POST /upload-async` accepts the same multipart request as `/upload` and imports the file in the background:
+
+```bash
+curl -i -X POST http://localhost:8090/upload-async -F 'file=@environment.json;type=application/json'
+```
+
+Expect `202 Accepted`, a JSON body with `handleId`, and a `Location` header pointing to `/upload-async/status/<handleId>`. Request that returned location without following redirects:
+
+```bash
+curl -i 'http://localhost:8090/<returned upload-async/status path>'
+```
+
+While the import runs, status returns `200 OK` with `executionState` `Running`. When it has finished, status returns `302 Found` with a `Location` header pointing to `/upload-async/result/<handleId>`. The result returns `200 OK` with a `BaseOperationResult`:
+
+| Outcome | `executionState` | `success` | `messages` |
+| --- | --- | --- | --- |
+| Imported | `Completed` | `true` | An `Info` message confirming that the environment was stored completely |
+| Failed | `Failed` | `false` | The messages that `/upload` returns for the same failure; nothing from the upload was stored |
+
+The import uses the same all-or-nothing transaction as `/upload` and fails if it does not finish within 15 minutes. Reading the result does not delete the handle; finished results are retained for 15 minutes.
+
+| Status | Meaning |
+| --- | --- |
+| `415 Unsupported Media Type` | The format was rejected before the file was accepted; no operation was created. |
+| `429 Too Many Requests` | No execution capacity is available; retry later. Each running import holds one database connection, so at most one fifth of `postgres.maxOpenConnections`, and at least one, run at the same time. |
+| `404 Not Found` on status or result | The handle is unknown, has expired, or belongs to another caller. |
+
+The handle is bound to the uploader. With runtime security enabled, the `/upload-async` routes reject unauthenticated requests with `401`, only the uploader can read the status and result, and the background import is authorized with the uploader's ABAC and ReBAC permissions exactly like `/upload`. See [Asynchronous API Operations](../common/asynchronous_requests) for the shared lifecycle.
 
 For shared payload-validation behavior, see [Validation](../common/validation).

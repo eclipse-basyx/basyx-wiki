@@ -4,6 +4,10 @@
 The MCP endpoint is an experimental feature, available from BaSyx Go v1.1.3. Its configuration, tools, tool parameters, and results may change.
 ```
 
+```{note}
+The [BaSyx MCP Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxMCPExample) runs a local AAS Environment with the MCP endpoint and writes enabled, preloaded with a drive motor AAS, and shows how to connect Claude Code and Codex. Its `secured` variant adds Keycloak sign-in, two users with different permissions, and a realm configured as described in [Example: Keycloak](#example-keycloak).
+```
+
 The AAS Environment can serve a [Model Context Protocol](https://modelcontextprotocol.io) (MCP) endpoint next to its REST API. AI agents and other MCP clients, such as Claude Code or Codex, use it to read and change Asset Administration Shells, Submodels, and Submodel Elements.
 
 Each tool call is turned into a request to the AAS Environment API inside the same process, carrying the caller's bearer token. Authentication, ABAC and ReBAC rules, validation, conditional requests, history, and eventing therefore apply exactly as they do to REST calls. The MCP endpoint grants no access that the REST API does not grant to the same user.
@@ -171,7 +175,3 @@ The secured MCP example uses Keycloak with Dynamic Client Registration. The real
 - Users have the realm role `offline_access`, and the `offline_access` client scope maps it. Clients such as Codex request refresh tokens with this scope, and self-registered clients receive roles only through their scopes.
 
 Keep the other anonymous registration policies, in particular *Allowed Protocol Mapper Types* and *Allowed Client Scopes*. They prevent self-registered clients from adding protocol mappers that put arbitrary claims, which ABAC rules may evaluate, into their tokens. A realm import that defines its own client scopes or registration policies replaces Keycloak's defaults, so it must list these policies explicitly.
-
-## Examples
-
-The [BaSyx MCP Example](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxMCPExample) in the BaSyx Go repository starts a local AAS Environment with the MCP endpoint and writes enabled. Its `secured` variant adds Keycloak sign-in, two users with different permissions, and a realm configured as described above.

@@ -22,6 +22,32 @@ server:
 
 The equivalent variables are `SERVER_STRICTVERIFICATION=strict` and `SERVER_VERIFICATIONENDPOINTAVAILABLE=true`. See [General Configuration](configuration) for loading and precedence. Neither `off` nor `permissive` makes malformed JSON acceptable.
 
+The mode also applies to the creation and replacement of Concept Descriptions in the Concept Description Repository and the AAS Environment, including imports. In `strict` mode, a rejected write returns `400 Bad Request` and stores nothing.
+
+### Submodel Element Lists and PATCH
+
+Writes of `SubmodelElementList` members are verified against the enclosing list: `PUT` and `PATCH` of a member, `POST` of a new member into a list, and `PATCH` of a list. In `strict` mode, a member that violates the list's `typeValueListElement`, `valueTypeListElement`, or `semanticIdListElement` (AASd-107, AASd-108, AASd-109) is rejected. Verification covers the complete stored list, also when access rules hide some members from the caller.
+
+A `PATCH` of a Submodel Element, including a `$metadata` PATCH, is verified on the merged result with the element's stored value, not only on the request payload.
+
+## idShort Rules
+
+Every verification mode, including `off`, rejects an `idShort` that does not match the idShort type of the AAS metamodel:
+
+- 2 to 128 characters;
+- only letters, digits, `-`, and `_`;
+- starts with a letter and does not end with `-`.
+
+This applies to AASs, Submodels, Concept Descriptions, and Submodel Elements written with `POST`, `PUT`, or `PATCH`, including `$metadata` PATCH and AAS Environment uploads. An optional `idShort` may be omitted, but an explicit empty string is invalid. Single-letter idShorts such as `X`, which some IDTA Submodel Templates use, are rejected as well. A rejected write returns `400 Bad Request` with an error code ending in `-INVALIDIDSHORT` in the message text.
+
+A Submodel Element must have an `idShort` unless it is a direct member of a `SubmodelElementList` (AASd-117). This applies in every mode to top-level elements, collection values, Entity statements, annotations, and Operation variable values. A missing `idShort` returns `400 Bad Request` with an error code ending in `-MISSINGIDSHORT`, unless `strict` verification already rejects the request with its own error.
+
+```{note}
+Resources stored by earlier versions with invalid idShorts are not migrated or repaired. Delete them and create them again with valid idShorts.
+
+Elements stored by earlier versions without `idShort` remain stored, and a `PATCH` that does not include them is not affected. Writing them back unchanged, for example by `PUT`ting a Submodel as it was read, is rejected. Add the missing idShorts in that `PUT` to repair them.
+```
+
 ## Check a Payload Before Writing It
 
 Except for the standalone DPP API, the BaSyx Go HTTP services can expose `POST {contextPath}/verify` when `server.verificationEndpointAvailable` is enabled. The DPP API does not register this endpoint. This shared endpoint verifies AAS model content. It is not a Registry descriptor-validation endpoint. It accepts JSON, XML, and AASX payloads. Supported model content includes AAS Environments and individual AAS model objects accepted by the parser.
@@ -48,4 +74,4 @@ Add the service context path if configured. Expect `200 OK`, `valid: true`, and 
 
 Change `idShort` to `1Invalid` and submit again. A parsed payload with semantic violations returns `200 OK` with `valid: false` and diagnostic `messages`. Inspect `valid`; HTTP success alone does not mean the model passed verification. This explicit verification reports violations independently of the write-verification mode.
 
-On a write route using semantic verification, the same invalid `idShort` is rejected in `strict` mode, logged in `permissive` mode, and not checked by the semantic verifier in `off` mode. Other write checks may still reject the request in any mode.
+On a write route, the same invalid `idShort` is rejected in every mode; see [idShort Rules](#idshort-rules). Other semantic violations are rejected in `strict` mode, logged in `permissive` mode, and not checked in `off` mode.

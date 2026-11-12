@@ -15,16 +15,14 @@ Continue after HTTP `200`. The examples use an empty context path and the unsecu
 ## Upload a Package
 
 ```bash
-curl -i -X POST http://localhost:8087/packages -F 'file=@example.aasx;type=application/asset-administration-shell-package' -F 'fileName=example.aasx' -F 'aasIds=urn:example:aas:1'
+curl -i -X POST http://localhost:8087/packages -F 'file=@example.aasx;type=application/asset-administration-shell-package' -F 'aasIds=urn:example:aas:1'
 ```
 
-Expect `201 Created`. Copy the `packageId` from the JSON response or the package identifier from the `Location` header. The returned value is already Base64URL-encoded for use in `/packages/{packageId}`; do not encode it again.
+Expect `201 Created`. The JSON response is a package description containing only `packageId` and `aasIds`, both as plain identifiers. The `Location` header contains the package path with the unpadded Base64URL-encoded package identifier; use it for `/packages/{packageId}` requests, or Base64URL-encode the returned `packageId` yourself.
 
-`file` is required. `fileName` and `aasIds` are optional. If `fileName` is omitted, the service uses the filename of the multipart `file` part; only its base filename is stored.
+`file` is required and `aasIds` is optional. The stored file name is the `filename` parameter of the `file` part's `Content-Disposition` header, which curl sets from the uploaded file; only its base filename is stored. A separate `fileName` form field is ignored.
 
-Supply plain, unencoded AAS identifiers in `aasIds`. The field can be repeated, and each field can contain comma-separated values. Surrounding whitespace and empty values are ignored, and duplicate identifiers are stored once. These identifiers are caller-supplied metadata: the File Server does not discover them by importing the AASX contents into Repository storage.
-
-Package descriptions use unpadded Base64URL representations for `packageId` and for every identifier in `aasIds`. Each representation encodes the UTF-8 bytes of the underlying identifier. Multipart `aasIds` input remains unencoded.
+Supply plain, unencoded AAS identifiers in `aasIds`. Each `aasIds` part carries exactly one identifier, so a comma is part of the identifier; repeat the part to associate several identifiers. Surrounding whitespace and empty values are ignored, and duplicate identifiers are stored once. These identifiers are caller-supplied metadata: the File Server does not discover them by importing the AASX contents into Repository storage.
 
 ## List Packages
 
@@ -32,13 +30,13 @@ Package descriptions use unpadded Base64URL representations for `packageId` and 
 curl -i -G http://localhost:8087/packages --data-urlencode 'limit=10'
 ```
 
-The response contains package descriptions in `result` and pagination information in `pagingMetadata`. Page sizes follow `server.pagination.defaultLimit` (default `100`) and `server.pagination.maxLimit` (default `1000`). A non-positive or excessive `limit` returns `400 Bad Request`. If `pagingMetadata.cursor` is present, treat it as opaque and pass it unchanged in the next request:
+The response contains package descriptions in `result` and pagination information in `paging_metadata`. Page sizes follow `server.pagination.defaultLimit` (default `100`) and `server.pagination.maxLimit` (default `1000`). A non-positive or excessive `limit` returns `400 Bad Request`. If `paging_metadata.cursor` is present, treat it as opaque and pass it unchanged in the next request:
 
 ```bash
 curl -i -G http://localhost:8087/packages --data-urlencode 'limit=10' --data-urlencode 'cursor=RETURNED_CURSOR'
 ```
 
-To filter by the AAS identifier supplied during upload, pass its Base64URL representation. For `urn:example:aas:1`:
+To filter by an AAS identifier supplied during upload, pass its Base64URL representation. For `urn:example:aas:1`:
 
 ```bash
 curl -i -G http://localhost:8087/packages --data-urlencode 'aasId=dXJuOmV4YW1wbGU6YWFzOjE'
@@ -46,20 +44,20 @@ curl -i -G http://localhost:8087/packages --data-urlencode 'aasId=dXJuOmV4YW1wbG
 
 ## Download the Package
 
-Replace `RETURNED_PACKAGE_ID` with the encoded identifier returned by the upload:
+Replace `RETURNED_PACKAGE_ID` with the encoded package identifier from the upload's `Location` header:
 
 ```bash
 curl -D response-headers.txt -o downloaded.aasx http://localhost:8087/packages/RETURNED_PACKAGE_ID
 ```
 
-The file response includes its stored name in the `X-FileName` header. HTTP headers are written to `response-headers.txt`, while the package bytes are written to `downloaded.aasx`.
+The response has the Content-Type `application/asset-administration-shell-package`, whether the package contains a JSON or XML environment, and includes its stored name in the `X-FileName` header. HTTP headers are written to `response-headers.txt`, while the package bytes are written to `downloaded.aasx`.
 
 ## Replace the Package
 
 Place a valid replacement package named `replacement.aasx` in the working directory, then send a complete multipart replacement:
 
 ```bash
-curl -i -X PUT http://localhost:8087/packages/RETURNED_PACKAGE_ID -F 'file=@replacement.aasx;type=application/asset-administration-shell-package' -F 'fileName=replacement.aasx' -F 'aasIds=urn:example:aas:1'
+curl -i -X PUT http://localhost:8087/packages/RETURNED_PACKAGE_ID -F 'file=@replacement.aasx;type=application/asset-administration-shell-package' -F 'aasIds=urn:example:aas:1'
 ```
 
 Expect `204 No Content` for an existing package. PUT creates a missing package with `201 Created`. Replacement changes the stored file, file name, and AAS associations together; include every association that should remain.
@@ -95,7 +93,7 @@ Submit the package:
 curl -i -X POST http://localhost:8087/packages-async -F 'file=@example.aasx;type=application/asset-administration-shell-package' -F 'aasIds=urn:example:aas:async'
 ```
 
-Expect `202 Accepted`, an `OperationHandle` JSON body containing `handleId`, and a `Location` header pointing to `/packages-async/status/{handleId}`. Use the encoded handle path from `Location`; do not place the raw JSON `handleId` into the path without Base64URL-encoding it. The asynchronous API takes the stored filename from the multipart `file` part.
+Expect `202 Accepted`, an `OperationHandle` JSON body containing `handleId`, and a `Location` header pointing to `/packages-async/status/{handleId}`. Use the encoded handle path from `Location`; do not place the raw JSON `handleId` into the path without Base64URL-encoding it. As with synchronous uploads, the stored file name comes from the `file` part's `Content-Disposition` filename.
 
 If the service has no free asynchronous execution capacity, submission returns `429 Too Many Requests`; retry later. `202 Accepted` means that the upload was accepted for processing, not that package validation and storage have completed.
 
@@ -111,11 +109,11 @@ While processing continues, the endpoint returns `200 OK` with a `BaseOperationR
 curl -i http://localhost:8087/packages-async/result/ENCODED_HANDLE_ID
 ```
 
-The result endpoint returns `200 OK` with a completed or failed `BaseOperationResult`. It reports the operation outcome rather than a package description. After a successful result, list the packages to obtain the new `packageId`. Reading the result does not delete the handle. See [Asynchronous API Operations](../common/asynchronous_requests) for the shared lifecycle and retention behavior.
+The result endpoint returns `200 OK` with a completed or failed `BaseOperationResult`. It reports the operation outcome rather than a package description. After a successful result, list the packages to obtain the new `packageId` and Base64URL-encode it for `/packages/{packageId}` requests. Reading the result does not delete the handle. See [Asynchronous API Operations](../common/asynchronous_requests) for the shared lifecycle and retention behavior.
 
 ## Upload Validation and Limits
 
-The server validates that an upload is an AASX package and rejects ambiguous JSON/XML specification parts. It determines the stored `contentType` from the package's specification part and reports `application/aasx+json` or `application/aasx+xml`; it does not simply copy curl's multipart MIME type.
+The server validates that an upload is an AASX package and rejects ambiguous JSON/XML specification parts.
 
 With the release defaults, uploaded file content is limited to 128 MiB, the complete expanded package to 512 MiB, each expanded part to 128 MiB, OPC metadata and thumbnails to 16 MiB each, and the package to 10,000 parts. Invalid packages return a client error; uploads exceeding configured limits can return `413 Payload Too Large`. Adjust limits through the verified settings in [Setup](setup), not through web-server assumptions.
 

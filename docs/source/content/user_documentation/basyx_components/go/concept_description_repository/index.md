@@ -19,6 +19,8 @@ Use the [AAS Environment](../aas_environment/index) when AASs, Submodels, Concep
 
 The identifier in a resource URL is the Base64URL encoding of its UTF-8 bytes. BaSyx Go accepts valid padded and unpadded Base64URL values. Identifiers in JSON request bodies remain unencoded. A PUT creates a missing Concept Description or replaces an existing one; its body identifier must match the decoded path identifier.
 
+POST and PUT verify the Concept Description according to the configured [verification mode](../common/validation); an invalid `idShort` is rejected in every mode.
+
 The Repository stores Concept Descriptions independently of the AAS and Submodel resources that reference them. It does not validate or synchronize semantic references in those resources.
 
 Creating, replacing, or deleting a Concept Description does not modify AASs or Submodels that reference its identifier. Deleting a Concept Description can therefore leave existing semantic references pointing to an identifier that is no longer available from this Repository.
