@@ -72,7 +72,7 @@ Dockers official documentation provides a [detailed installation guide](https://
 ```{note}
 The AAS Web UI is the frontend. Starting the `eclipsebasyx/aas-gui` container does not start any AAS repositories, registries, or discovery services.
 
-To browse or edit AAS data, connect the Web UI to an existing AAS infrastructure or deploy backend services separately. For a local setup, follow one of these examples first:
+To browse or edit AAS data, connect the Web UI to any compatible AAS server or deploy one separately. BaSyx is one option; for a local BaSyx setup, follow one of these examples first:
 
 * [BaSyx Go minimal example](https://github.com/eclipse-basyx/basyx-go-components/tree/main/examples/BaSyxMinimalExample)
 * [BaSyx Java minimal example](https://github.com/eclipse-basyx/basyx-java-server-sdk/tree/main/examples/BaSyxMinimal)

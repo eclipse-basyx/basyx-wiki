@@ -11,7 +11,7 @@ The BaSyx AAS Web UI is distributed as a Docker image that can be easily deploye
 ## Quick Start with Docker
 
 ```{note}
-The `eclipsebasyx/aas-gui` container starts the Web UI frontend only. To browse or edit AAS data, connect it to an existing AAS infrastructure or deploy the backend services separately. See the [Web UI Quick Start](../index.md#quick-start) for minimal backend examples and endpoint and CORS requirements.
+The `eclipsebasyx/aas-gui` container starts the Web UI frontend only. To browse or edit AAS data, connect it to a compatible AAS server or deploy one separately; the server does not have to be BaSyx. See the [Web UI Quick Start](../index.md#quick-start) for minimal backend examples and endpoint and CORS requirements.
 ```
 
 ### Pull the Image
