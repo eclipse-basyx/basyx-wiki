@@ -20,7 +20,7 @@ curl -i -X POST http://localhost:8087/packages -F 'file=@example.aasx;type=appli
 
 Expect `201 Created`. The JSON response is a package description containing only `packageId` and `aasIds`, both as plain identifiers. The `Location` header contains the package path with the unpadded Base64URL-encoded package identifier; use it for `/packages/{packageId}` requests, or Base64URL-encode the returned `packageId` yourself.
 
-`file` is required and `aasIds` is optional. The stored file name is the `filename` parameter of the `file` part's `Content-Disposition` header, which curl sets from the uploaded file; only its base filename is stored. A separate `fileName` form field is ignored.
+`file` is required and `aasIds` is optional. The stored file name is the `filename` parameter of the `file` part's `Content-Disposition` header, which curl sets from the uploaded file; only its base filename is stored. Without a `filename`, a replaced package keeps its stored file name, and a new package is stored as `<packageId>.aasx`. A separate `fileName` form field is ignored.
 
 Supply plain, unencoded AAS identifiers in `aasIds`. Each `aasIds` part carries exactly one identifier, so a comma is part of the identifier; repeat the part to associate several identifiers. Surrounding whitespace and empty values are ignored, and duplicate identifiers are stored once. These identifiers are caller-supplied metadata: the File Server does not discover them by importing the AASX contents into Repository storage.
 

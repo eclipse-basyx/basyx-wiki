@@ -14,9 +14,9 @@ To try BaSyx authentication and access control, choose an example setup:
 
 | Example | Identity provider and setup |
 | --- | --- |
-| [BaSyx Secured Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxSecuredExample) | Local Keycloak with separate BaSyx components, ABAC rules, and admin, read-only, and anonymous access scenarios. |
-| [BaSyx Ory Hydra Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxOryHydraExample) | Local Hydra and Kratos with the combined AAS Environment, JWT access tokens, and provider claim mappings. |
-| [BaSyx Entra ID Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxEntraIDExample) | An external Microsoft Entra ID tenant with app registrations, API audiences, and delegated or app-only permissions. |
+| [BaSyx Secured Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.5/examples/BaSyxSecuredExample) | Local Keycloak with separate BaSyx components, ABAC rules, and admin, read-only, and anonymous access scenarios. |
+| [BaSyx Ory Hydra Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.5/examples/BaSyxOryHydraExample) | Local Hydra and Kratos with the combined AAS Environment, JWT access tokens, and provider claim mappings. |
+| [BaSyx Entra ID Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.5/examples/BaSyxEntraIDExample) | An external Microsoft Entra ID tenant with app registrations, API audiences, and delegated or app-only permissions. |
 ```
 
 ## Security Model
@@ -262,6 +262,60 @@ objects, and formula match. Route objects match the API path. Resource objects
 and formulas can further restrict identifiable resources, descriptors,
 referables, or their fields.
 
+### ROUTE Matching
+
+ABAC matches `ROUTE` objects against one canonical form of the request path.
+Each path segment is decoded once, and only `%` and `/` inside a segment are
+encoded again, as `%25` and `%2F`. A slash inside a value therefore never acts
+as a path separator:
+
+| Client sends | ABAC matches |
+| --- | --- |
+| `/v1/dpps/urn:x%2Fp1/elements/a` | `/v1/dpps/urn:x%2Fp1/elements/a` |
+| `/submodels/abc/submodel-elements/List%5B0%5D` | `/submodels/abc/submodel-elements/List[0]` |
+| `/v1/dpps/a%25b` | `/v1/dpps/a%25b` |
+
+Write `ROUTE` values in the same notation:
+
+- `/` is always a path separator.
+- A slash inside a value is written `%2F`, a percent sign inside a value `%25`.
+  Every other character is written as plain text; `%` is not allowed in any
+  other form.
+- `*` matches any characters, including separators, but never stops inside
+  `%2F` or `%25`.
+- `.` and `..` segments and empty segments are not allowed. A trailing `/` is
+  ignored.
+- A route must not start or end with whitespace.
+
+| Target | `ROUTE` |
+| --- | --- |
+| Passport `urn:x/p1` | `/v1/dpps/urn:x%2Fp1` |
+| Identifier `a%b` | `/v1/dpps/a%25b` |
+| Identifier containing the text `%2F` | `/v1/dpps/a%252Fb` |
+
+Routes are validated when a policy is loaded from a file or from the policy
+repository, and a policy with an invalid route does not load. With ABAC
+enabled, requests whose path contains `.` or `..` segments (also when
+encoded), empty segments, or control characters are rejected with
+`400 Bad Request` before authorization.
+
+Submodel and AAS element endpoints decode the `idShortPath` once and reject
+it with `400 Bad Request` unless it is a valid idShortPath; see
+[Submodel Element Paths](../submodel_repository/usage.md#submodel-element-paths).
+Query authorization derives Submodel and element coverage only from `ROUTE`
+values that use valid identifiers and idShortPaths exactly as written, or `*`
+and `**`.
+
+```{warning}
+BaSyx Go 1.1.4 introduced this notation. Before upgrading from an earlier
+version, review every `ROUTE` rule in policy files and in the policy
+repository, including older versions that may be activated again. A rule for a
+value that contains `/` must write it as `%2F`, and an existing `%2F` or `%25`
+now means a slash or percent sign instead of the literal text. See
+[Validation, Activation, and Rejection](abac_policy_management.md#validation-activation-and-rejection)
+for policies that no longer load.
+```
+
 ### Attribute Evaluation
 
 Every declared `CLAIM` or `CLAIMPATH` attribute must exist. A missing claim or
@@ -401,6 +455,15 @@ A policy that grants superpaths only through `$sm` or `$sme` objects or
 formulas of the Submodel rules apply to the Submodel and its elements, not to
 the shell. ReBAC grants on the shell also satisfy the shell check.
 
+A rule whose formula refers to another resource is not used for a check: a
+rule with an `$aas` formula, such as a `/shells/*` route rule, can satisfy the
+shell check but does not grant access to the Submodel or its elements. Rules
+without a formula, or whose formula only uses caller attributes, still apply to
+the superpath. DELETE requests and Submodel superpath PATCH
+requests return no model fragments, so `FILTER` and `FILTERLIST` response
+masks do not apply to them, including in the shell check. Required rights,
+`FORMULA` conditions, and ReBAC grants still apply.
+
 ### Submodel Element Reads
 
 A `$sme` `REFERABLE` object covers the named element and its descendants. When
@@ -450,6 +513,7 @@ Imports require CREATE for new objects and UPDATE for existing ones. New attachm
 
 | Situation | Response |
 | --- | --- |
+| With ABAC enabled, the request path contains `.` or `..` segments, empty segments, or control characters, or an element endpoint receives an invalid idShortPath | `400 Bad Request` |
 | A token sent as `Authorization: Bearer <token>` is malformed, has an untrusted issuer, fails token validation, or contains claims that BaSyx cannot normalize | `401 Unauthorized` |
 | An authenticated token does not contain every scope required by its trustlist entry | `403 Forbidden` |
 | ABAC denies an otherwise valid request on an ABAC-only route outside `/security/abac`, whether authenticated or anonymous | `403 Forbidden` |

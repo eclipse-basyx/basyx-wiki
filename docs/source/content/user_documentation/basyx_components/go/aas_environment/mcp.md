@@ -5,7 +5,7 @@ The MCP endpoint is an experimental feature, available from BaSyx Go v1.1.3. Its
 ```
 
 ```{note}
-The [BaSyx MCP Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxMCPExample) runs a local AAS Environment with the MCP endpoint and writes enabled, preloaded with a drive motor AAS, and shows how to connect Claude Code and Codex. Its `secured` variant adds Keycloak sign-in, two users with different permissions, and a realm configured as described in [Example: Keycloak](#example-keycloak).
+The [BaSyx MCP Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.5/examples/BaSyxMCPExample) runs a local AAS Environment with the MCP endpoint and writes enabled, preloaded with a drive motor AAS, and shows how to connect Claude Code and Codex. Its `secured` variant adds Keycloak sign-in, two users with different permissions, and a realm configured as described in [Example: Keycloak](#example-keycloak).
 ```
 
 The AAS Environment can serve a [Model Context Protocol](https://modelcontextprotocol.io) (MCP) endpoint next to its REST API. AI agents and other MCP clients, such as Claude Code or Codex, use it to read and change Asset Administration Shells, Submodels, and Submodel Elements.
