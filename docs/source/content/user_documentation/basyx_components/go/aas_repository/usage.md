@@ -99,7 +99,9 @@ Expect `200 OK` with the asset information object. Save a replacement as `asset-
 curl -i -X PUT http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/asset-information -H 'Content-Type: application/json' --data-binary '@asset-information.json'
 ```
 
-Expect `204 No Content`. The serial number changes while the AAS identifier, short name, and references are retained. This replaces asset information, so include its fields that should remain.
+Expect `204 No Content`. The serial number changes while the AAS identifier, short name, and references are retained.
+
+PUT replaces the complete asset information, including a change of `assetKind` to `Type`. Optional fields that the body omits, such as `globalAssetId`, `assetType`, `specificAssetIds`, or `defaultThumbnail`, are cleared, so include every field that should remain. The body must contain a `globalAssetId` or at least one specific asset ID. To keep an uploaded thumbnail, resubmit the current `defaultThumbnail` path; a different path to an uploaded file is rejected with `400 Bad Request`. Use the [thumbnail endpoint](#asset-thumbnail) to upload a new file.
 
 ```bash
 curl -i http://localhost:8084/shells/dXJuOmV4YW1wbGU6YWFzOjE/asset-information
@@ -325,7 +327,7 @@ Expect `200 OK` with only `MotorAASUpdated` in `result`. `PumpAAS` does not matc
 | `idShort` | Plain short-name filter. |
 | `assetIds` | Asset identifier filter; each value is Base64URL-encoded JSON for a `SpecificAssetId`. Valid padded and unpadded forms are accepted. |
 | `limit`, `cursor` | Page size and continuation cursor. |
-| `createdFrom`, `updatedFrom` | RFC 3339 lower bounds on administrative creation/update timestamps. |
+| `createdFrom`, `updatedFrom` | Inclusive RFC 3339 lower bounds on administrative creation/update timestamps, compared with full fractional-second precision. A blank or malformed value returns `400 Bad Request`. They apply to `GET /shells` and `GET /shells/$reference`. |
 
 After the asset-information step above, the serial number is `SN-002`. The following ready-to-run request searches for that value. Its `assetIds` value is the unpadded Base64URL encoding of `{"name":"serialNumber","value":"SN-002"}`:
 

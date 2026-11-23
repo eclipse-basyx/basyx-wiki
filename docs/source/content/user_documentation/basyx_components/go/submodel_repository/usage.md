@@ -94,7 +94,9 @@ The Submodel identifier is encoded; `idShortPath` is not. Use dot-separated name
 | `Nameplate.SerialNumber` | Property inside that collection. |
 | `Measurements[0]` | First member of a list named `Measurements`, if such a list exists. |
 
-List indices are zero-based and can change when list content changes. List members are addressed by index rather than their own `idShort`. Apply normal URL escaping to path characters when constructing requests. With curl, use `--globoff` when a URL contains list brackets so curl does not interpret them as a URL range.
+List indices are zero-based and can change when list content changes. List members are addressed by index rather than their own `idShort`. Apply normal URL escaping to path characters when constructing requests. Percent-encoded brackets such as `Measurements%5B0%5D` are accepted. With curl, use `--globoff` when a URL contains unencoded list brackets so curl does not interpret them as a URL range.
+
+The `idShortPath` is decoded once and must be a valid idShortPath: idShorts joined by `.` with numeric list indices such as `[0]`, each idShort starting with a letter and containing only letters, digits, `_`, and `-`. Otherwise, the request returns `400 Bad Request`. Elements stored by earlier versions with an invalid idShort, for example one containing spaces, `%`, `/`, or non-ASCII letters, cannot be addressed by path but remain visible in their parent element and Submodel; see [idShort Rules](../common/validation.md#idshort-rules).
 
 ```bash
 curl -i http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ/submodel-elements/Nameplate.SerialNumber
@@ -122,6 +124,8 @@ curl -i -X POST http://localhost:8085/submodels/dXJuOmV4YW1wbGU6c3VibW9kZWw6MQ/s
 ```
 
 Expect `201 Created` and the element. To add a child to an existing collection instead, POST to the collection's path, for example `/submodel-elements/Nameplate`, with a child element body.
+
+The `Location` header contains the path of the created element. For a new member of a `SubmodelElementList`, which has no idShort of its own, it ends with the index the member was stored at, for example `Measurements[1]` (URL-encoded). Use that header rather than counting list members, because concurrent appends can change the index.
 
 Change `value` in `property.json` to `MOTOR-200` and replace the top-level Property:
 

@@ -44,7 +44,7 @@ The service also needs a readable OIDC trustlist. See
 defaults, environment-variable aliases, and file-mount guidance.
 
 ```{note}
-The [BaSyx History Audit Guarded Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.3/examples/BaSyxHistoryAuditGuardedExample) provides a runnable AAS Environment with the protected ABAC management API enabled, startup policy import, and policy-activation evidence in a local MinIO Object Lock backend.
+The [BaSyx History Audit Guarded Example](https://github.com/eclipse-basyx/basyx-go-components/tree/v1.1.5/examples/BaSyxHistoryAuditGuardedExample) provides a runnable AAS Environment with the protected ABAC management API enabled, startup policy import, and policy-activation evidence in a local MinIO Object Lock backend.
 ```
 
 ### Policy Scope
@@ -324,6 +324,14 @@ a named Submodel Element is a policy-content failure; see
 [Fragment Filter Targets](security.md#fragment-filter-targets). An active
 version that contains such a filter cannot be loaded, so clone it, change the
 filter, and activate the clone before upgrading from an earlier release.
+
+A `ROUTE` object that does not follow the
+[ROUTE notation](security.md#route-matching), for example one that contains a
+`%` other than `%2F` or `%25`, `.` or `..` segments, empty segments, or
+leading or trailing whitespace, is a policy-content failure as well. If the
+active policy in the policy repository contains such a route, the service does
+not start. Correct the policy file and start the service once with
+`abac.policyFileImport` set to `always`.
 
 Activation repeats validation. Superseding the current active version, marking
 the staged version active, and recording the corresponding policy events use one

@@ -43,7 +43,7 @@ This applies to AASs, Submodels, Concept Descriptions, and Submodel Elements wri
 A Submodel Element must have an `idShort` unless it is a direct member of a `SubmodelElementList` (AASd-117). This applies in every mode to top-level elements, collection values, Entity statements, annotations, and Operation variable values. A missing `idShort` returns `400 Bad Request` with an error code ending in `-MISSINGIDSHORT`, unless `strict` verification already rejects the request with its own error.
 
 ```{note}
-Resources stored by earlier versions with invalid idShorts are not migrated or repaired. Delete them and create them again with valid idShorts.
+Resources stored by earlier versions with invalid idShorts are not migrated or repaired. Delete them and create them again with valid idShorts. A Submodel Element with an invalid idShort cannot be addressed by `idShortPath`, but remains visible in its parent element and Submodel. Correct it by replacing the parent element or the Submodel with `PUT`, using a valid idShort for the element.
 
 Elements stored by earlier versions without `idShort` remain stored, and a `PATCH` that does not include them is not affected. Writing them back unchanged, for example by `PUT`ting a Submodel as it was read, is rejected. Add the missing idShorts in that `PUT` to repair them.
 ```
