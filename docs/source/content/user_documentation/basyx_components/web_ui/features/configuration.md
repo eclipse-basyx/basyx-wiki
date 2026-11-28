@@ -61,7 +61,11 @@ The template describes how the backend services are arranged. The Web UI uses it
 | **Mono Repo** | AAS Discovery, AAS Registry, Submodel Registry, AAS Environment | Registries and discovery are separate, while repositories share one AAS Environment endpoint |
 | **Mono All** | AAS Environment | One AAS Environment endpoint exposes all required APIs |
 | **Identifiable** | AAS Repository | AAS and Submodels are accessed through shell paths such as `/shells/{aasId}/submodels/{submodelId}` |
-| **Catena-X** | Digital Twin Registry, Submodel Service | Catena-X style infrastructure with DTR and Submodel Service endpoints |
+| **Catena-X** | Digital Twin Registry, Submodel Service | Catena-X style infrastructure with DTR and Submodel Service endpoints, or access to business partners through an Eclipse Dataspace Connector (EDC) |
+
+```{note}
+A **Catena-X** infrastructure that uses an EDC needs the [Catena-X EDC BFF](./catena_x_edc_bff.md). The infrastructure names only the BFF proxy and the business partners; the EDC credentials stay in the BFF.
+```
 
 **Endpoint URLs:**
 Enter the endpoint URLs shown for the selected template. If a template groups several backend APIs behind one URL, such as **AAS Environment**, the Web UI applies that URL to the relevant internal components automatically.

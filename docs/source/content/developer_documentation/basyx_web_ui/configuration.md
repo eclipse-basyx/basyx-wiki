@@ -413,6 +413,32 @@ Infrastructure templates describe which endpoint fields are active for a backend
 Grouped endpoint keys are expanded internally. For example, `aasEnvironment` in the `mono-repo` template sets the AAS Repository, Submodel Repository, and Concept Description Repository URLs to the same base URL.
 ```
 
+### Catena-X EDC Configuration
+
+An infrastructure with the `catena-x` template can reach the Digital Twin Registries and Submodels of business partners through an Eclipse Dataspace Connector (EDC). It then has a `catenaX` section, at the same level as `components`, and may omit `components`:
+
+```yaml
+  <infra-key>:
+    name: <infrastructure-name>
+    template: catena-x
+    catenaX:
+      accessMode: edc                       # or direct
+      edc:
+        proxyId: <bff-proxy-id>             # optional, default: default
+        defaultPartnerId: <partner-id>      # optional
+        partners:
+          - id: <partner-id>
+            name: <partner-name>            # optional
+            counterPartyId: "<partner-bpn>"
+            counterPartyAddress: "<partner-dsp-endpoint>"
+```
+
+The browser only knows the `proxyId`. The EDC Management API URL and API key are configured in the Catena-X EDC BFF, a server shipped with the Web UI that the CatenaXplorer and the Eclipse Dataspace Connector module call under `/api/catena-x/edc/`. Never put them into `basyx-infra.yml`.
+
+```{seealso}
+All fields, the BFF environment variables and its deployment are described on the [Catena-X EDC BFF](../../user_documentation/basyx_components/web_ui/features/catena_x_edc_bff.md) page. To run the BFF next to the Vite dev server, see [Catena-X EDC BFF Local Development](https://github.com/eclipse-basyx/basyx-aas-web-ui/blob/main/Docs/CatenaXEdcBffDevelopment.md).
+```
+
 ### Configuration Examples
 
 #### No Authentication
