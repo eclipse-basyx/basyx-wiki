@@ -91,6 +91,20 @@ The following modules are currently available or included in selected BaSyx AAS 
 - Includes sections for company identification, bank accounts, digital interfaces, business report figures, and company governance
 - Supports structured and multilingual information where applicable
 
+**[CatenaXplorer](modules/catenaxplorer.md)**
+
+- Browses and searches the AAS descriptors of a Catena-X Digital Twin Registry by specific asset ID
+- Reaches the registry directly, with creating and editing descriptors, or the registry of a business partner through an EDC (read-only)
+- Loads the Submodels behind the descriptors
+- Requires an infrastructure with the `catena-x` template; the EDC access needs the [Catena-X EDC BFF](catena_x_edc_bff.md)
+
+**[Eclipse Dataspace Connector](modules/eclipse_dataspace_connector.md)**
+
+- Manages the assets, policies and contracts of a Tractus-X EDC in a Catena-X dataspace
+- Creates EDC assets directly from an AAS and its Submodels
+- Browses the catalogs of business partners, fetches data from them and sends AAS or Submodels to them
+- Requires the [Catena-X EDC BFF](catena_x_edc_bff.md) and an infrastructure with the `catena-x` template; desktop only
+
 **[PCF Process](modules/pcf_process.md)**
 
 - Provides a workflow for initiating Product Carbon Footprint related production processes
@@ -127,4 +141,6 @@ For information about implementing a custom module, see the [Developing Custom M
 :maxdepth: 1
 
 modules/aas_creation_wizard
+modules/catenaxplorer
+modules/eclipse_dataspace_connector
 ```

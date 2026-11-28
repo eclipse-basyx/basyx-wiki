@@ -117,6 +117,12 @@ For more details on customizing branding, see the [Corporate Design](./corporate
 | Variable Name | Description | Default |
 |---------------|-------------|---------|
 | INFLUXDB_TOKEN | Token for accessing time series data from InfluxDB | - |
+| CX_EDC_BFF_ENABLED | Start the integrated Catena-X EDC BFF, used by the CatenaXplorer and the Eclipse Dataspace Connector module | false |
+| CX_EDC_BFF_UPSTREAM_URL | URL that `/api/catena-x/edc/` is forwarded to, e.g. a separate BFF container | `http://127.0.0.1:3001` if integrated, otherwise `http://catena-x-edc-bff:3001` |
+
+```{seealso}
+The BFF has further `CX_EDC_*` variables for the EDC connection, allowlists and authentication. See the [Catena-X EDC BFF](./catena_x_edc_bff.md) page.
+```
 
 #### Deprecated Infrastructure Configuration Variables
 

@@ -26,6 +26,7 @@ name: web_ui
 * [Mobile Support](./features/mobile_support.md)
 * [Plugins](./features/plugin_mechanism.md)
 * [Modules](./features/modules_overview.md)
+* [Catena-X EDC BFF](./features/catena_x_edc_bff.md)
 * [AAS Editor](./features/aas_editor.md)
 * [AAS Routing](./features/routing.md)
 * [Application Theme](./features/theme.md)
@@ -43,6 +44,7 @@ features/corporate_design
 features/mobile_support
 features/plugin_mechanism
 features/modules_overview
+features/catena_x_edc_bff
 features/aas_editor
 features/routing
 features/theme
@@ -360,6 +362,8 @@ The BaSyx AAS Web UI comes with several pre-built modules, including:
 * **AAS Importer**: Import Asset Administration Shells and Submodels from configured AAS infrastructures into your own AAS infrastructure.
 * **AAS Query Language**: Execute complex queries across multiple AAS and Submodels using a dedicated query language. Learn more in the [AAS Query Language](../../../concepts/use_cases/aas_query_language.md) documentation.
 * **Company Data Portal**: Centralized portal for managing and visualizing company-specific AAS data.
+* **CatenaXplorer**: Browse and search the AAS descriptors of a Catena-X Digital Twin Registry, directly or through the EDC of a business partner. Learn more in the [CatenaXplorer](./features/modules/catenaxplorer.md) module documentation.
+* **Eclipse Dataspace Connector**: Manage the assets, policies and contracts of a Tractus-X EDC and exchange AAS data with business partners in a Catena-X dataspace. Learn more in the [Eclipse Dataspace Connector](./features/modules/eclipse_dataspace_connector.md) module documentation.
 * **Additional domain-specific modules**: Depending on your deployment, additional modules may be available for specific industries or use cases
 
 **Accessing Extension Modules:**
